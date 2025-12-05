@@ -1,0 +1,16 @@
+name: Publish Docker Image
+
+on:
+  push:
+    branches:
+      - master
+      - feature/*
+
+jobs:
+  push_to_registry:
+    uses: TourmalineCore/home-github-workflows/.github/workflows/docker-build-and-push.yml@feature/add_context_for_build_workflow
+    with:
+      context: ./db-backupper
+      image-name: home-db-backupper
+    # without this it cannot login to the registry
+    secrets: inherit
