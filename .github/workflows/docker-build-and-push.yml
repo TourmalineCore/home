@@ -13,4 +13,4 @@ jobs:
       context: ./db-backupper
       image-name: home-db-backupper
     # without this it cannot login to the registry
-    secrets: inherit
+    secrets: inherit 
