@@ -25,7 +25,7 @@ jobs:
 
   build_s3_backupper:
     needs: paths-filter
-    if: needs.paths-filter.outputs.s3-backupper
+    if: needs.paths-filter.outputs.s3-backupper == 'true'
     uses: TourmalineCore/home-github-workflows/.github/workflows/docker-build-and-push.yml@feature/add_context_and_image_name_for_build_workflow
     with:
       context: ./s3-backupper
