@@ -10,14 +10,14 @@ jobs:
   paths-filter:
     runs-on: ubuntu-24.04
     outputs:
-      s3-backupper: ${{ steps.filter.outputs.s3-backupper }}
+      s3-backupper: ${{ steps.paths-filter.outputs.s3-backupper }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
       - name: Check which files was changed
         uses: dorny/paths-filter@v3
-        if: filter
+        if: paths-filter
         with:
           filters: |
             s3-backupper:
