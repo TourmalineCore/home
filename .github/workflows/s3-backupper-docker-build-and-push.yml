@@ -9,7 +9,7 @@ on:
       - s3-backupper/**
 
 jobs:
-  build_db_backupper:
+  build_s3_backupper:
     uses: TourmalineCore/home-github-workflows/.github/workflows/docker-build-and-push.yml@feature/add_context_and_image_name_for_build_workflow
     with:
       context: ./s3-backupper
