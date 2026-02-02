@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 
 ## Before you start
-
+ 
 - [Docker](https://www.docker.com/get-started/) (needed for Dev container)
 
 ### If you develop inside the Dev container
