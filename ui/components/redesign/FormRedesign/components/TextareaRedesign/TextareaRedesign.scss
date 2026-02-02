@@ -1,0 +1,85 @@
+.textarea-redesign {
+  $this: &;
+
+  &__box {
+    position: relative;
+    overflow: hidden;
+    resize: inherit;
+  }
+
+  &__control {
+    @include body-m;
+
+    display: block;
+    margin-top: 0;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid transparent;
+    border-radius: 2px;
+    padding: 0;
+    padding: 24px 16px 8px;
+    width: 100%;
+    min-height: 92px;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 1.4;
+    color: $color-white;
+    background-color: $color-grey-900-redesign;
+    resize: vertical;
+    transition: all 0.3s;
+    caret-color: $color-deep-blue-redesign;
+
+    &:not(:placeholder-shown) ~ #{$this}__label {
+      top: 0;
+      padding-top: 4px;
+      font-size: 14px;
+    }
+
+    &:focus-visible {
+      border-color: $color-deep-blue-redesign;
+      background-color: $color-grey-900-redesign;
+      transition: all 0.3s;
+
+      ~ #{$this}__label {
+        top: 0;
+        padding-top: 4px;
+        font-size: 14px;
+        background-color: $color-grey-900-redesign;
+      }
+    }
+
+    &:hover {
+      background-color: $color-grey-700-redesign;
+      transition: all 0.3s;
+
+      ~ #{$this}__label {
+        background-color: $color-grey-700-redesign;
+      }
+    }
+
+    @include desktop-xl {
+      min-height: 138px;
+    }
+  }
+
+  &__label {
+    @include body-m;
+
+    position: absolute;
+    left: 16px;
+    top: 15px;
+    width: calc(100% - 16px * 2);
+    min-height: 26px;
+    color: $color-grey-300-redesign;
+    background-color: $color-grey-900-redesign;
+    cursor: text;
+    transition: all 0.3s;
+
+    @include desktop-xl {
+      left: 22px;
+      top: 26px;
+      font-size: 24px;
+      line-height: 1.4;
+    }
+  }
+}

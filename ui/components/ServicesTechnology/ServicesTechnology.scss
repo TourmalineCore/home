@@ -1,0 +1,81 @@
+.services-technology {
+  &__wrapper {
+    padding-top: 80px;
+    padding-bottom: 80px;
+
+    @include tablet {
+      padding-top: 120px;
+      padding-bottom: 120px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 48px;
+    max-width: 550px;
+
+    @include tablet {
+      margin-bottom: 80px;
+
+      &--teams,
+      &--filled {
+        max-width: 910px;
+      }
+
+      &--embedded {
+        max-width: 665px;
+      }
+    }
+
+    @include tablet-xl {
+      max-width: 650px;
+
+      &--embedded {
+        max-width: 825px;
+      }
+    }
+
+    @include desktop {
+      max-width: 850px;
+
+      &--teams,
+      &--filled {
+        max-width: 1220px;
+      }
+
+      &--embedded {
+        max-width: 1110px;
+      }
+    }
+
+    @include desktop-xl {
+      max-width: 1050px;
+
+      &--embedded {
+        max-width: 1335px;
+      }
+    }
+  }
+
+  &__list {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(1, 1fr);
+
+    @include tablet {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include tablet-xl {
+      grid-template-columns: repeat(5, 1fr);
+
+      &--teams,
+      &--filled {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @include desktop-xl {
+      gap: 32px;
+    }
+  }
+}

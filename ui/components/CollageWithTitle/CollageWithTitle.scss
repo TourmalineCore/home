@@ -1,0 +1,382 @@
+.collage-with-title {
+  background-color: $color-black;
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    padding-top: 302px;
+    padding-bottom: 330px;
+    max-width: 375px;
+
+    @include tablet {
+      padding: 230px 0;
+      max-width: 768px;
+    }
+
+    @include tablet-xl {
+      padding: 320px 0;
+      max-width: 960px;
+    }
+
+    @include desktop {
+      padding: 408px 0;
+      max-width: 1278px;
+
+      &::before {
+        content: "";
+        position: absolute;
+        background-image: url("../../public/gif/text-surrounded-by-images-background.gif");
+        background-size: cover;
+        background-repeat: no-repeat;
+        pointer-events: none;
+        inset: 0;
+      }
+    }
+
+    @include desktop-xl {
+      padding: 580px 0;
+      max-width: 1872px;
+    }
+  }
+
+  &__title {
+    @include h2;
+
+    max-width: 560px;
+    text-align: center;
+
+    @include desktop-xl {
+      max-width: 788px;
+    }
+  }
+
+  &__image {
+    position: absolute;
+
+    img {
+      display: block;
+      border-radius: 2px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &--1 {
+      display: none;
+
+      @include tablet {
+        left: 352px;
+        bottom: 90px;
+        display: block;
+        width: 104px;
+        height: 104px;
+      }
+
+      @include tablet-xl {
+        left: 440px;
+        bottom: 140px;
+        width: 132px;
+        height: 132px;
+      }
+
+      @include desktop {
+        left: 584px;
+        bottom: 160px;
+        width: 178px;
+        height: 178px;
+      }
+
+      @include desktop-xl {
+        left: 856px;
+        bottom: 235px;
+        width: 256px;
+        height: 256px;
+      }
+    }
+
+    &--2 {
+      left: 40px;
+      bottom: 64px;
+      width: 98px;
+      height: 98px;
+
+      @include tablet {
+        left: 191px;
+        bottom: 57px;
+        width: 104px;
+        height: 104px;
+      }
+
+      @include tablet-xl {
+        left: 225px;
+        bottom: 98px;
+        width: 132px;
+        height: 132px;
+      }
+
+      @include desktop {
+        left: 298px;
+        bottom: 103px;
+        width: 178px;
+        height: 178px;
+      }
+
+      @include desktop-xl {
+        left: 421px;
+        bottom: 129px;
+        width: 256px;
+        height: 256px;
+      }
+    }
+
+    &--3 {
+      left: 0;
+      bottom: 195px;
+      width: 98px;
+      height: 98px;
+
+      @include tablet {
+        left: 104px;
+        bottom: 159px;
+        width: 76px;
+        height: 76px;
+      }
+
+      @include tablet-xl {
+        left: 107px;
+        bottom: 216px;
+        width: 100px;
+        height: 100px;
+      }
+
+      @include desktop {
+        left: 140px;
+        bottom: 263px;
+        width: 134px;
+        height: 134px;
+      }
+
+      @include desktop-xl {
+        left: 178px;
+        bottom: 370px;
+        width: 192px;
+        height: 192px;
+      }
+    }
+
+    &--4 {
+      left: 15px;
+      bottom: 471px;
+      width: 106px;
+      height: 106px;
+
+      @include tablet {
+        left: 24px;
+        bottom: 265px;
+        width: 104px;
+        height: 104px;
+      }
+
+      @include tablet-xl {
+        left: 0;
+        bottom: 363px;
+        width: 132px;
+        height: 132px;
+      }
+
+      @include desktop {
+        left: -2px;
+        bottom: 456px;
+        width: 178px;
+        height: 178px;
+      }
+
+      @include desktop-xl {
+        left: 30px;
+        bottom: 650px;
+        width: 256px;
+        height: 256px;
+      }
+    }
+
+    &--5 {
+      left: 164px;
+      bottom: 570px;
+      width: 98px;
+      height: 98px;
+
+      @include tablet {
+        left: 217px;
+        bottom: 375px;
+        width: 92px;
+        height: 92px;
+      }
+
+      @include tablet-xl {
+        left: 258px;
+        bottom: 488px;
+        width: 124px;
+        height: 124px;
+      }
+
+      @include desktop {
+        left: 341px;
+        bottom: 629px;
+        width: 162px;
+        height: 162px;
+      }
+
+      @include desktop-xl {
+        left: 486px;
+        top: 152px;
+        bottom: auto;
+        width: 232px;
+        height: 232px;
+      }
+    }
+
+    &--6 {
+      display: none;
+
+      @include tablet {
+        left: 393px;
+        bottom: 341px;
+        display: block;
+        width: 104px;
+        height: 104px;
+      }
+
+      @include tablet-xl {
+        left: 490px;
+        bottom: 452px;
+        width: 132px;
+        height: 132px;
+      }
+
+      @include desktop {
+        left: 653px;
+        bottom: 572px;
+        width: 178px;
+        height: 178px;
+      }
+
+      @include desktop-xl {
+        left: 954px;
+        top: 250px;
+        bottom: auto;
+        width: 256px;
+        height: 256px;
+      }
+    }
+
+    &--7 {
+      left: 259px;
+      bottom: 438px;
+      width: 112px;
+      height: 112px;
+
+      @include tablet {
+        width: 96px;
+        height: 96px;
+        inset: 84px 82px auto auto;
+      }
+
+      @include tablet-xl {
+        right: 77px;
+        top: 111px;
+        width: 128px;
+        height: 128px;
+      }
+
+      @include desktop {
+        right: 104px;
+        top: 148px;
+        width: 168px;
+        height: 168px;
+      }
+
+      @include desktop-xl {
+        right: 186px;
+        top: 208px;
+        width: 240px;
+        height: 240px;
+      }
+    }
+
+    &--8 {
+      left: 257px;
+      bottom: 180px;
+      width: 118px;
+      height: 118px;
+
+      @include tablet {
+        left: auto;
+        right: 60px;
+        bottom: 180px;
+        width: 104px;
+        height: 104px;
+      }
+
+      @include tablet-xl {
+        right: 50px;
+        bottom: 246px;
+        width: 132px;
+        height: 132px;
+      }
+
+      @include desktop {
+        right: 65px;
+        bottom: 302px;
+        width: 178px;
+        height: 178px;
+      }
+
+      @include desktop-xl {
+        right: 126px;
+        bottom: 434px;
+        width: 256px;
+        height: 256px;
+      }
+    }
+
+    &--9 {
+      left: 197px;
+      bottom: 40px;
+      width: 106px;
+      height: 106px;
+
+      @include tablet {
+        left: auto;
+        right: 186px;
+        bottom: 47px;
+        width: 104px;
+        height: 104px;
+      }
+
+      @include tablet-xl {
+        right: 220px;
+        bottom: 84px;
+        width: 132px;
+        height: 132px;
+      }
+
+      @include desktop {
+        left: 808px;
+        bottom: 84px;
+        width: 178px;
+        height: 178px;
+      }
+
+      @include desktop-xl {
+        left: auto;
+        right: 406px;
+        bottom: 72px;
+        width: 256px;
+        height: 256px;
+      }
+    }
+  }
+}

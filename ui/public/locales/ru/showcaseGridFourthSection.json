@@ -1,0 +1,71 @@
+{
+  "showcaseColumns":[
+    {
+      "id":0,
+      "type": "media",
+      "showcaseColumnWithMedia":{
+        "media": {
+          "url": "/video/best-by.mp4",
+          "mime": "video/mp4"
+        },
+        "title": "Best By",
+        "description": "Сервис для\u00A0отслеживания срока годности продукции",
+        "link": "https://best-by.ru/",
+        "size": "M",
+        "isNda": false
+      }
+    },
+    {
+      "id":1,
+      "type": "media",
+      "showcaseColumnWithMedia":{
+        "media": {
+          "url": "/images/senmotion-project.png",
+          "mime": "image/png"
+        },
+        "title": "Senmotion",
+        "description": "Подключение умных стелек к\u00A0облачной инфраструктуре для\u00A0хранения, обработки и\u00A0анализа данных врачами и\u00A0пациентами",
+        "size": "M",
+        "link": "https://www.behance.net/gallery/106976255/Sen-Motion",
+        "isNda": false
+      }
+    },
+    {
+      "id":2,
+      "type": "media",
+      "showcaseColumnWithMedia": {
+        "media": {
+          "url": "/images/smart-cleaning-project.png",
+          "mime": "image/png"
+        },
+        "title": "Умная система видеомониторинга",
+        "description": "Система видеомониторинга на\u00A0автомойках самообслуживания, отслеживающая движение и\u00A0классифицирующая события",
+        "size": "M",
+        "link": "https://disk.yandex.ru/i/CTXGo1K4KnulLQ",
+        "isNda": false
+      }
+    },
+    {
+      "id":3,
+      "type": "media",
+      "showcaseColumnWithMedia": {
+        "media": {
+          "url": "/images/tradehack-project.jpg",
+          "mime": "image/png"
+        },
+        "title": "Tradehack",
+        "description": "Cервис сбора аналитики по\u00A0товарам и\u00A0категориям товаров на\u00A0площадке маркетплейса Wildberries",
+        "size": "M",
+        "link": "https://www.behance.net/gallery/160948093/Analytics-dashboard",
+        "isNda": false
+      }
+    }
+  ],
+  "showOnMobile": false
+}
+
+
+
+
+
+

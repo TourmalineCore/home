@@ -1,0 +1,138 @@
+{
+  "title": "What we do",
+  "anchorId": "services",
+  "cards":
+  [
+    {
+      "id": 0,
+      "title": "Web Development",
+      "points": ["Single-page applications", "Websites and landing pages", "Enterprise systems", "CRM, ERP, personal accounts"],
+      "theme": "black",
+      "type": "points"
+    },
+    {
+      "id": 1,
+      "title": "Embedded development",
+      "points": ["Drivers", "Software modules with complex logic", "Protocols and libraries", "Cross-compilation setup", "Technical documentation"],
+      "link": {
+        "text": "Learn more",
+        "url":  "/embedded"
+      },
+      "theme": "white",
+      "type": "points"
+    },
+    {
+      "id": 2,
+      "imageWithBlurDataURL": {
+        "url": "/images/services-card.png"
+      },
+      "theme": "blue",
+      "type": "image"
+    },
+    {
+      "id": 3,
+      "title": "Machine learning and data analysis",
+      "points": ["Business data analytics", "Computer vision models", "Text and audio processing models", "Sensor signal processing models"],
+      "link": {
+        "text": "Learn more",
+        "url": "/ml"
+      },
+      "theme": "grey",
+      "type": "points"
+    },
+    {
+      "id": 4,
+      "title": "Testing",
+      "points": ["E2E testing", "UI & API testing", "Integration and unit testing", "Manual and automated testing"],
+      "link": {
+        "text": "Learn more",
+        "url": "/qa"
+      },
+      "theme": "white",
+      "type": "points"
+    },
+    {
+      "id": 5,
+      "title": "Design",
+      "points": ["UI/UX design", "Websites and landing pages design", "No/Low-code websites"],
+      "link": {
+        "text": "Learn more",
+        "url": "/design"
+      },
+      "theme": "grey",
+      "type": "points"
+    },
+    {
+      "id": 6,
+      "title": "Other",
+      "points": ["Launching MVP projects", "Architecture design", "Development of high-load services", "Setting up project’s environment and CI/CD", "Software architecture and development consulting"],
+      "theme": "grey",
+      "type": "points"
+    },
+    {
+      "id": 7,
+      "type": "blank"
+    },
+    {
+      "id": 8,
+      "imageWithBlurDataURL": {
+        "url": "/images/services-card-2.png"
+      },
+      "theme": "blue",
+      "type": "image"
+    },
+    {
+      "id": 9,
+      "title": "Teams",
+      "description": "We can provide a dedicated team or outsource several specialists for your project.",
+      "link": {
+        "text": "Learn more about our teams",
+        "url": "/teams"
+      },
+      "wideCardItems": [
+        {
+          "id": 1,
+          "name": "Backend",
+          "icon": "/images/icon-backend.svg",
+          "link": "/backend"
+        },
+        {
+          "id": 2,
+          "name": "Frontend",
+          "icon": "/images/icon-frontend.svg",
+          "link": "/frontend"
+        },
+        {
+          "id": 3,
+          "name": "ML engineers",
+          "icon": "/images/icon-ml.svg",
+          "link": "/ml"
+        },
+        {
+          "id": 4,
+          "name": "Embedded",
+          "icon": "/images/icon-embedded.svg",
+          "link": "/embedded"
+        },
+        {
+          "id": 5,
+          "name": "QA engineers",
+          "icon": "/images/icon-qa.svg",
+          "link": "/qa"
+        },
+        {
+          "id": 6,
+          "name": "Designers",
+          "icon": "/images/icon-design.svg",
+          "link": "/design"
+        },
+        {
+          "id": 7,
+          "name": "DevOps",
+          "icon": "/images/icon-devops.svg"
+        }
+      ],
+      "type": "wide"
+    }
+  ]
+}

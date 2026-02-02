@@ -1,0 +1,9 @@
+{
+  "title": "Будем рады обсудить ваш проект",
+  "description": "Напишите пару слов о задаче — мы уточним детали и предложим подходящее решение",
+  "consentText": "Нажимая на кнопку, вы даёте<bolt>согласие на обработку персональных данных</bolt>",
+  "asideText": "Если неудобно заполнять форму, можно написать нам в <a href='https://t.me/tourmalinecore'>Telegram</a>",
+  "imageUrl": "/images/submitted-form-image.png",
+  "contactLink": "https://t.me/tourmalinecore",
+  "contactLinkText": "Telegram"
+}

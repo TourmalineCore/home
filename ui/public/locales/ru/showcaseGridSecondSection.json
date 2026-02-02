@@ -1,0 +1,64 @@
+{
+  "showcaseColumns":[
+    {
+      "id":0,
+      "type": "media",
+      "showcaseColumnWithMedia":{
+        "media": {
+          "url": "/images/clever-project.png",
+          "mime": "image/png"
+        },
+        "title": "Clever",
+        "description": "Часть экосистемы проектов по\u00A0поддержке расчета бонусов продавцов и\u00A0мотивации персонала",
+        "link": "https://www.behance.net/gallery/107025505/Clever-Personal-managment",
+        "size": "M",
+        "isNda": false
+      }
+    },
+    {
+      "id":1,
+      "type": "media",
+      "showcaseColumnWithMedia":{
+        "media": {
+          "url": "/images/sine-project.png",
+          "mime": "image/png"
+        },
+        "title": "Sine",
+        "description": "Система для\u00A0управления персоналом",
+        "size": "M",
+        "isNda": false
+      }
+    },
+    {
+      "id":2,
+      "type": "media",
+      "showcaseColumnWithMedia": {
+        "media": {
+          "url": "/images/driver-project.png",
+          "mime": "image/png"
+        },
+        "title": "Драйвер",
+        "description": "Разработка и\u00A0интеграция драйвера для\u00A0периферийного устройства",
+        "size": "M",
+        "isNda": true
+      }
+    },
+    {
+      "id":3,
+      "type": "media",
+      "showcaseColumnWithMedia": {
+        "media": {
+            "url": "/images/protocol-project.png",
+            "mime": "image/png"
+        },
+        "title": "Протокол",
+        "description": "Разработка протокола передачи данных прикладного уровня",
+        "size": "M",
+        "isNda": true
+      }
+    }
+  ],
+  "showOnMobile": true
+}
+
+

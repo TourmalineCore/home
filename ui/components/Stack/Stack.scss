@@ -1,0 +1,194 @@
+.stack {
+  position: relative;
+
+  &__wrapper {
+    padding-top: 144px;
+    padding-bottom: 144px;
+
+    @include tablet {
+      padding-top: 80px;
+      padding-bottom: 80px;
+    }
+
+    @include tablet-xl {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 120px;
+      padding-bottom: 120px;
+    }
+  }
+
+  &__inner {
+    @include tablet-xl {
+      @include dynamic-width(592px, $tablet-xl-width, $pd-tablet);
+    }
+
+    @include desktop {
+      @include dynamic-width(803px, $desktop-width, $pd-desktop);
+    }
+
+    @include desktop-xl {
+      @include dynamic-width(960px, $desktop-xl-width, $pd-desktop-xl);
+    }
+  }
+
+  &__title {
+    margin-bottom: 48px;
+
+    @include tablet {
+      margin-bottom: 64px;
+    }
+
+    @include tablet-xl {
+      margin-bottom: 80px;
+    }
+  }
+
+  &__list {
+    display: grid;
+    gap: 32px 16px;
+    grid-template-columns: repeat(2, 1fr);
+
+    @include tablet {
+      gap: 48px 24px;
+    }
+  }
+
+  &__image {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    background-size: cover;
+
+    &--ml,
+    &--frontend,
+    &--design,
+    &--embedded,
+    &--qa,
+    &--backend,
+    &--teams {
+      width: 124px;
+      height: 175px;
+
+      @include tablet {
+        width: 190px;
+        height: 217px;
+      }
+
+      @include tablet-xl {
+        left: -81px;
+        width: 363px;
+        height: 411px;
+      }
+
+      @include desktop {
+        left: 0;
+      }
+
+      @include desktop-xl {
+        bottom: 70px;
+      }
+    }
+
+    &--frontend,
+    &--teams {
+      background-image: url("/images/stack-purple-element-mobile.png");
+
+      @include tablet {
+        background-image: url("/images/stack-purple-element-tablet.png");
+      }
+
+      @include tablet-xl {
+        background-image: url("/images/stack-purple-element-desktop.png");
+      }
+    }
+
+    &--backend {
+      background-image: url("/images/stack-backend-element-mobile.webp");
+
+      @include tablet {
+        background-image: url("/images/stack-backend-element-tablet.webp");
+      }
+
+      @include tablet-xl {
+        background-image: url("/images/stack-backend-element-desktop.webp");
+      }
+    }
+
+    &--qa {
+      background-image: url("/images/stack-qa-element-mobile.webp");
+
+      @include tablet {
+        background-image: url("/images/stack-qa-element-tablet.webp");
+      }
+
+      @include tablet-xl {
+        background-image: url("/images/stack-qa-element-desktop.webp");
+      }
+    }
+
+    &--embedded {
+      background-image: url("/images/stack-embedded-element-mobile.webp");
+
+      @include tablet {
+        background-image: url("/images/stack-embedded-element-tablet.webp");
+      }
+
+      @include tablet-xl {
+        background-image: url("/images/stack-embedded-element-desktop.webp");
+      }
+    }
+
+    &--ml {
+      background-image: url("/images/stack-ml-element-mobile.webp");
+
+      @include tablet {
+        background-image: url("/images/stack-ml-element-tablet.webp");
+      }
+
+      @include tablet-xl {
+        background-image: url("/images/stack-ml-element-desktop.webp");
+      }
+    }
+
+    &--frontend-team {
+      width: 124px;
+      height: 220px;
+      background-image: url("/images/stack-cyan-element-mobile.webp");
+
+      @include tablet {
+        width: 190px;
+        height: 217px;
+        background-image: url("/images/stack-cyan-element-tablet.webp");
+      }
+
+      @include tablet-xl {
+        left: -81px;
+        width: 363px;
+        height: 411px;
+        background-image: url("/images/stack-cyan-element-desktop.webp");
+      }
+
+      @include desktop {
+        left: 0;
+      }
+
+      @include desktop-xl {
+        bottom: 70px;
+      }
+    }
+
+    &--design {
+      background-image: url("/images/stack-design-element-mobile.png");
+
+      @include tablet {
+        background-image: url("/images/stack-design-element-tablet.png");
+      }
+
+      @include tablet-xl {
+        background-image: url("/images/stack-design-element-desktop.png");
+      }
+    }
+  }
+}

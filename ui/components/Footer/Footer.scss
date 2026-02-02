@@ -1,0 +1,94 @@
+.footer {
+  $this: &;
+
+  margin-top: auto;
+  padding-top: 48px;
+  padding-bottom: 48px;
+  color: $color-white-alpha-100;
+  background-image:
+    linear-gradient(
+        90.05deg,
+        rgba($color-pink, 0.1) 0.04%,
+        rgba($color-pink, 0.1) 0.05%,
+        rgba($color-green, 0.1) 99.96%
+      );
+  background-color: $color-purple-black;
+
+  &__about-us {
+    @include tablet {
+      display: flex;
+    }
+  }
+
+  &__short-information {
+    @include tablet {
+      width: 50%;
+    }
+  }
+
+  &__logo {
+    position: relative;
+    display: block;
+    width: 135px;
+    height: 40px;
+  }
+
+  &__description {
+    display: block;
+    margin-top: 32px;
+    max-width: 308px;
+
+    @include desktop-xl {
+      max-width: 340px;
+    }
+  }
+
+  &__links {
+    margin-top: 48px;
+
+    @include tablet {
+      margin-top: 0;
+    }
+  }
+
+  &__copyright {
+    display: flex;
+    flex-direction: column;
+    margin-top: 48px;
+
+    @include tablet {
+      flex-direction: row;
+      justify-content: space-between;
+      margin-top: 56px;
+    }
+
+    @include desktop {
+      margin-top: 64px;
+    }
+
+    @include desktop-xl {
+      margin-top: 80px;
+    }
+  }
+
+  &__location {
+    margin-top: 16px;
+
+    @include tablet {
+      margin-top: 0;
+    }
+  }
+
+  &--technology {
+    background-image: none;
+    background-color: $color-black;
+  }
+
+  &--zh {
+    #{$this}__description {
+      @include desktop-xl {
+        max-width: 350px;
+      }
+    }
+  }
+}

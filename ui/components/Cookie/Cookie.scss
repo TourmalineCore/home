@@ -1,0 +1,103 @@
+.cookie {
+  $this: &;
+
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 24px;
+  z-index: $cookie;
+  margin: 0 auto;
+  border-radius: 2px;
+  padding: 16px 24px;
+  background-color: $color-black-900;
+
+  &__link {
+    @include animated-underline-reverse;
+
+    font-size: inherit;
+    color: inherit;
+
+    &::after {
+      background-color: $color-white;
+    }
+  }
+
+  &__text {
+    @include body-m;
+
+    margin-bottom: 16px;
+    color: $color-white;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  &__button {
+    @include link-text;
+
+    position: relative;
+    border: none;
+    padding: 15px 20px;
+    width: 100%;
+    height: 48px;
+    color: $color-white;
+    background-color: $color-deep-blue-redesign;
+    cursor: pointer;
+    transition: background-color 0.25s;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      top: -2px;
+      width: 31px;
+      height: 51px;
+      background-image: url("../../public/images/cookie-button-edge.svg");
+      background-repeat: no-repeat;
+
+      @include desktop-xl {
+        width: 50px;
+        height: 74px;
+        background-image: url("../../public/images/cookie-button-edge-xl.svg");
+      }
+    }
+
+    &::before {
+      left: -2px;
+      pointer-events: none;
+    }
+
+    &::after {
+      right: -2px;
+      transform: scale(-1, 1);
+    }
+
+    &:hover,
+    &:focus-visible {
+      background-color: $color-pink-redesign;
+    }
+
+    @include desktop-xl {
+      height: 70px;
+    }
+  }
+
+  @include tablet {
+    left: unset;
+    right: 12px;
+    width: 369px;
+  }
+
+  @include desktop {
+    right: 16px;
+    bottom: 48px;
+    width: 437px;
+  }
+
+  @include desktop-xl {
+    right: 24px;
+    width: 618px;
+  }
+}
