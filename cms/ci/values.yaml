@@ -2,7 +2,7 @@
 
 image:
   registry: ghcr.io
-  repository: tourmalinecore/cms
+  repository: tourmalinecore/home-cms
   pullPolicy: Always
   debug: true
 

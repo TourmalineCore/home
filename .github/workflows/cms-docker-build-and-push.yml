@@ -12,7 +12,7 @@ jobs:
     uses: TourmalineCore/home-github-workflows/.github/workflows/docker-build-and-push.yml@feature/add_context_and_image_name_for_build_workflow
     with:
       context: ./cms
-      image-name: cms
+      image-name: home-cms
       # Build-args is used to define variables that will be used in image
       build-args: |
         # this perfectly explains why this is needed https://github.com/strapi/strapi/issues/13889#issuecomment-1516194973
