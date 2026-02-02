@@ -22,7 +22,9 @@ jobs:
         with:
           sparse-checkout: 'cms'
           sparse-checkout-cone-mode: false
-          path: '../'
+      
+      - name: Change dir
+        run: cd cms
 
       - name: ls
         run: ls
