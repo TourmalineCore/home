@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - feature/*
+    paths:
+      - 'cms/**'
 
 jobs:
   # this is needed to wait for the new docker image to be build and published to the registry
@@ -55,6 +57,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          # sparse-checkuour is needed to clone cms folder only. 
+          # Cone mode is disabled to not clone other files in root folder
           sparse-checkout: 'cms'
           sparse-checkout-cone-mode: false
       
