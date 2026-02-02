@@ -23,8 +23,10 @@ jobs:
           sparse-checkout: 'cms'
           sparse-checkout-cone-mode: false
       
-      - name: Change dir
-        run: cd cms
+      - name: Move subfolder to root
+        run: |
+          mv cms/* .
+          rm -rf cms
 
       - name: ls
         run: ls
