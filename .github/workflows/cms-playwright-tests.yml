@@ -54,6 +54,14 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: 'cms'
+          sparse-checkout-cone-mode: false
+      
+      - name: Move subfolder to root
+        run: |
+          mv cms/* .
+          rm -rf cms
 
       - name: Cache node modules
         id: cache-nodemodules
