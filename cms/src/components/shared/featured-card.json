@@ -1,0 +1,69 @@
+{
+  "collectionName": "components_shared_featured_cards",
+  "info": {
+    "displayName": "featuredCard"
+  },
+  "options": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "required": true,
+      "default": "points",
+      "enum": [
+        "points",
+        "image",
+        "blank",
+        "wide"
+      ]
+    },
+    "cardWithImage": {
+      "type": "component",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "type"
+            },
+            "image"
+          ]
+        }
+      },
+      "component": "featured-card.card-with-image",
+      "repeatable": false,
+      "required": true
+    },
+    "cardWithPoints": {
+      "type": "component",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "type"
+            },
+            "points"
+          ]
+        }
+      },
+      "component": "featured-card.card-with-points",
+      "repeatable": false,
+      "required": true
+    },
+    "wideCard": {
+      "type": "component",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "type"
+            },
+            "wide"
+          ]
+        }
+      },
+      "component": "featured-card.wide-card",
+      "repeatable": false,
+      "required": true
+    }
+  },
+  "config": {}
+}

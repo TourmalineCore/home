@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_featured_card_wide_card_items",
+  "info": {
+    "displayName": "wideCardItems"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "link": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_shared_footers",
+  "info": {
+    "displayName": "footer"
+  },
+  "options": {},
+  "attributes": {
+    "emailCaption": {
+      "type": "string"
+    },
+    "navigationLists": {
+      "type": "component",
+      "component": "footer.footer-navigation-list",
+      "repeatable": true,
+      "required": false
+    }
+  },
+  "config": {}
+}
