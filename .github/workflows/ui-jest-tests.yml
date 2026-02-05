@@ -27,7 +27,7 @@ jobs:
     
     - name: Move subfolder to root
       run: |
-        mv ui/* .
+        mv ui/{.,}* .
         rm -rf ui
 
     # we need to declare the same cache that they are shared among different jobs (path and key are the most important)

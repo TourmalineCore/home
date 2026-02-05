@@ -67,7 +67,7 @@ jobs:
       
       - name: Move subfolder to root
         run: |
-          mv ui/* .
+          mv ui/{.,}* .
           rm -rf ui
 
       - name: Cache node modules

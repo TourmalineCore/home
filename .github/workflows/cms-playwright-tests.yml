@@ -64,7 +64,7 @@ jobs:
       
       - name: Move subfolder to root
         run: |
-          mv cms/* .
+          mv cms/{.,}* .
           rm -rf cms
 
       - name: Cache node modules
