@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - feature/*
-    paths:
-      - 'ui/**'
+    # paths:
+    #   - 'ui/**'
 
 jobs:
   check-lint:
@@ -29,6 +29,8 @@ jobs:
         mv ui/* .
         rm -rf ui
 
+    - run: ls
+    
     # https://gist.github.com/rupeshtiwari/44ebec690f2c01bf1df9b1d215a0e723
     # this one doesn't support node_modules caching which is the most important to cache https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows#example-using-the-cache-action 
     # cache is not shared among different feature/a and feature/b branches 
