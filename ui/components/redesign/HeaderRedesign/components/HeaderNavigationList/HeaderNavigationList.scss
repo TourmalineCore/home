@@ -1,0 +1,72 @@
+.header-navigation-list {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @include tablet-xl {
+      flex-direction: row;
+      gap: 0;
+    }
+  }
+
+  &__list-item {
+    @include tablet-xl {
+      display: flex;
+      align-items: center;
+    }
+
+    &--is-open .header-accordion__arrow {
+      transform: rotate(-0.5turn);
+    }
+
+    &--is-open .header-accordion__list-wrapper {
+      display: flex;
+    }
+  }
+
+  &__accordion {
+    @include tablet-xl {
+      padding-right: 16px;
+      padding-left: 16px;
+    }
+
+    @include desktop-xl {
+      padding-right: 24px;
+      padding-left: 24px;
+    }
+  }
+
+  &__link {
+    @include h4;
+
+    width: 100%;
+    text-decoration: none;
+    color: $color-white;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+
+    @include tablet-xl {
+      @include body-m;
+
+      margin-right: 16px;
+      margin-left: 16px;
+    }
+
+    @include desktop-xl {
+      margin-right: 24px;
+      margin-left: 24px;
+    }
+  }
+
+  @include tablet-xl {
+    margin-right: 56px;
+  }
+
+  @include desktop-xl {
+    margin-right: 80px;
+  }
+}

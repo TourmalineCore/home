@@ -1,0 +1,171 @@
+.article-page {
+  overflow-x: hidden;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  font-size: 16px;
+}
+
+.article-page__comments {
+  margin-top: 40px;
+}
+
+.article-page h1 {
+  margin: 1em 0 0.8em;
+}
+
+.article-page h1:first-child {
+  margin-top: 0;
+}
+
+.article-page h2 {
+  margin-top: 1.2em;
+}
+
+.article-page p {
+  font-size: inherit;
+}
+
+.article-page a {
+  color: #c1dde2;
+}
+
+.article-page blockquote {
+  margin-right: 0;
+  margin-left: 0;
+  border-left: 10px solid #56b6c2;
+  padding-left: 20px;
+  text-align: left;
+  color: #abb2bf;
+}
+
+.article-page blockquote p {
+  font-size: 1em;
+}
+
+.article-page table {
+  margin-bottom: 20px;
+  border-collapse: collapse;
+}
+
+.article-page__info {
+  margin-bottom: 32px;
+
+  @media (width >= 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 56px;
+  }
+}
+
+.article-page__date-publication {
+  margin-top: 32px;
+
+  @media (width >= 768px) {
+    margin-top: 0;
+  }
+}
+
+.article-page td,
+.article-page th {
+  border: 1px solid #5c6370;
+  padding: 8px;
+}
+
+.article-page ol,
+.article-page ul {
+  list-style: revert;
+  padding: revert;
+}
+
+code {
+  border-radius: 5px;
+  padding: 0 4px;
+  color: #abb2bf;
+  background: #2d313c;
+}
+
+code.hljs {
+  padding: 3px 5px;
+}
+
+pre code.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 1em;
+}
+
+.hljs {
+  color: #abb2bf;
+  background: #2d313c;
+}
+
+.hljs-comment,
+.hljs-quote {
+  font-style: italic;
+  color: #5c6370;
+}
+
+.hljs-doctag,
+.hljs-formula,
+.hljs-keyword {
+  color: #c678dd;
+}
+
+.hljs-deletion,
+.hljs-name,
+.hljs-section,
+.hljs-selector-tag,
+.hljs-subst {
+  color: #e06c75;
+}
+
+.hljs-literal {
+  color: #56b6c2;
+}
+
+.hljs-addition,
+.hljs-attribute,
+.hljs-string,
+.hljs-meta .hljs-string,
+.hljs-regexp {
+  color: #98c379;
+}
+
+.hljs-attr,
+.hljs-number,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-pseudo,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable {
+  color: #d19a66;
+}
+
+.hljs-bullet,
+.hljs-link,
+.hljs-meta,
+.hljs-selector-id,
+.hljs-symbol,
+.hljs-title {
+  color: #61aeee;
+}
+
+.hljs-built_in,
+.hljs-class .hljs-title,
+.hljs-title.class_ {
+  color: #e6c07b;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: 700;
+}
+
+.hljs-link {
+  text-decoration: underline;
+}

@@ -1,0 +1,185 @@
+.featured-card {
+  $this: &;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 2px;
+  padding: 24px 20px;
+  height: 100%;
+  min-height: 304px;
+  color: $color-black;
+
+  &__list {
+    margin-bottom: 10px;
+    margin-left: 24px;
+    color: $color-grey-500-redesign;
+
+    @include tablet-xl {
+      margin-left: 26px;
+    }
+
+    @include desktop-xl {
+      margin-left: 36px;
+    }
+  }
+
+  &__title {
+    @include h6;
+
+    margin-bottom: 20px;
+
+    @include desktop {
+      margin-bottom: 32px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 44px;
+    }
+  }
+
+  &__link-text {
+    @include link-text;
+    @include animated-underline;
+
+    display: inline-flex;
+    align-items: center;
+    margin-top: auto;
+    width: fit-content;
+
+    svg {
+      display: block;
+      margin-left: 12px;
+      width: 12px;
+      height: auto;
+
+      path {
+        fill: $color-black;
+      }
+
+      @include desktop-xl {
+        width: 20px;
+      }
+    }
+  }
+
+  &__item {
+    @include body-m;
+
+    list-style-type: disc;
+
+    & + & {
+      margin-top: 12px;
+
+      @include desktop-xl {
+        margin-top: 16px;
+      }
+    }
+  }
+
+  &__link-wrapper {
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  &__image-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border: 10px solid $color-black;
+    width: 212px;
+    height: 276px;
+    background-color: $color-grey-100-redesign;
+    transform: translate(-50%, -50%);
+
+    img {
+      background-color: $color-black;
+      object-fit: cover;
+    }
+
+    @include desktop-xl {
+      border: 11px solid $color-black;
+      width: 298px;
+      height: 388px;
+    }
+  }
+
+  &:hover {
+    #{$this}__link-text::after {
+      transform: scaleX(1);
+      transform-origin: bottom left;
+    }
+  }
+
+  @include tablet-xl {
+    min-height: 386px;
+  }
+
+  @include desktop {
+    min-height: 405px;
+  }
+
+  @include desktop-xl {
+    padding: 32px 28px;
+    min-height: 607px;
+  }
+
+  &--blank {
+    display: none;
+
+    @include desktop {
+      display: block;
+    }
+  }
+
+  &--image {
+    display: none;
+
+    @include desktop {
+      display: block;
+    }
+  }
+
+  &--blue {
+    background-color: $color-deep-blue-redesign;
+  }
+
+  &--grey {
+    background-color: $color-grey-100-redesign;
+  }
+
+  &--black {
+    background-color: $color-black;
+
+    #{$this}__list {
+      color: $color-grey-300-redesign;
+    }
+
+    #{$this}__link,
+    #{$this}__title {
+      color: $color-white;
+
+      &::after {
+        background-color: $color-white;
+      }
+
+      &:hover {
+        #{$this}__link::after {
+          background-color: $color-white;
+        }
+      }
+    }
+    #{$this}__link {
+      path {
+        fill: $color-white;
+      }
+    }
+  }
+}

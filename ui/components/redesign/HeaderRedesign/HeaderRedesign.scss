@@ -1,0 +1,91 @@
+.header-redesign {
+  @include inter-font;
+
+  position: sticky;
+  top: 0;
+  z-index: $header;
+  background-color: $color-black;
+  transition: transform 0.3s ease-in-out;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  &__logo-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-right: auto;
+    width: 100%;
+    max-width: 135px;
+    aspect-ratio: 135 / 40;
+
+    @include tablet-xl {
+      z-index: 1;
+    }
+
+    @include desktop-xl {
+      max-width: 190px;
+      aspect-ratio: 190 / 56;
+    }
+  }
+
+  &__nav {
+    display: none;
+
+    @include tablet-xl {
+      display: block;
+    }
+  }
+
+  &__lang-switch {
+    margin-right: 24px;
+  }
+
+  &__burger {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    border: none;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    cursor: pointer;
+    gap: 8px;
+
+    @include tablet-xl {
+      display: none;
+    }
+
+    &--open {
+      :nth-child(1) {
+        transform: translateY(5px) rotate(45deg);
+      }
+
+      :nth-child(2) {
+        transform: translateY(-5px) rotate(-45deg);
+      }
+    }
+  }
+
+  &__line {
+    display: block;
+    border-radius: 4px;
+    width: 28px;
+    height: 2px;
+    background-color: $color-white;
+    transition: all 0.3s ease-in-out;
+  }
+
+  @include desktop-xl {
+    padding: 24px 0;
+  }
+
+  &--hidden {
+    transform: translateY(-100%);
+  }
+}

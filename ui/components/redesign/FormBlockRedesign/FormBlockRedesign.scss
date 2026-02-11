@@ -1,0 +1,159 @@
+.form-block-redesign {
+  $this: &;
+
+  padding-top: 40px;
+  background-color: $color-white;
+
+  &__wrapper {
+    position: relative;
+    background-color: $color-black;
+
+    @include tablet {
+      background-color: $color-white;
+    }
+  }
+
+  &__form-wrapper {
+    border-radius: 2px;
+    background-color: $color-black;
+  }
+
+  &__inner {
+    @include tablet {
+      margin: 0 auto;
+      max-width: 556px;
+    }
+
+    @include tablet-xl {
+      max-width: 658px;
+    }
+
+    @include desktop {
+      max-width: 716px;
+    }
+
+    @include desktop-xl {
+      max-width: 1006px;
+    }
+  }
+
+  &__aside {
+    @include body-s;
+
+    margin: 0 -12px;
+    padding: 32px 0 80px;
+    color: $color-black;
+    background-color: $color-white;
+
+    @include tablet-xl {
+      margin: 0 -16px;
+    }
+
+    @include desktop {
+      position: absolute;
+      left: 0;
+      top: 0;
+      flex-direction: column;
+      margin: 0;
+      padding: 0;
+      max-width: 220px;
+      background-color: transparent;
+    }
+
+    @include desktop-xl {
+      max-width: 320px;
+    }
+  }
+
+  &__aside-inner {
+    display: flex;
+    gap: 16px;
+
+    @include desktop {
+      flex-direction: column;
+    }
+
+    @include desktop-xl {
+      gap: 22px;
+    }
+  }
+
+  &__aside-img {
+    position: relative;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 2px;
+    width: 101px;
+    height: 72px;
+    background-color: $color-grey-100-redesign;
+
+    img {
+      object-fit: cover;
+    }
+
+    @include desktop {
+      width: 100px;
+      height: 100px;
+    }
+
+    @include desktop-xl {
+      width: 140px;
+      height: 140px;
+    }
+  }
+
+  &__aside-text {
+    max-width: 190px;
+
+    a {
+      color: $color-deep-blue-redesign;
+      transition: text-decoration-color 0.1s;
+      text-underline-offset: 2px;
+
+      &:hover,
+      &:focus-visible {
+        text-decoration-color: transparent;
+        transition: text-decoration-color 0.1s;
+      }
+    }
+
+    @include desktop {
+      max-width: none;
+    }
+  }
+
+  &.is-modal {
+    padding-top: 54px;
+    background-color: $color-black;
+
+    #{$this}__aside {
+      padding-bottom: 32px;
+    }
+
+    @include tablet {
+      padding-top: 0;
+      padding-bottom: 117px;
+      background-color: $color-white;
+    }
+
+    @include tablet-xl {
+      padding-bottom: 141px;
+    }
+
+    @include desktop {
+      padding-bottom: 0;
+    }
+  }
+
+  @include tablet {
+    padding: 40px 0 184px;
+  }
+
+  @include desktop {
+    padding: 100px 0 140px;
+  }
+
+  @include desktop-xl {
+    padding: 140px 0 200px;
+  }
+}

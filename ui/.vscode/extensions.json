@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
+    "ms-vscode-remote.remote-containers",
+    "vscode-icons-team.vscode-icons",
+    "k--kato.intellij-idea-keybindings",
+    "eamodio.gitlens",
+    "ms-playwright.playwright",
+  ]
+}

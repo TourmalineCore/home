@@ -1,0 +1,82 @@
+.hero {
+  padding-top: 40px;
+  padding-bottom: 80px;
+  background-color: $color-black;
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &__title {
+    @include h1;
+
+    margin-bottom: 24px;
+
+    @include desktop-xl {
+      margin-bottom: 32px;
+    }
+  }
+
+  &__description {
+    @include body-l;
+
+    margin-bottom: 56px;
+    color: $color-grey-300-redesign;
+
+    @include desktop-xl {
+      margin-bottom: 80px;
+    }
+  }
+
+  &__media {
+    position: relative;
+    width: 352px;
+    height: 264px;
+
+    // Todo: move to global and fix other image
+    img,
+    video {
+      display: block;
+      border-radius: 2px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @include tablet {
+      height: 332px;
+    }
+
+    @include desktop-xl {
+      width: 496px;
+      height: 468px;
+    }
+  }
+
+  &__title,
+  &__description {
+    max-width: 490px;
+    text-align: center;
+
+    @include desktop {
+      max-width: 646px;
+    }
+
+    @include desktop-xl {
+      max-width: 938px;
+    }
+  }
+
+  @include tablet {
+    padding-bottom: 130px;
+    min-height: calc(100vh - ($header-logo-height + $header-top-padding));
+  }
+
+  @include desktop-xl {
+    padding-top: 56px;
+    padding-bottom: 180px;
+    min-height: calc(100vh - ($header-logo-height-desktop-xl + $header-top-padding));
+  }
+}

@@ -1,0 +1,365 @@
+// TODO added 40px for padding-top
+.hero-block-technology {
+  $this: &;
+
+  position: relative;
+  font-weight: 500;
+  background-color: $color-black;
+
+  &__title {
+    font-weight: inherit;
+    font-size: 18px;
+    line-height: 1.33;
+    color: $color-white-alpha-100;
+
+    @include tablet-xl {
+      font-size: 20px;
+    }
+
+    @include desktop {
+      font-size: 24px;
+    }
+
+    @include desktop-xl {
+      font-size: 28px;
+    }
+  }
+
+  &__inner {
+    z-index: 1;
+
+    @include tablet-xl {
+      @include dynamic-width(592px, $tablet-xl-width, $pd-tablet);
+    }
+
+    @include desktop {
+      @include dynamic-width(803px, $desktop-width, $pd-desktop);
+    }
+
+    @include desktop-xl {
+      @include dynamic-width(960px, $desktop-xl-width, $pd-desktop-xl);
+    }
+  }
+
+  &__description {
+    margin-top: 8px;
+    margin-bottom: 32px;
+    font-size: 25px;
+    line-height: 1.36;
+    color: $color-white;
+
+    @include tablet {
+      padding-right: 0;
+      max-width: 522px;
+    }
+
+    @include tablet-xl {
+      margin-top: 16px;
+      margin-bottom: 48px;
+      max-width: none;
+      font-size: 29px;
+      line-height: 1.31;
+    }
+
+    @include desktop {
+      font-size: 39px;
+      line-height: 1.23;
+    }
+
+    @include desktop-xl {
+      font-size: 47px;
+      line-height: 1.36;
+    }
+  }
+
+  &__button {
+    position: relative;
+    display: inline-block;
+    border: 1px solid rgba($color-black, 0);
+    border-radius: 100px;
+    padding: 12px 40px;
+    font-family: $ff-montserrat;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.37;
+    letter-spacing: 0.02em;
+    text-align: center;
+    text-decoration: none;
+    color: $color-white;
+    background-color: initial;
+    cursor: pointer;
+    transition: all 0.3s ease-in;
+
+    &-text {
+      position: relative;
+      z-index: 1;
+      display: block;
+    }
+
+    &--ml,
+    &--frontend,
+    &--teams {
+      background-color: $color-purple-page-primary;
+
+      &:hover {
+        border: 1px solid $color-purple-page-primary;
+        background: rgba($color-purple-page-primary, 0.3);
+      }
+    }
+
+    @include desktop {
+      font-size: 18px;
+      line-height: 28px;
+    }
+
+    @include desktop-xl {
+      font-size: 20px;
+    }
+
+    &--backend {
+      background-image:
+        linear-gradient(
+            51deg,
+            $color-backend-page-primary 0%,
+            $color-backend-page-secondary 52%,
+            $color-backend-page-tertiary 100%
+          );
+      background-clip: padding-box;
+
+      &::after,
+      &::before {
+        content: "";
+        position: absolute;
+        display: block;
+        border-radius: inherit;
+        opacity: 0;
+        transition: all 0.3s ease-in-out;
+      }
+
+      &::before {
+        background-image:
+          linear-gradient(
+              51deg,
+              $color-backend-page-primary 0%,
+              $color-backend-page-secondary 52%,
+              $color-backend-page-tertiary 100%
+            );
+        inset: -1px;
+      }
+
+      &::after {
+        background-image:
+          linear-gradient(
+              51deg,
+              rgba($color-backend-page-primary, 0.3) 0%,
+              rgba($color-backend-page-secondary, 0.3) 52%,
+              rgba($color-backend-page-tertiary, 0.3) 100%
+            );
+        background-color: $color-black;
+        inset: 0;
+      }
+
+      &:hover {
+        background-image: transparent;
+      }
+
+      &:hover::after,
+      &:hover::before {
+        opacity: 1;
+      }
+    }
+
+    &--qa {
+      background-image: linear-gradient(309deg, $color-qa-page-primary 0%, $color-qa-page-secondary 100%);
+      background-clip: padding-box;
+
+      &::after,
+      &::before {
+        content: "";
+        position: absolute;
+        display: block;
+        border-radius: inherit;
+        opacity: 0;
+        transition: all 0.3s ease-in-out;
+      }
+
+      &::before {
+        background-image: linear-gradient(309deg, $color-qa-page-primary 0%, $color-qa-page-secondary 100%);
+        inset: -1px;
+      }
+
+      &::after {
+        background-image:
+          linear-gradient(
+              309deg,
+              rgba($color-qa-page-primary, 0.3) 0%,
+              rgba($color-qa-page-secondary, 0.3) 100%
+            );
+        background-color: $color-black;
+        inset: 0;
+      }
+
+      &:hover {
+        background-image: transparent;
+      }
+
+      &:hover::after,
+      &:hover::before {
+        opacity: 1;
+      }
+    }
+
+    &--frontend-team {
+      background-color: $color-cyan-page-primary;
+
+      &:hover {
+        border: 1px solid $color-cyan-page-primary;
+        background: rgba($color-cyan-page-primary, 0.3);
+      }
+    }
+
+    &--embedded {
+      background-image: linear-gradient(225deg, $color-embedded-page-primary 0%, $color-embedded-page-secondary 100%);
+      background-clip: padding-box;
+
+      &::after,
+      &::before {
+        content: "";
+        position: absolute;
+        display: block;
+        border-radius: inherit;
+        opacity: 0;
+        transition: all 0.3s ease-in-out;
+      }
+
+      &::before {
+        background-image: linear-gradient(225deg, $color-embedded-page-primary 0%, $color-embedded-page-secondary 100%);
+        inset: -1px;
+      }
+
+      &::after {
+        background-image:
+          linear-gradient(
+              225deg,
+              rgba($color-embedded-page-primary, 0.3) 0%,
+              rgba($color-embedded-page-secondary, 0.3) 100%
+            );
+        background-color: $color-black;
+        inset: 0;
+      }
+
+      &:hover {
+        background-image: transparent;
+      }
+
+      &:hover::after,
+      &:hover::before {
+        opacity: 1;
+      }
+    }
+
+    &--design {
+      background-image: linear-gradient(234deg, $color-design-page-primary 0%, $color-design-page-secondary 78.13%);
+      background-clip: padding-box;
+
+      &::after,
+      &::before {
+        content: "";
+        position: absolute;
+        display: block;
+        border-radius: inherit;
+        opacity: 0;
+        transition: all 0.3s ease-in-out;
+      }
+
+      &::before {
+        background-image:
+          linear-gradient(
+              234deg,
+              $color-design-page-primary 0%,
+              $color-design-page-secondary 78.13%
+            );
+        inset: -1px;
+      }
+
+      &::after {
+        background-image:
+          linear-gradient(
+              234deg,
+              $color-design-page-secondary-100 0%,
+              rgba($color-design-page-secondary, 0.3) 79.17%
+            );
+        background-color: $color-black;
+        inset: 0;
+      }
+
+      &:hover {
+        background-image: transparent;
+      }
+
+      &:hover::after,
+      &:hover::before {
+        opacity: 1;
+      }
+    }
+  }
+
+  &__image {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    overflow: hidden;
+    width: 249px;
+    height: 364px;
+
+    img {
+      height: 100%;
+    }
+
+    @include tablet {
+      width: 304px;
+      height: 411px;
+    }
+
+    @include tablet-xl {
+      left: 0;
+      top: 144px;
+      width: 100%;
+      height: calc(100% - 144px);
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+
+    @include desktop {
+      height: calc(100% - 92px);
+    }
+  }
+
+  &__wrapper {
+    padding-top: 104px;
+    padding-bottom: 300px;
+
+    @include tablet {
+      display: flex;
+      align-items: center;
+      padding-top: 104px;
+      padding-bottom: 198px;
+    }
+
+    @include tablet-xl {
+      justify-content: flex-end;
+      padding-top: 184px;
+      padding-bottom: 264px;
+    }
+
+    @include desktop {
+      margin-top: auto;
+      height: calc(100vh - 80px);
+    }
+  }
+
+  @include tablet-xl {
+    position: static;
+  }
+}
