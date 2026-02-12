@@ -1,0 +1,31 @@
+name: Trigger Home Env
+
+on:
+  push:
+    branches:
+      - feature/**
+    paths:
+      - 'env-synchronizer/**'
+
+jobs:
+  # this is needed to wait for the new docker image to be build and published to the registry
+  # so that we can use the image to run ui of the needed commit related version as part of local-env
+  # the idea is taken from here https://stackoverflow.com/a/71489231
+  docker_build_and_push:
+    uses: ./.github/workflows/env-synchronizer-docker-build-and-push.yml
+    # without this it cannot login to the registry
+    secrets: inherit
+
+  trigger_home_env:
+    needs: docker_build_and_push
+    uses: TourmalineCore/home/.github/workflows/.reusable-sync-env.yml@feature/add_reusable_workflows
+    with:
+      # target-env is used to define which env will be synced
+      target-env: home-env
+      # path-to-values is used to define where the values files is stored
+      path-to-values: deploy/values-env-synchronizer.yaml.gotmpl
+      # path-to-helmfile is used to define where the helmfile is stored
+      path-to-helmfile: deploy/helmfile.yaml
+      # service-name is the name of the subfolder where the service is stored in the home repo
+      service-name: env-synchronizer
+    secrets: inherit

@@ -1,0 +1,14 @@
+image:
+  registry: ghcr.io
+  repository: tourmalinecore/home-env-synchronizer
+  pullPolicy: Always
+
+resources:
+  limits:
+    # WARNING: small value of cpu limit may cause failing during applying helmfile
+    cpu: 500m
+  requests:
+    cpu: 1m
+    memory: 256Mi
+
+extraConfigMapEnvVars:
