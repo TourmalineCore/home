@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_shared_featured_cards_lists",
+  "info": {
+    "displayName": "featuredCardsList"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": false
+    },
+    "featuredCards": {
+      "type": "component",
+      "component": "shared.featured-card",
+      "repeatable": true,
+      "required": true
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

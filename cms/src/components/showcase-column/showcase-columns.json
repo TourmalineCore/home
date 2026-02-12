@@ -1,0 +1,50 @@
+{
+  "collectionName": "components_showcase_column_showcase_columns",
+  "info": {
+    "displayName": "showcaseColumns"
+  },
+  "options": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "required": true,
+      "default": "media",
+      "enum": [
+        "media",
+        "markdown"
+      ]
+    },
+    "showcaseColumnWithMarkdown": {
+      "type": "component",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "type"
+            },
+            "markdown"
+          ]
+        }
+      },
+      "component": "showcase-column.showcase-column-with-markdown",
+      "repeatable": false,
+      "required": false
+    },
+    "showcaseColumnWithMedia": {
+      "type": "component",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "type"
+            },
+            "media"
+          ]
+        }
+      },
+      "component": "showcase-column.showcase-column-with-media",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}

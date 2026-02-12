@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_shared_headers",
+  "info": {
+    "displayName": "header"
+  },
+  "options": {},
+  "attributes": {
+    "buttonLabel": {
+      "type": "string",
+      "required": true
+    },
+    "emailCaption": {
+      "type": "string",
+      "required": false
+    },
+    "socialLinks": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::social-network.social-network"
+    },
+    "navigationLists": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::navigation.navigation"
+    }
+  },
+  "config": {}
+}

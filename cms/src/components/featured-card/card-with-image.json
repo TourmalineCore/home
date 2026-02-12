@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_featured_card_card_with_images",
+  "info": {
+    "displayName": "cardWithImage"
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "theme": {
+      "type": "enumeration",
+      "required": true,
+      "default": "blue",
+      "enum": [
+        "black",
+        "grey",
+        "blue"
+      ]
+    }
+  },
+  "config": {}
+}
