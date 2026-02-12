@@ -1,0 +1,25 @@
+name: Publish Docker image for prod-env
+
+on:
+  push:
+    branches:
+      - feature/*
+    paths:
+      - 'ui/**'
+  # to allow to wait for a docker image to be published to proceed in another workflow
+  workflow_call:
+
+jobs:
+  push_to_registry:
+    uses: TourmalineCore/home-github-workflows/.github/workflows/docker-build-and-push.yml@feature/add_context_and_image_name_for_build_workflow
+    with:
+      context: ./ui
+      image-name: home-ui
+      # Build-args used to define variables that will be used in image
+      build-args: |
+        CDN_ENABLED=true
+        CDN_DOMAIN=cdn.tourmalinecore.com
+        CORS_ORIGIN=https://tourmalinecore.com
+        ENABLE_SEO_INDEXING=true
+    # without this it cannot login to the registry
+    secrets: inherit
