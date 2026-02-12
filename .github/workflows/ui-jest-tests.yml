@@ -24,7 +24,11 @@ jobs:
         # Cone mode is disabled to not clone other files in root folder
         sparse-checkout: 'ui'
         sparse-checkout-cone-mode: false
-    
+
+      # This step is needed because all steps runs from root folder and there is several options how to solve this problem
+      # Option #1: change working-directory of each step
+      # Option #2: move subfolder to root folder
+      # Option #2 was chosen because it allows the folder to be moved in a single action
     - name: Move subfolder to current(top-level) folder
       run: |
         mv ui/{.,}* .
