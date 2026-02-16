@@ -20,7 +20,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        # sparse-checkuout is needed to clone cms folder only. 
+        # sparse-checkuout is needed to clone ui folder only. 
         # Cone mode is disabled to not clone other files in root folder
         sparse-checkout: 'ui'
         sparse-checkout-cone-mode: false
