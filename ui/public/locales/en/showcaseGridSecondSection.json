@@ -1,0 +1,62 @@
+{
+  "showcaseColumns":[
+    {
+        "id":0,
+        "type": "media",
+        "showcaseColumnWithMedia":{
+          "media": {
+            "url": "/images/clever-project.png",
+            "mime": "image/png"
+          },
+          "title":"Clever",
+          "description":"Part of an ecosystem of\u00A0projects supporting a\u00A0salesperson’s bonus calculation and\u00A0employee incentive program",
+          "link":"https://www.behance.net/gallery/107025505/Clever-Personal-managment",
+          "size":"M",
+          "isNda":false
+        }
+    },
+    {
+        "id":1,
+        "type": "media",
+        "showcaseColumnWithMedia":{
+          "media": {
+            "url": "/images/sine-en.png",
+            "mime": "image/png"
+          },
+          "title":"Sine",
+          "description":"Human resource management system",
+          "size":"M",
+          "isNda":false
+        }
+    },
+    {
+        "id":2,
+        "type": "media",
+        "showcaseColumnWithMedia":{
+          "media": {
+            "url": "/images/driver-project.png",
+            "mime": "image/png"
+          },
+          "title":"Driver",
+          "description":"Development and\u00A0integration of a\u00A0driver for a\u00A0peripheral device",
+          "size":"M",
+          "isNda":true
+        }
+    },
+    {
+        "id":3,
+        "type": "media",
+        "showcaseColumnWithMedia":{
+          "media": {
+            "url": "/images/protocol-en.png",
+            "mime": "image/png"
+          },
+          "title":"Protocol",
+          "description":"Development of application layer data transfer protocol",
+          "size":"M",
+          "isNda":true
+        }
+    }
+  ],
+  "showOnMobile": true
+}

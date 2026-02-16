@@ -1,0 +1,166 @@
+.cooperation {
+  &__wrapper {
+    position: relative;
+    padding-top: 104px;
+    padding-bottom: 104px;
+
+    @include tablet {
+      display: flex;
+      justify-content: flex-start;
+      padding-top: 80px;
+      padding-bottom: 80px;
+    }
+
+    @include tablet-xl {
+      justify-content: flex-end;
+      padding-top: 120px;
+      padding-bottom: 120px;
+    }
+  }
+
+  &__inner {
+    max-width: 600px;
+
+    @include tablet {
+      max-width: 439px;
+    }
+
+    @include tablet-xl {
+      @include dynamic-width(592px, $tablet-xl-width, $pd-tablet);
+
+      max-width: none;
+    }
+
+    @include desktop {
+      @include dynamic-width(803px, $desktop-width, $pd-desktop);
+    }
+
+    @include desktop-xl {
+      @include dynamic-width(960px, $desktop-xl-width, $pd-desktop-xl);
+    }
+  }
+
+  &__title {
+    margin-bottom: 48px;
+
+    @include tablet {
+      margin-bottom: 64px;
+    }
+
+    @include tablet-xl {
+      margin-bottom: 80px;
+
+      &--teams {
+        max-width: 455px;
+      }
+    }
+
+    @include desktop {
+      &--teams {
+        max-width: 615px;
+      }
+    }
+
+    @include desktop-xl {
+      &--teams {
+        max-width: 740px;
+      }
+    }
+
+    &--teams {
+      max-width: 390px;
+    }
+  }
+
+  &__image {
+    position: absolute;
+    right: 0;
+    bottom: 145px;
+    background-size: cover;
+
+    &--ml,
+    &--frontend,
+    &--design,
+    &--embedded,
+    &--qa,
+    &--backend,
+    &--teams {
+      width: 62px;
+      height: 194px;
+
+      @include tablet {
+        right: $pd-tablet;
+        bottom: 15px;
+        width: 290px;
+        height: 355px;
+      }
+
+      @include tablet-xl {
+        left: 31px;
+        bottom: 100px;
+      }
+
+      @include desktop {
+        left: 74px;
+        bottom: 150px;
+      }
+
+      @include desktop-xl {
+        bottom: 200px;
+      }
+    }
+
+    &--frontend,
+    &--teams {
+      background-image: url("/images/cooperation-purple-element-mobile.png");
+    }
+
+    &--ml,
+    &--frontend,
+    &--teams {
+      @include tablet {
+        background-image: url("/images/ellipse-purple.svg");
+      }
+    }
+
+    &--backend {
+      background-image: url("/images/cooperation-backend-element-mobile.webp");
+
+      @include tablet {
+        background-image: url("/images/ellipse-backend.svg");
+      }
+    }
+
+    &--qa {
+      background-image: url("/images/cooperation-qa-element-mobile.webp");
+
+      @include tablet {
+        background-image: url("/images/ellipse-qa.svg");
+      }
+    }
+
+    &--ml {
+      background-image: url("/images/cooperation-ml-element-mobile.webp");
+
+      @include tablet {
+        background-image: url("/images/ellipse-purple.svg");
+      }
+    }
+
+    &--embedded {
+      background-image: url("/images/cooperation-embedded-element-mobile.webp");
+
+      @include tablet {
+        background-image: url("/images/ellipse-embedded.svg");
+      }
+    }
+
+    &--design {
+      background-image: url("/images/cooperation-design-element-mobile.png");
+
+      @include tablet {
+        background-image: url("/images/ellipse-design.svg");
+      }
+    }
+  }
+}

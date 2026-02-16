@@ -1,0 +1,82 @@
+.social-links {
+  $this: &;
+
+  &__link {
+    display: flex;
+    align-items: center;
+    margin-top: 12px;
+    width: max-content;
+    font-family: inherit;
+    font-size: 18px;
+    line-height: 1.56;
+    text-decoration: none;
+    transition: opacity 0.3s;
+
+    svg {
+      display: block;
+      margin-right: 12px;
+      width: 24px;
+      height: 24px;
+    }
+
+    &:focus,
+    &:active {
+      opacity: 0.6;
+    }
+
+    @include desktop-xl {
+      font-size: 22px;
+      line-height: 1.45;
+
+      svg {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+  }
+
+  &__mail {
+    background: linear-gradient(90.05deg, #e474f1 0.04%, #e474f1 0.05%, #81b9e8 99.96%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+
+    &--technology {
+      -webkit-text-fill-color: $color-white;
+      -moz-text-fill-color: $color-white;
+    }
+  }
+
+  &__telegram {
+    background: linear-gradient(90.05deg, #81b9e8 0.04%, #81b9e8 0.05%, #4fdae2 99.96%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+
+    &--technology {
+      -webkit-text-fill-color: $color-white;
+      -moz-text-fill-color: $color-white;
+    }
+  }
+
+  &--zh {
+
+    #{$this}__link {
+      font-size: 18px;
+
+      @include tablet {
+        font-size: 22px;
+      }
+
+      @include desktop-xl {
+        font-size: 28px;
+      }
+    }
+  }
+}

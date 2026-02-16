@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_column_with_content_column_with_images",
+  "info": {
+    "displayName": "columnWithImage"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "markdownText": {
+      "type": "richtext"
+    }
+  },
+  "config": {}
+}

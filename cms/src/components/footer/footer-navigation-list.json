@@ -1,0 +1,48 @@
+{
+  "collectionName": "components_footer_footer_navigation_lists",
+  "info": {
+    "displayName": "footerNavigationList"
+  },
+  "options": {},
+  "attributes": {
+    "caption": {
+      "type": "string",
+      "required": true
+    },
+    "isSocialNetworks": {
+      "type": "boolean",
+      "default": false
+    },
+    "links": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::navigation.navigation",
+      "conditions": {
+        "visible": {
+          "!=": [
+            {
+              "var": "isSocialNetworks"
+            },
+            true
+          ]
+        }
+      }
+    },
+    "socialLinks": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::social-network.social-network",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isSocialNetworks"
+            },
+            true
+          ]
+        }
+      }
+    }
+  },
+  "config": {}
+}

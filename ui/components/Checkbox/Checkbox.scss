@@ -1,0 +1,21 @@
+.checkbox {
+  margin: 0;
+  border: 2px solid $color-white;
+  border-radius: 2px;
+  width: 16px;
+  height: 16px;
+  background-color: $color-black;
+  cursor: pointer;
+  appearance: none;
+
+  &:checked {
+    background-image: url("../../public/images/checkbox-mark.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  @include desktop-xl {
+    width: 20px;
+    height: 20px;
+  }
+}

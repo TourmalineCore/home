@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_shared_three_column_grids",
+  "info": {
+    "displayName": "threeColumnGrid"
+  },
+  "options": {},
+  "attributes": {
+    "columnsWithContent": {
+      "type": "component",
+      "component": "shared.column-with-content",
+      "repeatable": true,
+      "required": true,
+      "max": 3
+    }
+  },
+  "config": {}
+}

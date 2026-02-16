@@ -1,0 +1,94 @@
+{
+  "navigationLists":[
+    {
+      "id": 0,
+      "name": "Направления",
+      "link": "",
+      "navItems": [
+        {
+          "id": 0,
+          "name": "Frontend",
+          "link": "/frontend"
+        },
+        {
+          "id": 1,
+          "name": "Backend",
+          "link": "/backend"
+        },
+        {
+          "id": 2,
+          "name": "Embedded",
+          "link": "/embedded"
+        },
+        {
+          "id": 3,
+          "name": "Машинное обучение",
+          "link": "/ml"
+        },
+        {
+          "id": 4,
+          "name": "Тестирование",
+          "link": "/qa"
+        },
+        {
+          "id": 5,
+          "name": "UI/UX дизайн",
+          "link": "/design"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "Команды",
+      "link": "",
+      "navItems": [
+        {
+          "id": 0,
+          "name": "Аутсорсинг",
+          "link": "/teams"
+        },
+        {
+          "id": 1,
+          "name": "Frontend-команда",
+          "link": "/frontend-team"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Статьи",
+      "link": "/articles",
+      "navItems": []
+    }
+  ],
+  "buttonLabel": "Обсудить проект",
+  "emailCaption": "По всем вопросам",
+  "emailAddress": "contact@tourmalinecore.com",
+  "socialLinks": [
+    {
+      "id": 0,
+      "name": "VK",
+      "link": "https://vk.com/tourmalinecore"
+    },
+    {
+      "id": 1,
+      "name": "Habr",
+      "link": "https://habr.com/ru/users/TourmalineCore/"
+    },
+    {
+      "id": 2,
+      "name": "GitHub",
+      "link": "https://github.com/TourmalineCore"
+    },
+    {
+      "id": 3,
+      "name": "Telegram",
+      "link": "https://t.me/tourmalinecore"
+    },
+    {
+      "id": 4,
+      "name": "YouTube",
+      "link": "https://youtube.com/@tourmalinecore"
+    }
+  ]
+}

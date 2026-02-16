@@ -1,0 +1,72 @@
+{
+  "showcaseColumns":[
+    {
+      "id":0,
+      "type": "media",
+      "showcaseColumnWithMedia":{
+        "media": {
+          "url": "/video/best-by.mp4",
+          "mime": "video/mp4"
+        },
+        "title": "Best By",
+        "description": "Service for\u00A0tracking product expiration dates",
+        "link": "",
+        "size": "M",
+        "isNda": false
+      }
+    },
+    {
+      "id":1,
+      "type": "media",
+      "showcaseColumnWithMedia":{
+        "media": {
+          "url": "/images/senmotion-project.png",
+          "mime": "image/png"
+        },
+        "title": "Senmotion",
+        "description": "Connecting smart insoles to\u00A0cloud infrastructure to\u00A0store, process, and\u00A0analyze patients’ data",
+        "size": "M",
+        "link": "https://www.behance.net/gallery/106976255/Sen-Motion",
+        "isNda": false
+      }
+    },
+    {
+      "id":2,
+      "type": "media",
+      "showcaseColumnWithMedia": {
+        "media": {
+          "url": "/images/smart-cleaning-project.png",
+          "mime": "image/png"
+        },
+        "title": "Smart video monitoring system",
+        "description": "Video monitoring system for\u00A0self-service car washes that\u00A0tracks movement and\u00A0classifies events",
+        "size": "M",
+        "isNda": false
+      }
+    },
+    {
+      "id":3,
+      "type": "media",
+      "showcaseColumnWithMedia": {
+        "media": {
+          "url": "/images/tradehack-project.jpg",
+          "mime": "image/png"
+        },
+        "title": "Tradehack",
+        "description": "Service for\u00A0collecting analytics on\u00A0products and\u00A0product categories on\u00A0Wildberries marketplace",
+        "size": "M",
+        "link": "https://www.behance.net/gallery/160948093/Analytics-dashboard",
+        "isNda": false
+      }
+    }
+  ],
+  "showOnMobile": false
+}
+
+
+
+
+
+
+
+
