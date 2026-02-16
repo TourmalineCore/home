@@ -3,7 +3,7 @@ name: Trigger Home Env
 on:
   push:
     branches:
-      - feature/**
+      - master
     paths:
       - 'env-synchronizer/**'
 
