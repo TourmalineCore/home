@@ -1,0 +1,67 @@
+.showcase-grid {
+  $grid-mobile-gap: 32px;
+  $grid-desktop-gap: 12px;
+
+  padding-top: 40px;
+  padding-bottom: 32px;
+  background-color: $color-white;
+
+  &__columns {
+    gap: $grid-mobile-gap;
+
+    @include tablet {
+      gap: $grid-desktop-gap;
+    }
+  }
+
+  &__title {
+    @include h3;
+
+    margin-bottom: 32px;
+    color: $color-black;
+
+    @include tablet-xl {
+      margin-top: 16px;
+    }
+
+    @include desktop {
+      margin-top: 32px;
+      margin-bottom: 48px;
+    }
+
+    @include desktop-xl {
+      margin-top: 44px;
+      margin-bottom: 72px;
+    }
+  }
+
+  // adds padding to the last block in the chain
+  &:not(:has(+ &)) {
+    padding-bottom: 40px;
+
+    @include desktop {
+      padding-bottom: 48px;
+    }
+  }
+
+  & + & {
+    @media (width < $tablet-width) {
+      padding-top: 0;
+    }
+  }
+
+  @include tablet {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+
+  @include desktop {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  @include desktop-xl {
+    padding-top: 72px;
+    padding-bottom: 72px;
+  }
+}

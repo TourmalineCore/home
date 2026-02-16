@@ -1,0 +1,136 @@
+.showcase-column-with-media {
+  display: flex;
+  flex-direction: column-reverse;
+  height: max-content;
+
+  &__images {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 12px;
+    border-radius: 2px;
+    height: 280px;
+    background-color: $color-grey-100-redesign;
+
+    // Todo: move to global and fix other image
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @include desktop {
+      margin-bottom: 20px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 28px;
+    }
+
+    &--XS {
+      @include desktop {
+        height: 290px;
+      }
+
+      @include desktop-xl {
+        height: 408px;
+      }
+    }
+
+    &--S {
+      @include desktop {
+        height: 364px;
+      }
+
+      @include desktop-xl {
+        height: 512px;
+      }
+    }
+
+    &--M {
+      @include desktop {
+        height: 432px;
+      }
+
+      @include desktop-xl {
+        height: 608px;
+      }
+    }
+
+    &--L {
+      @include desktop {
+        height: 545px;
+      }
+
+      @include desktop-xl {
+        height: 764px;
+      }
+    }
+  }
+
+  &__title {
+    @include h6;
+
+    margin-bottom: 8px;
+    color: $color-black;
+
+    @include tablet {
+      word-break: break-word;
+    }
+
+    @include tablet-xl {
+      word-break: normal;
+    }
+
+    @include desktop {
+      margin-bottom: 12px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 16px;
+    }
+  }
+
+  &__description {
+    @include body-m;
+
+    color: $color-grey-500-redesign;
+  }
+
+  &__link {
+    display: flex;
+    flex-direction: column-reverse;
+    text-decoration: none;
+
+    img,
+    video {
+      transition: transform 0.2s ease-out;
+    }
+
+    &:hover img,
+    &:hover video,
+    &:focus-visible img,
+    &:focus-visible video {
+      transform: scale(1.05);
+    }
+  }
+
+  &__nda {
+    @include h7;
+
+    position: absolute;
+    right: 16px;
+    bottom: 12px;
+    z-index: 1;
+    color: $color-white;
+  }
+
+  &__video {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

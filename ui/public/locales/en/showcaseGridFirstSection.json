@@ -1,0 +1,45 @@
+{
+  "title": "Projects",
+  "anchorId": "projects",
+  "showcaseColumns": [
+    {
+      "id": 0,
+      "type": "media",
+      "showcaseColumnWithMedia": {
+        "media": {
+          "url": "/images/pelican-en.png",
+          "mime": "image/png"
+        },
+        "title": "Pelican",
+        "description": "An open-source website for Chelyabinsk Zoo, which we developed free of charge",
+        "link": "",
+        "size": "S",
+        "isNda": false
+      }
+    },
+    {
+      "id": 1,
+      "type": "media",
+      "showcaseColumnWithMedia": {
+        "media": {
+          "url": "/images/tourmanique-project.png",
+          "mime": "image/png"
+        },
+        "title": "Tourmanique",
+        "description": "Service for\u00A0determining the\u00A0uniqueness of\u00A0photos",
+        "link": "https://www.behance.net/gallery/203111257/Photo-Uniqueness-Detection-Service-UI-UX",
+        "size": "L",
+        "isNda": false
+      }
+    },
+    {
+      "id": 2,
+      "type": "markdown",
+      "showcaseColumnWithMarkdown": {
+        "subtitle": "We make projects for\u00A0B2B, B2C, municipal and\u00A0charitable organizations, tech companies, and\u00A0innovative startups.",
+        "markdown": "<span>Chelyabinsk Zoo, Fairaction, Senmotion, Industry Transformation Solutions, Daoism Systems</span>\n<span className='blue-deep-color nda'>+ NDA clients</span>"
+      }
+    }
+  ],
+  "showOnMobile": true
+}

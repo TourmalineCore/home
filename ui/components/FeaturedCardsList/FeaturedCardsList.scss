@@ -1,0 +1,60 @@
+.featured-cards-list {
+  $this: &;
+
+  padding-top: 40px;
+  color: $color-black;
+  background-color: $color-white;
+
+  &__title {
+    @include h3;
+
+    margin-bottom: 26px;
+
+    @include desktop {
+      max-width: 904px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 80px;
+    }
+  }
+
+  &__cards {
+    grid-gap: 8px;
+
+    @include tablet-xl {
+      grid-gap: 12px;
+    }
+
+    @include desktop {
+      grid-gap: 11px;
+    }
+
+    @include desktop-xl {
+      grid-gap: 16px;
+    }
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+
+    @include desktop {
+      display: block;
+    }
+  }
+
+  @include tablet-xl {
+    padding-bottom: 40px;
+  }
+
+  @include desktop {
+    padding-top: 88px;
+    padding-bottom: 128px;
+  }
+
+  @include desktop-xl {
+    padding-top: 120px;
+    padding-bottom: 180px;
+  }
+}

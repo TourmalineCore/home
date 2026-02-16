@@ -1,0 +1,160 @@
+.stages-list {
+  display: flex;
+  flex-flow: column;
+  gap: 56px;
+
+  &__number {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 24px;
+    border: 1px solid rgba($color-black, 0);
+    border-radius: 50%;
+    padding: 8px 17px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    color: $color-white;
+    background-clip: padding-box, border-box;
+    transition: background-position 0.3s linear;
+
+    @include tablet {
+      margin-right: 51px;
+    }
+
+    @include tablet-xl {
+      margin-right: 37px;
+    }
+
+    @include desktop {
+      margin-right: 63px;
+    }
+
+    &--design {
+      background-image: linear-gradient(234deg, $color-design-page-primary 0%, $color-design-page-secondary 78.13%);
+    }
+
+    &--teams {
+      background-color: $color-purple-page-primary;
+    }
+
+    &--frontend-team {
+      background-color: $color-cyan-page-primary;
+    }
+  }
+
+  &__item {
+    display: flex;
+    border-bottom: 1px solid rgba($color-white-alpha-300, 0.3);
+    padding-bottom: 56px;
+
+    @include tablet {
+      align-items: unset;
+    }
+  }
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    text-align: left;
+
+    &--trigger {
+      outline: 0;
+      border: none;
+      padding: 0;
+      font-family: inherit;
+      color: inherit;
+      background: transparent;
+    }
+  }
+
+  &__description {
+    display: none;
+    white-space: pre-wrap;
+
+    @include tablet {
+      display: block;
+      line-height: 1.33;
+
+      &--teams,
+      &--frontend-team {
+        font-size: 20px;
+        line-height: 1.8;
+        color: $color-white;
+      }
+
+      @include tablet-xl {
+        line-height: 1.5;
+
+        &--teams,
+        &--frontend-team {
+          line-height: 1.8;
+        }
+      }
+
+      @include desktop {
+        padding: 0 12px;
+        line-height: 1.55;
+
+        &--teams,
+        &--frontend-team {
+          font-size: 24px;
+          line-height: 1.8;
+        }
+      }
+
+      @include desktop-xl {
+        font-size: 20px;
+        line-height: 1.4;
+
+        &--teams,
+        &--frontend-team {
+          font-size: 28px;
+          line-height: 1.8;
+        }
+      }
+
+      &--design {
+        font-size: 18px;
+        color: $color-white-alpha-100;
+      }
+    }
+
+    &--is-open {
+      display: block;
+      margin-top: 10px;
+      padding-right: 20px;
+    }
+  }
+
+  &__inner {
+    flex: 1;
+    margin-top: 8px;
+
+    @include tablet {
+      display: grid;
+      margin-top: 0;
+      gap: 24px;
+      grid-column: 2;
+      grid-template-columns: 0.7fr 1fr;
+    }
+  }
+
+  &__accordion-icon {
+    flex: none;
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+    color: $color-white;
+    opacity: 0.5;
+    transition: all 0.3s;
+
+    &--is-open {
+      transform: rotate(-0.5turn);
+    }
+  }
+}

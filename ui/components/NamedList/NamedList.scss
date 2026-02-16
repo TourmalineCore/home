@@ -1,0 +1,36 @@
+.named-list {
+  font-weight: 500;
+
+  &__title {
+    margin-bottom: 16px;
+    color: $color-white-alpha-200;
+
+    @include tablet-xl {
+      margin-bottom: 48px;
+
+      &--teams {
+        margin-bottom: 16px;
+      }
+    }
+
+    @include desktop-xl {
+      &--teams {
+        margin-bottom: 24px;
+      }
+    }
+  }
+
+  &__item {
+    & + & {
+      margin-top: 8px;
+
+      @include tablet-xl {
+        margin-top: 16px;
+      }
+    }
+  }
+
+  @include tablet-xl {
+    padding-right: 32px;
+  }
+}

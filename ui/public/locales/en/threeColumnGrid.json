@@ -1,0 +1,53 @@
+{
+  "columns": [
+    {
+      "id": 0,
+      "type": "image",
+      "columnWithImage": {  
+        "title": "We teach\n at the university",
+        "imageWithBlurDataURL": {
+          "url": "/images/teach-at-the-university.png",
+          "blurDataURL": ""
+        },
+        "markdownText": "We talk about the\u00A0basics of\u00A0web architecture and\u00A0extreme approaches to\u00A0development in\u00A0class"
+      }
+    },
+    {
+      "id": 1,
+      "type": "repositories",
+      "columnWithRepositories": {
+        "title": "We do open source\n where we can",
+        "repositories": [
+          {
+            "name": "to-dos-documentation",
+            "language": "TypeScript",
+            "description": "",
+            "link": "https://github.com/TourmalineCore/to-dos-documentation"
+          },
+          {
+            "name": "TourmalineCore.AspNetCore.JwtAuthentication",
+            "description": "Libraries that will help you easily connect the JWT-based authentication to your project.",
+            "language": "C#",
+            "link": "https://github.com/TourmalineCore/TourmalineCore.AspNetCore.JwtAuthentication"
+          },
+          {
+            "name": "inner-circle-documentation",
+            "description": "",
+            "language": "TypeScript",
+            "link": "https://github.com/TourmalineCore/inner-circle-documentation"
+          }
+        ],
+        "markdownText": "It is important for us to share experience, improve the quality of code and bring our projects to the next level, so we share our code <a href='https://github.com/TourmalineCore'>on\u00A0GitHub</a>"
+      }
+    },
+    {
+      "id": 2,
+      "type": "text-and-date",
+       "columnWithTextAndDate": {
+        "title": "We publish scientific\n research",
+        "text": "«Мethod for\u00A0determining the\u00A0level of\u00A0similarity of\u00A0images by\u00A0color component based on\u00A0correlation analysis and\u00A0color space quantization»",
+        "date": "2023-06-03"
+      }
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+.payment-list {
+  display: flex;
+  flex-flow: column;
+  row-gap: 48px;
+
+  &__item {
+    border-bottom: 1px solid rgba($color-white-alpha-300, 0.3);
+    padding-bottom: 48px;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    @include tablet-xl {
+      display: flex;
+      gap: 24px;
+    }
+
+    @include desktop-xl {
+      gap: 32px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 24px;
+    max-width: 230px;
+
+    @include tablet-xl {
+      margin-bottom: 0;
+      padding-right: 24px;
+      min-width: calc(346px / ($tablet-xl-width - (2 * $pd-tablet)) * 100%);
+      max-width: none;
+    }
+
+    @include desktop {
+      min-width: calc(391px / ($desktop-width - (2 * $pd-desktop)) * 100%);
+    }
+
+    @include desktop-xl {
+      min-width: calc(466px / ($desktop-xl-width - (2 * $pd-desktop-xl)) * 100%);
+    }
+  }
+
+  &__inner {
+    display: grid;
+    width: 100%;
+    gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+
+    @include tablet-xl {
+      gap: 24px;
+    }
+
+    @include desktop-xl {
+      gap: 32px;
+    }
+  }
+
+  &__named-list {
+    @include tablet-xl {
+      padding-right: 24px;
+    }
+  }
+
+  &__named-list-title {
+    margin-bottom: 16px;
+  }
+}

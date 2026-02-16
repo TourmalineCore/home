@@ -1,0 +1,121 @@
+{
+  "kind": "collectionType",
+  "collectionName": "navigations",
+  "info": {
+    "singularName": "navigation",
+    "pluralName": "navigations",
+    "displayName": "Navigation"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": true
+    },
+    "link": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isMultiLevelNavigation"
+            },
+            false
+          ]
+        }
+      },
+      "required": true
+    },
+    "navItems": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::navigation.navigation",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isMultiLevelNavigation"
+            },
+            true
+          ]
+        }
+      }
+    },
+    "isMultiLevelNavigation": {
+      "type": "boolean",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": true,
+      "default": false
+    },
+    "blocks": {
+      "type": "dynamiczone",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isMultiLevelNavigation"
+            },
+            false
+          ]
+        }
+      },
+      "components": [
+        "shared.three-column-grid",
+        "shared.single-image",
+        "shared.signpost-multiple",
+        "shared.showcase-grid",
+        "shared.hero",
+        "shared.featured-cards-list",
+        "shared.collage-with-title",
+        "shared.collage-with-link"
+      ]
+    },
+    "seo": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isMultiLevelNavigation"
+            },
+            false
+          ]
+        }
+      },
+      "component": "shared.seo",
+      "repeatable": false,
+      "required": false
+    }
+  }
+}

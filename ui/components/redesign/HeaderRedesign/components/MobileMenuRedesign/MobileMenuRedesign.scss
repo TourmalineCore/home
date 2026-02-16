@@ -1,0 +1,80 @@
+.mobile-menu-redesign {
+  position: relative;
+  z-index: $mobile-menu;
+  overflow-y: auto;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  width: 100%;
+  height: 100vh;
+  background-color: $color-black;
+  animation: showSmoothАppearance 0.15s ease-out forwards;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &__nav {
+    margin-bottom: 40px;
+  }
+
+  &__button {
+    margin-bottom: 88px;
+  }
+
+  &__contact {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 40px;
+  }
+
+  &__caption {
+    @include link-text;
+
+    margin-bottom: 4px;
+    color: $color-pink-redesign;
+  }
+
+  &__email {
+    @include h7;
+    @include animated-underline;
+
+    width: max-content;
+    text-decoration: none;
+    color: $color-white;
+
+    &::after {
+      background-color: $color-white;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__list-item {
+    &:not(:last-child)::after {
+      content: "/";
+      margin: 0 12px;
+      color: $color-grey-500-redesign;
+    }
+  }
+
+  &__link {
+    @include body-s;
+    @include animated-underline;
+
+    text-decoration: none;
+    color: $color-white;
+
+    &::after {
+      background-color: $color-white;
+    }
+  }
+
+  @include desktop-xl {
+    min-height: calc(100vh - 118px);
+  }
+}

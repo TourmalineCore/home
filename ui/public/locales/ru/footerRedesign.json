@@ -1,0 +1,68 @@
+{
+  "emailCaption":"По всем вопросам",
+  "emailAddress":"contact@tourmalinecore.com",
+  "navigationLists":[
+    {
+      "id": 0,
+      "caption":"Навигация",
+      "links":[
+        {
+          "id": 0,
+          "name":"Услуги",
+          "link":"#services"
+        },
+        {
+          "id": 1,
+          "name":"Проекты",
+          "link":"#projects"
+        },
+        {
+          "id": 2,
+          "name":"Команды",
+          "link":"/ru/teams"
+        },
+        {
+          "id": 3,
+          "name":"Статьи",
+          "link":"/ru/articles"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "caption":"Соц. сети",
+      "links":[
+        {
+          "id": 0,
+          "name":"VK",
+          "link":"https://vk.com/tourmalinecore"
+        },
+        {
+          "id": 1,
+          "name":"Habr",
+          "link":"https://habr.com/ru/users/TourmalineCore/"
+        },
+        {
+          "id": 2,
+          "name":"GitHub",
+          "link":"https://github.com/TourmalineCore"
+        },
+        {
+          "id": 3,
+          "name":"Telegram",
+          "link":"https://t.me/tourmalinecore"
+        },
+        {
+          "id": 4,
+          "name":"YouTube",
+          "link":"https://youtube.com/@tourmalinecore"
+        },
+        {
+          "id": 5,
+          "name":"Behance",
+          "link":"https://www.behance.net/tourmalinecore"
+        }
+      ]
+    }
+  ]
+}

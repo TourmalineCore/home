@@ -1,0 +1,25 @@
+.components-page {
+  padding: 40px;
+
+  &__subtitle {
+    @include h2;
+
+    margin: 20px 0;
+  }
+
+  &__item {
+    @include body-m;
+
+    &::before {
+      content: "- ";
+    }
+
+    & + & {
+      margin-top: 20px;
+    }
+  }
+
+  a {
+    color: $color-grey-300-redesign;
+  }
+}

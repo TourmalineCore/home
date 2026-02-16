@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_shared_showcase_grids",
+  "info": {
+    "displayName": "showcaseGrid"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "showcaseColumns": {
+      "type": "component",
+      "component": "showcase-column.showcase-columns",
+      "repeatable": true,
+      "required": true
+    },
+    "showOnMobile": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}
