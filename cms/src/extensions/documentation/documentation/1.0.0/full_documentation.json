@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2026-01-23T08:23:12.918Z"
+    "x-generation-date": "2026-02-16T08:27:49.154Z"
   },
   "x-strapi-config": {
     "plugins": []
@@ -1782,6 +1782,9 @@
                     },
                     {
                       "$ref": "#/components/schemas/SharedCollageWithLinkComponent"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SharedFormComponent"
                     }
                   ]
                 },
@@ -1795,7 +1798,8 @@
                     "shared.single-image": "#/components/schemas/SharedSingleImageComponent",
                     "shared.three-column-grid": "#/components/schemas/SharedThreeColumnGridComponent",
                     "shared.showcase-grid": "#/components/schemas/SharedShowcaseGridComponent",
-                    "shared.collage-with-link": "#/components/schemas/SharedCollageWithLinkComponent"
+                    "shared.collage-with-link": "#/components/schemas/SharedCollageWithLinkComponent",
+                    "shared.form": "#/components/schemas/SharedFormComponent"
                   }
                 }
               },
@@ -1898,6 +1902,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/SharedCollageWithLinkComponent"
+                },
+                {
+                  "$ref": "#/components/schemas/SharedFormComponent"
                 }
               ]
             },
@@ -1911,7 +1918,8 @@
                 "shared.single-image": "#/components/schemas/SharedSingleImageComponent",
                 "shared.three-column-grid": "#/components/schemas/SharedThreeColumnGridComponent",
                 "shared.showcase-grid": "#/components/schemas/SharedShowcaseGridComponent",
-                "shared.collage-with-link": "#/components/schemas/SharedCollageWithLinkComponent"
+                "shared.collage-with-link": "#/components/schemas/SharedCollageWithLinkComponent",
+                "shared.form": "#/components/schemas/SharedFormComponent"
               }
             }
           },
@@ -1993,6 +2001,9 @@
                       },
                       {
                         "$ref": "#/components/schemas/SharedCollageWithLinkComponent"
+                      },
+                      {
+                        "$ref": "#/components/schemas/SharedFormComponent"
                       }
                     ]
                   },
@@ -2006,7 +2017,8 @@
                       "shared.single-image": "#/components/schemas/SharedSingleImageComponent",
                       "shared.three-column-grid": "#/components/schemas/SharedThreeColumnGridComponent",
                       "shared.showcase-grid": "#/components/schemas/SharedShowcaseGridComponent",
-                      "shared.collage-with-link": "#/components/schemas/SharedCollageWithLinkComponent"
+                      "shared.collage-with-link": "#/components/schemas/SharedCollageWithLinkComponent",
+                      "shared.form": "#/components/schemas/SharedFormComponent"
                     }
                   }
                 },
@@ -3757,6 +3769,20 @@
                 }
               }
             }
+          }
+        }
+      },
+      "SharedFormComponent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "__component": {
+            "type": "string",
+            "enum": [
+              "shared.form"
+            ]
           }
         }
       },
