@@ -1,0 +1,443 @@
+.collage-with-link {
+  $this: &;
+
+  overflow: hidden;
+  height: 708px;
+  background-color: $color-black;
+
+  &__wrapper {
+    position: relative;
+    margin: 0 auto;
+    padding: 40px 0;
+    height: 100%;
+    max-width: 375px;
+
+    @include tablet {
+      max-width: 768px;
+    }
+
+    @include tablet-xl {
+      max-width: 1024px;
+    }
+
+    @include desktop {
+      padding: 80px 0;
+      max-width: 1366px;
+    }
+
+    @include desktop-xl {
+      padding: 112px 0;
+      max-width: 1872px;
+    }
+  }
+
+  &__accent-link {
+    display: none;
+
+    @include tablet-xl {
+      position: absolute;
+      left: 46px;
+      top: 54px;
+      z-index: 1;
+      display: block;
+      max-width: 197px;
+      text-decoration: none;
+
+      &:hover,
+      &:focus-visible {
+        #{$this}__link-box {
+          background-color: $color-deep-blue-redesign;
+        }
+
+        #{$this}__cta {
+          text-decoration-color: $color-white;
+        }
+      }
+    }
+
+    @include desktop {
+      left: 27px;
+      top: 80px;
+      max-width: 252px;
+    }
+
+    @include desktop-xl {
+      left: 20px;
+      top: 110px;
+      max-width: 352px;
+    }
+  }
+
+  &__link-box {
+    @include tablet-xl {
+      @include h1;
+
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+      margin-bottom: 12px;
+      border-radius: 2px;
+      width: 196px;
+      height: 147px;
+      font-size: 56px;
+      color: $color-black;
+      background-color: $color-pink-redesign;
+      transition: background-color 0.3s ease-in-out;
+
+      &::after {
+        content: "";
+        position: absolute;
+        right: -7px;
+        top: 0;
+        z-index: -1;
+        width: 204px;
+        height: 157px;
+        background-color: $color-black;
+
+        @include desktop {
+          right: -8px;
+          width: 260px;
+          height: 200px;
+        }
+
+        @include desktop-xl {
+          width: 360px;
+          height: 280px;
+        }
+      }
+    }
+
+    @include desktop {
+      width: 254px;
+      height: 192px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 20px;
+      width: 352px;
+      height: 272px;
+    }
+  }
+
+  &__cta {
+    @include h7;
+
+    @include tablet {
+      text-decoration: underline;
+      text-decoration-color: $color-black;
+      color: $color-white;
+      transition: text-decoration-color 0.3s ease-in-out;
+    }
+  }
+
+  &__image {
+    position: absolute;
+
+    img {
+      display: block;
+      border-radius: 2px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &--1 {
+      left: 0;
+      bottom: 194px;
+      z-index: 2;
+      width: 98px;
+      height: 98px;
+
+      @include tablet {
+        bottom: 186px;
+        width: 116px;
+        height: 116px;
+      }
+
+      @include tablet-xl {
+        bottom: 210px;
+        width: 145px;
+        height: 145px;
+      }
+
+      @include desktop {
+        left: 0;
+        bottom: 234px;
+        width: 202px;
+        height: 202px;
+      }
+
+      @include desktop-xl {
+        left: -20px;
+        bottom: 336px;
+        width: 283px;
+        height: 283px;
+      }
+    }
+
+    &--2 {
+      right: 0;
+      bottom: 180px;
+      width: 118px;
+      height: 118px;
+
+      @include tablet {
+        width: 132px;
+        height: 132px;
+        inset: 126px auto auto 150px;
+      }
+
+      @include tablet-xl {
+        left: 250px;
+        top: 145px;
+        width: 164px;
+        height: 164px;
+      }
+
+      @include desktop {
+        left: 254px;
+        top: 152px;
+        width: 251px;
+        height: 249px;
+      }
+
+      @include desktop-xl {
+        left: 338px;
+        top: 210px;
+        width: 348px;
+        height: 348px;
+      }
+    }
+
+    &--3 {
+      left: 76px;
+      top: 218px;
+      width: 228px;
+      height: 228px;
+
+      @include tablet {
+        left: 264px;
+        top: 186px;
+        z-index: 1;
+        width: 240px;
+        height: 240px;
+      }
+
+      @include tablet-xl {
+        left: 394px;
+        top: 240px;
+        width: 240px;
+        height: 240px;
+      }
+
+      @include desktop {
+        left: 438px;
+        top: 262px;
+        width: 424px;
+        height: 421px;
+      }
+
+      @include desktop-xl {
+        left: 596px;
+        top: 366px;
+        width: 596px;
+        height: 596px;
+      }
+    }
+
+    &--4 {
+      right: 112px;
+      top: 40px;
+      width: 98px;
+      height: 98px;
+
+      @include tablet {
+        right: 146px;
+        top: 71px;
+        z-index: 2;
+        width: 160px;
+        height: 160px;
+      }
+
+      @include tablet-xl {
+        right: 234px;
+        top: 96px;
+        width: 183px;
+        height: 183px;
+      }
+
+      @include desktop {
+        right: 256px;
+        top: 87px;
+        width: 295px;
+        height: 296px;
+      }
+
+      @include desktop-xl {
+        right: 328px;
+        top: 122px;
+        width: 416px;
+        height: 416px;
+      }
+    }
+
+    &--5 {
+      right: 72px;
+      bottom: 38px;
+      width: 106px;
+      height: 106px;
+
+      @include tablet {
+        right: 61px;
+        top: 203px;
+        bottom: auto;
+        width: 108px;
+        height: 108px;
+      }
+
+      @include tablet-xl {
+        right: 136px;
+        top: 248px;
+        width: 124px;
+        height: 124px;
+      }
+
+      @include desktop {
+        right: 80px;
+        top: 290px;
+        width: 209px;
+        height: 209px;
+      }
+
+      @include desktop-xl {
+        right: 86px;
+        top: 404px;
+        width: 292px;
+        height: 292px;
+      }
+    }
+
+    &--6 {
+      right: 4px;
+      top: 160px;
+      width: 112px;
+      height: 112px;
+
+      @include tablet {
+        right: 0;
+        top: auto;
+        bottom: 138px;
+      }
+
+      @include tablet-xl {
+        right: -24px;
+        bottom: 164px;
+        width: 139px;
+        height: 139px;
+      }
+
+      @include desktop {
+        right: 0;
+        bottom: 142px;
+        width: 192px;
+        height: 192px;
+      }
+
+      @include desktop-xl {
+        right: -30px;
+        bottom: 204px;
+        width: 270px;
+        height: 270px;
+      }
+    }
+
+    &--7 {
+      left: 15px;
+      top: 132px;
+      width: 106px;
+      height: 106px;
+
+      @include tablet {
+        width: 116px;
+        height: 116px;
+        inset: auto 184px 86px auto;
+      }
+
+      @include tablet-xl {
+        right: 272px;
+        bottom: 138px;
+        width: 144px;
+        height: 144px;
+      }
+
+      @include desktop {
+        right: 334px;
+        bottom: 100px;
+        width: 202px;
+        height: 202px;
+      }
+
+      @include desktop-xl {
+        right: 442px;
+        bottom: 150px;
+        width: 284px;
+        height: 284px;
+      }
+    }
+
+    &--8 {
+      left: 40px;
+      bottom: 64px;
+      width: 98px;
+      height: 98px;
+
+      @include tablet {
+        left: 164px;
+        bottom: 74px;
+        z-index: 2;
+        width: 128px;
+        height: 128px;
+      }
+
+      @include tablet-xl {
+        left: 268px;
+        bottom: 144px;
+        z-index: 0;
+        width: 159px;
+        height: 159px;
+      }
+
+      @include desktop {
+        left: 242px;
+        bottom: 78px;
+        width: 246px;
+        height: 220px;
+      }
+
+      @include desktop-xl {
+        left: 334px;
+        bottom: 116px;
+        width: 314px;
+        height: 314px;
+      }
+    }
+  }
+
+  @include tablet {
+    height: 614px;
+  }
+
+  @include tablet-xl {
+    height: 716px;
+  }
+
+  @include desktop {
+    height: 874px;
+  }
+
+  @include desktop-xl {
+    height: 1233px;
+  }
+}

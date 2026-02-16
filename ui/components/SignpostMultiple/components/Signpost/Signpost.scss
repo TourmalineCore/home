@@ -1,0 +1,58 @@
+.signpost {
+  $this: &;
+
+  &__subtitle {
+    color: $color-grey-300-redesign;
+  }
+
+  &__link-wrapper {
+    text-decoration: none;
+    color: inherit;
+
+    &:hover,
+    &:focus-visible {
+      #{$this}__title {
+        text-decoration-color: currentColor;
+      }
+    }
+  }
+
+  &__image-container {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 16px;
+    border-radius: 2px;
+    width: 326px;
+    height: 242px;
+
+    img {
+      object-fit: cover;
+      object-position: center;
+    }
+
+    @include desktop {
+      width: 100%;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 24px;
+      height: 340px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 4px;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    transition: text-decoration-color 0.3s;
+
+    @include desktop-xl {
+      margin-bottom: 8px;
+    }
+  }
+
+  &__title,
+  &__subtitle {
+    @include body-m;
+  }
+}

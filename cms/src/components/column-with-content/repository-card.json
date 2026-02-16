@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_column_with_content_repository_cards",
+  "info": {
+    "displayName": "repositoryCard"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "link": {
+      "type": "string"
+    },
+    "language": {
+      "type": "enumeration",
+      "enum": [
+        "TypeScript",
+        "C#"
+      ]
+    }
+  },
+  "config": {}
+}

@@ -1,0 +1,138 @@
+{
+  "title": "Услуги",
+  "anchorId": "services",
+  "cards":
+  [
+    {
+      "id": 0,
+      "title": "Веб-разработка",
+      "points": ["SPA-приложения", "Сайты и лендинги", "Корпоративные сервисы", "CRM, ERP, личные кабинеты"],
+      "theme": "black",
+      "type": "points"
+    },
+    {
+      "id": 1,
+      "title": "Embedded разработка",
+      "points": ["Драйверы", "Программные модули со\u00A0сложной логикой", "Протоколы и библиотеки", "Настройка кросс-компиляции", "Техническая документации"],
+      "link": {
+        "text": "Подробнее",
+        "url": "/ru/embedded"
+      },
+      "theme": "white",
+      "type": "points"
+    },
+    {
+      "id": 2,
+      "imageWithBlurDataURL": {
+        "url": "/images/services-card.png"
+      },
+      "theme": "blue",
+      "type": "image"
+    },
+    {
+      "id": 3,
+      "title": "Машинное обучение и\u00A0анализ данных",
+      "points": ["Бизнес-анализ данных", "Модели компьютерного зрения", "Модели обработки текста и звука", "Модели обработки сигнала с\u00A0датчиков"],
+      "link": {
+        "text":  "Подробнее",
+        "url": "/ru/ml"
+      },
+      "theme": "grey",
+      "type": "points"
+    },
+    {
+      "id": 4,
+      "title": "Тестирование",
+      "points": ["E2E тестирование", "Тестирование UI и API", "Интеграционное и юнит тестирование", "Ручное и автоматизированное тестирование"],
+      "link": {
+        "text":  "Подробнее",
+        "url": "/ru/qa"
+      },
+      "theme": "white",
+      "type": "points"
+    },
+    {
+      "id": 5,
+      "title": "Дизайн",
+      "points": ["UI/UX дизайн", "Дизайн сайтов и лендингов", "No/Low-code сайты"], 
+      "link": {
+        "text": "Подробнее",
+        "url": "/ru/design"
+      },
+      "theme": "grey",
+      "type": "points"
+    },
+    {
+      "id": 6,
+      "title": "Другое",
+      "points": ["Запуск MVP-проекта", "Проектирование архитектуры", "Разработка высоконагруженных сервисов", "Настройка окружения и CI/CD проекта", "Консультации по архитектуре и\u00A0разработке"],
+      "theme": "grey",
+      "type": "points"
+    },
+    {
+      "id": 7,
+      "type": "blank"
+    },
+    {
+      "id": 8,
+      "imageWithBlurDataURL": {
+        "url": "/images/services-card-2.png"
+      },
+      "theme": "blue",
+      "type": "image"
+    },
+    {
+      "id": 9,
+      "title": "Команды",
+      "description": "Можем предоставить команду для вашего проекта или подключить нескольких специалистов.",
+      "link": {
+        "text": "Узнать больше о\u00A0командах",
+        "url": "/ru/teams"
+      },
+      "wideCardItems": [
+        {
+          "id": 1,
+          "name": "Backend",
+          "icon": "/images/icon-backend.svg",
+          "link": "/ru/backend"
+        },
+        {
+          "id": 2,
+          "name": "Frontend",
+          "icon": "/images/icon-frontend.svg",
+          "link": "/ru/frontend"
+        },
+        {
+          "id": 3,
+          "name": "ML-инженеры",
+          "icon": "/images/icon-ml.svg",
+          "link": "/ru/ml"
+        },
+        {
+          "id": 4,
+          "name": "Embedded",
+          "icon": "/images/icon-embedded.svg",
+          "link": "/ru/embedded"
+        },
+        {
+          "id": 5,
+          "name": "QA-инженеры",
+          "icon": "/images/icon-qa.svg",
+          "link": "/ru/qa"
+        },
+        {
+          "id": 6,
+          "name": "Дизайнеры",
+          "icon": "/images/icon-design.svg",
+          "link": "/ru/design"
+        },
+        {
+          "id": 7,
+          "name": "DevOps",
+          "icon": "/images/icon-devops.svg"
+        }
+      ],
+      "type": "wide"
+    }
+  ]
+}

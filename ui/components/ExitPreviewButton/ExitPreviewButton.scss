@@ -1,0 +1,12 @@
+.exit-preview-button {
+  @include body-s;
+
+  border: none;
+  border-bottom: 1px solid $color-pink;
+  height: 49px;
+  text-align: center;
+  color: $color-white;
+  background: inherit;
+  cursor: pointer;
+  transition: all ease-out 0.6s;
+}

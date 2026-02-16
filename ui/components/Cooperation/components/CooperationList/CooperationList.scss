@@ -1,0 +1,44 @@
+.cooperation-list {
+  display: flex;
+  flex-flow: column;
+  font-weight: 500;
+  gap: 32px;
+
+  &__title {
+    margin-bottom: 24px;
+  }
+
+  &__item {
+    padding-right: 40px;
+  }
+
+  &__description {
+    color: $color-white-alpha-100;
+
+    @include tablet {
+      &--teams {
+        max-width: 520px;
+      }
+    }
+
+    @include desktop {
+      &--teams {
+        max-width: 625px;
+      }
+    }
+
+    @include desktop-xl {
+      &--teams {
+        max-width: 730px;
+      }
+    }
+
+    &--teams {
+      display: block;
+    }
+  }
+
+  @include tablet-xl {
+    gap: 48px;
+  }
+}

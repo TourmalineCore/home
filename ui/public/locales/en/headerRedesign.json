@@ -1,0 +1,79 @@
+{
+  "navigationLists":[
+    {
+      "id": 0,
+      "name": "Services",
+      "link": "",
+      "navItems": [
+        {
+          "id": 0,
+          "name": "Frontend",
+          "link": "/frontend"
+        },
+        {
+          "id": 1,
+          "name": "Backend",
+          "link": "/backend"
+        },
+        {
+          "id": 2,
+          "name": "Embedded",
+          "link": "/embedded"
+        },
+        {
+          "id": 3,
+          "name": "ML",
+          "link": "/ml"
+        },
+        {
+          "id": 4,
+          "name": "QA",
+          "link": "/qa"
+        },
+        {
+          "id": 5,
+          "name": "UI/UX design",
+          "link": "/design"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "Teams",
+      "link": "",
+      "navItems": [
+        {
+          "id": 0,
+          "name": "Outsourcing",
+          "link": "/teams"
+        },
+        {
+          "id": 1,
+          "name": "Frontend team",
+          "link": "/frontend-team"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Articles",
+      "link": "/articles",
+      "navItems": []
+    }
+  ],
+  "buttonLabel": "Discuss the project",
+  "emailCaption": "For all questions",
+  "emailAddress": "contact@tourmalinecore.com",
+  "socialLinks": [
+    {
+      "id": 0,
+      "name": "GitHub",
+      "link": "https://github.com/TourmalineCore"
+    },
+    {
+      "id": 1,
+      "name": "Telegram",
+      "link": "https://t.me/tourmalinecore"
+    }
+  ]
+}

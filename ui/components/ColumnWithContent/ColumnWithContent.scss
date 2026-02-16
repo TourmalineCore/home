@@ -1,0 +1,39 @@
+.column-with-content {
+  &__title {
+    @include h5;
+
+    margin-bottom: 32px;
+    white-space: pre-line;
+
+    @include desktop {
+      margin-bottom: 40px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 56px;
+    }
+  }
+
+  &__markdown {
+    @include body-m;
+
+    margin-top: 16px;
+
+    a {
+      text-decoration: none;
+      color: $color-pink-redesign;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    @include desktop {
+      margin-top: 20px;
+    }
+
+    @include desktop-xl {
+      margin-top: 28px;
+    }
+  }
+}

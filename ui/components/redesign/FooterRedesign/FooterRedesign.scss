@@ -1,0 +1,130 @@
+@mixin footer-caption {
+  @include link-text;
+
+  color: $color-pink-redesign;
+}
+
+.footer-redesign {
+  margin-top: auto;
+  padding-top: 40px;
+  padding-bottom: 16px;
+
+  &__inner {
+    display: grid;
+    min-height: 150px;
+    gap: 48px;
+    grid-template-rows: repeat(3, auto);
+
+    @include tablet {
+      gap: 0 48px;
+      grid-template-columns: repeat(2, auto);
+      grid-template-rows: repeat(2, auto);
+    }
+  }
+
+  &__copyright {
+    @include body-m;
+
+    display: flex;
+    flex-direction: column;
+    color: $color-white;
+    gap: 4px;
+    grid-row: 3;
+
+    @include tablet {
+      align-self: flex-end;
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+  }
+
+  &__privacy-policy {
+    @include body-m;
+    @include animated-underline;
+
+    width: fit-content;
+    color: $color-grey-300-redesign;
+
+    &::after {
+      background-color: $color-grey-300-redesign;
+    }
+  }
+
+  &__navigation {
+    display: grid;
+    gap: 8px;
+
+    @include tablet {
+      margin-right: 56px;
+      margin-bottom: 26px;
+      gap: 16px;
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: flex-start;
+    }
+
+    @include tablet-xl {
+      margin-right: 114px;
+      gap: 12px;
+      grid-row: 1 / span 2;
+      justify-self: flex-end;
+    }
+
+    @include desktop {
+      margin-right: 108px;
+    }
+
+    @include desktop-xl {
+      margin-right: 157px;
+      margin-bottom: 38px;
+      gap: 16px;
+    }
+  }
+
+  &__caption {
+    @include footer-caption;
+
+    margin-bottom: 4px;
+
+    @include tablet {
+      margin-bottom: 8px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 12px;
+    }
+  }
+
+  &__email {
+    @include h7;
+    @include animated-underline;
+
+    width: fit-content;
+    text-decoration: none;
+    color: $color-white;
+
+    &::after {
+      background-color: $color-white;
+    }
+  }
+
+  &__info {
+    @include tablet {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+  }
+
+  @include tablet {
+    padding-bottom: 16px;
+  }
+
+  @include desktop {
+    padding-bottom: 24px;
+  }
+
+  @include desktop-xl {
+    padding-top: 56px;
+    padding-bottom: 32px;
+  }
+}

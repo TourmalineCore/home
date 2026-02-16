@@ -1,0 +1,170 @@
+.points {
+  font-weight: 500;
+
+  &__wrapper {
+    padding-top: 80px;
+    padding-bottom: 80px;
+
+    @include tablet-xl {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 120px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 48px;
+
+    @include tablet {
+      margin-bottom: 64px;
+    }
+
+    @include tablet-xl {
+      margin-bottom: 80px;
+    }
+  }
+
+  &__inner {
+    position: relative;
+
+    @include tablet-xl {
+      @include dynamic-width(592px, $tablet-xl-width, $pd-tablet);
+    }
+
+    @include desktop {
+      @include dynamic-width(803px, $desktop-width, $pd-desktop);
+    }
+
+    @include desktop-xl {
+      @include dynamic-width(960px, $desktop-xl-width, $pd-desktop-xl);
+    }
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    row-gap: 32px;
+
+    @include tablet {
+      column-gap: 24px;
+      grid-template-columns: repeat(2, 1fr);
+
+      &--teams {
+        row-gap: 16px;
+      }
+
+      &--frontend-team {
+        gap: 30px 0;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(2, auto);
+      }
+    }
+
+    @include tablet-xl {
+      row-gap: 48px;
+
+      &--teams {
+        row-gap: 24px;
+      }
+
+      &--frontend-team {
+        row-gap: 32px;
+      }
+    }
+
+    @include desktop {
+      &--teams {
+        row-gap: 48px;
+      }
+
+      &--frontend-team {
+        row-gap: 42px;
+      }
+    }
+
+    @include desktop-xl {
+      &--frontend-team {
+        row-gap: 50px;
+      }
+    }
+  }
+
+  &__item {
+    padding-right: 24px;
+    max-width: 550px;
+
+    &:nth-child(2),
+    &:nth-child(3) {
+      padding-right: 90px;
+    }
+
+    &--frontend-team {
+      max-width: none;
+    }
+  }
+
+  &__text {
+    position: relative;
+    z-index: 1;
+    font-size: 18px;
+    line-height: 1.33;
+    color: $color-white-alpha-100;
+
+    @include tablet-xl {
+      font-size: 20px;
+      line-height: 1.4;
+    }
+
+    @include desktop {
+      font-size: 24px;
+      line-height: 1.33;
+    }
+
+    @include desktop-xl {
+      font-size: 28px;
+      line-height: 1.35;
+    }
+  }
+
+  &__image {
+    position: absolute;
+    right: -16px;
+    bottom: 18px;
+    width: 87px;
+    height: 135px;
+    background-size: cover;
+
+    &--frontend,
+    &--teams {
+      background-image: url("/images/points-purple-element.webp");
+    }
+
+    @include tablet {
+      display: none;
+    }
+
+    &--backend {
+      background-image: url("/images/points-backend-element.webp");
+    }
+
+    &--qa {
+      background-image: url("/images/points-qa-element.webp");
+    }
+
+    &--embedded {
+      background-image: url("/images/points-embedded-element.webp");
+    }
+
+    &--frontend-team {
+      background-image: url("/images/points-frontend-team-element.webp");
+    }
+
+    &--ml {
+      background-image: url("/images/points-ml-element.webp");
+    }
+
+    &--design {
+      background-image: url("/images/points-design-element.webp");
+    }
+  }
+}

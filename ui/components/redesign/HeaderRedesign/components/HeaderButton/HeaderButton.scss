@@ -1,0 +1,51 @@
+.header-button {
+  @include link-text;
+
+  position: relative;
+  display: inline-block;
+  outline-offset: 4px;
+  border: none;
+  padding: 15px 26px;
+  text-decoration: none; // ToDo: remove when HeaderButton is no longer a link
+  color: $color-white;
+  background-color: $color-deep-blue-redesign;
+  cursor: pointer;
+  transition: background-color 0.25s;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    width: 19px;
+    height: 52px;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    @include desktop-xl {
+      width: 27px;
+      height: 74px;
+    }
+  }
+
+  &::before {
+    left: -4px;
+    background-image: url("../../../../../public/images/header-button-edge-left-desktop-xl.svg");
+    pointer-events: none;
+  }
+
+  &::after {
+    right: -4px;
+    background-image: url("../../../../../public/images/header-button-edge-right-desktop-xl.svg");
+  }
+
+  &:hover,
+  &:focus-visible {
+    background-color: $color-pink-redesign;
+  }
+
+  @include desktop-xl {
+    margin-left: 32px;
+    padding: 22px 40px;
+  }
+}
