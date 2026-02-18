@@ -1,0 +1,62 @@
+name: UI Jest Tests
+
+on: 
+  push:
+    branches:
+      - feature/*
+    paths:
+      - 'ui/**'
+
+jobs:
+  run-jest-tests:
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20.18.0]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        # sparse-checkuout is needed to clone ui folder only. 
+        # Cone mode is disabled to not clone other files in root folder
+        # It's important to clone only this folder to keep the root folder clean
+        # Because we will move service subfolder to the root in the next step 
+        sparse-checkout: 'ui'
+        sparse-checkout-cone-mode: false
+
+      # This step is needed because all steps runs from root folder and there are several options how to solve this problem
+      # Option #1: change working-directory of each step
+      # Option #2: move subfolder to root folder
+      # Option #2 was chosen because it allows the folder to be moved in a single action
+      # It seems a good option to move subfolder to the root folder because we are not going to commit anything from this workflow
+    - name: Move subfolder to current(top-level) folder
+      run: |
+        mv ui/{.,}* .
+        rm -rf ui
+
+    # we need to declare the same cache that they are shared among different jobs (path and key are the most important)
+    # https://stackoverflow.com/a/71895573
+    - name: Cache node modules
+      id: cache-nodemodules
+      uses: actions/cache@v4
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+ 
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install Dependencies
+      if: steps.cache-nodemodules.outputs.cache-hit != 'true'
+      run: npm ci
+
+    - name: Run Jest Tests
+      run: |
+        npm run jest:run
