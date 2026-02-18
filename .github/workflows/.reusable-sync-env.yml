@@ -1,0 +1,63 @@
+name: Trigger Env
+
+on:
+  workflow_call:
+    inputs:
+      # target-env defines which environment will be synchronized
+      # Examples of target-env: "home-env"
+      target-env:
+        required: true
+        type: string
+      # path-to-values defines where the values files is stored
+      # Examples of path-to-values: "deploy/values-ui.yaml.gotmpl"
+      path-to-values:
+        required: true
+        type: string
+      # path-to-helmfile defines where the helmfile is stored
+      # Examples of path-to-helmfile: "deploy/helmfile.yaml"
+      path-to-helmfile:
+        required: true
+        type: string
+      # We use CDN at prod, that enabling or disabling only during build and can't be enabled/disabled at runtime.   
+      # Prefix is used to build several images, the first one with disabled CDN for Local Env
+      # the second and the third ones with enabled CDN and different CDN_DOMAIN's for Prod and Staging Envs
+      # Examples of prefix: "local-env"
+      prefix:
+        required: false
+        type: string
+      # service-name is the name of the subfolder where the service is stored in the home repo.
+      # Examples of service-name: "home-ui", "home-cms"
+      service-name:
+        required: true
+        type: string
+jobs:
+  trigger-env:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v3
+        
+      - name: Write short-sha to GitHub Env
+        run: |
+          echo "SHORT_SHA=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV
+        
+      - name: Trigger Env
+        # NOTE: quotes for commit_message not needed because toJson writes quotes automatically
+        # NOTE: prefix is optional, so it will be added only if it was defined
+        run: |
+          curl -X POST https://api.github.com/repos/${{ github.repository_owner }}/${{ inputs.target-env }}/dispatches \
+          -H "Accept: application/vnd.github.everest-preview+json" \
+          -u ${{ secrets.HOME_ENV_SYNC_TRIGGER_TOKEN  }} \
+          -d '{
+          "event_type": "latest-${{ github.event.repository.name }}-image-tag",
+          "client_payload": {
+            "image_tag": "${{ inputs.prefix && format('{0}-', inputs.prefix) || '' }}sha-${{ github.sha }}",
+            "commit_message": ${{ toJson(github.event.head_commit.message) }},
+            "repository": "${{ github.event.repository.name }}",
+            "sha": "${{ github.sha }}",
+            "short_sha": "${{ env.SHORT_SHA }}",
+            ${{ inputs.prefix && format('"prefix": "{0}",', inputs.prefix) || '' }}
+            "path_to_values": "${{ inputs.path-to-values }}",
+            "path_to_helmfile": "${{ inputs.path-to-helmfile }}",
+            "service_name": "${{ inputs.service-name }}"
+            }}'
