@@ -1,4 +1,4 @@
-name: Run playwright E2E tests
+name: Run UI Playwright E2E Tests
 
 # ToDo should it be triggered only as part of an open PR?
 # currently it triggers for any commit in a FB
@@ -45,9 +45,10 @@ jobs:
             # The -i flag is needed to write new image tag directly to values file
             sed -i "0,/tag:.*/s//tag: \"local-env-sha-${{ github.sha }}\"/" deploy/values-ui.yaml.gotmpl
 
-             # we need to override "latest" ref of service chart inside local-env to run tests against the current commit service chart version and not against latest from master
+            # we need to override "latest" ref of service chart inside local-env to run tests against the current commit service chart version and not against latest from master
             sed -i "0,/ui?ref=.*/s//ui?ref=${{ github.sha }}/" deploy/helmfile.yaml
             
+            # This changes values file ref in the helmfile.yaml
             sed -i "0,/ui\/ci\/values.yaml?ref=.*/s//ui\/ci\/values.yaml?ref=${{ github.sha }}/" deploy/helmfile.yaml
 
             kind create cluster --name home --config kind-local-config.yaml --kubeconfig ./.home-cluster-kubeconfig
@@ -62,13 +63,16 @@ jobs:
         with:
           # sparse-checkuout is needed to clone ui folder only. 
           # Cone mode is disabled to not clone other files in root folder
+          # It's important to clone only this folder to keep the root folder clean
+          # Because we will move service subfolder to the root in the next step 
           sparse-checkout: 'ui'
           sparse-checkout-cone-mode: false
 
-      # This step is needed because all steps runs from root folder and there is several options how to solve this problem
-      # Option #1: change working-directory of each step
-      # Option #2: move subfolder to root folder
-      # Option #2 was chosen because it allows the folder to be moved in a single action
+        # This step is needed because all steps runs from root folder and there are several options how to solve this problem
+        # Option #1: change working-directory of each step
+        # Option #2: move subfolder to root folder
+        # Option #2 was chosen because it allows the folder to be moved in a single action
+        # It seems a good option to move subfolder to the root folder because we are not going to commit anything from this workflow
       - name: Move subfolder to current(top-level) folder
         run: |
           mv ui/{.,}* .

@@ -1,4 +1,4 @@
-name: Trigger Home Env
+name: Sync UI In Home Env
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
 
   trigger_home_env:
     needs: docker_build_and_push
-    uses: TourmalineCore/home/.github/workflows/.reusable-sync-env.yml@feature/add_reusable_workflows
+    uses: ./.github/workflows/.reusable-sync-env.yml
     with:
       # target-env is used to define which env will be synced
       target-env: home-env
