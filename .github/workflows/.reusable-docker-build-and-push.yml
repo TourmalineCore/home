@@ -24,10 +24,12 @@ on:
         required: false
         type: string
       # Context is used to define the working directory folder
+      # Example of context: cms
       context:
         required: false
         type: string
-      # Image-name is used to define the name of image in situation when you need to name it differ from project name
+      # Image-name is used to define the name of docker image. We can't use name of the repo as image name because all services stored as subfolders
+      # Example of image-name: home-cms
       image-name:
         required: false
         type: string
@@ -57,12 +59,8 @@ jobs:
 
       - name: Get lowercase repository
         id: get-lowercase-repository
-        # REPOSITORY_CUSTOM is needed to process with situations when repository name can't be used as image name
-        # If image-name wasn't defined then REPOSITORY_CUSTOM=github.repository (e.g. REPOSITORY_CUSTOM=TourmalineCore/home-ui)
-        # If image-name was defined then REPOSITORY_CUSTOM=github.repository_owner + image-name (e.g. image-name=home-ui, so REPOSITORY_CUSTOM=TourmalineCore + ui=TourmalineCore/home-ui)
         run: |
-          REPOSITORY_CUSTOM=${{ inputs.image-name && format('{0}/{1}', github.repository_owner, inputs.image-name) || github.repository }}
-          REPOSITORY_LOWER=$(echo "$REPOSITORY_CUSTOM" | tr '[:upper:]' '[:lower:]')
+          REPOSITORY_LOWER=$(echo "${{ github.repository_owner }}/${{ inputs.image-name }}" | tr '[:upper:]' '[:lower:]')
           echo "REPOSITORY_LOWER=$REPOSITORY_LOWER" >> $GITHUB_OUTPUT
 
       - name: Docker meta
@@ -125,10 +123,8 @@ jobs:
 
       - name: Get lowercase repository
         id: get-lowercase-repository
-        # REPOSITORY_CUSTOM is needed to process with situations when repository name can't be used as image name
         run: |
-          REPOSITORY_CUSTOM=${{ inputs.image-name && format('{0}/{1}', github.repository_owner, inputs.image-name) || github.repository }}
-          REPOSITORY_LOWER=$(echo "$REPOSITORY_CUSTOM" | tr '[:upper:]' '[:lower:]')
+          REPOSITORY_LOWER=$(echo "${{ github.repository_owner }}/${{ inputs.image-name }}" | tr '[:upper:]' '[:lower:]')
           echo "REPOSITORY_LOWER=$REPOSITORY_LOWER" >> $GITHUB_OUTPUT
 
       - name: Docker meta
@@ -192,10 +188,8 @@ jobs:
 
       - name: Get lowercase repository
         id: get-lowercase-repository
-        # REPOSITORY_CUSTOM is needed to process with situations when repository name can't be used as image name
         run: |
-          REPOSITORY_CUSTOM=${{ inputs.image-name && format('{0}/{1}', github.repository_owner, inputs.image-name) || github.repository }}
-          REPOSITORY_LOWER=$(echo "$REPOSITORY_CUSTOM" | tr '[:upper:]' '[:lower:]')
+          REPOSITORY_LOWER=$(echo "${{ github.repository_owner }}/${{ inputs.image-name }}" | tr '[:upper:]' '[:lower:]')
           echo "REPOSITORY_LOWER=$REPOSITORY_LOWER" >> $GITHUB_OUTPUT
 
       - name: Extract metadata (tags, labels) for Docker
