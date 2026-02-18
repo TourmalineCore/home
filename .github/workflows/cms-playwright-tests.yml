@@ -30,7 +30,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: TourmalineCore/home-local-env
-          ref: feature/cms_from_monorepo
 
       - name: Deploy Local Env to Kind k8s
         uses: devcontainers/ci@v0.3
@@ -58,7 +57,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # sparse-checkuout is needed to clone cms folder only. 
+          # sparse-checkout is needed to clone cms folder only. 
           # Cone mode is disabled to not clone other files in root folder
           # It's important to clone only this folder to keep the root folder clean
           # Because we will move service subfolder to the root in the next step 
