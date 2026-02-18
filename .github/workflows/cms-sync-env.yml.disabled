@@ -3,7 +3,7 @@ name: Sync CMS In Home Env
 on:
   push:
     branches:
-      - feature/**
+      - master
     paths:
       - 'cms/**'
 
