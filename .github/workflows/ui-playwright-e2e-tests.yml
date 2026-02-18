@@ -61,7 +61,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # sparse-checkuout is needed to clone ui folder only. 
+          # sparse-checkout is needed to clone ui folder only. 
           # Cone mode is disabled to not clone other files in root folder
           # It's important to clone only this folder to keep the root folder clean
           # Because we will move service subfolder to the root in the next step 
