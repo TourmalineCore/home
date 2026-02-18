@@ -9,7 +9,7 @@ Install dependencies:
 ```
 npm ci
 ```
-
+ 
 To successfully run Strapi locally, run the command:
 ```
 docker-compose --profile db-and-minio-s3 up -d
