@@ -10,7 +10,7 @@ on:
 
 jobs:
   push_to_registry:
-    uses: TourmalineCore/home/.github/workflows/.reusable-docker-build-and-push.yml@master
+    uses: ./.github/workflows/.reusable-docker-build-and-push.yml
     with:
       context: ./env-synchronizer
       image-name: home-env-synchronizer
