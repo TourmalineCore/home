@@ -1,4 +1,4 @@
-name: Publish Docker Image
+name: Publish Env Synchronizer Docker Image
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   push_to_registry:
-    uses: TourmalineCore/home/.github/workflows/.reusable-docker-build-and-push.yml@feature/add_reusable_workflows
+    uses: TourmalineCore/home/.github/workflows/.reusable-docker-build-and-push.yml@master
     with:
       context: ./env-synchronizer
       image-name: home-env-synchronizer

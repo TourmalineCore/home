@@ -1,4 +1,4 @@
-name: Trigger Home Env
+name: Sync Env Synchronizer In Home Env
 
 on:
   push:
