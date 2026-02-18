@@ -1,4 +1,4 @@
-name: Publish Docker image
+name: Publish CMS Docker Image
 
 on:
   # to allow to wait for a docker image to be published to proceed in another workflow
@@ -6,7 +6,7 @@ on:
 
 jobs:
   push_to_registry:
-    uses: TourmalineCore/home/.github/workflows/.reusable-docker-build-and-push.yml@feature/add_reusable_workflows
+    uses: ./.github/workflows/.reusable-docker-build-and-push.yml
     with:
       context: ./cms
       image-name: home-cms
