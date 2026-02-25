@@ -1,0 +1,20 @@
+image:
+    repository: bitnamilegacy/postgresql
+
+global:
+    postgresql:
+        auth:
+            postgresPassword: "{{ .Values.HOME_DATABASE_PASSWORD }}"
+            username: "{{ .Values.HOME_DATABASE_USERNAME }}"
+            password: "{{ .Values.HOME_DATABASE_PASSWORD }}"
+            database: "{{ .Values.HOME_DATABASE_NAME }}"
+
+primary:
+    service:
+        type: NodePort
+        nodePorts:
+            postgresql: 30130
+
+#    persistence:
+#        size: {{ env "POSTGRES_PV_SIZE" }}
+

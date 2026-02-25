@@ -1,0 +1,15 @@
+image:
+  tag: "latest"
+
+ingress:
+  hostname: "{{ .Values.HOME_HOSTNAME }}"
+  annotations:
+    # to do not redirect from http to https
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    # the maximum allowed size of the client's request body
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+  tls: false
+
+service:
+  ports:
+    http: {{ .Values.HOME_EXTERNAL_PORT }}

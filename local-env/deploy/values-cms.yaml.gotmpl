@@ -1,0 +1,54 @@
+image:
+  tag: "latest"
+
+extraConfigMapEnvVars:
+  HOST: "0.0.0.0"
+  PORT: "1337"
+  
+  APP_KEYS: "{{ .Values.HOME_APP_KEYS }}"
+  API_TOKEN_SALT: "{{ .Values.HOME_API_TOKEN_SALT }}"
+  ADMIN_JWT_SECRET: "{{ .Values.HOME_ADMIN_JWT_SECRET }}"
+  TRANSFER_TOKEN_SALT: "{{ .Values.HOME_TRANSFER_TOKEN_SALT }}"
+  JWT_SECRET: "{{ .Values.HOME_JWT_SECRET }}"
+
+  DATABASE_HOST: "{{ .Values.HOME_DATABASE_HOST }}"
+  DATABASE_PORT: "{{ .Values.HOME_DATABASE_PORT }}"
+  DATABASE_NAME: "{{ .Values.HOME_DATABASE_NAME }}"
+  DATABASE_USERNAME: "{{ .Values.HOME_DATABASE_USERNAME }}"
+  DATABASE_PASSWORD: "{{ .Values.HOME_DATABASE_PASSWORD }}"
+  
+  AWS_ACCESS_KEY_ID: "{{ .Values.HOME_AWS_ACCESS_KEY_ID }}"
+  AWS_ACCESS_SECRET_KEY: "{{ .Values.HOME_AWS_ACCESS_SECRET_KEY }}"
+
+  # if else condition is needed to handle the situation when a subfolder exists
+  {{- if .Values.HOME_AWS_SUBFOLDER_NAME }}
+  AWS_ENDPOINT: "{{ .Values.HOME_AWS_ENDPOINT }}/{{ .Values.HOME_AWS_BUCKET }}"
+  AWS_PUBLIC_ENDPOINT: "{{ .Values.HOME_AWS_ENDPOINT }}/{{ .Values.HOME_AWS_BUCKET }}/{{ .Values.HOME_AWS_SUBFOLDER_NAME}}"
+  AWS_BUCKET: "{{ .Values.HOME_AWS_SUBFOLDER_NAME }}"
+  {{- else }}
+  AWS_ENDPOINT: "{{ .Values.HOME_AWS_ENDPOINT }}"
+  AWS_PUBLIC_ENDPOINT: "{{ .Values.HOME_AWS_ENDPOINT }}/{{ .Values.HOME_AWS_BUCKET }}"
+  AWS_BUCKET: "{{ .Values.HOME_AWS_BUCKET }}"
+  {{- end }}
+  
+  AWS_REGION: "{{ .Values.HOME_AWS_REGION }}"
+
+  SERVER_URL: "{{ .Values.HOME_BASE_EXTERNAL_URL }}/cms"
+  FRONTEND_URL: "{{ .Values.HOME_BASE_EXTERNAL_URL }}"
+
+  PREVIEW_SECRET: "{{ .Values.HOME_PREVIEW_SECRET }}"
+
+initContainers:
+  - name: create-bucket
+    image: minio/mc
+    command: ["/bin/sh", "-c"]
+    args:
+      - |
+        while ! mc alias set myminio {{ .Values.HOME_AWS_ENDPOINT }} {{ .Values.HOME_AWS_ACCESS_KEY_ID }} {{ .Values.HOME_AWS_ACCESS_SECRET_KEY }}; do
+          echo "Waiting for MinIO to be ready... Pod isn't alive yet"
+          sleep 10
+        done
+        mc mb myminio/{{ .Values.HOME_AWS_BUCKET }}
+        mc policy set public myminio/{{ .Values.HOME_AWS_BUCKET }}
+        mc anonymous set download myminio/{{ .Values.HOME_AWS_BUCKET }}
+        mc policy myminio/{{ .Values.HOME_AWS_BUCKET }}
