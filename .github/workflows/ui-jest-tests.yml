@@ -30,6 +30,7 @@ jobs:
         sparse-checkout-cone-mode: false
         path: 'home-ui'
     - run: ls
+    - run: ls home-ui
 
       # This step is needed because all steps runs from root folder and there are several options how to solve this problem
       # Option #1: change working-directory of each step
