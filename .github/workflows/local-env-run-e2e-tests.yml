@@ -25,6 +25,7 @@ jobs:
       uses: devcontainers/ci@v0.3
       with:
         subFolder: local-env
+        configFile: ./local-env/.devcontainer\devcontainer.json
         runCmd: |
           kind create cluster --name home --config kind-local-config.yaml --kubeconfig ./.home-cluster-kubeconfig
           helmfile cache cleanup && helmfile --environment local --namespace local -f deploy/helmfile.yaml apply
