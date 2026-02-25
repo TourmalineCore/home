@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - feature/*
-    paths:
-      - 'ui/**'
+    # paths:
+    #   - 'ui/**'
 
 jobs:
   run-jest-tests:
@@ -17,6 +17,8 @@ jobs:
         node-version: [20.18.0]
 
     steps:
+    - run: ls
+    
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
@@ -26,16 +28,18 @@ jobs:
         # Because we will move service subfolder to the root in the next step 
         sparse-checkout: 'ui'
         sparse-checkout-cone-mode: false
+        path: 'home-ui'
+    - run: ls
 
       # This step is needed because all steps runs from root folder and there are several options how to solve this problem
       # Option #1: change working-directory of each step
       # Option #2: move subfolder to root folder
       # Option #2 was chosen because it allows the folder to be moved in a single action
       # It seems a good option to move subfolder to the root folder because we are not going to commit anything from this workflow
-    - name: Move subfolder to current(top-level) folder
-      run: |
-        mv ui/{.,}* .
-        rm -rf ui
+    # - name: Move subfolder to current(top-level) folder
+      # run: |
+      #   mv ui/{.,}* .
+      #   rm -rf ui
 
     # we need to declare the same cache that they are shared among different jobs (path and key are the most important)
     # https://stackoverflow.com/a/71895573
