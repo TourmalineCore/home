@@ -90,6 +90,7 @@ jobs:
     - name: Checkout Home CMS
       uses: actions/checkout@v4
       with:
+        path: 'cms'
         sparse-checkout: 'cms'
         sparse-checkout-cone-mode: false
 
