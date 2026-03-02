@@ -47,7 +47,7 @@ jobs:
         sparse-checkout-cone-mode: false
 
       # This step is needed because in the previous step UI service was cloned into ui/ui folder
-      # And we need to move it from ui/ui to ui/ to make all pipelines work properly
+      # And we need to move it from ui/ui to ui/ to keep path of the service
     - name: Move subfolder to current(top-level) folder
       run: |
         mv ui/ui/{.,}* ./ui
