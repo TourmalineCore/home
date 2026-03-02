@@ -21,6 +21,10 @@ jobs:
         mv local-env/{.,}* .
         rm -rf local-env
 
+    - name: Test
+      run: |
+        pwd
+
     - name: Deploy Local Env to Kind k8s
       uses: devcontainers/ci@v0.3
       with:
@@ -31,9 +35,7 @@ jobs:
         # we don't need to push docker image that was built using our Dev Container
         push: never
     
-    - name: Test
-      run: |
-        pwd
+
 
     # PLAYWRIGHT UI TESTS
 
