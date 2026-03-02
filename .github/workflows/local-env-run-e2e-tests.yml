@@ -30,6 +30,10 @@ jobs:
           helmfile cache cleanup && helmfile --environment local --namespace local -f deploy/helmfile.yaml apply
         # we don't need to push docker image that was built using our Dev Container
         push: never
+    
+    - name: Test
+      runs: |
+        pwd
 
     # PLAYWRIGHT UI TESTS
 
