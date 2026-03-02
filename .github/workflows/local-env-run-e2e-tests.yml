@@ -44,6 +44,7 @@ jobs:
     - name: Checkout Home UI
       uses: actions/checkout@v4
       with:
+        path: 'ui'
         sparse-checkout: 'ui'
         sparse-checkout-cone-mode: false
 
