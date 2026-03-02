@@ -49,7 +49,7 @@
 	],
 	// this tells kind where to look for the default config
 	"containerEnv": {
-		"KUBECONFIG": "/workspaces/local-env/.home-cluster-kubeconfig"
+		"KUBECONFIG": "/workspaces/home/local-env/.home-cluster-kubeconfig"
 	},
 	// this is to prevent the k8s cluster container from pausing when closing VSCode
 	"shutdownAction": "none"
