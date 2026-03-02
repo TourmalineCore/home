@@ -19,11 +19,6 @@ jobs:
         sparse-checkout: 'local-env'
         sparse-checkout-cone-mode: false
 
-    - name: Test
-      run: |
-        pwd && \
-        ls
-
     - name: Deploy Local Env to Kind k8s
       uses: devcontainers/ci@v0.3
       with:
@@ -49,18 +44,12 @@ jobs:
         sparse-checkout: 'ui'
         sparse-checkout-cone-mode: false
 
-
       # This step is needed because in the previous step UI service was cloned into ui/ui folder
       # And we need to move it from ui/ui to ui/ to make all pipelines work properly
     - name: Move subfolder to current(top-level) folder
       run: |
         mv ui/ui/{.,}* ./ui
         rm -rf ui/ui
-
-    - run: |
-        pwd
-        ls
-        ls ui
 
     - name: Playwright Run Against UI
       uses: devcontainers/ci@v0.3
