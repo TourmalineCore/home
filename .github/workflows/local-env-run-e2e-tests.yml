@@ -47,11 +47,6 @@ jobs:
         sparse-checkout: 'ui'
         sparse-checkout-cone-mode: false
 
-    - name: Move subfolder to current(top-level) folder
-      run: |
-        mv ui/{.,}* .
-        rm -rf ui
-
     - run: |
         pwd
         ls
@@ -97,11 +92,6 @@ jobs:
       with:
         sparse-checkout: 'cms'
         sparse-checkout-cone-mode: false
-
-    - name: Move subfolder to current(top-level) folder
-      run: |
-        mv cms/{.,}* .
-        rm -rf cms
 
     - name: Playwright Run Against CMS
       uses: devcontainers/ci@v0.3
