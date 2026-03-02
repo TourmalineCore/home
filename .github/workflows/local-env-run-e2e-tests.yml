@@ -52,6 +52,11 @@ jobs:
         mv ui/{.,}* .
         rm -rf ui
 
+    - run: |
+        pwd
+        ls
+        ls ui
+
     - name: Playwright Run Against UI
       uses: devcontainers/ci@v0.3
       with:
