@@ -13,13 +13,11 @@ jobs:
     - name: Checkout Local Env
       uses: actions/checkout@v4
       with:
+        # sparse-checkout is needed to clone service folder only
+        # Cone mode is disabled to not clone other files in root folder
+        # It's important to clone only this folder to keep the root folder clean
         sparse-checkout: 'local-env'
         sparse-checkout-cone-mode: false
-
-    # - name: Move subfolder to current(top-level) folder
-    #   run: |
-    #     mv local-env/{.,}* .
-    #     rm -rf local-env
 
     - name: Test
       run: |
@@ -30,24 +28,30 @@ jobs:
       uses: devcontainers/ci@v0.3
       with:
         subFolder: local-env
+        # In the current configuration we store services as subfolders 
+        # and it's necessary to define path to the devcontainer config in the folder of needed service
         configFile: ./local-env/.devcontainer/devcontainer.json
         runCmd: |
           kind create cluster --name home --config kind-local-config.yaml --kubeconfig ./.home-cluster-kubeconfig
           helmfile cache cleanup && helmfile --environment local --namespace local -f deploy/helmfile.yaml apply
         # we don't need to push docker image that was built using our Dev Container
         push: never
-    
-
 
     # PLAYWRIGHT UI TESTS
 
     - name: Checkout Home UI
       uses: actions/checkout@v4
       with:
+        # we need to specify this path otherwise it will create this folder home/home
+        # and that will lead to permissions error at the next CMS repo checkout when it tries to remove no longer needed folder
+        # this path that matches the repo name isolates UI src folder from CMS one
         path: 'ui'
         sparse-checkout: 'ui'
         sparse-checkout-cone-mode: false
 
+
+      # This step is needed because in the previous step UI service was cloned into ui/ui folder
+      # And we need to move it from ui/ui to ui/ to make all pipelines work properly
     - name: Move subfolder to current(top-level) folder
       run: |
         mv ui/ui/{.,}* ./ui
