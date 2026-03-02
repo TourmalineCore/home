@@ -32,7 +32,7 @@ jobs:
         push: never
     
     - name: Test
-      runs: |
+      run: |
         pwd
 
     # PLAYWRIGHT UI TESTS
