@@ -73,6 +73,11 @@
       background-color: $color-white;
     }
   }
+  
+  
+  @include tablet-xl {
+    display: none;
+  }
 
   @include desktop-xl {
     min-height: calc(100vh - 118px);

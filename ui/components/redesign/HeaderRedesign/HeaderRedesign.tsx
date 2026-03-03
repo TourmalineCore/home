@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import Image from "next/image"; 
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { useRouter } from "next/router";
@@ -8,7 +8,7 @@ import { HeaderButton } from "./components/HeaderButton/HeaderButton";
 import { MobileMenu } from "./components/MobileMenuRedesign/MobileMenuRedesign";
 import { useBodyScrollHidden } from "../../../common/hooks/useBodyScrollHidden";
 import { HeaderRedesignProps } from "../../../common/types";
-import { useDeviceSize, useOnScrollDirections } from "../../../common/hooks";
+import { useOnScrollDirections } from "../../../common/hooks";
 import { HeaderNavigationList } from "./components/HeaderNavigationList/HeaderNavigationList";
 import { AppRoute } from "../../../common/enums";
 import { FormModal } from "../../FormModal/FormModal";
@@ -20,10 +20,6 @@ export function HeaderRedesign({
   emailAddress,
   socialLinks,
 }: HeaderRedesignProps) {
-  const {
-    isTabletXl,
-  } = useDeviceSize();
-
   const {
     asPath,
   } = useRouter();
@@ -97,7 +93,7 @@ export function HeaderRedesign({
           <span className="header-redesign__line" />
         </button>
 
-        {isTabletXl && buttonLabel && (
+        {buttonLabel && (
           <HeaderButton
             className="header-redesign__button"
             onClick={setIsModalOpen}
@@ -107,7 +103,7 @@ export function HeaderRedesign({
         )}
       </div>
 
-      {isMobileMenuOpen && !isTabletXl && (
+      {isMobileMenuOpen && (
         <MobileMenu
           navigationLists={navigationLists}
           buttonLabel={buttonLabel}
