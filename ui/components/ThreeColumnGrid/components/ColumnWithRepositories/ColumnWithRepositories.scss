@@ -15,6 +15,14 @@
         margin-top: 28px;
       }
     }
+
+    &--hidden-on-mobile {
+      display: none;
+
+      @include tablet-xl {
+        display: block;
+      }
+    }
   }
 
   &__item-inner {

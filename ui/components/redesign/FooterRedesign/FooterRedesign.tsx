@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { FooterNavigationListRedesign } from './components/FooterNavigationListRedesign/FooterNavigationListRedesign';
 import { FooterRedesignProps } from '../../../common/types';
-import { useDeviceSize } from '../../../common/hooks';
 
 export function FooterRedesign({
   emailCaption,
@@ -16,15 +15,7 @@ export function FooterRedesign({
     locale,
   } = useRouter();
 
-  const {
-    isTabletXl,
-  } = useDeviceSize();
-
   const colCount = Math.min(navigationLists.length, 4);
-
-  const footerNavigationStyle = {
-    gridTemplateColumns: ` repeat(${isTabletXl ? colCount : 2}, auto)`,
-  };
 
   useEffect(() => {
     setCurrentYear(new Date()
@@ -63,7 +54,9 @@ export function FooterRedesign({
         {navigationLists.length > 0 && (
           <ul
             className="footer-redesign__navigation"
-            style={footerNavigationStyle}
+            style={{
+              '--columns-count': colCount,
+            } as React.CSSProperties}
           >
             {navigationLists.map((el) => (
               <FooterNavigationListRedesign

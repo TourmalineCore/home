@@ -72,6 +72,7 @@ export function HeaderRedesign({
         <HeaderNavigationList
           className="header-redesign__nav"
           navigationLists={navigationLists}
+          isMobileMenu={false}
         />
 
         <LangSwitchRedesign className="header-redesign__lang-switch" />

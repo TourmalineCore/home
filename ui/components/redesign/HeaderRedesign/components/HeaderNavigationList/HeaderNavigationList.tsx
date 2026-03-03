@@ -2,20 +2,17 @@ import clsx from "clsx";
 import { useState } from "react";
 import { HeaderAccordion } from "../HeaderAccordion/HeaderAccordion";
 import { HeaderRedesignProps } from "../../../../../common/types";
-import { useDeviceSize } from "../../../../../common/hooks";
 import { SmartLink } from "../../../../SmartLink/SmartLink";
 
 export function HeaderNavigationList({
   className,
   navigationLists,
+  isMobileMenu,
 }: {
   className?: string;
   navigationLists: HeaderRedesignProps["navigationLists"];
+  isMobileMenu: boolean;
 }) {
-  const {
-    isTabletXl,
-  } = useDeviceSize();
-
   const [openId, setOpenId] = useState<number | null>(null);
 
   const handleToggle = (id: number) => {
@@ -39,7 +36,7 @@ export function HeaderNavigationList({
               },
             )}
             key={el.id}
-            {...(!isTabletXl ? {
+            {...(isMobileMenu ? {
               onClick: () => handleToggle(el.id),
             } : {
               onMouseEnter: () => setOpenId(el.id),
