@@ -1,4 +1,4 @@
-import { useDeviceSize } from '../../common/hooks';
+import clsx from 'clsx';
 import { ShowcaseGridBlock } from '../../common/types';
 import { ShowcaseColumnWithMedia } from './components/ShowcaseColumnWithMedia/ShowcaseColumnWithMedia';
 import { ShowcaseColumnWithMarkdown } from './components/ShowcaseColumnWithMarkdown/ShowcaseColumnWithMarkdown';
@@ -18,16 +18,11 @@ export function ShowcaseGrid({
 }) {
   const columnsCount = GRID_COLUMNS / showcaseColumns.length >= MAX_COLUMNS ? MAX_COLUMNS : MIN_COLUMNS;
 
-  const {
-    isTablet,
-  } = useDeviceSize();
-
-  if (!showOnMobile && !isTablet) {
-    return null;
-  }
   return (
     <section
-      className="showcase-grid"
+      className={clsx(`showcase-grid`, {
+        "showcase-grid--hide-on-mobile": !showOnMobile,
+      })}
       data-testid={dataTestId}
       {...(anchorId && {
         id: anchorId,

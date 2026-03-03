@@ -22,6 +22,7 @@ export function MobileMenu({
       <HeaderNavigationList
         className="mobile-menu-redesign__nav"
         navigationLists={navigationLists}
+        isMobileMenu
       />
 
       {buttonLabel && (

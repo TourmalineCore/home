@@ -53,6 +53,7 @@
   &__navigation {
     display: grid;
     gap: 8px;
+    grid-template-columns: repeat(2, auto);
 
     @include tablet {
       margin-right: 56px;
@@ -67,6 +68,7 @@
       margin-right: 114px;
       gap: 12px;
       grid-row: 1 / span 2;
+      grid-template-columns: repeat(var(--columns-count, 2), auto);
       justify-self: flex-end;
     }
 

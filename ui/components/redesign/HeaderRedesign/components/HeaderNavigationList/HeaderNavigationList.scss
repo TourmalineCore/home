@@ -23,6 +23,12 @@
     &--is-open .header-accordion__list-wrapper {
       display: flex;
     }
+
+    &--mobile {
+      @include tablet-xl {
+        display: none;
+      }
+    }
   }
 
   &__accordion {

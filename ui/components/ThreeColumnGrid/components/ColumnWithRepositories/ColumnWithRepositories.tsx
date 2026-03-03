@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import { ColumnWithContent } from '../../../ColumnWithContent/ColumnWithContent';
-import { useDeviceSize } from '../../../../common/hooks';
 import { ColumnWithRepositoriesProps } from '../../../../common/types';
 
 export function ColumnWithRepositories({
@@ -11,12 +10,6 @@ export function ColumnWithRepositories({
 }: ColumnWithRepositoriesProps & {
   className: string;
 }) {
-  const {
-    isTabletXl,
-  } = useDeviceSize();
-
-  const repositoriesList = isTabletXl ? repositories : repositories.slice(0, 1);
-
   return (
     <ColumnWithContent
       title={title}
@@ -24,14 +17,20 @@ export function ColumnWithRepositories({
       className={clsx(`column-with-repositories`, className)}
     >
       <ul className="column-with-repositories__list">
-        {repositoriesList.map(({
-          name,
-          description,
-          language,
-          link,
-        }) => (
+        {repositories.map((
+          {
+            name,
+            description,
+            language,
+            link,
+          },
+          index,
+        ) => (
           <li
-            className="column-with-repositories__item"
+            className={clsx(
+              `column-with-repositories__item`,
+              index > 0 && `column-with-repositories__item--hidden-on-mobile`,
+            )}
             key={name}
           >
             {
