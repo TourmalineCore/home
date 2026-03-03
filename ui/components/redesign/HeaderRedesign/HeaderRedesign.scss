@@ -72,6 +72,14 @@
     }
   }
 
+  &__button {
+    display: none;
+
+    @include tablet-xl {
+      display: inline-block;
+    }
+  }
+
   &__line {
     display: block;
     border-radius: 4px;
