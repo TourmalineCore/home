@@ -45,65 +45,71 @@ export function HeaderRedesign({
   } = useRouter();
 
   return (
-    <header
-      className={clsx(`header-redesign`, {
-        'header-redesign--hidden': !isScrollUp && !isMobileMenuOpen,
-      })}
-      data-testid="header-redesign"
-    >
-      <div className="header-redesign__inner container-redesign">
-        <Link
-          className="header-redesign__logo-wrapper"
-          href={AppRoute.Main}
-          aria-label={
-            locale === `ru`
-              ? `Ссылка на главную страницу`
-              : `Link to home page`
-          }
-        >
-          <Image
-            src="/images/logo.png"
-            alt="Tourmaline core logo"
-            aria-hidden="true"
-            fill
-          />
-        </Link>
-
-        <HeaderNavigationList
-          className="header-redesign__nav"
-          navigationLists={navigationLists}
-          isMobileMenu={false}
-        />
-
-        <LangSwitchRedesign className="header-redesign__lang-switch" />
-
-        <button
-          className={clsx(`header-redesign__burger`, {
-            'header-redesign__burger--open': isMobileMenuOpen,
-          })}
-          data-testid="header-redesign-burger"
-          type="button"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label={
-            locale === `ru`
-              ? `Открыть мобильное меню`
-              : `Open mobile menu`
-          }
-        >
-          <span className="header-redesign__line" />
-          <span className="header-redesign__line" />
-        </button>
-
-        {buttonLabel && (
-          <HeaderButton
-            className="header-redesign__button"
-            onClick={setIsModalOpen}
-            isMobileMenu={false}
+    <>
+      <header
+        className={clsx(`header-redesign`, {
+          'header-redesign--hidden': !isScrollUp && !isMobileMenuOpen,
+        })}
+        data-testid="header-redesign"
+      >
+        <div className="header-redesign__inner container-redesign">
+          <Link
+            className="header-redesign__logo-wrapper"
+            href={AppRoute.Main}
+            aria-label={
+              locale === `ru`
+                ? `Ссылка на главную страницу`
+                : `Link to home page`
+            }
           >
-            {buttonLabel}
-          </HeaderButton>
-        )}
-      </div>
+            <Image
+              src="/images/logo.png"
+              alt="Tourmaline core logo"
+              aria-hidden="true"
+              fill
+            />
+          </Link>
+
+          <HeaderNavigationList
+            className="header-redesign__nav"
+            navigationLists={navigationLists}
+            isMobileMenu={false}
+          />
+
+          <LangSwitchRedesign className="header-redesign__lang-switch" />
+
+          <button
+            className={clsx(`header-redesign__burger`, {
+              'header-redesign__burger--open': isMobileMenuOpen,
+            })}
+            data-testid="header-redesign-burger"
+            type="button"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={
+              locale === `ru`
+                ? `Открыть мобильное меню`
+                : `Open mobile menu`
+            }
+          >
+            <span className="header-redesign__line" />
+            <span className="header-redesign__line" />
+          </button>
+
+          {buttonLabel && (
+            <HeaderButton
+              className="header-redesign__button"
+              onClick={setIsModalOpen}
+              isMobileMenu={false}
+            >
+              {buttonLabel}
+            </HeaderButton>
+          )}
+        </div>
+        <FormModal
+          onCloseModal={() => setIsModalOpen(false)}
+          isModalOpen={isModalOpen}
+        />
+      </header>
 
       <MobileMenu
         navigationLists={navigationLists}
@@ -114,11 +120,6 @@ export function HeaderRedesign({
         onOpenModal={() => setIsModalOpen(true)}
         isMobileMenuOpen={isMobileMenuOpen}
       />
-
-      <FormModal
-        onCloseModal={() => setIsModalOpen(false)}
-        isModalOpen={isModalOpen}
-      />
-    </header>
+    </>
   );
 }

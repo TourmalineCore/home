@@ -155,25 +155,32 @@ async function layoutMainScenarioTest() {
         await test.step(`Check mobile menu`, checkMobileMenu);
 
         async function checkDesktop() {
-          await expect(page.getByText(HEADER_NAVIGATION))
+          const header = await page.getByTestId(`header-redesign`);
+          const footer = await page.getByTestId(`footer`);
+
+          await expect(header
+            .getByText(HEADER_NAVIGATION))
             .toBeVisible();
 
-          await page.getByText(HEADER_NAVIGATION)
+          await header
+            .getByText(HEADER_NAVIGATION)
             .hover();
 
-          await expect(page.getByText(NESTED_HEADER_NAVIGATION))
+          await expect(header
+            .getByText(NESTED_HEADER_NAVIGATION))
             .toBeVisible();
 
-          await expect(page.getByText(EMAIL_CAPTION))
+          await expect(footer.getByText(EMAIL_CAPTION))
             .toBeVisible();
 
-          await expect(page.getByText(EMAIL_ADDRESS))
+          await expect(footer.getByText(EMAIL_ADDRESS))
             .toBeVisible();
 
-          await expect(page.getByText(BUTTON_LABEL))
+          await expect(header
+            .getByText(BUTTON_LABEL))
             .toBeVisible();
 
-          await expect(page.getByText(FOOTER_NAVIGATION_CAPTION))
+          await expect(footer.getByText(FOOTER_NAVIGATION_CAPTION))
             .toBeVisible();
         }
 

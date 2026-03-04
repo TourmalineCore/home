@@ -47,9 +47,11 @@ function layoutPreviewTest() {
       gotoInPreviewMode: CustomTestFixtures['gotoInPreviewMode'];
       page: Page;
     }) => {
+      const header = await page.getByTestId(`header-redesign`);
+
       await goto();
 
-      await expect(page.getByText(BUTTON_LABEL_DRAFT))
+      await expect(header.getByText(BUTTON_LABEL_DRAFT))
         .toBeHidden();
 
       await expect(page.getByText(FOOTER_NAVIGATION_CAPTION_DRAFT))
@@ -57,7 +59,7 @@ function layoutPreviewTest() {
 
       await gotoInPreviewMode();
 
-      await expect(page.getByText(BUTTON_LABEL_DRAFT))
+      await expect(header.getByText(BUTTON_LABEL_DRAFT))
         .toBeVisible();
 
       await expect(page.getByText(FOOTER_NAVIGATION_CAPTION_DRAFT))
