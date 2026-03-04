@@ -1,0 +1,16 @@
+# related discussion https://stackoverflow.com/a/69009486
+# kind docs regarding this bit https://kind.sigs.k8s.io/docs/user/configuration#nodeport-with-port-mappings
+
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  extraPortMappings:
+  # containerPort has to be the same port that is configured in values-ingress-nginx
+  # this port is exposed from the cluster container
+  - containerPort: 30080
+    # host OS port which is called from the browser e.g. when UI is opened
+    # it should be the same as {{ .Values.HOME_EXTERNAL_PORT }}
+    hostPort: 40120
+    # listens to all interfaces
+    listenAddress: "0.0.0.0"
