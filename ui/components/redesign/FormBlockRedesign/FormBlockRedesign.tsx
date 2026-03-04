@@ -37,7 +37,7 @@ export function FormBlockRedesign({
       className={clsx(`form-block-redesign`, {
         'is-modal': isModal,
       })}
-      data-testid={testId || `form-block`}
+      data-testid={testId || `form-block${isModal ? `-modal` : ``}`}
     >
       <div className="form-block-redesign__wrapper container-redesign">
         <div className="form-block-redesign__inner">
