@@ -1,4 +1,5 @@
 import Link from "next/link";
+import clsx from "clsx";
 import { HeaderButton } from "../HeaderButton/HeaderButton";
 import { HeaderRedesignProps } from "../../../../../common/types";
 import { HeaderNavigationList } from "../HeaderNavigationList/HeaderNavigationList";
@@ -10,13 +11,17 @@ export function MobileMenu({
   emailCaption,
   emailAddress,
   socialLinks,
-  setIsModalOpen,
+  onOpenModal,
+  isMobileMenuOpen,
 }: HeaderRedesignProps & {
-  setIsModalOpen: (isOpen: boolean) => void;
+  onOpenModal: () => void;
+  isMobileMenuOpen: boolean;
 }) {
   return (
     <div
-      className="mobile-menu-redesign container-redesign"
+      className={clsx(`mobile-menu-redesign container-redesign`, {
+        'mobile-menu-redesign--open': isMobileMenuOpen,
+      })}
       data-testid="mobile-menu-redesign"
     >
       <HeaderNavigationList
@@ -28,7 +33,8 @@ export function MobileMenu({
       {buttonLabel && (
         <HeaderButton
           className="mobile-menu-redesign__button"
-          onClick={setIsModalOpen}
+          onClick={onOpenModal}
+          isMobileMenu
         >
           {buttonLabel}
         </HeaderButton>

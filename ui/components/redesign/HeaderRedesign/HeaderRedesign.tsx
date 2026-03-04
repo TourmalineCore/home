@@ -98,24 +98,27 @@ export function HeaderRedesign({
           <HeaderButton
             className="header-redesign__button"
             onClick={setIsModalOpen}
+            isMobileMenu={false}
           >
             {buttonLabel}
           </HeaderButton>
         )}
       </div>
 
-      {isMobileMenuOpen && (
-        <MobileMenu
-          navigationLists={navigationLists}
-          buttonLabel={buttonLabel}
-          emailCaption={emailCaption}
-          emailAddress={emailAddress}
-          socialLinks={socialLinks}
-          setIsModalOpen={setIsModalOpen}
-        />
-      )}
+      <MobileMenu
+        navigationLists={navigationLists}
+        buttonLabel={buttonLabel}
+        emailCaption={emailCaption}
+        emailAddress={emailAddress}
+        socialLinks={socialLinks}
+        onOpenModal={() => setIsModalOpen(true)}
+        isMobileMenuOpen={isMobileMenuOpen}
+      />
 
-      {isModalOpen && <FormModal setIsOpen={setIsModalOpen} />}
+      <FormModal
+        onCloseModal={() => setIsModalOpen(false)}
+        isModalOpen={isModalOpen}
+      />
     </header>
   );
 }

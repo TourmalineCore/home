@@ -1,15 +1,18 @@
 import { ReactNode, useEffect, useRef } from 'react';
 import FocusLock from 'react-focus-lock';
 import { useRouter } from 'next/router';
+import clsx from 'clsx';
 import IconCross from '../../icons/cross.svg';
 import { useOnClickOutside } from '../../common/hooks';
 
 export function Modal({
   children,
+  className,
   onClose = () => {},
   testId,
 }: {
   children: ReactNode;
+  className: string;
   onClose?:() => unknown;
   testId?: string;
 }) {
@@ -42,7 +45,7 @@ export function Modal({
       returnFocus
     >
       <div
-        className="default-scroll modal"
+        className={clsx(`default-scroll modal`, className)}
         data-testid={testId}
       >
         <div className="modal__container">

@@ -1,6 +1,7 @@
 .mobile-menu-redesign {
   position: relative;
   z-index: $mobile-menu;
+  display: none;
   overflow-y: auto;
   padding-top: 24px;
   padding-bottom: 24px;
@@ -80,5 +81,9 @@
 
   @include desktop-xl {
     min-height: calc(100vh - 118px);
+  }
+
+  &--open {
+    display: block;
   }
 }

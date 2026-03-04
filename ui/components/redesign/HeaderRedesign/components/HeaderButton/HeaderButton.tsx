@@ -6,10 +6,12 @@ export function HeaderButton({
   children,
   className,
   onClick,
+  isMobileMenu,
 }: {
   children: ReactNode;
   className?: string;
   onClick: (isOpen: boolean) => void;
+  isMobileMenu: boolean;
 }) {
   const isCountryRus = useIsRussianCountry();
 
@@ -19,6 +21,9 @@ export function HeaderButton({
         className={clsx(
           `header-button`,
           className,
+          {
+            'header-button--mobile-menu': isMobileMenu,
+          },
         )}
         type="button"
         onClick={() => onClick(true)}
@@ -30,6 +35,9 @@ export function HeaderButton({
         className={clsx(
           `header-button`,
           className,
+          {
+            'header-button--mobile-menu': isMobileMenu,
+          },
         )}
         role="button"
         href="mailto:contact@tourmalinecore.com"
