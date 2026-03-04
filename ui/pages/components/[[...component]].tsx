@@ -114,7 +114,7 @@ export default function ComponentsPage({
         emailCaption={headerRedesign.emailCaption}
         emailAddress={headerRedesign.emailAddress}
         socialLinks={headerRedesign.socialLinks}
-        onCloseMobileMenu={() => {}}
+        onOpenModal={() => {}}
         isMobileMenuOpen
       />
     );
