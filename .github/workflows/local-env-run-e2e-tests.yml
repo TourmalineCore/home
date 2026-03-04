@@ -35,7 +35,6 @@ jobs:
         push: never
 
     # PLAYWRIGHT UI TESTS
-
     - name: Checkout Home UI
       uses: actions/checkout@v4
       with:
