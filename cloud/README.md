@@ -1,4 +1,4 @@
-# home-cloud-private
+# home-cloud
 
 ## Getting Started
 > Additional information about Yandex Cloud Terraform provider and Yandex Cloud resources can be found in documentation
