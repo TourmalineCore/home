@@ -1,32 +1,34 @@
+import clsx from 'clsx';
 import { Modal } from '../Modal/Modal';
 import { FormBlockRedesign } from '../redesign/FormBlockRedesign/FormBlockRedesign';
 
 export function FormModal({
-  setIsOpen,
+  onCloseModal,
   initializeIsSubmit,
   testId,
   isComponentPage,
+  isModalOpen,
 }:{
-  setIsOpen: (isOpen: boolean) => void;
+  onCloseModal: () => void;
   initializeIsSubmit?: boolean;
   testId?: string;
   isComponentPage?: boolean;
+  isModalOpen: boolean;
 }) {
   return (
     <Modal
+      className={clsx(`form-modal`, {
+        'form-modal--open': isModalOpen,
+      })}
       testId={testId}
-      onClose={onClose}
+      onClose={onCloseModal}
     >
       <FormBlockRedesign
         isModal
         initializeIsSubmit={initializeIsSubmit}
-        onCloseModal={onClose}
+        onCloseModal={onCloseModal}
         isComponentPage={isComponentPage}
       />
     </Modal>
   );
-
-  function onClose() {
-    setIsOpen(false);
-  }
 }

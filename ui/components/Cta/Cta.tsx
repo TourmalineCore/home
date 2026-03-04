@@ -9,13 +9,13 @@ export function Cta() {
   const {
     slicePathname,
   } = usePath();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     t,
   } = useTranslation(`cta`);
 
-  useBodyScrollHidden(isOpen);
+  useBodyScrollHidden(isModalOpen);
 
   const isCountryRus = useIsRussianCountry();
 
@@ -29,7 +29,7 @@ export function Cta() {
           <h2 className="title-technology-type-1 cta__title">{t(`title`)}</h2>
           {isCountryRus ? (
             <PrimaryButton
-              onClick={() => setIsOpen(true)}
+              onClick={() => setIsModalOpen(true)}
               className={`cta__button cta__button--${slicePathname}`}
             >
               {t(`buttonText`)}
@@ -46,7 +46,10 @@ export function Cta() {
           <div className="cta__image" />
         </div>
       </div>
-      {isOpen && <FormModal setIsOpen={setIsOpen} />}
+      <FormModal
+        onCloseModal={() => setIsModalOpen(false)}
+        isModalOpen={isModalOpen}
+      />
     </section>
   );
 }

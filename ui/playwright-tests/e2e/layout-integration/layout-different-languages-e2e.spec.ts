@@ -61,9 +61,11 @@ function layoutDifferentLanguagesTest() {
       goto: CustomTestFixtures['goto'];
       page: Page;
     }) => {
+      const header = await page.getByTestId(`header-redesign`);
       await goto();
 
-      await expect(page.getByText(BUTTON_LABEL_EN))
+      await expect(header
+        .getByText(BUTTON_LABEL_EN))
         .toBeVisible();
 
       await expect(page.getByText(FOOTER_NAVIGATION_CAPTION_EN))
@@ -77,7 +79,8 @@ function layoutDifferentLanguagesTest() {
 
       await page.waitForLoadState(`networkidle`);
 
-      await expect(page.getByText(BUTTON_LABEL_RU))
+      await expect(header
+        .getByText(BUTTON_LABEL_RU))
         .toBeVisible();
 
       await expect(page.getByText(FOOTER_NAVIGATION_CAPTION_RU))

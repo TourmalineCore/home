@@ -14,7 +14,7 @@ export function HeroBlockTechnology() {
   const {
     slicePathname,
   } = usePath();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     locale,
   } = useRouter();
@@ -22,7 +22,7 @@ export function HeroBlockTechnology() {
     t,
   } = useTranslationNamespace(`hero`);
 
-  useBodyScrollHidden(isOpen);
+  useBodyScrollHidden(isModalOpen);
 
   const isCountryRus = useIsRussianCountry();
 
@@ -38,7 +38,7 @@ export function HeroBlockTechnology() {
           {isCountryRus ? (
             <button
               type="button"
-              onClick={() => setIsOpen(true)}
+              onClick={() => setIsModalOpen(true)}
               className={`hero-block-technology__button hero-block-technology__button--${slicePathname}`}
             >
               <span className="hero-block-technology__button-text">{t(`buttonText`)}</span>
@@ -68,7 +68,10 @@ export function HeroBlockTechnology() {
           />
         </picture>
       </div>
-      {isOpen && <FormModal setIsOpen={setIsOpen} />}
+      <FormModal
+        onCloseModal={() => setIsModalOpen(false)}
+        isModalOpen={isModalOpen}
+      />
     </section>
   );
 }

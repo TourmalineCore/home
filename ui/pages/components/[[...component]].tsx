@@ -114,7 +114,8 @@ export default function ComponentsPage({
         emailCaption={headerRedesign.emailCaption}
         emailAddress={headerRedesign.emailAddress}
         socialLinks={headerRedesign.socialLinks}
-        setIsModalOpen={() => {}}
+        onOpenModal={() => {}}
+        isMobileMenuOpen
       />
     );
   }
@@ -215,7 +216,8 @@ export default function ComponentsPage({
   if (componentName === ComponentName.FORM_MODAL) {
     return (
       <FormModal
-        setIsOpen={() => {}}
+        onCloseModal={() => {}}
+        isModalOpen
         testId="form-modal"
         isComponentPage
       />
@@ -225,7 +227,8 @@ export default function ComponentsPage({
   if (componentName === ComponentName.SUBMITTED_FORM_MODAL) {
     return (
       <FormModal
-        setIsOpen={() => {}}
+        onCloseModal={() => {}}
+        isModalOpen
         testId="submitted-form-modal"
         initializeIsSubmit
         isComponentPage
