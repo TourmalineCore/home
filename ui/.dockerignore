@@ -20,7 +20,6 @@
 **/Dockerfile*
 
 .env.development
-.env.production
 
 .eslintrc.json
 .stylelintrc.json
