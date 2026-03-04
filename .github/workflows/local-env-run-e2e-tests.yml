@@ -86,7 +86,6 @@ jobs:
         retention-days: 7
 
     # PLAYWRIGHT CMS TESTS
-
     - name: Checkout Home CMS
       uses: actions/checkout@v4
       with:
