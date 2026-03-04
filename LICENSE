@@ -10,5 +10,5 @@ cms
 env-synchronizer
   MIT License
 
-home-local-env
+local-env
   AGPL-3.0 License
