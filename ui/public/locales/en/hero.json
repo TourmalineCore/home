@@ -1,0 +1,38 @@
+{
+  "title": "Tourmaline Core Tech\u00A0Company",
+  "description": "Launching MVP, working on R&D projects, complex enterprise services, and websites. Writing code for embedded systems, implementing machine\u00A0learning.",
+  "media": [
+    {
+      "url": "/images/hero-slider-image-1.png",
+      "mime": "image"
+    },
+    {
+      "url": "/images/hero-slider-image-2.png",
+      "mime": "image"
+    },
+    {
+      "url": "/images/hero-slider-image-3.png",
+      "mime": "image"
+    },
+    {
+      "url": "/images/hero-slider-image-4.png",
+      "mime": "image"
+    },
+    {
+      "url": "/images/hero-slider-image-5.png",
+      "mime": "image"
+    },
+    {
+      "url": "/images/hero-slider-image-6.png",
+      "mime": "image"
+    },
+    {
+      "url": "/images/hero-slider-image-7.png",
+      "mime": "image"
+    },
+    {
+      "url": "/images/hero-slider-image-8.png",
+      "mime": "image"
+    }
+  ]
+}

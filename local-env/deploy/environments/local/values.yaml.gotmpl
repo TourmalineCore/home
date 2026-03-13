@@ -1,0 +1,35 @@
+HOME_HOSTNAME: "localhost"
+
+# there are the same HOME_INTERNAL_PORT and externalPort to support both kind and Docker Desktop k8s clusters
+# when these are different e.g. 40080 for externalPort it doesn't work for Docker Desktop
+# it was decided to keep things less explicit to support seemless switch between clusters
+HOME_INTERNAL_PORT: "30080"
+# -- Port the external HTTP listener is published with.
+HOME_EXTERNAL_PORT: "40120"
+
+# there has to be externalPort in baseExternalUrl (cannot be used as a variable in the same file)
+HOME_BASE_EXTERNAL_URL: "http://localhost:40120" 
+
+HOME_APP_KEYS: "l447ZbufnsvHicHvfpMoJA==,b00dkarNr56Er5mJLMr38w==,+GhweEM/mZi8NbBpkZIpDw==,TNAQ7URlV9PVGg7+zFXr7w=="
+HOME_API_TOKEN_SALT: "xgb5x7cdhbCNbveTtVtq2Q=="
+HOME_ADMIN_JWT_SECRET: "hR/XPb6VISQZg71UPYijWg=="
+HOME_TRANSFER_TOKEN_SALT: "3pCV+b5ISok+iqUiZtTpQQ=="
+HOME_JWT_SECRET: "xRbyekJVuwhmMeAT7js05g=="
+
+HOME_DATABASE_HOST: "postgresql"
+HOME_DATABASE_PORT: "5432"
+HOME_DATABASE_NAME: "home_db"
+HOME_DATABASE_USERNAME: "postgres"
+HOME_DATABASE_PASSWORD: "admin"
+
+HOME_AWS_ACCESS_KEY_ID: "admin"
+HOME_AWS_ACCESS_SECRET_KEY: "rootPassword"
+# The internal domain minio-s3:9000 only works on the UI, but not on the CMS
+# The public domain minio-s3.localhost:40120 only works on the CMS, but not on the UI
+HOME_AWS_ENDPOINT: "http://minio-s3:9000"
+HOME_AWS_BUCKET: "home-local-env"
+# If you don't have subfolder then leave HOME_AWS_SUBFOLDER_NAME with empty quotes
+HOME_AWS_SUBFOLDER_NAME: ""
+HOME_AWS_REGION: "us-east-1"
+
+HOME_PREVIEW_SECRET: "secret"

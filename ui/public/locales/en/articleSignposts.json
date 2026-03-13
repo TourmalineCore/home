@@ -1,0 +1,42 @@
+{
+  "title": "We write articles",
+  "viewAllLink": {
+    "text": "All articles",
+    "url":"/articles"
+  },
+  "signposts": [
+    {
+      "imageWithBlurDataURL": {
+        "url": "/images/article-1-en.png"
+      },
+      "title": "To Docker or not to Docker? That is JupyterLab",
+      "subtitle": "May 21, 2025",
+      "link": "/articles/environment-jupyterlab-jupyter-poetry-docker-mlops-ml-infrastructure"
+    },
+    {
+      "imageWithBlurDataURL": {
+        "url": "/images/article-2.png"
+      },
+      "title": "How to make unit testing in .NET\u00A0easier and more fun? ",
+      "subtitle": "November 20, 2024",
+      "link": "/articles/dotnet-unit-testing"
+    },
+    {
+      "imageWithBlurDataURL": {
+        "url": "/images/article-3-en.png"
+      },
+      "title": "Cool features in Docker Compose – profiles and templates",
+      "subtitle": "July 25, 2024",
+      "link": "/articles/docker-compose-profiles-templates"
+    },
+    {
+      "imageWithBlurDataURL": {
+        "url": "/images/article-4-en.png"
+      },
+      "title": "How to estimate tasks and make peace with deadlines",
+      "subtitle": "June 22, 2023",
+      "link": "/articles/design-and-management-task-evaluation"
+    }
+  ]
+}
+

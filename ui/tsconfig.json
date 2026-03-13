@@ -1,0 +1,40 @@
+ {
+  "compilerOptions": {
+    "target": "es6",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "alwaysStrict": true, // "use strict"
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "strictPropertyInitialization": false, // dsfsd
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true, // dfasfa
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "downlevelIteration": false,
+    "allowSyntheticDefaultImports": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.js",  
+    "**/*.ts", 
+    "**/*.tsx", 
+    "**/*.jsx", 
+    "**/*.config.js", 
+    "next-sitemap.config.js",
+    "packages.d.ts"
+  ],
+  "exclude": ["node_modules"]
+}

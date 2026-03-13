@@ -1,0 +1,173 @@
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+.body--scroll-hidden {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
+html,
+body {
+  overflow-x: hidden;
+  margin: 0;
+  height: 100%;
+  box-sizing: border-box;
+  font-family: $ff-montserrat;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: $color-white;
+  background-color: $color-black;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+
+  .layout--zh {
+    font-size: 18px;
+
+    @include desktop-xl {
+      font-size: 24px;
+    }
+  }
+
+  @include desktop-xl {
+    font-size: 19px;
+    line-height: 1.6;
+  }
+}
+
+.default-scroll {
+  scrollbar-color:
+    #838389
+    #0e0e0f;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #0e0e0f;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border: 2px solid #0e0e0f;
+    border-radius: 5px;
+    height: 56px;
+    background-color: #838389;
+  }
+}
+
+code {
+  font-family:
+    Source-Code-Pro,
+    Menlo,
+    Monaco,
+    "Courier New",
+    monospace;
+}
+
+img {
+  display: block;
+}
+
+/* stylelint-disable-next-line selector-id-pattern */
+#__next {
+  height: 100%;
+}
+
+p + p {
+  margin-top: 10px;
+}
+
+a {
+  text-decoration-skip-ink: none;
+}
+
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: $pd-mobile;
+  padding-left: $pd-mobile;
+  width: 100%;
+  max-width: 1606px;
+
+  @include tablet {
+    padding-right: $pd-tablet;
+    padding-left: $pd-tablet;
+  }
+
+  @include desktop {
+    padding-right: $pd-desktop;
+    padding-left: $pd-desktop;
+  }
+}
+
+.container-redesign {
+  margin: 0 auto;
+  padding-right: 12px;
+  padding-left: 12px;
+  max-width: 1920px;
+
+  @include tablet-xl {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  @include desktop-xl {
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+}
+
+.visually-hidden {
+  display: none;
+}
+
+@mixin dynamic-width($containerSize, $widthViewport, $padding) {
+  width: calc($containerSize / ($widthViewport - (2 * $padding)) * 100%);
+}
+
+.custom-scroll {
+  scroll-padding-left: 20px;
+  scroll-padding-right: 20px;
+  scrollbar-color:
+    $color-blue
+    rgb(255 255 255 / 20%);
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    border: 3px solid $color-purple-black;
+    border-radius: 20px;
+    height: 1px;
+  }
+
+  &::-webkit-scrollbar-track {
+    margin: 0 16px;
+    height: 1px;
+    background: rgb(255 255 255 / 20%);
+
+    @include desktop-xl {
+      margin: 0;
+    }
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    height: 1px;
+    background-image: linear-gradient(90.09deg, #e977f6 0.08%, #a2a6ee 99.85%);
+  }
+}
+
+@keyframes showSmoothАppearance {
+  0% {
+    transform: translate3d(0, -10px, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}

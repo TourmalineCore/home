@@ -1,0 +1,53 @@
+{
+  "showcaseColumns":[
+    {
+      "id":0,
+      "type": "media",
+      "showcaseColumnWithMedia":{
+        "media": {
+          "url": "/images/capybara-en.png",
+          "mime": "image/png"
+        },
+        "title": "Capybara",
+        "description": "An application for\u00A0centralized storage and\u00A0management of\u00A0large sets of\u00A0images",
+        "link": "",
+        "size": "XS",
+        "isNda": true
+      }
+    },
+    {
+      "id":1,
+      "type": "media",
+      "showcaseColumnWithMedia":{
+        "media": {
+          "url": "/images/swatch-en.png",
+          "mime": "image/png"
+        },
+        "title": "AI modules in smart watches",
+        "description": "Machine learning model that\u00A0identifies the\u00A0type of\u00A0worker activity on\u00A0construction site based on\u00A0smartwatch sensor signals",
+        "size": "L",
+        "isNda": false
+      }
+    },
+    {
+      "id":2,
+      "type": "media",
+      "showcaseColumnWithMedia": {
+        "media": {
+          "url": "/images/inner-circle-project.png",
+          "mime": "image/png"
+        },
+        "title": "Inner Circle",
+        "description": "An application for\u00A0calculating the\u00A0company's financials",
+        "size": "S",
+        "link": "https://github.com/TourmalineCore/inner-circle-documentation",
+        "isNda": false
+      }
+    }
+  ],
+  "showOnMobile": true
+}
+
+
+
+

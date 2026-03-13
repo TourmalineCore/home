@@ -1,0 +1,40 @@
+{
+  "showcaseColumns": [
+    {
+      "id": 0,
+      "type": "media",
+      "showcaseColumnWithMedia": {
+        "media": {
+          "url": "/images/real-estate-en.png",
+          "mime": "image/png"
+        },
+        "title": "Real estate",
+        "description": "Service for\u00A0checking, converting, and\u00A0uploading xml files with a\u00A0large number of\u00A0ads to\u00A0real estate sales and\u00A0rental websites",
+        "size": "XS",
+        "isNda": false
+      }
+    },
+    {
+      "id": 1,
+      "type": "media",
+      "showcaseColumnWithMedia": {
+        "media": {
+          "url": "/images/fairaction-project.jpg",
+          "mime": "image/png"
+        },
+        "title": "Fairaction",
+        "description": "Website for\u00A0an\u00A0Australian charity providing drinking water to\u00A0parts of\u00A0Africa",
+        "size": "L",
+        "isNda": false
+      }
+    },
+    {
+      "id": 2,
+      "type": "markdown",
+      "showcaseColumnWithMarkdown": {
+        "markdown": "<span className='blue-deep-color'>27 more cases</span>,\n<span>where we solved\n clients' problems</span>"
+      }
+    }
+  ],
+  "showOnMobile": false
+}

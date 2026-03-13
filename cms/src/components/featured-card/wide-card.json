@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_featured_card_wide_cards",
+  "info": {
+    "displayName": "wideCard"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "wideCardItems": {
+      "type": "component",
+      "component": "featured-card.wide-card-items",
+      "repeatable": true
+    },
+    "link": {
+      "type": "component",
+      "component": "shared.link",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}

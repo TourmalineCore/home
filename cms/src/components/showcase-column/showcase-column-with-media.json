@@ -1,0 +1,43 @@
+{
+  "collectionName": "components_showcase_column_showcase_column_with_medias",
+  "info": {
+    "displayName": "showcaseColumnWithMedia"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "text"
+    },
+    "description": {
+      "type": "text"
+    },
+    "media": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "videos"
+      ]
+    },
+    "link": {
+      "type": "string"
+    },
+    "isNda": {
+      "type": "boolean",
+      "default": false
+    },
+    "size": {
+      "type": "enumeration",
+      "required": true,
+      "default": "M",
+      "enum": [
+        "XS",
+        "S",
+        "M",
+        "L"
+      ]
+    }
+  },
+  "config": {}
+}

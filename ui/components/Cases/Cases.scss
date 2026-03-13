@@ -1,0 +1,49 @@
+.cases {
+  &__wrapper {
+    padding-top: 80px;
+    padding-bottom: 80px;
+
+    @include desktop {
+      padding-top: 120px;
+      padding-bottom: 120px;
+    }
+  }
+
+  &__inner {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(1, 1fr);
+
+    @include tablet {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include desktop {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include desktop-xl {
+      gap: 32px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 24px;
+
+    @include tablet {
+      max-width: 220px;
+    }
+
+    @include tablet-xl {
+      max-width: 260px;
+    }
+
+    @include desktop {
+      max-width: 310px;
+    }
+
+    @include desktop-xl {
+      max-width: 370px;
+    }
+  }
+}

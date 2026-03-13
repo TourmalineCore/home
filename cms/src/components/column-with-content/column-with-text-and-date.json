@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_column_with_content_column_with_text_and_dates",
+  "info": {
+    "displayName": "columnWithTextAndDate"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "text": {
+      "type": "text",
+      "required": true
+    },
+    "date": {
+      "type": "date"
+    }
+  },
+  "config": {}
+}

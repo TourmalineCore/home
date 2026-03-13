@@ -1,0 +1,120 @@
+.tasks {
+  font-weight: 500;
+
+  &__inner {
+    @include tablet-xl {
+      @include dynamic-width(706px, $tablet-xl-width, $pd-tablet);
+    }
+
+    @include desktop {
+      @include dynamic-width(803px, $desktop-width, $pd-desktop);
+    }
+
+    @include desktop-xl {
+      @include dynamic-width(960px, $desktop-xl-width, $pd-desktop-xl);
+    }
+  }
+
+  &__wrapper {
+    position: relative;
+    padding-top: 80px;
+    padding-bottom: 80px;
+
+    @include tablet-xl {
+      padding-top: 120px;
+      padding-bottom: 145px;
+    }
+
+    @include desktop {
+      padding-bottom: 218px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 48px;
+
+    @include tablet {
+      margin-bottom: 64px;
+    }
+
+    @include tablet-xl {
+      margin-bottom: 80px;
+    }
+  }
+
+  &__image {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: none;
+    width: 340px;
+    height: 300px;
+    background-size: cover;
+
+    @include desktop {
+      right: 75px;
+    }
+
+    @include tablet-xl {
+      display: block;
+    }
+  }
+
+  &__react-animation {
+    display: grid;
+    margin: 0 auto;
+    border: 3px solid;
+    border-radius: 50%;
+    width: 250px;
+    height: 100px;
+    box-sizing: border-box;
+    animation: l2 10s infinite linear;
+
+    &::before,
+    &::after {
+      content: "";
+      border: inherit;
+      border-radius: 50%;
+      background: inherit;
+      animation: inherit;
+      animation-duration: 12s;
+      grid-area: 1/1;
+    }
+
+    &::after {
+      --s: -1;
+    }
+
+    &--ml,
+    &--frontend,
+    &--teams {
+      color: $color-purple-page-primary;
+    }
+
+    &--backend {
+      color: $color-backend-page-tertiary;
+    }
+
+    &--qa {
+      color: $color-qa-page-primary;
+    }
+
+    &--frontend-team {
+      color: $color-cyan-page-primary;
+    }
+
+    &--embedded {
+      color: $color-embedded-page-primary;
+    }
+
+    &--design {
+      color: $color-design-page-react-animation;
+    }
+
+    @keyframes l2 {
+      100% {
+        transform: rotate(calc(var(--s, 1) * 1turn));
+      }
+    }
+  }
+}

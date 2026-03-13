@@ -1,0 +1,40 @@
+{
+  "showcaseColumns": [
+    {
+      "id": 0,
+      "type": "media",
+      "showcaseColumnWithMedia": {
+        "media": {
+          "url": "/images/real-estate-project.png",
+          "mime": "image/png"
+        },
+        "title": "Real estate",
+        "description": "Cервис для проверки, преобразования и\u00A0выгрузки xml-файлов с\u00A0большим количеством объявлений на\u00A0сайты по\u00A0продаже и\u00A0аренде недвижимости",
+        "size": "XS",
+        "isNda": false
+      }
+    },
+    {
+      "id": 1,
+      "type": "media",
+      "showcaseColumnWithMedia": {
+        "media": {
+          "url": "/images/fairaction-project.jpg",
+          "mime": "image/png"
+        },
+        "title": "Fairaction",
+        "description": "Сайт для\u00A0австралийской благотворительной организации, обеспечивающей регионы Африки питьевой водой",
+        "size": "L",
+        "isNda": false
+      }
+    },
+    {
+      "id": 2,
+      "type": "markdown",
+      "showcaseColumnWithMarkdown": {
+        "markdown": "<span className='blue-deep-color'>еще 27 кейсов</span>,\n<span>в которых мы решили\nпроблемы клиентов</span>"
+      }
+    }
+  ],
+  "showOnMobile": false
+}

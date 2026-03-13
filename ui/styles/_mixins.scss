@@ -1,0 +1,47 @@
+@mixin underline-base {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background-color: $color-black;
+    transform-origin: bottom left;
+    transition: transform 0.25s ease-out;
+  }
+}
+
+@mixin animated-underline {
+  @include underline-base;
+
+  &::after {
+    transform: scaleX(0);
+  }
+
+  &:hover,
+  &:focus-visible {
+    &::after {
+      transform: scaleX(1);
+    }
+  }
+}
+
+@mixin animated-underline-reverse {
+  @include underline-base;
+
+  &::after {
+    transform: scaleX(1);
+  }
+
+  &:hover,
+  &:focus-visible {
+    &::after {
+      transform: scaleX(0);
+    }
+  }
+}

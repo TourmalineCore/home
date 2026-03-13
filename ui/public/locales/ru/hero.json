@@ -1,0 +1,38 @@
+{
+  "title": "IT-компания Tourmaline Core",
+  "description": "Запускаем MVP, делаем R&D проекты, сложные корпоративные сервисы и сайты. Пишем код для встраиваемых систем, внедряем машинное обучение.",
+  "media": [
+    {
+      "url": "/images/hero-slider-image-1.png",
+      "mime": "image"
+    },
+    {
+      "url": "/images/hero-slider-image-2.png",
+      "mime": "image"
+    },
+    {
+      "url": "/images/hero-slider-image-3.png",
+      "mime": "image"
+    },
+    {
+      "url": "/images/hero-slider-image-4.png",
+      "mime": "image"
+    },
+    {
+      "url": "/images/hero-slider-image-5.png",
+      "mime": "image"
+    },
+    {
+      "url": "/images/hero-slider-image-6.png",
+      "mime": "image"
+    },
+    {
+      "url": "/images/hero-slider-image-7.png",
+      "mime": "image"
+    },
+    {
+      "url": "/images/hero-slider-image-8.png",
+      "mime": "image"
+    }
+  ]
+}
