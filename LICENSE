@@ -9,6 +9,7 @@ cloud
   Apache License
 
 env-synchronizer
+db-backupper
   MIT License
 
 local-env
