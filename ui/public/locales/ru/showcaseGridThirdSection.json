@@ -1,0 +1,51 @@
+{
+  "showcaseColumns":[
+    {
+      "id":0,
+      "type": "media",
+      "showcaseColumnWithMedia":{
+        "media": {
+          "url": "/images/capybara-project.png",
+          "mime": "image/png"
+        },
+        "title": "Capybara",
+        "description": "Приложение для\u00A0централизованного хранения и\u00A0управления большим количеством изображений",
+        "link": "",
+        "size": "XS",
+        "isNda": true
+      }
+    },
+    {
+      "id":1,
+      "type": "media",
+      "showcaseColumnWithMedia":{
+        "media": {
+          "url":"/images/smart-watch-project.png",
+          "mime": "image/png"
+        },
+        "title": "Модули с ИИ в умных часах",
+        "description": "Модель машинного обучения, определяющая тип активности рабочего на\u00A0строительном объекте по\u00A0сигналам с\u00A0датчиков умных часов",
+        "size": "L",
+        "isNda": false
+      }
+    },
+    {
+      "id":2,
+      "type": "media",
+      "showcaseColumnWithMedia": {
+        "media": {
+          "url":"/images/inner-circle-project.png",
+          "mime": "image/png"
+        },
+        "title": "Inner Circle",
+        "description": "Сервис для расчета финансовых показателей компании",
+        "size": "S",
+        "link": "https://github.com/TourmalineCore/inner-circle-documentation",
+        "isNda": false
+      }
+    }
+  ],
+  "showOnMobile": true
+}
+
+

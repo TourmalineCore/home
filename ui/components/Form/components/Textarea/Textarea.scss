@@ -1,0 +1,114 @@
+.textarea {
+  $this: &;
+
+  color: $color-white-alpha-200;
+
+  &__box {
+    position: relative;
+    resize: inherit;
+  }
+
+  &__control {
+    display: block;
+    margin-top: 24px;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid $color-white-alpha-200;
+    padding: 0;
+    padding-bottom: 16px;
+    width: 100%;
+    min-height: 92px;
+    font-family: inherit;
+    font-size: inherit;
+    color: $color-white;
+    background-color: inherit;
+    resize: inherit;
+    transition: all 0.3s;
+
+    &:not(:placeholder-shown) ~ #{$this}__label {
+      @include type-body-2;
+
+      top: -24px;
+      letter-spacing: 0.02em;
+    }
+
+    &:focus {
+      border-color: $color-pink;
+
+      ~ #{$this}__label {
+        @include type-body-2;
+
+        top: -24px;
+        letter-spacing: 0.02em;
+        color: $color-pink;
+      }
+    }
+  }
+
+  &__label {
+    position: absolute;
+    top: 0;
+    min-height: 30px;
+    color: inherit;
+    cursor: text;
+    transition: all 0.3s;
+  }
+
+  &__description {
+    margin-top: 4px;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  @include desktop {
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  @include desktop-xl {
+    font-size: 22px;
+    line-height: 1.5;
+  }
+
+  &--zh {
+    #{$this}__label {
+      font-size: 18px;
+
+      @include desktop-xl {
+        font-size: 28px;
+      }
+    }
+
+    #{$this}__description {
+      font-size: 18px;
+
+      @include desktop-xl {
+        font-size: 24px;
+      }
+    }
+
+    #{this}__control {
+      &:not(:placeholder-shown) ~ #{$this}__label {
+        @include type-body-2-zh;
+      }
+
+      &:focus {
+        ~ #{$this}__label {
+          @include type-body-2-zh;
+        }
+      }
+    }
+  }
+
+  &--is-error {
+    color: $color-error;
+
+    #{$this}__control {
+      border-color: $color-error;
+    }
+
+    #{$this}__control:focus ~ #{$this}__label {
+      color: $color-error;
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "collectionName": "components_shared_column_with_contents",
+  "info": {
+    "displayName": "columnWithContent"
+  },
+  "options": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "required": true,
+      "default": "image",
+      "enum": [
+        "image",
+        "repositories",
+        "text-and-date"
+      ]
+    },
+    "columnWithImage": {
+      "type": "component",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "type"
+            },
+            "image"
+          ]
+        }
+      },
+      "component": "column-with-content.column-with-image",
+      "repeatable": false,
+      "required": true
+    },
+    "columnWithRepositories": {
+      "type": "component",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "type"
+            },
+            "repositories"
+          ]
+        }
+      },
+      "component": "column-with-content.column-with-repositories",
+      "repeatable": false,
+      "required": true
+    },
+    "columnWithTextAndDate": {
+      "type": "component",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "type"
+            },
+            "text-and-date"
+          ]
+        }
+      },
+      "component": "column-with-content.column-with-text-and-date",
+      "repeatable": false,
+      "required": true
+    }
+  },
+  "config": {}
+}

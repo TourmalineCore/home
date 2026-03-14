@@ -1,0 +1,49 @@
+.showcase-column-with-markdown {
+  padding: 16px 0;
+
+  &__subtitle {
+    @include body-m;
+
+    margin-bottom: 16px;
+    color: $color-grey-500-redesign;
+
+    @include desktop {
+      margin-bottom: 24px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 32px;
+    }
+  }
+
+  &__markdown {
+    @include accent-text;
+
+    color: $color-black;
+
+    .blue-deep-color {
+      color: $color-deep-blue-redesign;
+    }
+
+    a {
+      color: $color-black;
+
+      &:hover,
+      &:focus-visible {
+        text-decoration: none;
+      }
+    }
+  }
+
+  @include tablet {
+    padding: 0;
+  }
+
+  @include tablet-xl {
+    padding: 0 8px;
+  }
+
+  @include desktop {
+    padding: 0 20px;
+  }
+}

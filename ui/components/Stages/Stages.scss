@@ -1,0 +1,41 @@
+.stages {
+  font-weight: 500;
+
+  &__wrapper {
+    padding-top: 120px;
+    padding-bottom: 120px;
+
+    @include desktop-xl {
+      padding-top: 240px;
+      padding-bottom: 240px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 80px;
+
+    @include tablet {
+      &--teams {
+        max-width: 550px;
+      }
+    }
+
+    @include tablet-xl {
+      &--teams {
+        max-width: 650px;
+      }
+    }
+
+    @include desktop {
+      &--teams {
+        max-width: 850px;
+      }
+    }
+
+    @include desktop-xl {
+      &--teams {
+        max-width: 995px;
+      }
+    }
+  }
+}

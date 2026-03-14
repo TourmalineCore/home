@@ -1,0 +1,16 @@
+.skip-link {
+  position: fixed;
+  left: 50%;
+  top: -1px;
+  z-index: $skip-link;
+  display: block;
+  padding: 15px;
+  width: auto;
+  color: $color-white;
+  background: $color-deep-blue-redesign;
+  transform: translateY(-100%);
+
+  &:focus-visible {
+    transform: translate(-50%, 0);
+  }
+}

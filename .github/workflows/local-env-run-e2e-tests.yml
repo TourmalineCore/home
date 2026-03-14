@@ -1,0 +1,120 @@
+name: E2E Tests Execution Against Local Env
+
+on:
+  push:
+    branches:
+      - feature/*
+    paths:
+      - 'local-env/**'
+
+jobs:
+  run-e2e-against-local-env:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Checkout Local Env
+      uses: actions/checkout@v4
+      with:
+        # sparse-checkout is needed to clone service folder only
+        # Cone mode is disabled to not clone other files in root folder
+        # It's important to clone only this folder to keep the root folder clean
+        sparse-checkout: 'local-env'
+        sparse-checkout-cone-mode: false
+
+    - name: Deploy Local Env to Kind k8s
+      uses: devcontainers/ci@v0.3
+      with:
+        subFolder: local-env
+        # In the current configuration we store services as subfolders 
+        # and it's necessary to define path to the devcontainer config in the folder of needed service
+        configFile: ./local-env/.devcontainer/devcontainer.json
+        runCmd: |
+          kind create cluster --name home --config kind-local-config.yaml --kubeconfig ./.home-cluster-kubeconfig
+          helmfile cache cleanup && helmfile --environment local --namespace local -f deploy/helmfile.yaml apply
+        # we don't need to push docker image that was built using our Dev Container
+        push: never
+
+    # PLAYWRIGHT UI TESTS
+    - name: Checkout Home UI
+      uses: actions/checkout@v4
+      with:
+        # we need to specify this path otherwise it will create this folder home/home
+        # and that will lead to permissions error at the next CMS repo checkout when it tries to remove no longer needed folder
+        # this path that matches the repo name isolates UI src folder from CMS one
+        path: 'ui'
+        sparse-checkout: 'ui'
+        sparse-checkout-cone-mode: false
+
+      # This step is needed because in the previous step UI service was cloned into ui/ui folder
+      # And we need to move it from ui/ui to ui/ to keep path of the service
+    - name: Move subfolder to current(top-level) folder
+      run: |
+        mv ui/ui/{.,}* ./ui
+        rm -rf ui/ui
+
+    - name: Playwright Run Against UI
+      uses: devcontainers/ci@v0.3
+      with:
+        subFolder: ui
+        # we expect that UI repo as well as CMS one contains the needed Dev Container configuration
+        # that allows us to get rid of caching and installation of deps here and rely of docker images more
+        configFile: ./ui/.devcontainer/e2e-tests-in-pr/devcontainer.json
+        # we use --reporter=list to prints a line for each test being run
+        # https://playwright.dev/docs/test-reporters#list-reporter
+        runCmd: |
+          npx playwright test --config=playwright.e2e.config.ts --reporter=list,html
+        # we don't need to push docker image that was built using our Dev Container
+        push: never
+        # we forward CI env var value from GitHub to Dev Container
+        # without it CI is not defined
+        # We set the PLAYWRIGHT_HTML_OPEN flag to never to avoid opening the HTML report if the test fails
+        # https://playwright.dev/docs/test-reporters#html-reporter 
+        env: |
+          PLAYWRIGHT_HTML_OPEN=never
+          FRONTEND_URL=http://localhost:40120 
+          CMS_URL=http://localhost:40120/cms
+          CMS_EMAIL=admin@init-strapi-admin.strapi.io
+          CMS_PASSWORD=admin
+          CI
+
+    - name: Upload HTML report
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: ui-html-report--attempt-${{ github.run_attempt }}
+        path: ui/playwright-report
+        retention-days: 7
+
+    # PLAYWRIGHT CMS TESTS
+    - name: Checkout Home CMS
+      uses: actions/checkout@v4
+      with:
+        path: 'cms'
+        sparse-checkout: 'cms'
+        sparse-checkout-cone-mode: false
+
+    - name: Move subfolder to current(top-level) folder
+      run: |
+        mv cms/cms/{.,}* ./cms
+        rm -rf cms/cms
+
+    - name: Playwright Run Against CMS
+      uses: devcontainers/ci@v0.3
+      with:
+        subFolder: cms
+        configFile: ./cms/.devcontainer/e2e-tests-in-pr/devcontainer.json
+        runCmd: |
+          npx playwright test --reporter=list,html 
+        push: never
+        env: |
+          PLAYWRIGHT_HTML_OPEN=never
+          FRONTEND_URL=http://localhost:40120
+          SERVER_URL=http://localhost:40120/cms
+
+    - name: Upload HTML report
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: cms-html-report--attempt-${{ github.run_attempt }}
+        path: cms/playwright-report
+        retention-days: 7

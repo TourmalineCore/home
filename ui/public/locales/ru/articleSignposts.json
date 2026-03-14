@@ -1,0 +1,42 @@
+{
+  "title": "Пишем статьи",
+  "viewAllLink": {
+    "text": "Все статьи",
+    "url": "/articles"
+  },
+  "signposts": [
+    {
+      "imageWithBlurDataURL": {
+        "url": "/images/article-1.png"
+      },
+      "title": "To Docker or not to Docker? Вот в чём JupyterLab",
+      "subtitle": "21 мая 2025",
+      "link": "/ru/articles/environment-jupyterlab-jupyter-poetry-docker-mlops-ml-infrastructure"
+    },
+    {
+      "imageWithBlurDataURL": {
+        "url": "/images/article-2.png"
+      },
+      "title": "Как сделать Unit-тестирование в .NET\u00A0проще и интереснее?",
+      "subtitle": "20 ноября 2024",
+      "link": "/ru/articles/dotnet-unit-testing"
+    },
+    {
+      "imageWithBlurDataURL": {
+        "url": "/images/article-3.png"
+      },
+      "title": "Клёвые фичи в Docker Compose — профили и шаблоны",
+      "subtitle": "25 июля 2024",
+      "link": "/ru/articles/docker-compose-profiles-templates"
+    },
+    {
+      "imageWithBlurDataURL": {
+        "url": "/images/article-4.png"
+      },
+      "title": "Dev контейнеры и с чем их едят",
+      "subtitle": "15 мая 2024",
+      "link": "https://habr.com/ru/articles/814071/"
+    }
+  ]
+}
+

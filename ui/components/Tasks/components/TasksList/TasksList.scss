@@ -1,0 +1,96 @@
+.tasks-list {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(1, 1fr);
+
+  &__item {
+    display: flex;
+    padding-right: 24px;
+  }
+
+  &__number {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 24px;
+    border: 1px solid rgba($color-black, 0);
+    border-radius: 50%;
+    padding: 8px 17px;
+    width: 40px;
+    height: 40px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    color: $color-white;
+    background-clip: padding-box, border-box;
+    transition: background-position 0.3s linear;
+
+    &--ml,
+    &--frontend,
+    &--teams {
+      background-color: $color-purple-page-primary;
+    }
+
+    &--backend {
+      background-image:
+        linear-gradient(
+            51deg,
+            $color-backend-page-primary 0%,
+            $color-backend-page-secondary 52%,
+            $color-backend-page-tertiary 100%
+          );
+    }
+
+    &--qa {
+      background-image: linear-gradient(309deg, $color-qa-page-primary 0%, $color-qa-page-secondary 100%);
+    }
+
+    &--frontend-team {
+      background-color: $color-cyan-page-primary;
+    }
+
+    &--design {
+      background-image: linear-gradient(234deg, $color-design-page-primary 0%, $color-design-page-secondary 78.13%);
+    }
+
+    &--embedded {
+      background-image: linear-gradient(225deg, $color-embedded-page-primary 0%, $color-embedded-page-secondary 100%);
+    }
+  }
+
+  &__text {
+    display: initial;
+    font-size: 18px;
+    line-height: 1.33;
+    color: $color-white-alpha-100;
+
+    @include tablet-xl {
+      font-size: 20px;
+      line-height: 1.4;
+    }
+
+    @include desktop {
+      font-size: 24px;
+      line-height: 1.33;
+    }
+
+    @include desktop-xl {
+      font-size: 28px;
+      line-height: 1.35;
+    }
+  }
+
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include tablet-xl {
+    row-gap: 48px;
+  }
+
+  @include desktop-xl {
+    column-gap: 32px;
+  }
+}

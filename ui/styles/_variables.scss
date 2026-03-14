@@ -1,0 +1,88 @@
+// Black
+$color-black: #000;
+$color-black-900: #18181a;
+$color-purple-black: #06040f;
+
+// White
+$color-white: #fff;
+$color-white-alpha-100: rgb(255 255 255 / 80%);
+$color-white-alpha-200: rgb(255 255 255 / 50%);
+$color-white-alpha-300: rgb(255 255 255 / 30%);
+$color-white-alpha-400: rgb(255 255 255 / 10%);
+
+// Main gradient
+$main-gradient: linear-gradient(90.05deg, #e474f1 0.04%, #e474f1 0.05%, #4fdae2 99.96%);
+
+// Primary
+$green-gradient: linear-gradient(90.05deg, #81b9e8 0.04%, #81b9e8 0.05%, #4fdae2 99.96%);
+$color-pink: #e474f1;
+$color-purple: #b397ed;
+$color-blue: #81b9e8;
+$color-green: #4fdae2;
+
+// Frontend page
+$color-purple-page-primary: #7926ff;
+
+// Design page
+$color-design-page-primary: #ff7921;
+$color-design-page-secondary: #fd3866;
+$color-design-page-react-animation: #fe4b52;
+$color-design-page-secondary-100: rgb(253 105 7 / 30%);
+
+// Ml page
+$color-ml-page-primary: #7926ff;
+
+// Embedded page
+$color-embedded-page-primary: rgb(251 138 238);
+$color-embedded-page-secondary: rgb(108 121 240);
+
+// QA page
+$color-qa-page-primary: rgb(229 109 217);
+$color-qa-page-secondary: rgb(112 62 163);
+
+// Backend page
+$color-backend-page-primary: rgb(176 58 249);
+$color-backend-page-secondary: rgb(246 125 85);
+$color-backend-page-tertiary: rgb(255 242 84);
+
+// Frontend pelican team page
+$color-cyan-page-primary: #4d79ff;
+
+// Secondary
+$color-gray: #1b1926;
+$color-dark-card: linear-gradient(234deg, #17191c 0%, #101112 100%);
+$color-dark-purple-card: linear-gradient(234deg, #7926ff 0%, #090029 100%);
+$color-dark-cyan-card: linear-gradient(234deg, #4d79ff 0%, #090029 100%);
+
+// Error
+$color-error: #ff9994;
+
+// z-index
+$top-panel: 10;
+$mobile-menu: 20;
+$skip-link: 30;
+$cookie: 40;
+$header: 100;
+$modal: 150;
+
+// padding
+$pd-mobile: 16px;
+$pd-tablet: 32px;
+$pd-desktop: 75px;
+$pd-desktop-xl: 232px;
+
+// redesign
+$color-pink-redesign: #fe00b0;
+$color-deep-blue-redesign: #0d00ff;
+$color-medium-blue-redesign: #006fff;
+$color-light-blue-redesign: #39ddd9;
+$color-grey-100-redesign: #f4f4f5;
+$color-grey-300-redesign: #afafb8;
+$color-grey-500-redesign: #4c4c53;
+$color-grey-700-redesign: #252528;
+$color-grey-900-redesign: #18181a;
+
+// Elements
+$header-logo-height: 40px;
+$header-logo-height-desktop-xl: 48px;
+$header-top-padding: 40px;

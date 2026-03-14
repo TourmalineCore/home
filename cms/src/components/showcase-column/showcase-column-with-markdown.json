@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_showcase_column_showcase_column_with_markdowns",
+  "info": {
+    "displayName": "showcaseColumnWithMarkdown"
+  },
+  "options": {},
+  "attributes": {
+    "subtitle": {
+      "type": "text"
+    },
+    "markdown": {
+      "type": "richtext",
+      "required": true
+    }
+  },
+  "config": {}
+}

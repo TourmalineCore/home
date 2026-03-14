@@ -1,0 +1,56 @@
+.footer-navigation-list-redesign {
+  overflow-wrap: break-word;
+
+  &__caption {
+    @include footer-caption;
+
+    display: inline-block;
+    margin-bottom: 4px;
+
+    @include tablet {
+      margin-bottom: 8px;
+    }
+  }
+
+  &__item {
+    @include body-m;
+
+    & + & {
+      margin-top: 8px;
+
+      @include desktop-xl {
+        margin-top: 12px;
+      }
+    }
+  }
+
+  &__link {
+    @include animated-underline;
+
+    color: $color-white;
+
+    &::after {
+      background-color: $color-white;
+    }
+  }
+
+  @include tablet {
+    min-width: 138px;
+    max-width: 180px;
+  }
+
+  @include tablet-xl {
+    min-width: 138px;
+    max-width: 214px;
+  }
+
+  @include desktop {
+    min-width: 214px;
+    max-width: 283.5px;
+  }
+
+  @include desktop-xl {
+    min-width: 299px;
+    max-width: 350px;
+  }
+}

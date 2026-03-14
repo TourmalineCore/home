@@ -1,0 +1,78 @@
+.input-redesign {
+  $this: &;
+
+  &__box {
+    position: relative;
+  }
+
+  &__control {
+    @include body-m;
+
+    display: block;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid transparent;
+    border-radius: 2px;
+    padding: 24px 16px 8px;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 1.4;
+    color: $color-white;
+    background-color: $color-grey-900-redesign;
+    transition: all 0.3s;
+    caret-color: $color-deep-blue-redesign;
+
+    &:not(:placeholder-shown) ~ #{$this}__label {
+      top: 4px;
+      font-size: 14px;
+    }
+
+    &:focus-visible {
+      border-color: $color-deep-blue-redesign;
+      background-color: $color-grey-900-redesign;
+      transition: all 0.3s;
+
+      ~ #{$this}__label {
+        top: 4px;
+        font-size: 14px;
+      }
+    }
+
+    &:hover {
+      background-color: $color-grey-700-redesign;
+      transition: all 0.3s;
+    }
+
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus-visible {
+      transition: background-color 9999s ease-in-out 0s;
+      -webkit-text-fill-color: #fff;
+    }
+
+    @include desktop-xl {
+      padding-bottom: 24px;
+      padding-left: 22px;
+    }
+  }
+
+  &__label {
+    @include inter-font;
+
+    position: absolute;
+    left: 16px;
+    top: 15px;
+    font-weight: 500;
+    color: $color-grey-300-redesign;
+    cursor: text;
+    transition: all 0.3s;
+
+    @include desktop-xl {
+      left: 22px;
+      top: 26px;
+      font-size: 24px;
+      line-height: 1.4;
+    }
+  }
+}

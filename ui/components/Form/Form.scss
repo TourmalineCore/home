@@ -1,0 +1,89 @@
+.form {
+  $this: &;
+
+  &__input {
+    margin-bottom: 40px;
+  }
+
+  &__message {
+    margin-top: 64px;
+    resize: vertical;
+  }
+
+  &__footer {
+    position: relative;
+    margin-top: 32px;
+
+    @include tablet {
+      display: flex;
+      align-items: center;
+    }
+
+    @include desktop {
+      margin-top: 24px;
+    }
+  }
+
+  &__consent {
+    @include body-s;
+
+    display: flex;
+    margin-top: 32px;
+    color: $color-white-alpha-100;
+    gap: 8px;
+
+    @include desktop {
+      margin-top: 24px;
+    }
+
+    @include desktop-xl {
+      gap: 16px;
+    }
+  }
+
+  &__consent-checkbox {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  &__consent-link {
+    position: relative;
+    margin-left: 4px;
+    color: inherit;
+    text-underline-offset: 2px;
+  }
+
+  &__button {
+    margin-bottom: 24px;
+    cursor: pointer;
+
+    @include tablet {
+      flex: none;
+      margin: 0;
+      margin-right: 24px;
+      min-width: 196px;
+    }
+
+    @include desktop {
+      margin-right: 32px;
+    }
+  }
+
+  &--zh {
+    #{$this}__approval {
+      font-size: 16px;
+
+      .external-link {
+        font-size: 16px;
+      }
+
+      @include desktop-xl {
+        font-size: 20px;
+
+        .external-link {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+}

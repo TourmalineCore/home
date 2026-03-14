@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_shared_single_images",
+  "info": {
+    "displayName": "singleImage"
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  },
+  "config": {}
+}

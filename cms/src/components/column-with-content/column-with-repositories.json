@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_column_with_content_column_with_repositories",
+  "info": {
+    "displayName": "columnWithRepositories"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "repositories": {
+      "type": "component",
+      "component": "column-with-content.repository-card",
+      "repeatable": true,
+      "required": true
+    },
+    "markdownText": {
+      "type": "richtext"
+    }
+  },
+  "config": {}
+}

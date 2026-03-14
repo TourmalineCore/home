@@ -1,0 +1,156 @@
+.button {
+  $this: &;
+
+  @include type-body-2;
+
+  position: relative;
+  z-index: 0;
+  display: block;
+  border: 1px solid rgba($color-black, 0);
+  font-family: $ff-montserrat;
+  letter-spacing: 0.02em;
+  color: $color-white;
+  background-image:
+    linear-gradient(180deg, rgba($color-purple-black, 0.95), rgba($color-purple-black, 0.95)),
+    linear-gradient(90deg, $color-pink, $color-green, $color-green, $color-pink);
+  background-position: 0;
+  background-size: 200% 100%;
+  background-clip: padding-box, border-box;
+  background-color: initial;
+  cursor: pointer;
+  transition: background-position 0.3s linear;
+
+  &::after,
+  &::before {
+    content: "";
+    position: absolute;
+    left: var(--gap);
+    top: var(--gap);
+    z-index: -1;
+    display: block;
+    border: inherit;
+    border-radius: inherit;
+    width: calc(100% - var(--gap) * 2);
+    height: calc(100% - var(--gap) * 2);
+    background: inherit;
+  }
+
+  &::before {
+    --gap: 1px;
+
+    opacity: 0.6;
+  }
+
+  &::after {
+    --gap: 3px;
+
+    opacity: 0.4;
+  }
+
+  &:focus,
+  &:active {
+    background-position: 90%;
+  }
+
+  &--zh {
+    @include type-body-2-zh;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background-position: 90%;
+    }
+  }
+}
+
+.primary-button {
+  $this: &;
+
+  border-radius: 30px;
+  padding: 20px 0;
+  width: 100%;
+  min-height: 45.9px;
+
+  @include tablet {
+    padding: 20px 56px;
+    width: auto;
+  }
+
+  @include desktop {
+    min-height: 52px;
+  }
+
+  &--zh {
+    @include type-body-2-zh;
+  }
+}
+
+.secondary-button {
+  $this: &;
+
+  display: flex;
+  align-items: center;
+  border: none;
+  padding: 0;
+  background: inherit;
+  cursor: pointer;
+
+  &__text {
+    @include type-body-2;
+
+    margin-right: 24px;
+    font-family: $ff-montserrat;
+    letter-spacing: 0.02em;
+    color: $color-white;
+  }
+
+  &__icon {
+    border-radius: 50%;
+    padding: 14px;
+    width: auto;
+
+    svg {
+      display: block;
+      width: 12px;
+      height: 12px;
+      color: $color-white;
+    }
+  }
+
+  &:active {
+    .button {
+      background-position: 90%;
+    }
+  }
+
+  &--zh {
+    #{$this}__text {
+      @include type-body-2-zh;
+    }
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      .button {
+        background-position: 90%;
+      }
+    }
+  }
+}
+
+.external-link {
+  font-style: normal;
+  font-size: 12px;
+  line-height: 1.3;
+  color: $color-white-alpha-200;
+  cursor: pointer;
+
+  &:visited {
+    color: $color-purple;
+  }
+
+  &:hover,
+  &:active {
+    color: $color-pink;
+  }
+}

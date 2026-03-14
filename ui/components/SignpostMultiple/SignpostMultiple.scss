@@ -1,0 +1,105 @@
+.signpost-multiple {
+  $grid-mobile-gap: 8px;
+  $grid-desktop-gap: 12px;
+
+  padding-top: 40px;
+  padding-bottom: 40px;
+  color: $color-white;
+  background-color: $color-black;
+
+  &__list {
+    overflow-x: scroll;
+    margin: 0 -12px;
+    gap: $grid-mobile-gap;
+    grid-auto-flow: column;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    @include desktop {
+      overflow-x: auto;
+      margin: 0;
+      gap: $grid-desktop-gap;
+      grid-auto-flow: unset;
+      grid-template-columns: repeat(12, 1fr);
+    }
+  }
+
+  &__item {
+    &:first-child {
+      margin-left: 12px;
+
+      @include desktop {
+        margin: 0;
+      }
+    }
+
+    &:last-child {
+      margin-right: 12px;
+
+      @include desktop {
+        margin: 0;
+      }
+    }
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+
+    @include desktop {
+      margin-bottom: 40px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 56px;
+    }
+  }
+
+  &__title {
+    @include h5;
+  }
+
+  &__view-all-link {
+    @include link-text;
+    @include animated-underline;
+
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+
+    &::after {
+      background-color: $color-white;
+    }
+  }
+
+  svg {
+    margin-left: 6px;
+    width: 12px;
+    height: auto;
+
+    path {
+      fill: $color-white;
+    }
+
+    @include tablet {
+      margin-left: 12px;
+    }
+
+    @include desktop-xl {
+      width: 20px;
+    }
+  }
+
+  @include desktop {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  @include desktop-xl {
+    padding-top: 72px;
+    padding-bottom: 72px;
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "emailCaption":"If you have any questions",
+  "emailAddress":"contact@tourmalinecore.com",
+  "navigationLists":[
+    {
+      "id": 0,
+      "caption":"Navigation",
+      "links":[
+        {
+          "id": 0,
+          "name":"Services",
+          "link":"#featured-cards-list"
+        },
+        {
+          "id": 1,
+          "name":"Projects",
+          "link":"#projects"
+        },
+        {
+          "id": 2,
+          "name":"Teams",
+          "link":"/teams"
+        },
+        {
+          "id": 3,
+          "name":"Articles",
+          "link":"/articles"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "caption":"Socials",
+      "links":[
+        {
+          "id": 0,
+          "name":"GitHub",
+          "link":"https://github.com/TourmalineCore"
+        },
+        {
+          "id": 1,
+          "name":"Telegram",
+          "link":"https://t.me/tourmalinecore"
+        },
+        {
+          "id": 2,
+          "name":"Behance",
+          "link":"https://www.behance.net/tourmalinecore"
+        }
+      ]
+    }
+  ]
+}

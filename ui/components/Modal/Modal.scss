@@ -1,0 +1,100 @@
+.modal {
+  position: fixed;
+  z-index: $modal;
+  display: flex;
+  overflow-y: auto;
+  font-weight: inherit;
+  background-color: $color-white;
+  inset: 0;
+
+  &__container {
+    width: 100%;
+
+    @include desktop {
+      margin: auto;
+    }
+  }
+
+  &__inner {
+    position: relative;
+    background-color: $color-white;
+
+    @include tablet {
+      padding-top: 149px;
+      min-height: 722px;
+    }
+
+    @include tablet-xl {
+      padding-top: 173px;
+    }
+
+    @include desktop {
+      position: static;
+      padding-top: 0;
+      min-height: unset;
+    }
+  }
+
+  &__subtitle {
+    margin-top: 12px;
+    color: transparent;
+    background-image: $green-gradient;
+    background-clip: text;
+  }
+
+  &__cross {
+    position: absolute;
+    right: 21px;
+    top: 28px;
+    border: none;
+    padding: 0;
+    width: 22px;
+    height: 22px;
+    background-color: $color-black;
+    cursor: pointer;
+    transition: transform 0.3s;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+
+      path {
+        fill: $color-white;
+
+        @include tablet {
+          fill: $color-grey-500-redesign;
+        }
+      }
+    }
+
+    &:hover,
+    &:active,
+    &:focus-visible {
+      transform: rotate(-0.5turn);
+    }
+
+    @include tablet {
+      background-color: $color-white;
+    }
+
+    @include tablet {
+      right: 22px;
+      top: 30px;
+      width: 22px;
+      height: 22px;
+    }
+
+    @include tablet-xl {
+      right: 25px;
+      top: 25px;
+    }
+
+    @include desktop-xl {
+      right: 36px;
+      top: 36px;
+      width: 32px;
+      height: 32px;
+    }
+  }
+}
