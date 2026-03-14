@@ -10,6 +10,7 @@ cloud
 
 env-synchronizer
 db-backupper
+s3-backupper
   MIT License
 
 local-env
