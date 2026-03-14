@@ -4,13 +4,13 @@
 	"name": "Helm",
 	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
 	"features": {
-		"ghcr.io/devcontainers/features/docker-outside-of-docker:1.4.5": {
-			"version": "20.10",
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1.6.5": {
+			"version": "28.5.1",
 			"enableNonRootDocker": "true",
 			"moby": "true"
 		},
 		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1.1.9": {
-			"version": "1.30.0",
+			"version": "none",
 			"helm": "3.14.4",
 			"minikube": "none"
 		}
