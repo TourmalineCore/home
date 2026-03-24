@@ -1,151 +1,147 @@
 # Content Security Policy
 
-#### Статус
-Принято
+#### Status
+Accepted
 
-## Контекст
-Content Security Policy (CSP) — это механизм защиты, реализуемый через HTTP-заголовок Content-Security-Policy. Он позволяет указать, какие источники контента разрешены на странице. Это помогает предотвратить ряд атак, таких как XSS (Cross-Site Scripting) или загрузка вредоносных ресурсов.  
+## Context
+Content Security Policy (CSP) is a security mechanism implemented via the Content-Security-Policy HTTP header. It allows you to specify which content sources are permitted on a page. This helps prevent various attacks, such as XSS (Cross-Site Scripting) or the loading of malicious resources. 
 
-#### Цель CSP:
-- Предотвратить выполнение вредоносных скриптов, которые могут быть внедрены на страницу. Например: Если CSP настроен так, что разрешены только скрипты с определенного домена (script-src 'self' https://trusted-scripts.com), то любые попытки выполнить скрипты из других источников будут заблокированы.
+#### Purpose of CSP:
+- To prevent the execution of malicious scripts that could be injected into a page. For example: If CSP is configured to allow only scripts from a specific domain (script-src 'self' https://trusted-scripts.com), any attempts to execute scripts from other sources will be blocked.
 
-- Обеспечить доверенность загружаемого контента, контролируя источники для загрузки ресурсов (скриптов, стилей, изображений и т.д.). Например: Директива img-src 'self' https://trusted-images.com позволяет загружать изображения только с вашего домена и с доверенного сервиса. С неразрешенных источников загрузка изображений будет запрещена.
+- To ensure the trustworthiness of loaded content by controlling sources for resource loading (scripts, styles, images, etc.). For example, the directive img-src 'self' https://trusted-images.com allows loading images only from your own domain and a trusted service. Loading images from unauthorized sources will be prohibited.
 
-#### Список директив:
-- **default-src** — источник по умолчанию для всех типов ресурсов, кроме base-uri, frame-ancestors и form-action
+#### List of Directives:
+- **default-src** — default source for all resource types except base-uri, frame-ancestors, and form-action
 
-- **script-src** — источники для загрузки скриптов
+- **script-src** —  sources for loading scripts
 
-- **style-src** — источники для загрузки стилей
+- **style-src** —  sources for loading styles
 
-- **img-src** — источники для загрузки изображений
+- **img-src** —  sources for loading images
 
-- **connect-src** — источники, к которым разрешено устанавливать соединения (например, для AJAX-запросов)
+- **connect-src** — sources to which connections are allowed to be established (e.g., for AJAX requests)
 
-- **font-src** — источники для загрузки шрифтов
+- **font-src** — sources for loading fonts
 
-- **media-src** — источники для загрузки медиафайлов (аудио и видео)
+- **media-src** — sources for loading media files (audio and video)
 
-- **frame-src** — источники, из которых разрешено загружать фреймы
+- **frame-src** — sources from which frames are allowed to be loaded
 
-- **manifest-src** — источники для загрузки манифестов приложений
+- **manifest-src** — sources for loading application manifests
 
-- **base-uri** — допустимые источники для элемента `<base>`
+- **base-uri** —  allowed sources for the `<base>` element 
 
-- **form-action** — указывает, куда разрешено отправлять формы
+- **form-action** —  specifies where forms are allowed to be submitted
 
-- **frame-ancestors** — какие источники могут встраивать текущую страницу в фрейм
+- **frame-ancestors** — which sources are allowed to embed the current page in a frame
 
-#### Допустимые значения директив:
-- **'self'** — разрешает загрузку ресурсов только с того же источника (домена)
+#### Allowed Directive Values:
+- **'self'** — allows loading resources only from the same origin (domain)
 
-- **'none'** — запрещает загрузку ресурсов из любого источника
+- **'none'** — prohibits loading resources from any source
 
-- **'unsafe-inline'** - разрешает выполнение встроенных скриптов или стилей. Использовать с осторожностью, так как это увеличивает риск XSS
+- **'unsafe-inline'** - allows execution of inline scripts or styles. Use with caution, as this increases XSS risk
 
-- **'unsafe-eval'** — разрешает выполнение строковых скриптов, например, с помощью [eval()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval). Также следует использовать с осторожностью
+- **'unsafe-eval'** — allows execution of string scripts, e.g., via [eval()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval). Also should be used with caution
 
-- **URL-адреса** - Полные URL-адреса (например, https://example.com), которые указывают на разрешенные источники
+- **URL-адреса** - full URLs (e.g., https://example.com) specifying allowed sources
 
-Во время разработки и настройки CSP хорошей практикой считается использование заголовка Content-Security-Policy-Report-Only вместо Content-Security-Policy, чтобы отлавливать нарушения и понять, что ещё работает небезопасно, прежде чем включать жёсткую политику с блокировкой контента.
+During development and CSP configuration, it is considered good practice to use the Content-Security-Policy-Report-Only header instead of Content-Security-Policy to catch violations and understand what is still insecure before enabling a strict policy that blocks content.
 
-Основной сложностью в CSP-репорте являлось использование небезопасных значений:
-- 'unsafe-inline' — разрешает любые встроенные скрипты и стили
+The main challenge with CSP report was the use of unsafe values:
+- 'unsafe-inline' — allows any inline scripts and styles
 
-- 'unsafe-eval' — разрешает eval()
+- 'unsafe-eval' — allows eval()
 
-Избавиться от этих небезопасных значений можно, только если отказаться от инлайн-элементов, но они присутствуют в HTML и необходимы для корректной работы некоторых компонентов. Например, скрипты госуслуг и яндекс метрик, а также инлайн стили лоадера, добавленнные в _document.tsx для моментального отображения лоадера.
+These unsafe values can only be eliminated by abandoning inline elements, but they are present in the HTML and are necessary for the correct operation of some components. For example, Gosuslugi services scripts and Yandex Metrica scripts, as well as inline loader styles added in _document.tsx for immediate loader display.
 
-Note: Эти значения обычно используют только для dev, т.к. в нашем случае Next в dev окружении добавляет на страницу дополнительные скрипты, которым мы не можем прокинуть nonce и CSP их блокирует, не давая странице открыться. Но мы решили просто отключать CSP для dev окружения.
+Note: These values are typically used only for development, as in our case Next.js adds additional scripts to the page in the dev environment to which we cannot pass a nonce, and CSP blocks them, preventing the page from loading. However, we decided to simply disable CSP for the dev environment.
 
-## Решение
-Самое распространненое и эффективное решение — внедрение nonce или hash:
-- **nonce** — уникальный код, генерируемый на каждый запрос к странице, добавляется в заголовок и на элементы на странице
-
-- **hash** — хэш содержимого скрипта, если он не меняется
+## Decision
+The most common and effective solution is the implementation of nonce or hash:
+- **nonce** —  a unique code generated for each request to the page, added to the header and to elements on the page
+- **hash** —  a hash of the script's content, if it does not change
 
 ### Nonce
-Для нашего кейса идеальным стало использование **nonce**.
+For our case, using **nonce** proved to be ideal.
 
-Суть в том, что только элементы с корректным nonce будут выполнены — злоумышленник не сможет предугадать/подделать значение.
+The principle is that only elements with a correct nonce will be executed — an attacker cannot guess or forge the value.
 
-Сначала пробовали задавать заголовки CSP на уровне next.config.js, захардкодили nonce и поняли, что это неверное решение, потому что он должен быть динамическим — разным на каждый запрос, а не генерироваться только единоразово на этапе сборки.
+Initially, we tried setting CSP headers at the next.config.js level, hardcoded the nonce, and realized this was incorrect because it needs to be dynamic — different for each request, not generated only once at build time.
 
-Мы добавили файл middleware.ts в src/, реализующий динамическую генерацию nonce и установку CSP-заголовка. Пример реализации взят из:
-- [официальной документации Next.js](https://nextjs.org/docs/app/guides/content-security-policy)
-- [доклада на конференции React Summit](https://gitnation.com/contents/content-security-policy-with-nextjs-leveling-up-your-websites-security/video)
+We added a middleware.ts file in src/, which implements dynamic nonce generation and CSP header setting. The implementation example was taken from:
+- [official Next.js docs](https://nextjs.org/docs/app/guides/content-security-policy)
+- [a talk at the React Summit conf](https://gitnation.com/contents/content-security-policy-with-nextjs-leveling-up-your-websites-security/video)
 
-Этот middleware:
-1) генерирует nonce
-2) вставляет его в CSP-заголовок
-3) передает его через Request Headers
-4) доступен в компонентах для использования в скриптах и стилях
+This middleware:
+1) generates a nonce
+2) inserts it into the CSP header
+3) passes it via Request Headers
+4) can be used in components for scripts and styles
 
-Далее мы внедрили сгенерированный **nonce** в теги скриптов и стилей, встроенных в HTML в файле _document.tsx
-После этого удалили значения 'unsafe-inline' и 'unsafe-eval', но по советам Lighthouse и документации пришлось оставить значение 'unsafe-inline' для script-src в прод версии, на случай, если устаревшие браузеры не будут поддерживать подход с nonce и без него элементы не смогут отобразиться. В современных браузерах **unsafe-inline**, прописанная рядом с  **nonce** вместе со **strict-dynamic**, игнорируется и не создает дыр в безопасности.
+We then injected the generated **nonce** into script and style tags embedded in HTML within the _document.tsx file.
+After this, we removed the 'unsafe-inline' and 'unsafe-eval' values. However, based on Lighthouse recommendations and documentation, we had to keep the 'unsafe-inline' value for script-src in the production version, in case older browsers do not support the nonce approach and elements cannot be displayed without it. In modern browsers, **unsafe-inline**, specified alongside **nonce** together with **strict-dynamic**, is ignored and does not create security holes.
 
-После устранения проблем из отчета Content-Security-Policy-Report-Only мы перешли на хэдер Content-Security-Policy.
+After resolving issues from the Content-Security-Policy-Report-Only report, we switched to the Content-Security-Policy header.
 
 ### Hash
-Также мы внедрили еще и использование **hash** для дополнительной защиты от изменения наших скриптов, т.к. nonce разрешает использование скриптов со сторонних ресурсов, но если их взломают и изменят передаваемый скрипт, только hash поможет это обнаружить.
+We also implemented the use of **hash** for additional protection against modification of our scripts, because while nonce allows the use of scripts from third-party sources, if those sources are compromised and the delivered script is altered, only a hash can detect this.
 
-Решили генерировать хэши внутри нашего кода и добавили утилиту `getHash.ts`, в которой прописали функцию хэширования контента. Эту функцию мы вызываем в файле _document.tsx и передаем в нее скрипты госуслуг и яндекс метрики для получения хэша. Сгенерированный хэш уже добавляем к атрибуту `<script>` в параметр `integrity`. Например:
+We decided to generate hashes within our code and added a utility `getHash.ts`, in which we wrote a content hashing function. We call this function in the _document.tsx file and pass it the Gosuslugi services and Yandex Metrica scripts to obtain the hash. The generated hash is then added to the `<script>` attribute in the `integrity` parameter. For example:
 
 ```js
 <Script
 id="yandex-metrika"
 strategy="afterInteractive"
 nonce={nonce}
-integrity={YMetricHash} // сгенерированный хэш
+integrity={YMetricHash} // generated hash
 crossOrigin="anonymous"
 dangerouslySetInnerHTML={{
-    __html: YMetricScript, // сам скрипт
+    __html: YMetricScript, // the script itself
 }}
 />
 ```
 
-Также к атрибуту `<script>` добавили параметр `crossOrigin="anonymous"`, который идет в паре с `integrity` и разрешает загрузку ресурсов с других источников без отправления учетных данных, куки и т.д.
+We also added the `crossOrigin="anonymous"` parameter to the `<script>` attribute, which pairs with `integrity` and allows loading resources from other origins without sending credentials, cookies, etc.
 
-### Как выглядят добавленные nonce и hash в браузере
+### How Added Nonce and Hash Appear in Browser
 
-Так в DevTools выглядит nonce, добавленный в заголовок
+This is how the nonce, added to the header, looks in DevTools
 
 ![csp devtools nonce](./images/csp-devtools-nonce.png)
 
-Так выглядят nonce и hash в HTML страницы
+This is how the nonce and hash appear in the page's HTML
 
 ![nonce and hash in page code](./images/nonce-and-hash-in-page-code.png)
 
-### Тестирование
+### Testing
 
-Для тестирования рассматриваем реализацию теста, который выставляет хэдер Content-Security-Policy-Report-Only и проверяет отчет на наличие замечаний.   
-Существует небольшая проблема в реализации из-за директивы    [upgrade-insecure-requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Upgrade-Insecure-Requests) в CSP хэдерах, которая сообщает браузеру автоматически заменять все HTTP-запросы на HTTPS-запросы.
+For testing, we are considering implementing a test that sets the Content-Security-Policy-Report-Only header and checks the report for any issues.
+There is a minor implementation issue due to the [upgrade-insecure-requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Upgrade-Insecure-Requests) directive in the CSP headers, which instructs the browser to automatically replace all HTTP requests with HTTPS requests.
 
-Content-Security-Policy-Report-Only выводит ошибку-предупреждение:
+Content-Security-Policy-Report-Only outputs an error/warning:
 
 ![csp error](./images/error-CSP-Report-Only.png)
 
-Эта ошибка сообщает, что директива upgrade-insecure-requests игнорируется, так как заголовок Content-Security-Policy-Report-Only не должен изменять поведение браузера, а лишь служит для мониторинга нарушений. 
+This error indicates that the upgrade-insecure-requests directive is ignored because the Content-Security-Policy-Report-Only header is not intended to alter browser behavior, but only to monitor violations.
 
-Решением является удаление директивы upgrade-insecure-requests из CSP-заголовка Content-Security-Policy-Report-Only на время тестирования.
+The solution is to remove the upgrade-insecure-requests directive from the Content-Security-Policy-Report-Only header during testing.
 
-## Альтернативы
-Не рассматривали.
+## Alternatives
+None considered.
 
-## Последствия
-- Сторонние скрипты, виджеты могут перестать работать, если их явно не разрешить
+## Consequences
+- Third-party scripts and widgets may stop working if they are not explicitly allowed
+- Additional support is required when the HTML structure changes or new inline elements appear
 
-- Требуется дополнительная поддержка при изменении структуры HTML или появлении новых инлайн-элементов
+## Pros
+- Enhanced website security
+- Control over used resources and executed code
 
-## Плюсы
-- Повышенная безопасность сайта
-
-- Контроль над используемыми ресурсами и выполняемым кодом
-
-## Минусы
-- Увеличение сложности конфигурации
-
-- Потребовалось много времени для настройки и рефакторинга
+## Cons
+- Increased configuration complexity
+- Significant time required for setup and refactoring
  
-### Ссылка на PR
+### Link to PR
 https://github.com/TourmalineCore/pelican-ui/pull/345
