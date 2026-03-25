@@ -1,54 +1,52 @@
 # Cross-Origin Resource Sharing
 
-## Статус
-Принято
+## Status
+Accepted
 
-## Контекст
-CORS (Cross-Origin Resource Sharing) — это механизм в браузере, который регулирует, может ли один веб-сайт (домен) делать запросы к ресурсам на другом сайте (домене). Он нужен, чтобы защитить пользователей от потенциально опасных действий, когда один сайт (возможно, вредоносный) пытается взаимодействовать с другим сайтом.
+## Context
+CORS (Cross-Origin Resource Sharing) is a browser mechanism that controls whether one website (domain) can make requests to resources on another website (domain). It is designed to protect users from potentially harmful actions when one site (possibly malicious) attempts to interact with another site.
 
-## Решение
-Для повышения безопасности и предсказуемости поведения сайта мы приняли решение настроить заголовки, связанные с CORS и безопасностью, через метод headers() в next.config.js.
+## Decision
+To enhance security and ensure predictable site behavior, we decided to configure CORS and security-related headers using the headers() method in next.config.js.
 
-Были добавлены такие заголовки:
+The following headers were added:
 
-1. CORS-заголовки
+1. CORS Headers
 
-- **Access-Control-Allow-Credentials: false** - Запрещает браузеру передавать cookies и другие credentials в кросс-доменных запросах. Это снижает риск утечек сессионной информации при внешнем доступе к сайту.
+- **Access-Control-Allow-Credentials: false** - Prevents the browser from sending cookies and other credentials in cross-origin requests. This reduces the risk of session information leakage when the site is accessed externally.
 
-- **Access-Control-Allow-Origin: https://chelzoo.tech** - Ограничивает доступ только для Origin: https://chelzoo.tech, что на практике означает запрет на кросс-доменные запросы с большинства сайтов.
+- **Access-Control-Allow-Origin: https://chelzoo.tech** - Restricts access to only the Origin: here it is https://chelzoo.tech, which in practice means that cross-origin requests from most websites are prohibited.
 
-- **Cross-Origin-Opener-Policy: same-origin** - Изолирует контексты между окнами и вкладками с разными origin-ами, защищая от атак.
+- **Cross-Origin-Opener-Policy: same-origin** - Isolates browsing contexts between windows and tabs with different origins, protecting against attacks.
 
-2. Заголовки безопасности
+2. Security Headers
 
-- **X-Frame-Options: SAMEORIGIN** - Запрещает отображение сайта внутри `<iframe>` с другого origin-а, тем самым защищает от clickjacking-атак.
+- **X-Frame-Options: SAMEORIGIN** - Prevents the site from being displayed within an `<iframe>` from a different origin, thereby protecting against clickjacking attacks.
 
-- **X-Content-Type-Options: nosniff** - Браузеру запрещено пытаться угадать тип содержимого, если заголовок Content-Type не соответствует. Это предотвращает возможное выполнение вредоносного кода, ошибочно интерпретированного браузером.
+- **X-Content-Type-Options: nosniff** - Prevents the browser from attempting to guess the content type if the Content-Type header does not match. This helps prevent malicious code from being executed if it is misinterpreted by the browser.
 
-- **Referrer-Policy: no-referrer** - Полностью отключает отправку заголовка Referer, обеспечивая максимальную приватность пользователя и предотвращая утечку URL-ов с чувствительной информацией.
+- **Referrer-Policy: no-referrer** - Completely disables the sending of the Referrer header, ensuring maximum user privacy and preventing the leakage of URLs containing sensitive information.
 
-- **Permissions-Policy: interest-cohort=(), camera=(), microphone=(), geolocation=(), fullscreen=(), payment=(), usb=(), accelerometer=(), display-capture=(), gyroscope=(), magnetometer=(), midi=(), picture-in-picture=(self), xr-spatial-tracking=()** - Ограничивает или полностью запрещает доступ к множеству встроенных API браузера:
-    - interest-cohort=() запрещает Google FLoC (Federated Learning of Cohorts).
-    - Отключены: камера, микрофон, геолокация, USB, акселерометр, захват экрана и т.п.
-    - Разрешён только picture-in-picture с того же origin-а (self), что позволяет использовать встроенное видео в плавающем режиме.
+- **Permissions-Policy: interest-cohort=(), camera=(), microphone=(), geolocation=(), fullscreen=(), payment=(), usb=(), accelerometer=(), display-capture=(), gyroscope=(), magnetometer=(), midi=(), picture-in-picture=(self), xr-spatial-tracking=()** - Restricts or completely disables access to many built-in browser APIs:
+    - interest-cohort=() disables Google FLoC (Federated Learning of Cohorts).
+    - Disabled: camera, microphone, geolocation, USB, accelerometer, display capture, etc.
+    - Only picture-in-picture is allowed from the same origin (self), enabling the use of embedded video in floating mode.
 
-Эти заголовки помогают усилить безопасность приложения, ограничить внешнее вмешательство, минимизировать риски утечки данных и дать разработчику полный контроль над политикой доступа.
+These headers help enhance application security, limit external interference, minimize data leakage risks, and give developers full control over access policy.
 
-## Альтернативы
-Не рассматривали.
+## Alternatives
+None considered.
 
-## Последствия
-Ограниченный доступ с других origin-ов делает приложение более безопасным по умолчанию.
+## Consequences
+Restricted access from other origins makes the application more secure by default.
 
-## Плюсы
-- Повышенная безопасность (защита от clickjacking, MIME-sniffing, side-channel атак и утечек через referer).
+## Pros
+- Enhanced security (protection against clickjacking, MIME sniffing, side-channel attacks, and referrer leaks).
+- Full control over access policy and isolation.
+- Reduced risks associated with cross-origin requests.
 
-- Полный контроль над политикой доступа и изоляцией.
+## Cons
+Potential compatibility issues may arise for users on older browsers that do not support some of these headers.
 
-- Снижение рисков, связанных с кросс-доменными запросами.
-
-## Минусы
-Могут возникнуть проблемы с совместимостью для пользователей, использующих старые браузеры, которые не поддерживают некоторые заголовки.
-
-### Ссылка на PR
+### Link to PR
 https://github.com/TourmalineCore/pelican-ui/pull/303
