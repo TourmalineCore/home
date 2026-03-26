@@ -1,50 +1,49 @@
-# Robots.txt и Sitemap
+# Robots.txt and Sitemap
 
-## Введение: Зачем нужны файлы robots.txt и sitemap.xml
+## Introduction: why robots.txt and sitemap.xml files are needed
 
-Файлы robots.txt и sitemap.xml играют важную роль в оптимизации сайта для поисковых систем. Эти файлы помогают поисковым роботам правильно индексировать ваш сайт, что улучшает видимость в результатах поиска.
+The robots.txt and sitemap.xml files play an important role in optimizing a website for search engines. These files help search engine crawlers properly index your site, which improves visibility in search results.
 
 ### Robots.txt
-Файл robots.txt используется для управления доступом поисковых роботов к сайту. Он позволяет указывать, какие страницы или разделы сайта должны быть проиндексированы, а какие — нет. Это **особенно** полезно, если вы хотите скрыть от индексации определенные страницы, например, страницы с конфиденциальной информацией или дублирующимся контентом.
+The robots.txt file is used to control search engine crawler access to the site. It allows you to specify which pages or sections of the site should be indexed and which should not. This is **especially** useful if you want to hide certain pages from indexing, such as pages with confidential information or duplicate content.
 
-Пример нашего robots.txt:
+Example of our robots.txt:
 
 ```
-// * Означает, что мы скрываем страницу для всех 
+// * Means we hide the page from all crawlers
 User-agent: *
-// Скрываем страницу компонентов
+// Hide the components page
 Disallow: /components
 
-// Адрес нашего сайта
+// Our site address
 Host: https://chelzoo.ru
 
-// Эндпоинт, который возвращает xml файл
+// Endpoint that returns the xml file
 Sitemap: https://chelzoo.ru/api/get-sitemap
 ```
 
 ### Sitemap.xml
-Файл sitemap.xml представляет собой карту сайта, которая помогает поисковым системам лучше понять структуру вашего сайта и быстрее находить новые или обновленные страницы. В отличие от robots.txt, который ограничивает доступ, sitemap.xml направлен на улучшение индексации. Этот файл содержит список всех URL-адресов сайта, а также дополнительную информацию о каждом URL, такую как дата последнего обновления, частота обновления и приоритет.
+The sitemap.xml file is a site map that helps search engines better understand the structure of your site and more quickly find new or updated pages. Unlike robots.txt, which restricts access, sitemap.xml aims to improve indexing. This file contains a list of all URLs on the site, as well as additional information about each URL, such as the last update date, update frequency, and priority.
 
+### Configuration
 
-### Настройка
+#### Configuring robots.txt Generation
+To generate robots.txt and the sitemap, the [next-sitemap](https://www.npmjs.com/package/next-sitemap) plugin is used, which generates these files after the project build. Its configuration is located in the `next-sitemap.config.js` file.
 
-#### Настройка генерации robots.txt
-Для генерации robots.txt и sitemap, используется плагин [next-sitemap](https://www.npmjs.com/package/next-sitemap), который генерирует эти файлы после билда проекта, его конфигурация находится в репозитории [pelican-ui](https://github.com/TourmalineCore/pelican-ui) в файле `next-sitemap.config.js`.
-
-Конфигурация плагина:
+Plugin configuration:
 ```js
 module.exports = {
-  // Адрес сайта
+  // Site address
   siteUrl: `https://chelzoo.ru`, 
-  // Флаг, который говорит генерировать robots.txt или нет
+  // Flag indicating whether to generate robots.txt or not
   generateRobotsTxt: true, 
-  // Флаг, который говорит генерировать sitemap.xml или нет, мы получаем sitemap из Strapi поэтому отключаем 
+  // Flag indicating whether to generate sitemap.xml or not. We get the sitemap from Strapi so we disable it
   generateIndexSitemap: false, 
-  // Для полного отключения генерации sitemap исключаем все
+  // To completely disable sitemap generation, exclude everything
   exclude: [`*`], 
-  // Объект с настройками генерации robotsTxt
+  // Object with robotsTxt generation settings
   robotsTxtOptions: {
-    // Если флаг ENABLE_SEO_INDEXING===true, то мы включаем индексацию всех страниц, кроме страницы компонентов, т.к это служебная страница. Если флаг false, запрещаем индексировать сайт.
+    // If the ENABLE_SEO_INDEXING flag === true, we enable indexing of all pages except the components page, as it is an internal utility page. If the flag is false, we prohibit indexing the site.
     policies: [
       process.env.ENABLE_SEO_INDEXING === `true` ? {
         userAgent: `*`,
@@ -54,7 +53,7 @@ module.exports = {
         disallow: `/`,
       },
     ],
-    // Если индексация разрешена, то подключаем серверную sitemap из Strapi
+    // If indexing is allowed, connect the server-side sitemap from Strapi
     ...(process.env.ENABLE_SEO_INDEXING === `true` && {
       additionalSitemaps: [`https://chelzoo.ru/api/get-sitemap`],
     }),
@@ -63,65 +62,64 @@ module.exports = {
 
 ```
 
+#### Configuring Sitemap.xml in Strapi
+The sitemap configuration is done in the cms repository, as our pages depend on the content added to Strapi. The [strapi-5-sitemap-plugin](https://market.strapi.io/plugins/strapi-5-sitemap-plugin) is used to generate the sitemap.
 
-#### Настройка Sitemap.xml в Strapi
-Настройка sitemap осуществляется в репозитории [pelican-cms](https://github.com/TourmalineCore/pelican-cms), т.к наши страницы зависят от добавленного контента в Strapi. Для генерации sitemap используется плагин [strapi-5-sitemap-plugin](https://market.strapi.io/plugins/strapi-5-sitemap-plugin).
+> Important: For the site to start being indexed by search engines, you need to add ENABLE_SEO_INDEXING=true to the .env file in the ui repository.
 
-> Важно, для того, чтобы сайт начала индексироваться поисковиками, в репозитории [pelican-ui](https://github.com/TourmalineCore/pelican-ui) необходимо добавить в .env ENABLE_SEO_INDEXING=true.
-
-Переходим в настройки во вкладку sitemap configuration.
+Go to settings in the sitemap configuration tab.
 
 ![alt text](./images/robots-and-sitemap-image.png)
 
-Здесь можно установить домен сайта.
+Here you can set the site domain.
 ![alt text](./images/robots-and-sitemap-image-1.png)
 
-Конфигурацию для коллекций.
+Configuration for collections.
 ![alt text](./images/robots-and-sitemap-image-2.png)
 
-Конфигурация состоит из следующих полей:
+The configuration consists of the following fields:
 
-1. Type - в этом выбираем коллекцию для которой будет осуществлять настройку.
+1. Type - here you select the collection for which you will perform the configuration.
 ![alt text](./images/robots-and-sitemap-image-3.png)
 
-2. Lang Code - в этом поле выбираем подходящий язык.
+2. Lang Code - in this field, select the appropriate language.
 ![alt text](./images/robots-and-sitemap-image-4.png)
 
-3. Pattern - в этом поле настраивается ссылка, которая будет отображена в sitemap.
+3. Pattern - in this field, configure the link that will be displayed in the sitemap.
 ![alt text](./images/robots-and-sitemap-image-5.png)
 
-4. Priority - в этом поле настраивается приоритетность страницы (от 0.0 до 1.0). Не все поисковые роботы обращают внимание на это поле.
+4. Priority - in this field, configure the page priority (from 0.0 to 1.0). Not all search engine crawlers pay attention to this field.
 ![alt text](./images/robots-and-sitemap-image-6.png)
 
-Рекомендации по расстановке приоритетов:
-- Главная страница (/) – 1.0
+Priority setting recommendations:
+- Home page (/) – 1.0
 
-Обычно самая важная, так как это входная точка для пользователей.
+Usually the most important, as it is the entry point for users.
 
-- Ключевые разделы и категории – 0.8 – 0.9
+- Key sections and categories – 0.8 – 0.9
 
-Основные категории, услуги, главные landing pages.
+Main categories, services, main landing pages.
 
-- Статьи, товары, подкатегории – 0.6 – 0.7
+- Articles, products, subcategories – 0.6 – 0.7
 
-Важные, но не критичные, как главная страница.
+Important, but not as critical as the home page.
 
-- Второстепенные страницы (блог, FAQ, контакты) – 0.4 – 0.5
+- Secondary pages (blog, FAQ, contacts) – 0.4 – 0.5
 
-Полезные, но не ключевые для SEO.
+Useful, but not key for SEO.
 
-- Технические и служебные страницы – 0.1 – 0.3
+- Technical and utility pages – 0.1 – 0.3
 
-Политика конфиденциальности, условия использования и т. д.
+Privacy policy, terms of use, etc.
 
-5. Change Frequency - это поле, в котором нужно выбрать, как часто контент будет менять на этой странице. Роботы Google, Яндекс и других систем используют эту информацию, чтобы понять, как часто стоит перепроверять страницу на обновления.
+5. Change Frequency - this field is where you select how often the content on this page changes. Google, Yandex, and other search engine crawlers use this information to understand how often they should recheck the page for updates.
 ![alt text](./images/robots-and-sitemap-image-9.png)
 
-6. Last Modified - добавляет в sitemap дату последнего обновления страницы, что помогает SEO понять какие страницы нужно переиндексировать. Рекомендуется выставлять true.
+6. Last Modified - adds the last page update date to the sitemap, helping SEO understand which pages need to be reindexed. It is recommended to set this to true.
 ![alt text](./images/robots-and-sitemap-image-7.png)
 
-7. Thumbnail - это поле, в котором можно указать картинку, которая используется для указания превью изображений, связанных с страницами сайта. Оно особенно полезно для визуального контента, например, интернет-магазинов, галерей, блогов с картинками.
+7. Thumbnail - this field allows you to specify an image used to indicate preview images associated with site pages. It is especially useful for visual content, such as online stores, galleries, blogs with images.
 ![alt text](./images/robots-and-sitemap-image-8.png)
 
-Помимо коллекций можно добавить свои URL, например главную страницу или страницу контактного зоопарка.
+In addition to collections, you can add your own URLs, such as the home page or the contact zoo page.
 ![alt text](./images/robots-and-sitemap-image-10.png)
