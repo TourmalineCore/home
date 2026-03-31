@@ -18,6 +18,7 @@ import { HeaderRedesign } from "../../components/redesign/HeaderRedesign/HeaderR
 import { MobileMenu } from "../../components/redesign/HeaderRedesign/components/MobileMenuRedesign/MobileMenuRedesign";
 import { ThreeColumnGrid } from "../../components/ThreeColumnGrid/ThreeColumnGrid";
 import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLink";
+import { ChelzooHero } from "../chelzoo/components/ChelzooHero/ChelzooHero";
 
 export default function ComponentsPage({
   pageData,
@@ -236,6 +237,12 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_HERO) {
+    return (
+      <ChelzooHero />
+    );
+  }
+
   return (
     <div className="components-page container-redesign">
       <h2 className="components-page__subtitle">
@@ -299,6 +306,9 @@ export default function ComponentsPage({
         </li>
         <li className="components-page__item">
           <Link href={ComponentName.SUBMITTED_FORM_MODAL}>Submitted Form Modal</Link>
+        </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_HERO}>Chelzoo Hero</Link>
         </li>
       </ul>
     </div>
