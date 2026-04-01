@@ -334,12 +334,17 @@ export async function getStaticProps({
     `pageNotFound`,
     `headerRedesign`,
     `footerRedesign`,
+    `chelzooHero`,
   ]);
 
   return {
     props: {
       pageData: translationsPageData,
-      ...(await serverSideTranslations(locale, [`cookie`, `formBlockRedesign`])),
+      ...(await serverSideTranslations(locale, [
+        `cookie`,
+        `formBlockRedesign`,
+        `chelzooHero`,
+      ])),
     },
   };
 }

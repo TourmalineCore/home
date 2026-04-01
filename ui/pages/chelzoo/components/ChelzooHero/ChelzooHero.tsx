@@ -1,22 +1,48 @@
+import { useTranslation } from 'next-i18next';
+import IconDownArrow from '../../../../icons/icon-arrow-down-chelzoo.svg';
 
 export function ChelzooHero() {
+  const {
+    t,
+  } = useTranslation(`chelzooHero`);
+
   return (
+
     <section
       className="chelzoo-hero"
       data-testid="chelzoo-hero"
     >
-      <div className="container-redesign chelzoo-hero__wrapper">
-        <h1 className="chelzoo-hero__title">CHELZOO CASE</h1>
+      <div className="container-cases chelzoo-hero__wrapper">
+        <h1 className="chelzoo-hero__title">
+          {t(`title`)}
+        </h1>
         <div className="chelzoo-hero__media">
           <video
-            src=""
+            src={t(`videoUrl`)}
             playsInline
             loop
             muted
             autoPlay
           />
         </div>
+        <div className="chelzoo-hero__content">
+          <div className="chelzoo-hero__label">
+            {t(`yearLabel`)}
+          </div>
+          <div className="chelzoo-hero__subtitle">
+            {t(`subtitle`)}
+          </div>
+          <div className="chelzoo-hero__description">
+            {t(`description`)}
+          </div>
+        </div>
       </div>
+      <button
+        type="button"
+        className="chelzoo-hero__scroll-button"
+      >
+        <IconDownArrow />
+      </button>
     </section>
   );
 }

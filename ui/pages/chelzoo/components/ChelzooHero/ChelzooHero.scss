@@ -1,3 +1,194 @@
 .chelzoo-hero {
-  //
+  @include inter-font;
+
+  padding: 48px 0 120px;
+  font-weight: 500;
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &__title {
+    @include unbounded-font;
+
+    margin-bottom: 40px;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 0.9;
+    text-align: center;
+
+    @include tablet {
+      max-width: 416px;
+    }
+
+    @include tablet-xl {
+      margin-bottom: 24px;
+      max-width: 672px;
+      font-size: 80px;
+    }
+
+    @include desktop {
+      max-width: 1000px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 32px;
+      max-width: 1400px;
+      font-size: 112px;
+    }
+  }
+
+  &__media {
+    overflow: hidden;
+    margin-bottom: 40px;
+    border-radius: 24px;
+    aspect-ratio: 343/229;
+
+    @include tablet {
+      margin-bottom: 40px;
+      max-width: 480px;
+      aspect-ratio: 480/320;
+    }
+
+    @include tablet-xl {
+      margin-bottom: 24px;
+      border-radius: 28px;
+      max-width: 570px;
+      aspect-ratio: 570/380;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 32px;
+      border-radius: 40px;
+      max-width: 780px;
+      aspect-ratio: 780/520;
+    }
+  }
+
+  video {
+    width: 100%;
+  }
+
+  &__content {
+    align-self: flex-start;
+    max-width: 336px;
+
+    @include tablet-xl {
+      max-width: 408px;
+    }
+
+    @include desktop {
+      max-width: 390px;
+    }
+
+    @include desktop-xl {
+      max-width: 544px;
+    }
+  }
+
+  &__label {
+    margin-bottom: 16px;
+    border-radius: 4px;
+    padding: 4px 12px;
+    width: fit-content;
+    line-height: 1.3;
+    background-color: #0f8263;
+
+    @include tablet-xl {
+      margin-bottom: 24px;
+      font-size: 18px;
+    }
+
+    @include desktop {
+      margin-bottom: 24px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 32px;
+      padding: 8px 20px;
+      font-size: 26px;
+    }
+  }
+
+  &__subtitle {
+    margin-bottom: 8px;
+    font-size: 20px;
+    line-height: 1.2;
+
+    @include tablet-xl {
+      margin-bottom: 12px;
+      font-size: 22px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 16px;
+      font-size: 32px;
+    }
+  }
+
+  &__description {
+    font-size: 16px;
+    line-height: 1.3;
+    color: #afafb8;
+
+    @include tablet-xl {
+      font-size: 18px;
+    }
+
+    @include desktop-xl {
+      font-size: 26px;
+    }
+  }
+
+  &__scroll-button {
+    position: fixed;
+    left: 50%;
+    bottom: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    border: none;
+    border-radius: 50%;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    background: $color-white;
+    cursor: pointer;
+    transform: translateX(-50%);
+
+    svg {
+      width: 14px;
+      height: 14px;
+
+      @include desktop-xl {
+        width: 19px;
+        height: 19px;
+      }
+    }
+
+    @include tablet {
+      bottom: 72px;
+    }
+
+    @include tablet-xl {
+      bottom: 48px;
+    }
+
+    @include desktop-xl {
+      bottom: 68px;
+      width: 44px;
+      height: 44px;
+    }
+  }
+
+  @include tablet {
+    padding-bottom: 48px;
+  }
+
+  @include desktop-xl {
+    padding: 64px 0;
+  }
 }
