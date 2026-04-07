@@ -1,10 +1,80 @@
 .chelzoo-hero {
   @include inter-font;
 
+  position: relative;
   padding: 48px 0 120px;
   font-weight: 500;
 
+  &__decor {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    background: no-repeat url("/images/flower.svg");
+    background-size: contain;
+
+    @include tablet {
+      width: 400px;
+      height: 400px;
+    }
+
+    @include tablet-xl {
+      width: 640px;
+      height: 640px;
+    }
+
+    @include desktop-xl {
+      width: 900px;
+      height: 900px;
+    }
+
+    &--left {
+      left: -128px;
+      top: 12px;
+
+      @include tablet {
+        left: -200px;
+        top: 16px;
+      }
+
+      @include tablet-xl {
+        left: -292px;
+        top: 0;
+      }
+
+      @include desktop-xl {
+        left: -410px;
+        top: 0;
+      }
+    }
+
+    &--right {
+      right: -120px;
+      top: 332px;
+
+      @include tablet {
+        right: -83px;
+        top: 260px;
+      }
+
+      @include tablet-xl {
+        right: -520px;
+        top: 170px;
+      }
+
+      @include desktop {
+        right: -178px;
+        top: 170px;
+      }
+
+      @include desktop-xl {
+        right: -128px;
+        top: 12px;
+      }
+    }
+  }
+
   &__wrapper {
+    position: relative;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -27,6 +97,7 @@
       margin-bottom: 24px;
       max-width: 672px;
       font-size: 80px;
+      line-height: 0.9;
     }
 
     @include desktop {
