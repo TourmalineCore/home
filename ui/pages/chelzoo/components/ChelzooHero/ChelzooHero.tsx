@@ -43,15 +43,15 @@ export function ChelzooHero({
           }
         </div>
         <div className="chelzoo-hero__content">
-          <div className="chelzoo-hero__label">
+          <span className="chelzoo-hero__label">
             {t(`yearLabel`)}
-          </div>
-          <div className="chelzoo-hero__subtitle">
+          </span>
+          <h3 className="chelzoo-hero__subtitle">
             {t(`subtitle`)}
-          </div>
-          <div className="chelzoo-hero__description">
+          </h3>
+          <p className="chelzoo-hero__description">
             {t(`description`)}
-          </div>
+          </p>
         </div>
       </div>
       <button
