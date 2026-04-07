@@ -1,12 +1,12 @@
-import { cmsFetch } from "../../../services/cms/api/http-client";
-import { E2E_UI_NAME_PREFIX } from "../../constants/e2e-ui-name-prefix";
-import { createCmsActions } from "../../create-cms-actions";
+import { cmsFetch } from "../../services/cms/api/http-client";
+import { E2E_UI_NAME_PREFIX } from "../constants/e2e-ui-name-prefix";
+import { createCmsActions } from "../create-cms-actions";
 import {
   CustomTestFixtures,
   expect,
   Page,
   test,
-} from "../../custom-test";
+} from "../custom-test";
 
 export const DYNAMIC_PAGE_NAME = `${E2E_UI_NAME_PREFIX} Frontend`;
 const DYNAMIC_PAGE_LINK = `frontend-e2e-test`;
