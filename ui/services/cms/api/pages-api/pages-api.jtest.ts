@@ -21,9 +21,7 @@ describe(`getPageData`, () => {
   });
 
   test(`
-    GIVEN locale = zh
-    AND status = published
-    AND slug != '/'
+    GIVEN locale = zh, status = published and slug != '/'
     WHEN getLayoutData is called with this props
     THEN query string should contain locale = en and status = published
     AND request should be sent to the navigations endpoint
@@ -53,9 +51,7 @@ describe(`getPageData`, () => {
   });
 
   test(`
-    GIVEN locale = ru
-    AND status = published
-    AND slug = '/'
+    GIVEN locale = ru, status = published and slug = '/'
     WHEN getLayoutData is called with this props
     THEN query string should contain locale = ru and status = draft
     AND request should be sent to the homepage endpoint
