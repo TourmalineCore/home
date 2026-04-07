@@ -60,15 +60,6 @@ export async function getServerSideProps({
   if (process.env.IS_STATIC_MODE === `true`) {
     const translationsPageData = await loadTranslations(locale, [`headerRedesign`, `footerRedesign`]);
 
-    // const mapStaticBlocksWithId = (blocks: Block[]) => blocks.map((block) => ({
-    //   id: crypto.randomUUID(),
-    //   ...block,
-    // }));
-
-    // const blocks = mapStaticBlocksWithId([
-
-    // ]);
-
     return {
       props: {
         layoutData: {
