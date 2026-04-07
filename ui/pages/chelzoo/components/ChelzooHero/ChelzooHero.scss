@@ -41,13 +41,16 @@
   }
 
   &__media {
+    position: relative;
     overflow: hidden;
     margin-bottom: 40px;
     border-radius: 24px;
+    min-height: 229px;
     aspect-ratio: 343/229;
 
     @include tablet {
       margin-bottom: 40px;
+      min-height: 320px;
       max-width: 480px;
       aspect-ratio: 480/320;
     }
@@ -55,6 +58,7 @@
     @include tablet-xl {
       margin-bottom: 24px;
       border-radius: 28px;
+      min-height: 380px;
       max-width: 570px;
       aspect-ratio: 570/380;
     }
@@ -62,13 +66,19 @@
     @include desktop-xl {
       margin-bottom: 32px;
       border-radius: 40px;
+      min-height: 520px;
       max-width: 780px;
       aspect-ratio: 780/520;
     }
   }
 
+  img,
   video {
     width: 100%;
+  }
+
+  img {
+    object-fit: cover;
   }
 
   &__content {

@@ -1,13 +1,17 @@
 import { useTranslation } from 'next-i18next';
+import Image from 'next/image';
 import IconDownArrow from '../../../../icons/icon-arrow-down-chelzoo.svg';
 
-export function ChelzooHero() {
+export function ChelzooHero({
+  isComponentPage,
+}:{
+  isComponentPage?: boolean;
+}) {
   const {
     t,
   } = useTranslation(`chelzooHero`);
 
   return (
-
     <section
       className="chelzoo-hero"
       data-testid="chelzoo-hero"
@@ -17,13 +21,24 @@ export function ChelzooHero() {
           {t(`title`)}
         </h1>
         <div className="chelzoo-hero__media">
-          <video
-            src={t(`videoUrl`)}
-            playsInline
-            loop
-            muted
-            autoPlay
-          />
+          {
+            isComponentPage
+              ? (
+                <Image
+                  src="/images/hero-slider-image-6.png"
+                  alt="heroImage"
+                  fill
+                />
+              ) : (
+                <video
+                  src={t(`videoUrl`)}
+                  playsInline
+                  loop
+                  muted
+                  autoPlay
+                />
+              )
+          }
         </div>
         <div className="chelzoo-hero__content">
           <div className="chelzoo-hero__label">

@@ -239,7 +239,7 @@ export default function ComponentsPage({
 
   if (componentName === ComponentName.CHELZOO_HERO) {
     return (
-      <ChelzooHero />
+      <ChelzooHero isComponentPage />
     );
   }
 
