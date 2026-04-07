@@ -1,9 +1,16 @@
 import { test } from '../../../../playwright-tests/custom-test';
 import { BREAKPOINTS } from '../../../../playwright-tests/constants/breakpoints';
-import { ComponentName } from '../../../../common/enums';
+import { BreakpointName, ComponentName } from '../../../../common/enums';
 
 const TEST_ID = `chelzoo-hero`;
 
+const heightMap: Record<BreakpointName, number> = {
+  mobile: 689,
+  tablet: 708,
+  'tablet-xl': 830,
+  desktop: 830,
+  'desktop-xl': 1152,
+};
 test.describe(`ChelzooHeroTests`, () => {
   test.beforeEach(async ({
     goToComponentsPage,
@@ -23,6 +30,7 @@ test.describe(`ChelzooHeroTests`, () => {
         testId: TEST_ID,
         breakpoint,
         breakpointName,
+        height: heightMap[breakpointName],
       });
     });
   }
