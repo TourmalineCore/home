@@ -28,7 +28,7 @@ export function ChelzooHero({
               ? (
                 <Image
                   src="/images/hero-slider-image-6.png"
-                  alt="heroImage"
+                  alt=""
                   fill
                 />
               ) : (
