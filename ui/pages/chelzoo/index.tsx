@@ -6,6 +6,7 @@ import { LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
 import { LayoutRedesign } from '../../components/redesign/LayoutRedesign/LayoutRedesign';
+import { ChelzooHero } from '../../components/chelzoo/ChelzooHero/ChelzooHero';
 
 export default function ChelzooPage({
   layoutData,
@@ -42,8 +43,9 @@ export default function ChelzooPage({
         footerContent={layoutData.footerContent}
         isPreview={isPreview}
       >
-        <div className="chelzoo__hero-block-container">
-          Test
+        <div className="chelzoo__container">
+          <ChelzooHero />
+
         </div>
       </LayoutRedesign>
     </>
@@ -100,5 +102,6 @@ async function getStaticTranslation({
     `common`,
     `cookie`,
     `formBlockRedesign`,
+    `chelzooHero`,
   ]);
 }
