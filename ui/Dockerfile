@@ -7,6 +7,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
+RUN npm install --os=linux --libc=musl --cpu=arm64 sharp@0.34.5
 RUN npm ci
 
 # Build
