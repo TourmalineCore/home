@@ -19,4 +19,5 @@ export enum ComponentName {
   FORM_MODAL = `form-modal`,
   SUBMITTED_FORM_MODAL = `submitted-form-modal`,
   CHELZOO_HERO = `chelzoo-hero`,
+  CHELZOO_PODCAST = `chelzoo-podcast`,
 }
