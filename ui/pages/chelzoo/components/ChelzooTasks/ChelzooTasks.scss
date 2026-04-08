@@ -1,0 +1,113 @@
+.chelzoo-tasks {
+  padding: 48px 16px;
+  background-color: $color-white;
+
+  &__wrapper {
+    position: relative;
+    display: grid;
+    gap: 32px;
+
+    @include tablet {
+      align-items: center;
+      height: 752px;
+      gap: 0;
+    }
+
+    @include tablet-xl {
+      height: auto;
+    }
+  }
+
+  &__card {
+    position: relative;
+    z-index: 1;
+
+    &:first-of-type {
+      @include tablet {
+        position: absolute;
+        left: 16px;
+        top: 0;
+      }
+
+      @include tablet-xl {
+        left: 25px;
+        top: 60px;
+      }
+
+      @include desktop {
+        left: 0;
+      }
+
+      @include desktop-xl {
+        left: 23px;
+        top: 67px;
+      }
+    }
+
+    &:last-of-type {
+      @include tablet {
+        position: absolute;
+        right: 16px;
+        bottom: 0;
+      }
+
+      @include tablet-xl {
+        right: 0;
+        bottom: 66px;
+      }
+
+      @include desktop {
+        bottom: 60px;
+      }
+
+      @include desktop-xl {
+        bottom: 94px;
+      }
+    }
+  }
+
+  &__image-wrapper {
+    position: relative;
+    margin: 0 auto;
+    width: 280px;
+    height: 280px;
+
+    @include tablet {
+      z-index: 0;
+      width: 640px;
+      height: 640px;
+    }
+
+    @include tablet-xl {
+      width: 816px;
+      height: 816px;
+    }
+
+    @include desktop {
+      width: 1046px;
+      height: 1046px;
+    }
+
+    @include desktop-xl {
+      width: 1472px;
+      height: 1472px;
+    }
+  }
+
+  &__image {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  @include tablet-xl {
+    padding: 104px 40px;
+  }
+
+  @include desktop {
+    padding: 104px 64px;
+  }
+
+  @include desktop-xl {
+    padding: 164px 67px;
+  }
+}
