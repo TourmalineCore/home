@@ -134,16 +134,16 @@ export function FormRedesign({
         !isSubmit && (
           <>
             <InputRedesign
-              id="name"
-              name="name"
+              id={`name-${isModal ? `modal` : ``}`}
+              name={`name-${isModal ? `modal` : ``}`}
               className="form-redesign__input"
               label={nameLabel}
               onKeyDown={handleOnKeyDown}
               required
             />
             <InputRedesign
-              id="email"
-              name="email"
+              id={`email-${isModal ? `modal` : ``}`}
+              name={`email-${isModal ? `modal` : ``}`}
               className="form-redesign__input"
               label={emailLabel}
               type="email"
@@ -153,8 +153,8 @@ export function FormRedesign({
               required
             />
             <TextareaRedesign
-              id="message"
-              name="message"
+              id={`message-${isModal ? `modal` : ``}`}
+              name={`message-${isModal ? `modal` : ``}`}
               label={textareaLabel}
               className="form-redesign__input"
               description={t(`message.description`)}

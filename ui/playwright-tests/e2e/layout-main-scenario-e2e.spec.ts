@@ -1,16 +1,15 @@
 
-import { Breakpoint } from "../../../common/enums";
-import { NavigationListResponse } from "../../../common/types";
-import { cmsFetch } from "../../../services/cms/api/http-client";
-import { createCmsActions } from "../../create-cms-actions";
-import { E2E_UI_NAME_PREFIX } from "../../constants/e2e-ui-name-prefix";
+import { Breakpoint } from "../../common/enums";
+import { NavigationListResponse } from "../../common/types";
+import { cmsFetch } from "../../services/cms/api/http-client";
+import { createCmsActions } from "../create-cms-actions";
+import { E2E_UI_NAME_PREFIX } from "../constants/e2e-ui-name-prefix";
 import {
   CustomTestFixtures,
   expect,
   Page,
   test,
-} from "../../custom-test";
-import { cleanupLayoutApi } from "./layout-api-helpers";
+} from "../custom-test";
 
 const EMAIL_CAPTION = `If you have any questions`;
 const EMAIL_ADDRESS = `test@tourmalinecore.com`;
@@ -22,6 +21,7 @@ const NESTED_HEADER_NAVIGATION = `${E2E_UI_NAME_PREFIX} Frontend`;
 const NESTED_HEADER_NAVIGATION_LINK = `/frontend`;
 
 const NAVIGATION_ENDPOINT = `/navigations`;
+const LAYOUT_ENDPOINT = `/layout`;
 
 test.describe(`Main scenario for filling layout`, layoutMainScenarioTest);
 
@@ -208,18 +208,14 @@ async function layoutMainScenarioTest() {
   );
 }
 
-async function cleanupNavigation({
-  locale = `en`,
-}: {
-  locale?: 'ru' | 'en';
-} = {}) {
+async function cleanupNavigation() {
   try {
-    const navigationList = await cmsFetch<NavigationListResponse>(`${NAVIGATION_ENDPOINT}?populate=*&locale=${locale}`);
+    const navigationList = await cmsFetch<NavigationListResponse>(`${NAVIGATION_ENDPOINT}?populate=*&locale=en`);
 
     const navigationToDelete = navigationList?.data?.filter((navigation) => navigation.name.startsWith(E2E_UI_NAME_PREFIX));
 
     navigationToDelete?.forEach(async (navigation) => {
-      const response = await cmsFetch(`${NAVIGATION_ENDPOINT}/${navigation.documentId}?locale=${locale}`, {
+      const response = await cmsFetch(`${NAVIGATION_ENDPOINT}/${navigation.documentId}?locale=en`, {
         method: `DELETE`,
       });
 
@@ -228,5 +224,18 @@ async function cleanupNavigation({
     });
   } catch (error: any) {
     throw new Error(`Failed to delete test navigation: ${error.message}`);
+  }
+}
+
+async function cleanupLayoutApi() {
+  try {
+    const response = await cmsFetch(`${LAYOUT_ENDPOINT}?locale=en`, {
+      method: `DELETE`,
+    });
+
+    await expect(response.status, `Layout should be deleted with status 204`)
+      .toEqual(204);
+  } catch (error: any) {
+    throw new Error(`Failed to delete test layout: ${error.message}`);
   }
 }

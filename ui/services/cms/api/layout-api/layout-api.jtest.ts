@@ -18,9 +18,9 @@ describe(`getLayoutData`, () => {
   });
 
   test(`
-    GIVEN locale = zh
-    WHEN getLayoutData is called with this locale
-    THEN query string should contain locale en
+    GIVEN locale = zh and status = published
+    WHEN getLayoutData is called with this props
+    THEN query string should contain locale = en and status = published
     `, async () => {
     await getLayoutData({
       locale: `zh`,
@@ -30,6 +30,32 @@ describe(`getLayoutData`, () => {
     expect(mockedApiFetch)
       .toHaveBeenCalledWith(
         expect.stringContaining(`locale=en`),
+      );
+
+    expect(mockedApiFetch)
+      .toHaveBeenCalledWith(
+        expect.stringContaining(`status=published`),
+      );
+  });
+
+  test(`
+    GIVEN locale = ru and status = published
+    WHEN getLayoutData is called with this props
+    THEN query string should contain locale = ru and status = draft
+    `, async () => {
+    await getLayoutData({
+      locale: `ru`,
+      status: `draft`,
+    });
+
+    expect(mockedApiFetch)
+      .toHaveBeenCalledWith(
+        expect.stringContaining(`locale=ru`),
+      );
+
+    expect(mockedApiFetch)
+      .toHaveBeenCalledWith(
+        expect.stringContaining(`status=draft`),
       );
   });
 });
