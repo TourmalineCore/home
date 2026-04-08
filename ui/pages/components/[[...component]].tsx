@@ -18,7 +18,7 @@ import { HeaderRedesign } from "../../components/redesign/HeaderRedesign/HeaderR
 import { MobileMenu } from "../../components/redesign/HeaderRedesign/components/MobileMenuRedesign/MobileMenuRedesign";
 import { ThreeColumnGrid } from "../../components/ThreeColumnGrid/ThreeColumnGrid";
 import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLink";
-import { ChelzooTasks } from "../chelzoo/components/ChelzooTasks/ChelzooTasks";
+import { ChelzooTasks } from "../../components/chelzoo/components/ChelzooTasks/ChelzooTasks";
 
 export default function ComponentsPage({
   pageData,
