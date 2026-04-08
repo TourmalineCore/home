@@ -1,6 +1,6 @@
 import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
-import IconDownArrow from '../../../../icons/icon-arrow-down-chelzoo.svg';
+import IconDownArrow from '../../../../icons/icon-arrow-chelzoo.svg';
 
 export function ChelzooHero({
   isComponentPage,
