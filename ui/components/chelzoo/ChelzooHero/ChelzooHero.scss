@@ -102,9 +102,13 @@
       font-size: 80px;
     }
 
+    @include desktop {
+      max-width: 700px;
+    }
+
     @include desktop-xl {
       margin-bottom: 32px;
-      max-width: 1000px;
+      max-width: 1080px;
       font-size: 112px;
     }
   }
