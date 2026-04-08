@@ -3,6 +3,7 @@
 
   position: relative;
   padding: 48px 0 120px;
+  min-height: calc(100vh - $header-redesign-height);
   font-weight: 500;
 
   &__decor {
@@ -224,7 +225,7 @@
   }
 
   &__scroll-button {
-    position: fixed;
+    position: absolute;
     left: 50%;
     bottom: 48px;
     display: flex;
@@ -269,7 +270,12 @@
     padding-bottom: 48px;
   }
 
+  @include tablet {
+    min-height: calc(100vh - $header-redesign-height-tablet-xl);
+  }
+
   @include desktop-xl {
     padding: 64px 0;
+    min-height: calc(100vh - $header-redesign-height-desktop-xl);
   }
 }
