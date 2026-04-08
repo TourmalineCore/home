@@ -59,7 +59,7 @@ export function ChelzooHero({
 
     return (
       <video
-        src={t(`videoUrl`)}
+        src="/video/chelzoo-hero-video.mp4"
         playsInline
         loop
         muted

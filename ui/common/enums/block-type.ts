@@ -8,5 +8,4 @@ export enum BlockType {
   SHARED_COLLAGE_WITH_LINK = `shared.collage-with-link`,
   SHARED_SHOWCASE_GRID = `shared.showcase-grid`,
   SHARED_FORM_BLOCK = `shared.form`,
-  CHELZOO_HERO = `CHELZOO_HERO`,
 }
