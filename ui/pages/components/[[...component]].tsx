@@ -340,7 +340,11 @@ export async function getStaticProps({
   return {
     props: {
       pageData: translationsPageData,
-      ...(await serverSideTranslations(locale, [`cookie`, `formBlockRedesign`])),
+      ...(await serverSideTranslations(locale, [
+        `cookie`,
+        `formBlockRedesign`,
+        `chelzooTasks`,
+      ])),
     },
   };
 }
