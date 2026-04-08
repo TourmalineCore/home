@@ -1,12 +1,12 @@
-import { createCmsActions } from "../../create-cms-actions";
-import { E2E_UI_NAME_PREFIX } from "../../constants/e2e-ui-name-prefix";
+import { createCmsActions } from "../create-cms-actions";
+import { E2E_UI_NAME_PREFIX } from "../constants/e2e-ui-name-prefix";
 import {
   CustomTestFixtures,
   expect,
   Page,
   test,
-} from "../../custom-test";
-import { cleanupHomepageApi } from "./homepage-api-helpers";
+} from "../custom-test";
+import { cmsFetch } from "../../services/cms/api/http-client";
 
 const HERO_TITLE = `${E2E_UI_NAME_PREFIX} Tourmaline Core Tech Company`;
 const HERO_DESCRIPTION = `${E2E_UI_NAME_PREFIX} Launching MVP, working on R&D projects, complex enterprise services, and websites.`;
@@ -14,6 +14,8 @@ const HERO_DESCRIPTION = `${E2E_UI_NAME_PREFIX} Launching MVP, working on R&D pr
 const META_TITLE = `Homepage`;
 const META_DESCRIPTION = `Development of public websites, customized enterprise information systems, and applications`;
 const META_KEYWORDS = `public websites, enterprise information systems, software development`;
+
+const ENDPOINT = `/homepage`;
 
 test.describe(`Main scenario for filling homepage`, homepageMainScenarioTest);
 
@@ -119,4 +121,17 @@ function homepageMainScenarioTest() {
       }
     },
   );
+}
+
+async function cleanupHomepageApi() {
+  try {
+    const response = await cmsFetch(`${ENDPOINT}?locale=en`, {
+      method: `DELETE`,
+    });
+
+    await expect(response.status, `Homepage should be deleted with status 204`)
+      .toEqual(204);
+  } catch (error: any) {
+    throw new Error(`Failed to delete homepage: ${error.message}`);
+  }
 }
