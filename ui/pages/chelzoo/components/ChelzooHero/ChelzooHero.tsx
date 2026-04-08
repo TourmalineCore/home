@@ -23,24 +23,7 @@ export function ChelzooHero({
           {t(`title`)}
         </h1>
         <div className="chelzoo-hero__media">
-          {
-            isComponentPage
-              ? (
-                <Image
-                  src="/images/hero-slider-image-6.png"
-                  alt=""
-                  fill
-                />
-              ) : (
-                <video
-                  src="/video/chelzoo-hero-video.mp4"
-                  playsInline
-                  loop
-                  muted
-                  autoPlay
-                />
-              )
-          }
+          {renderMedia()}
         </div>
         <div className="chelzoo-hero__content">
           <span className="chelzoo-hero__label">
@@ -62,4 +45,26 @@ export function ChelzooHero({
       </button>
     </section>
   );
+
+  function renderMedia() {
+    if (isComponentPage) {
+      return (
+        <Image
+          src="/images/hero-slider-image-6.png"
+          alt=""
+          fill
+        />
+      );
+    }
+
+    return (
+      <video
+        src={t(`videoUrl`)}
+        playsInline
+        loop
+        muted
+        autoPlay
+      />
+    );
+  }
 }
