@@ -1,9 +1,9 @@
 .mobile-menu-redesign {
-  position: relative;
+  position: fixed;
   z-index: $mobile-menu;
   display: none;
   overflow-y: auto;
-  padding-top: 24px;
+  padding-top: 104px;
   padding-bottom: 24px;
   width: 100%;
   height: 100vh;
