@@ -6,7 +6,7 @@ import { LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
 import { LayoutRedesign } from '../../components/redesign/LayoutRedesign/LayoutRedesign';
-import { ChelzooHero } from '../components/chelzoo/chelzoo-hero/ChelzooHero';
+import { ChelzooHero } from '../../components/chelzoo/ChelzooHero/ChelzooHero';
 
 export default function ChelzooPage({
   layoutData,
