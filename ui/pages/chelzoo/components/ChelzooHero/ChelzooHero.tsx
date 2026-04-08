@@ -33,7 +33,7 @@ export function ChelzooHero({
                 />
               ) : (
                 <video
-                  src={t(`videoUrl`)}
+                  src="/video/chelzoo-hero-video.mp4"
                   playsInline
                   loop
                   muted
