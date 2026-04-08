@@ -79,34 +79,32 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+
+    @include desktop-xl {
+      padding-right: 24px;
+      padding-left: 24px;
+    }
   }
 
   &__title {
     @include unbounded-font;
 
     margin-bottom: 40px;
+    max-width: 350px;
     font-weight: 400;
     font-size: 40px;
     line-height: 0.9;
     text-align: center;
 
-    @include tablet {
-      max-width: 416px;
-    }
-
     @include tablet-xl {
       margin-bottom: 24px;
-      max-width: 672px;
+      max-width: 600px;
       font-size: 80px;
-    }
-
-    @include desktop {
-      max-width: 1000px;
     }
 
     @include desktop-xl {
       margin-bottom: 32px;
-      max-width: 1400px;
+      max-width: 1000px;
       font-size: 112px;
     }
   }
