@@ -2,8 +2,6 @@ import { test } from '../../../../playwright-tests/custom-test';
 import { BREAKPOINTS } from '../../../../playwright-tests/constants/breakpoints';
 import { BreakpointName, ComponentName } from '../../../../common/enums';
 
-const TEST_ID = `chelzoo-hero`;
-
 const heightMap: Record<BreakpointName, number> = {
   mobile: 689,
   tablet: 708,
@@ -27,7 +25,7 @@ test.describe(`ChelzooHeroTests`, () => {
       testScreenshotAtBreakpoint,
     }) => {
       await testScreenshotAtBreakpoint({
-        testId: TEST_ID,
+        testId: ComponentName.CHELZOO_HERO,
         breakpoint,
         breakpointName,
         height: heightMap[breakpointName],
