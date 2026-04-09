@@ -19,6 +19,7 @@ import { MobileMenu } from "../../components/redesign/HeaderRedesign/components/
 import { ThreeColumnGrid } from "../../components/ThreeColumnGrid/ThreeColumnGrid";
 import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLink";
 import { ChelzooHero } from "../../components/chelzoo/ChelzooHero/ChelzooHero";
+import { ChelzooAbout } from "../../components/chelzoo/ChelzooAbout/ChelzooAbout";
 
 export default function ComponentsPage({
   pageData,
@@ -243,6 +244,12 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_ABOUT) {
+    return (
+      <ChelzooAbout />
+    );
+  }
+
   return (
     <div className="components-page container-redesign">
       <h2 className="components-page__subtitle">
@@ -310,6 +317,9 @@ export default function ComponentsPage({
         <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_HERO}>Chelzoo Hero</Link>
         </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_ABOUT}>Chelzoo About</Link>
+        </li>
       </ul>
     </div>
   );
@@ -334,7 +344,6 @@ export async function getStaticProps({
     `pageNotFound`,
     `headerRedesign`,
     `footerRedesign`,
-    `chelzooHero`,
   ]);
 
   return {
@@ -344,6 +353,7 @@ export async function getStaticProps({
         `cookie`,
         `formBlockRedesign`,
         `chelzooHero`,
+        `chelzooAbout`,
       ])),
     },
   };

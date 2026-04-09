@@ -7,6 +7,8 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
+# Necessary to provide sharp support for alpine - https://sharp.pixelplumbing.com/install/#cross-platform
+RUN npm install --cpu=x64 --os=linux --libc=musl sharp@0.34.5
 RUN npm ci
 
 # Build
