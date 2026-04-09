@@ -323,10 +323,12 @@ export default function ComponentsPage({
         </li>
         <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_HERO}>Chelzoo Hero</Link>
-          <Link href={ComponentName.CHELZOO_TASKS}>Chelzoo Tasks</Link>
         </li>
         <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_ABOUT}>Chelzoo About</Link>
+        </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_TASKS}>Chelzoo Tasks</Link>
         </li>
       </ul>
     </div>
