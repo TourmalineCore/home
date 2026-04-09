@@ -1,5 +1,6 @@
 import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
+import { useDeviceSize } from '../../../common/hooks';
 
 export function ChelzooPodcast({
   isComponentPage,
@@ -9,6 +10,10 @@ export function ChelzooPodcast({
   const {
     t,
   } = useTranslation(`chelzooPodcast`);
+
+  const {
+    isTabletXl,
+  } = useDeviceSize();
 
   return (
     <section
@@ -51,7 +56,7 @@ export function ChelzooPodcast({
 
     return (
       <video
-        src="/video/chelzoo-podcast-video.mp4"
+        src={isTabletXl ? `/video/chelzoo-podcast-video-large.mp4` : `/video/chelzoo-podcast-video.mp4`}
         playsInline
         loop
         muted
