@@ -20,6 +20,7 @@ import { ThreeColumnGrid } from "../../components/ThreeColumnGrid/ThreeColumnGri
 import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLink";
 import { ChelzooHero } from "../../components/chelzoo/ChelzooHero/ChelzooHero";
 import { ChelzooAbout } from "../../components/chelzoo/ChelzooAbout/ChelzooAbout";
+import { ChelzooStack } from "../../components/chelzoo/ChelzooStack/ChelzooStack";
 
 export default function ComponentsPage({
   pageData,
@@ -250,6 +251,12 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_STACK) {
+    return (
+      <ChelzooStack />
+    );
+  }
+
   return (
     <div className="components-page container-redesign">
       <h2 className="components-page__subtitle">
@@ -354,6 +361,7 @@ export async function getStaticProps({
         `formBlockRedesign`,
         `chelzooHero`,
         `chelzooAbout`,
+        `chelzooStack`,
       ])),
     },
   };
