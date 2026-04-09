@@ -7,13 +7,6 @@ export function ChelzooTasks() {
     t,
   } = useTranslation(`chelzooTasks`);
 
-  const tasks = t(`tasks`, {
-    returnObjects: true,
-  }) as {
-    id: number;
-    text: string;
-  }[];
-
   return (
     <section
       className="chelzoo-tasks"
@@ -25,7 +18,7 @@ export function ChelzooTasks() {
             label={t(`taskLabel`, {
               number: 1,
             })}
-            text={tasks[0].text}
+            text={t(`firstTaskText`)}
           />
         </div>
 
@@ -43,7 +36,7 @@ export function ChelzooTasks() {
             label={t(`taskLabel`, {
               number: 2,
             })}
-            text={tasks[1].text}
+            text={t(`secondTaskText`)}
           />
         </div>
       </div>
