@@ -27,7 +27,6 @@ export function ChelzooAbout() {
         <div className="chelzoo-about__images">
           <div className="chelzoo-about__old-image-container">
             <Image
-              className="chelzoo-about__old-image"
               src={OldChelzoo}
               fill
               placeholder="blur"
@@ -39,7 +38,6 @@ export function ChelzooAbout() {
           </span>
           <div className="chelzoo-about__new-image-container">
             <Image
-              className="chelzoo-about__new-image"
               src={locale === `ru` ? NewChelzoo : NewChelzooEng}
               fill
               placeholder="blur"
