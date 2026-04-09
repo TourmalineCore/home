@@ -2,7 +2,7 @@ import { ComponentName } from "../../../common/enums";
 import { BREAKPOINTS } from "../../../playwright-tests/constants/breakpoints";
 import { test } from "../../../playwright-tests/custom-test";
 
-test.describe(`TaskTests`, () => {
+test.describe(`ChelzooTasksTests`, () => {
   test.beforeEach(async ({
     goToComponentsPage,
   }) => {
