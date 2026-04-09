@@ -1,5 +1,6 @@
 import { useTranslation } from "next-i18next";
 import Image from 'next/image';
+import TaskImage from "../../../public/images/img-chelzoo-tasks.jpg";
 import { Task } from "./Task/Task";
 
 export function ChelzooTasks() {
@@ -25,9 +26,10 @@ export function ChelzooTasks() {
         <div className="chelzoo-tasks__image-wrapper">
           <Image
             className="chelzoo-tasks__image"
-            src="/images/img-chelzoo-tasks.jpg"
+            src={TaskImage}
             alt=""
             fill
+            placeholder="blur"
           />
         </div>
 
