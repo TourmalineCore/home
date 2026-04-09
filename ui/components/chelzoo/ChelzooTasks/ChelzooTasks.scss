@@ -4,19 +4,29 @@
 
   &__wrapper {
     position: relative;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 32px;
 
     @include tablet {
       align-items: center;
+      margin: 0 auto;
+      width: 704px;
       height: 752px;
       gap: 0;
     }
 
     @include tablet-xl {
-      margin: 0 auto;
+      width: 944px;
       height: auto;
-      max-width: 1853px;
+    }
+
+    @include desktop {
+      width: 1238px;
+    }
+
+    @include desktop-xl {
+      width: 1786px;
     }
   }
 
