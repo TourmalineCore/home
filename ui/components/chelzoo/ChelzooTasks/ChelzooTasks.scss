@@ -14,7 +14,9 @@
     }
 
     @include tablet-xl {
+      margin: 0 auto;
       height: auto;
+      max-width: 1853px;
     }
   }
 
