@@ -1,6 +1,6 @@
-import { ComponentName } from "../../../../common/enums";
-import { BREAKPOINTS } from "../../../../playwright-tests/constants/breakpoints";
-import { test } from "../../../../playwright-tests/custom-test";
+import { ComponentName } from "../../../common/enums";
+import { BREAKPOINTS } from "../../../playwright-tests/constants/breakpoints";
+import { test } from "../../../playwright-tests/custom-test";
 
 test.describe(`TaskTests`, () => {
   test.beforeEach(async ({
