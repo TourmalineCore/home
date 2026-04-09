@@ -1,0 +1,49 @@
+{
+  "title": "Стек технологий",
+  "description": "Мы объединили все наши подходы, попробовали новые инструменты в реальной работе. Держали фокус на качестве, а не на скорости.",
+  "list": [
+    {
+      "title": "Автоматизация и развертывание",
+      "data": [
+        "Docker",
+        "Kubernetes",
+        "TypeScript",
+        "kind",
+        "helm",
+        "DevContainers"
+      ]
+    },
+    {
+      "title": "Frontend",
+      "data": [
+        "React",
+        "Next.js",
+        "TypeScript"
+      ]
+    },
+    {
+      "title": "Backend",
+      "data": [
+        "Strapi",
+        "PostgreSQL",
+        "S3",
+        "Swagger"
+      ]
+    },
+    {
+      "title": "Тестирование",
+      "data": [
+        "Playwright",
+        "axe-core",
+        "JMeter",
+        "Step CI"
+      ]
+    },
+    {
+      "title": "Подходы",
+      "data": [
+        "Test-Driven Development"
+      ]
+    }
+  ]
+}
