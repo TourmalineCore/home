@@ -7,9 +7,6 @@
   background-color: $color-white;
 
   &__wrapper {
-    display: flex;
-    flex-direction: column;
-
     @include tablet {
       padding-right: 32px;
       padding-left: 32px;
@@ -69,6 +66,28 @@
     }
   }
 
+  &__content {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+
+    @include tablet {
+      max-width: 704px;
+    }
+
+    @include tablet-xl {
+      max-width: 896px;
+    }
+
+    @include desktop {
+      max-width: 1238px;
+    }
+
+    @include desktop-xl {
+      max-width: 1744px;
+    }
+  }
+
   &__media {
     position: relative;
     align-self: center;
@@ -114,11 +133,6 @@
     object-fit: cover;
   }
 
-  &__content {
-    align-self: flex-start;
-    max-width: 336px;
-  }
-
   &__link {
     display: block;
     align-self: center;
@@ -149,6 +163,10 @@
   }
 
   @include tablet-xl {
-    padding-bottom: 64px 0;
+    padding: 64px 0 116px;
+  }
+
+  @include desktop-xl {
+    padding: 88px 0 164px;
   }
 }

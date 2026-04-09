@@ -28,17 +28,19 @@ export function ChelzooPodcast({
         <p className="chelzoo-podcast__description">
           {t(`description`)}
         </p>
-        <div className="chelzoo-podcast__media">
-          {renderMedia()}
+        <div className="chelzoo-podcast__content">
+          <div className="chelzoo-podcast__media">
+            {renderMedia()}
+          </div>
+          <a
+            className="chelzoo-podcast__link"
+            href={t(`link`)}
+          >
+            {t(`linkText`)}
+            {` `}
+            →
+          </a>
         </div>
-        <a
-          className="chelzoo-podcast__link"
-          href={t(`link`)}
-        >
-          {t(`linkText`)}
-          {` `}
-          →
-        </a>
       </div>
     </section>
   );
