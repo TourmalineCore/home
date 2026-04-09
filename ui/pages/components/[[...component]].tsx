@@ -18,6 +18,7 @@ import { HeaderRedesign } from "../../components/redesign/HeaderRedesign/HeaderR
 import { MobileMenu } from "../../components/redesign/HeaderRedesign/components/MobileMenuRedesign/MobileMenuRedesign";
 import { ThreeColumnGrid } from "../../components/ThreeColumnGrid/ThreeColumnGrid";
 import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLink";
+import { ChelzooHero } from "../../components/chelzoo/ChelzooHero/ChelzooHero";
 import { ChelzooTasks } from "../../components/chelzoo/ChelzooTasks/ChelzooTasks";
 
 export default function ComponentsPage({
@@ -237,6 +238,12 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_HERO) {
+    return (
+      <ChelzooHero isComponentPage />
+    );
+  }
+
   if (componentName === ComponentName.CHELZOO_TASKS) {
     return (
       <ChelzooTasks />
@@ -308,6 +315,7 @@ export default function ComponentsPage({
           <Link href={ComponentName.SUBMITTED_FORM_MODAL}>Submitted Form Modal</Link>
         </li>
         <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_HERO}>Chelzoo Hero</Link>
           <Link href={ComponentName.CHELZOO_TASKS}>Chelzoo Tasks</Link>
         </li>
       </ul>
@@ -334,6 +342,7 @@ export async function getStaticProps({
     `pageNotFound`,
     `headerRedesign`,
     `footerRedesign`,
+    `chelzooHero`,
     `chelzooTasks`,
   ]);
 
@@ -343,6 +352,7 @@ export async function getStaticProps({
       ...(await serverSideTranslations(locale, [
         `cookie`,
         `formBlockRedesign`,
+        `chelzooHero`,
         `chelzooTasks`,
       ])),
     },
