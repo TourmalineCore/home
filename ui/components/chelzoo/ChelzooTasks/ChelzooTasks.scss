@@ -4,16 +4,12 @@
 
   &__wrapper {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
 
     @include tablet {
-      align-items: center;
-      margin: 0 auto;
-      width: 704px;
+      align-content: center;
+      margin: auto;
+      width: 736px;
       height: 752px;
-      gap: 0;
     }
 
     @include tablet-xl {
@@ -81,12 +77,13 @@
   &__image-wrapper {
     position: relative;
     overflow: hidden;
-    margin: 0 auto;
+    margin: 32px auto;
     width: 280px;
     height: 280px;
 
     @include tablet {
       z-index: 0;
+      margin: 0 auto;
       width: 640px;
       height: 640px;
     }
