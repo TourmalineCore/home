@@ -7,6 +7,7 @@ import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
 import { LayoutRedesign } from '../../components/redesign/LayoutRedesign/LayoutRedesign';
 import { ChelzooHero } from '../../components/chelzoo/ChelzooHero/ChelzooHero';
+import { ChelzooAbout } from '../../components/chelzoo/ChelzooAbout/ChelzooAbout';
 import { ChelzooTasks } from '../../components/chelzoo/ChelzooTasks/ChelzooTasks';
 
 export default function ChelzooPage({
@@ -46,6 +47,7 @@ export default function ChelzooPage({
       >
         <div className="chelzoo__container">
           <ChelzooHero />
+          <ChelzooAbout />
           <ChelzooTasks />
         </div>
       </LayoutRedesign>
@@ -104,6 +106,7 @@ async function getStaticTranslation({
     `cookie`,
     `formBlockRedesign`,
     `chelzooHero`,
+    `chelzooAbout`,
     `chelzooTasks`,
   ]);
 }
