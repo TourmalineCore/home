@@ -39,6 +39,14 @@ export function ChelzooHero({
       </div>
       <button
         type="button"
+        onClick={() => {
+          const element = document.getElementById(`chelzoo-about`);
+          if (element) {
+            element.scrollIntoView({
+              behavior: `smooth`,
+            });
+          }
+        }}
         className="chelzoo-hero__scroll-button"
       >
         <IconDownArrow />
