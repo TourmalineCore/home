@@ -19,6 +19,8 @@ import { MobileMenu } from "../../components/redesign/HeaderRedesign/components/
 import { ThreeColumnGrid } from "../../components/ThreeColumnGrid/ThreeColumnGrid";
 import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLink";
 import { ChelzooHero } from "../../components/chelzoo/ChelzooHero/ChelzooHero";
+import { ChelzooAbout } from "../../components/chelzoo/ChelzooAbout/ChelzooAbout";
+import { ChelzooTasks } from "../../components/chelzoo/ChelzooTasks/ChelzooTasks";
 import { ChelzooPodcast } from "../../components/chelzoo/ChelzooPodcast/ChelzooPodcast";
 
 export default function ComponentsPage({
@@ -244,6 +246,16 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_ABOUT) {
+    return (
+      <ChelzooAbout />
+    );
+  }
+
+  if (componentName === ComponentName.CHELZOO_TASKS) {
+    return (
+      <ChelzooTasks />
+  }
   if (componentName === ComponentName.CHELZOO_PODCAST) {
     return (
       <ChelzooPodcast isComponentPage />
@@ -318,6 +330,12 @@ export default function ComponentsPage({
           <Link href={ComponentName.CHELZOO_HERO}>Chelzoo Hero</Link>
         </li>
         <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_ABOUT}>Chelzoo About</Link>
+        </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_TASKS}>Chelzoo Tasks</Link>
+        </li>
+		<li className="components-page__item">
           <Link href={ComponentName.CHELZOO_PODCAST}>Chelzoo Podcast</Link>
         </li>
       </ul>
@@ -344,8 +362,6 @@ export async function getStaticProps({
     `pageNotFound`,
     `headerRedesign`,
     `footerRedesign`,
-    `chelzooHero`,
-    `chelzooPodcast`,
   ]);
 
   return {
@@ -355,6 +371,8 @@ export async function getStaticProps({
         `cookie`,
         `formBlockRedesign`,
         `chelzooHero`,
+        `chelzooAbout`,
+        `chelzooTasks`,
         `chelzooPodcast`,
       ])),
     },

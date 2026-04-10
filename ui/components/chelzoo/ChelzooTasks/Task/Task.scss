@@ -1,0 +1,37 @@
+.task {
+  display: flex;
+  justify-content: center;
+
+  &__card {
+    @include chelzoo-body;
+
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    width: 343px;
+    min-height: 198px;
+    box-shadow: 2.81px 0 4.21px 0 $color-shadow;
+    background-color: $color-secondary-purple;
+    gap: 40px;
+
+    @include tablet-xl {
+      width: 375px;
+      min-height: 210px;
+    }
+
+    @include desktop-xl {
+      padding: 22px;
+      width: 550px;
+      min-height: 305px;
+      gap: 56px;
+    }
+  }
+
+  &__label {
+    color: $color-grey-500-redesign;
+  }
+
+  &__text {
+    color: $color-grey-700-redesign;
+  }
+}

@@ -99,6 +99,7 @@ export async function getServerSideProps({
       `headerRedesign`,
       `footerRedesign`,
       `chelzooHero`,
+      `chelzooTasks`,
       `chelzooPodcast`,
     ]);
 
