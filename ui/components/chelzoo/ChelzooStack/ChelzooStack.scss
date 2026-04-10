@@ -1,6 +1,4 @@
 .chelzoo-stack {
-  @include inter-font;
-
   position: relative;
   padding: 48px 0;
   color: $color-black;
@@ -184,12 +182,11 @@
   }
 
   &__technology {
+    @include chelzoo-h4;
+
     border-radius: 25px;
     padding: 12px 18px;
     width: fit-content;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 1.2;
     background-color: #f6f5f5;
 
     & + & {
@@ -206,12 +203,10 @@
 
     @include tablet-xl {
       padding: 12px 24px;
-      font-size: 22px;
     }
 
     @include desktop-xl {
       padding: 16px 32px;
-      font-size: 32px;
     }
   }
 
