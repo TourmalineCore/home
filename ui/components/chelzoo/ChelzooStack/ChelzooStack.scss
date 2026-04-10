@@ -81,6 +81,7 @@
     @include chelzoo-body;
 
     margin-bottom: 32px;
+    color: $color-grey-500-redesign;
 
     @include tablet {
       max-width: 80%;
