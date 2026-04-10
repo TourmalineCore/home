@@ -255,7 +255,9 @@ export default function ComponentsPage({
   if (componentName === ComponentName.CHELZOO_TASKS) {
     return (
       <ChelzooTasks />
+    );
   }
+
   if (componentName === ComponentName.CHELZOO_PODCAST) {
     return (
       <ChelzooPodcast isComponentPage />
@@ -335,7 +337,7 @@ export default function ComponentsPage({
         <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_TASKS}>Chelzoo Tasks</Link>
         </li>
-		<li className="components-page__item">
+        <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_PODCAST}>Chelzoo Podcast</Link>
         </li>
       </ul>
