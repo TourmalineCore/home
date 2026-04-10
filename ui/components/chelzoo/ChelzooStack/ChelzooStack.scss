@@ -95,7 +95,7 @@
     }
 
     @include desktop {
-      max-width: 52%;
+      max-width: 53%;
     }
 
     @include desktop-xl {
@@ -108,6 +108,7 @@
     overflow: auto;
     margin: 0 -16px;
     gap: 24px;
+    scrollbar-width: none;
 
     @include tablet {
       margin: 0 -32px;
