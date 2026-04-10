@@ -66,7 +66,7 @@
   &__images {
     display: flex;
     overflow-x: auto;
-    width: 100%;
+    margin: 0 -16px;
     gap: 15px;
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -85,6 +85,7 @@
   }
 
   &__dev-image-container {
+    margin-left: 16px;
     width: 240px;
     height: 300px;
 
@@ -105,6 +106,7 @@
     }
 
     @include tablet {
+      margin-left: 0;
       width: 225px;
     }
 
@@ -176,6 +178,7 @@
   }
 
   &__typography-image-container {
+    margin-right: 16px;
     width: 240px;
     height: 300px;
 
@@ -196,6 +199,7 @@
     }
 
     @include tablet {
+      margin-right: 0;
       width: 225px;
     }
 
