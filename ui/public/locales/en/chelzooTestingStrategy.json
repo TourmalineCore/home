@@ -1,0 +1,32 @@
+{
+  "title": "Testing Strategy",
+  "description": "We use test-driven development to ensure the project's stability, so we carefully thought out the project's testing strategy in advance.",
+  "linkText": "Watch our presentation at UWDC 2025",
+  "list": [
+    {
+      "label": "e2e",
+      "title": "Functional Testing",
+      "text": "Website components behave as expected"
+    },
+    {
+      "label": "a11y",
+      "title": "Interface Accessibility Tests",
+      "text": "Website is accessible according to WCAG criteria"
+    },
+    {
+      "label": "API CMS",
+      "title": "Integration Testing",
+      "text": "CMS saves and sends the required data to the frontend"
+    },
+    {
+      "label": "Load testing",
+      "title": "Simulating traffic",
+      "text": "Website loads quickly"
+    },
+    {
+      "label": "Visual",
+      "title": "Pixel-perfect testing",
+      "text": "Layout looks exactly like the design"
+    }
+  ]
+}
