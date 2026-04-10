@@ -21,6 +21,7 @@ import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLin
 import { ChelzooHero } from "../../components/chelzoo/ChelzooHero/ChelzooHero";
 import { ChelzooAbout } from "../../components/chelzoo/ChelzooAbout/ChelzooAbout";
 import { ChelzooTasks } from "../../components/chelzoo/ChelzooTasks/ChelzooTasks";
+import { ChelzooPodcast } from "../../components/chelzoo/ChelzooPodcast/ChelzooPodcast";
 
 export default function ComponentsPage({
   pageData,
@@ -257,6 +258,12 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_PODCAST) {
+    return (
+      <ChelzooPodcast isComponentPage />
+    );
+  }
+
   return (
     <div className="components-page container-redesign">
       <h2 className="components-page__subtitle">
@@ -330,6 +337,9 @@ export default function ComponentsPage({
         <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_TASKS}>Chelzoo Tasks</Link>
         </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_PODCAST}>Chelzoo Podcast</Link>
+        </li>
       </ul>
     </div>
   );
@@ -365,6 +375,7 @@ export async function getStaticProps({
         `chelzooHero`,
         `chelzooAbout`,
         `chelzooTasks`,
+        `chelzooPodcast`,
       ])),
     },
   };
