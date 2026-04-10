@@ -5,9 +5,13 @@ import { ImagesWithBlurDataURL } from '../../common/types';
 export function ImageSlider({
   imagesWithBlurDataURL,
   interval,
+  priority,
+  fetchPriority,
 }: {
   imagesWithBlurDataURL: ImagesWithBlurDataURL[];
   interval: number;
+  priority?: boolean;
+  fetchPriority?: 'high' | 'low' | 'auto';
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -25,6 +29,8 @@ export function ImageSlider({
     <ImageWithBlur
       src={imagesWithBlurDataURL[currentIndex].url}
       blurDataURL={imagesWithBlurDataURL[currentIndex].blurDataURL}
+      priority={priority}
+      fetchPriority={fetchPriority}
     />
   );
 }

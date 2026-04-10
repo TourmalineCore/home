@@ -37,6 +37,8 @@ export function Hero({
               <ImageSlider
                 imagesWithBlurDataURL={imagesWithBlurDataURL}
                 interval={1600}
+                fetchPriority="high"
+                priority
               />
             )}
           </div>
