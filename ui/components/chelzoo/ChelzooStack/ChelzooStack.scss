@@ -1,6 +1,227 @@
 .chelzoo-stack {
   @include inter-font;
 
+  position: relative;
+  padding: 48px 0;
   color: $color-black;
   background-color: $color-white;
+
+  &::after {
+    content: url("../../../public/images/flower-pink.svg");
+    position: absolute;
+    right: 0;
+    bottom: 3px;
+    width: 85px;
+    height: 104px;
+
+    @include tablet {
+      right: -6px;
+      bottom: -4px;
+    }
+
+    @include tablet-xl {
+      right: 38px;
+      bottom: 40px;
+      width: 160px;
+      height: 195px;
+    }
+
+    @include desktop {
+      right: -18px;
+      bottom: 98px;
+      width: 160px;
+      height: 195px;
+    }
+
+    @include desktop-xl {
+      right: 4px;
+      bottom: 52px;
+      width: 228px;
+      height: 278px;
+    }
+  }
+
+  &__wrapper {
+    padding: 0 16px;
+
+    @include tablet {
+      padding: 0 32px;
+    }
+
+    @include tablet-xl {
+      padding: 0 64px;
+    }
+
+    @include desktop {
+      max-width: 1366px;
+    }
+
+    @include desktop-xl {
+      padding: 0 88px;
+      max-width: 1920px;
+    }
+  }
+
+  &__title {
+    @include chelzoo-h2;
+
+    margin-bottom: 12px;
+
+    @include tablet-xl {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 28px;
+    }
+  }
+
+  &__description {
+    @include chelzoo-body;
+
+    margin-bottom: 32px;
+
+    @include tablet {
+      max-width: 80%;
+    }
+
+    @include tablet-xl {
+      margin-right: auto;
+      margin-bottom: 64px;
+      margin-left: auto;
+      text-align: center;
+    }
+
+    @include desktop {
+      max-width: 52%;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 90px;
+    }
+  }
+
+  &__list {
+    display: flex;
+    overflow: auto;
+    margin: 0 -16px;
+    gap: 24px;
+
+    @include tablet {
+      margin: 0 -32px;
+    }
+
+    @include tablet-xl {
+      margin: 0 -64px;
+    }
+
+    @include desktop {
+      overflow: hidden;
+      margin: 0;
+      gap: 56px;
+    }
+
+    @include desktop-xl {
+      gap: 74px;
+    }
+  }
+
+  &__item {
+    &:first-child {
+      margin-left: 16px;
+
+      @include tablet {
+        margin-left: 32px;
+      }
+
+      @include tablet-xl {
+        margin-left: 64px;
+      }
+
+      @include desktop {
+        margin-left: 0;
+      }
+    }
+
+    &:last-child {
+      margin-right: 16px;
+
+      @include tablet {
+        margin-right: 32px;
+      }
+
+      @include tablet-xl {
+        margin-right: 64px;
+      }
+
+      @include desktop {
+        margin-right: 0;
+      }
+    }
+  }
+
+  &__direction {
+    @include chelzoo-body;
+
+    margin-bottom: 12px;
+    min-height: 38px;
+    color: $color-grass-green;
+
+    @include tablet-xl {
+      margin-bottom: 20px;
+    }
+
+    @include desktop {
+      max-width: 290px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 24px;
+    }
+  }
+
+  &__technology {
+    border-radius: 25px;
+    padding: 12px 18px;
+    width: fit-content;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 1.2;
+    background-color: #f6f5f5;
+
+    & + & {
+      margin-top: 8px;
+
+      @include tablet-xl {
+        margin-top: 12px;
+      }
+
+      @include desktop-xl {
+        margin-top: 16px;
+      }
+    }
+
+    @include tablet-xl {
+      padding: 12px 24px;
+      font-size: 22px;
+    }
+
+    @include desktop-xl {
+      padding: 16px 32px;
+      font-size: 32px;
+    }
+  }
+
+  &__name {
+    white-space: pre;
+  }
+
+  @include tablet-xl {
+    padding: 116px 0 64px;
+  }
+
+  @include desktop-xl {
+    padding: 164px 0 88px;
+  }
 }

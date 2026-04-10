@@ -31,14 +31,22 @@ export function ChelzooStack() {
             title,
             data,
           }) => (
-            <div key={title}>
-              <h4>{title}</h4>
-              <ul>
+            <div
+              key={title}
+              className="chelzoo-stack__item"
+            >
+              <h4 className="chelzoo-stack__direction">{title}</h4>
+              <ul className="chelzoo-stack__technologies">
                 {data.map((text) => (
                   <li
                     key={text}
+                    className="chelzoo-stack__technology"
                   >
-                    <span>{text}</span>
+                    <span
+                      className="chelzoo-stack__name"
+                    >
+                      {text}
+                    </span>
                   </li>
                 ))}
               </ul>
