@@ -23,6 +23,7 @@ import { ChelzooAbout } from "../../components/chelzoo/ChelzooAbout/ChelzooAbout
 import { ChelzooTasks } from "../../components/chelzoo/ChelzooTasks/ChelzooTasks";
 import { ChelzooAccessibility } from "../../components/chelzoo/ChelzooAccessibility/ChelzooAccessibility";
 import { ChelzooPodcast } from "../../components/chelzoo/ChelzooPodcast/ChelzooPodcast";
+import { ChelzooTestingStrategy } from "../../components/chelzoo/ChelzooTestingStrategy/ChelzooTestingStrategy";
 
 export default function ComponentsPage({
   pageData,
@@ -271,6 +272,12 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_TESTING_STRATEGY) {
+    return (
+      <ChelzooTestingStrategy />
+    );
+  }
+
   return (
     <div className="components-page container-redesign">
       <h2 className="components-page__subtitle">
@@ -387,6 +394,7 @@ export async function getStaticProps({
         `chelzooTasks`,
         `chelzooAccessibility`,
         `chelzooPodcast`,
+        `chelzooTestingStrategy`,
       ])),
     },
   };
