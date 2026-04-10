@@ -1,8 +1,8 @@
 .chelzoo-podcast {
   @include inter-font;
+  @include medium-font;
 
   padding: 48px 0;
-  font-weight: 500;
   color: $color-black;
   background-color: $color-white;
 
