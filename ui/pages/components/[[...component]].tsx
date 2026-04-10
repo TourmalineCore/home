@@ -21,6 +21,7 @@ import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLin
 import { ChelzooHero } from "../../components/chelzoo/ChelzooHero/ChelzooHero";
 import { ChelzooAbout } from "../../components/chelzoo/ChelzooAbout/ChelzooAbout";
 import { ChelzooTasks } from "../../components/chelzoo/ChelzooTasks/ChelzooTasks";
+import { ChelzooAccessibility } from "../../components/chelzoo/ChelzooAccessibility/ChelzooAccessibility";
 import { ChelzooPodcast } from "../../components/chelzoo/ChelzooPodcast/ChelzooPodcast";
 
 export default function ComponentsPage({
@@ -258,6 +259,12 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_ACCESSIBILITY) {
+    return (
+      <ChelzooAccessibility />
+    );
+  }
+
   if (componentName === ComponentName.CHELZOO_PODCAST) {
     return (
       <ChelzooPodcast isComponentPage />
@@ -340,6 +347,9 @@ export default function ComponentsPage({
         <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_PODCAST}>Chelzoo Podcast</Link>
         </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_ACCESSIBILITY}>Chelzoo Accessibility</Link>
+        </li>
       </ul>
     </div>
   );
@@ -375,6 +385,7 @@ export async function getStaticProps({
         `chelzooHero`,
         `chelzooAbout`,
         `chelzooTasks`,
+        `chelzooAccessibility`,
         `chelzooPodcast`,
       ])),
     },
