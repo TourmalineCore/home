@@ -84,154 +84,120 @@
     }
   }
 
-  &__dev-image-container {
-    margin-left: 16px;
-    width: 240px;
-    height: 300px;
-
-    img {
-      border-radius: 24px;
-
-      @include tablet-xl {
-        border-radius: 36px;
-      }
-
-      @include desktop {
-        border-radius: 48px;
-      }
-
-      @include desktop-xl {
-        border-radius: 68px;
-      }
-    }
-
-    @include tablet {
-      margin-left: 0;
-      width: 225px;
-    }
-
-    @include tablet-xl {
-      z-index: 2;
-      order: 1;
-      width: 318px;
-      height: 405px;
-    }
-
-    @include desktop {
-      width: 424px;
-      height: 540px;
-    }
-
-    @include desktop-xl {
-      width: 592px;
-      height: 752px;
-    }
-  }
-
-  &__color-image-container {
-    width: 240px;
-    height: 300px;
-
-    img {
-      border-radius: 24px;
-
-      @include tablet-xl {
-        border-radius: 36px;
-      }
-
-      @include desktop {
-        border-radius: 48px;
-      }
-
-      @include desktop-xl {
-        border-radius: 54px;
-      }
-    }
-
-    @include tablet {
-      width: 225px;
-    }
-
-    @include tablet-xl {
-      left: -10px;
-      top: 50px;
-      z-index: 1;
-      order: 2;
-      width: 239px;
-      height: 304px;
-      transform: rotate(20deg);
-    }
-
-    @include desktop {
-      left: 14px;
-      top: 66px;
-      width: 318px;
-      height: 405px;
-    }
-
-    @include desktop-xl {
-      left: 25px;
-      top: 80px;
-      width: 464px;
-      height: 590px;
-    }
-  }
-
-  &__typography-image-container {
-    margin-right: 16px;
-    width: 240px;
-    height: 300px;
-
-    img {
-      border-radius: 24px;
-
-      @include tablet-xl {
-        border-radius: 36px;
-      }
-
-      @include desktop {
-        border-radius: 48px;
-      }
-
-      @include desktop-xl {
-        border-radius: 54px;
-      }
-    }
-
-    @include tablet {
-      margin-right: 0;
-      width: 225px;
-    }
-
-    @include tablet-xl {
-      left: 10px;
-      top: 50px;
-      z-index: 1;
-      order: 0;
-      width: 239px;
-      height: 304px;
-      transform: rotate(-20deg);
-    }
-
-    @include desktop {
-      left: -15px;
-      top: 66px;
-      width: 318px;
-      height: 405px;
-    }
-
-    @include desktop-xl {
-      left: -25px;
-      top: 80px;
-      width: 464px;
-      height: 590px;
-    }
-  }
-
-  &__dev-image-container,
-  &__color-image-container,
-  &__typography-image-container {
+  &__image-container {
     position: relative;
     flex-shrink: 0;
+    width: 240px;
+    height: 300px;
+
+    img {
+      border-radius: 24px;
+
+      @include tablet-xl {
+        border-radius: 36px;
+      }
+
+      @include desktop {
+        border-radius: 48px;
+      }
+
+      @include desktop-xl {
+        border-radius: 54px;
+      }
+    }
+
+    @include tablet {
+      width: 225px;
+    }
+
+    &--dev {
+      margin-left: 16px;
+
+      img {
+        @include desktop-xl {
+          border-radius: 68px;
+        }
+      }
+
+      @include tablet {
+        margin-left: 0;
+        width: 225px;
+      }
+
+      @include tablet-xl {
+        z-index: 2;
+        order: 1;
+        width: 318px;
+        height: 405px;
+      }
+
+      @include desktop {
+        width: 424px;
+        height: 540px;
+      }
+
+      @include desktop-xl {
+        width: 592px;
+        height: 752px;
+      }
+    }
+
+    &--color {
+      @include tablet-xl {
+        left: -10px;
+        top: 50px;
+        z-index: 1;
+        order: 2;
+        width: 239px;
+        height: 304px;
+        transform: rotate(20deg);
+      }
+
+      @include desktop {
+        left: 14px;
+        top: 66px;
+        width: 318px;
+        height: 405px;
+      }
+
+      @include desktop-xl {
+        left: 25px;
+        top: 80px;
+        width: 464px;
+        height: 590px;
+      }
+    }
+
+    &--typography {
+      margin-right: 16px;
+
+      @include tablet {
+        margin-right: 0;
+      }
+
+      @include tablet-xl {
+        left: 10px;
+        top: 50px;
+        z-index: 1;
+        order: 0;
+        width: 239px;
+        height: 304px;
+        transform: rotate(-20deg);
+      }
+
+      @include desktop {
+        left: -15px;
+        top: 66px;
+        width: 318px;
+        height: 405px;
+      }
+
+      @include desktop-xl {
+        left: -25px;
+        top: 80px;
+        width: 464px;
+        height: 590px;
+      }
+    }
   }
 }

@@ -26,7 +26,7 @@ export function ChelzooAccessibility() {
         <h2 className="chelzoo-accessibility__title">{t(`title`)}</h2>
         <div className="chelzoo-accessibility__description">{t(`description`)}</div>
         <div className="chelzoo-accessibility__images">
-          <div className="chelzoo-accessibility__dev-image-container">
+          <div className="chelzoo-accessibility__image-container chelzoo-accessibility__image-container--dev">
             <Image
               src={locale === `ru` ? DevImage : DevImageEng}
               fill
@@ -35,7 +35,7 @@ export function ChelzooAccessibility() {
             />
           </div>
 
-          <div className="chelzoo-accessibility__color-image-container">
+          <div className="chelzoo-accessibility__image-container chelzoo-accessibility__image-container--color">
             <Image
               src={locale === `ru` ? ColorImage : ColorImageEng}
               fill
@@ -44,7 +44,7 @@ export function ChelzooAccessibility() {
             />
           </div>
 
-          <div className="chelzoo-accessibility__typography-image-container">
+          <div className="chelzoo-accessibility__image-container chelzoo-accessibility__image-container--typography">
             <Image
               src={locale === `ru` ? TypographyImage : TypographyImageEng}
               fill
