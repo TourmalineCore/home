@@ -51,8 +51,8 @@ export default function ChelzooPage({
           <ChelzooHero />
           <ChelzooAbout />
           <ChelzooTasks />
-          <ChelzooAccessibility />
           <ChelzooPodcast />
+          <ChelzooAccessibility />
         </div>
       </LayoutRedesign>
     </>
