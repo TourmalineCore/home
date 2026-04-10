@@ -1,0 +1,65 @@
+.chelzoo-design {
+  background-color: $color-white;
+
+  &__wrapper {
+    padding-top: 48px;
+    padding-bottom: 48px;
+
+    @include tablet {
+      padding-right: 32px;
+      padding-left: 32px;
+    }
+
+    @include tablet-xl {
+      padding: 64px 64px 116px;
+    }
+
+    @include desktop-xl {
+      padding: 88px 88px 164px;
+    }
+  }
+
+  &__title {
+    @include chelzoo-h2;
+
+    margin-bottom: 12px;
+    color: $color-black;
+
+    @include desktop-xl {
+      margin-bottom: 16px;
+    }
+  }
+
+  &__description {
+    @include chelzoo-body;
+
+    margin-bottom: 20px;
+    color: $color-grey-500-redesign;
+
+    @include tablet {
+      max-width: 624px;
+    }
+
+    @include tablet-xl {
+      margin-bottom: 0;
+    }
+  }
+
+  &__item {
+  }
+
+  &__cards {
+  }
+
+  &__image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 240px;
+
+    img {
+      border-radius: 24px;
+      object-fit: cover;
+    }
+  }
+}

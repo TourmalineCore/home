@@ -1,0 +1,20 @@
+{
+  "title": "Design",
+  "description": "We've captured the zoo's atmosphere through\u00A0design, giving users a\u00A0clear idea of\u00A0what to\u00A0expect from\u00A0their visit.",
+  "concept": {
+    "title": "Concept",
+    "description": "A minimalist interface where\u00A0vibrant animal photos and\u00A0simple illustrations serve as\u00A0accents, creating an emotional connection with\u00A0the user."
+  },
+  "illustrations": {
+    "title": "Illustrations",
+    "description": "The drawings were inspired by\u00A0real zoo animals, each with\u00A0a name and\u00A0a story. They become characters that help navigate the\u00A0website."
+  },
+  "photos": {
+    "title": "Photos",
+    "description": "We used cute and\u00A0funny photos of\u00A0animals in\u00A0natural settings without\u00A0enclosures, as\u00A0well as\u00A0moments of\u00A0human-animal interactions, to\u00A0highlight the caring attitude towards\u00A0them."
+  },
+  "typography": {
+    "title": "Typography",
+    "description": "The interface uses Inter Medium, a\u00A0modern font with\u00A0high legibility, soft geometry, and\u00A0a\u00A0minimalist feel."
+  }
+}

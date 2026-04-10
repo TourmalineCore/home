@@ -23,6 +23,7 @@ import { ChelzooAbout } from "../../components/chelzoo/ChelzooAbout/ChelzooAbout
 import { ChelzooTasks } from "../../components/chelzoo/ChelzooTasks/ChelzooTasks";
 import { ChelzooAccessibility } from "../../components/chelzoo/ChelzooAccessibility/ChelzooAccessibility";
 import { ChelzooPodcast } from "../../components/chelzoo/ChelzooPodcast/ChelzooPodcast";
+import { ChelzooDesign } from "../../components/chelzoo/ChelzooDesign/ChelzooDesign";
 
 export default function ComponentsPage({
   pageData,
@@ -271,6 +272,12 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_DESIGN) {
+    return (
+      <ChelzooDesign />
+    );
+  }
+
   return (
     <div className="components-page container-redesign">
       <h2 className="components-page__subtitle">
@@ -350,6 +357,9 @@ export default function ComponentsPage({
         <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_ACCESSIBILITY}>Chelzoo Accessibility</Link>
         </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_DESIGN}>Chelzoo Design</Link>
+        </li>
       </ul>
     </div>
   );
@@ -387,6 +397,7 @@ export async function getStaticProps({
         `chelzooTasks`,
         `chelzooAccessibility`,
         `chelzooPodcast`,
+        `chelzooDesign`,
       ])),
     },
   };
