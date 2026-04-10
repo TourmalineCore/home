@@ -127,8 +127,6 @@
   }
 
   &__link {
-    @include inter-font;
-    @include medium-font;
     @include chelzoo-body;
 
     display: block;
