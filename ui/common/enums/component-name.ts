@@ -21,4 +21,5 @@ export enum ComponentName {
   CHELZOO_HERO = `chelzoo-hero`,
   CHELZOO_ABOUT = `chelzoo-about`,
   CHELZOO_TASKS = `chelzoo-tasks`,
+  CHELZOO_DISCOVERY = `chelzoo-discovery`,
 }

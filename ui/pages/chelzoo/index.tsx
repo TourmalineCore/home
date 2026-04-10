@@ -9,6 +9,7 @@ import { LayoutRedesign } from '../../components/redesign/LayoutRedesign/LayoutR
 import { ChelzooHero } from '../../components/chelzoo/ChelzooHero/ChelzooHero';
 import { ChelzooAbout } from '../../components/chelzoo/ChelzooAbout/ChelzooAbout';
 import { ChelzooTasks } from '../../components/chelzoo/ChelzooTasks/ChelzooTasks';
+import { ChelzooDiscovery } from '../../components/chelzoo/ChelzooDiscovery/ChelzooDiscovery';
 
 export default function ChelzooPage({
   layoutData,
@@ -49,6 +50,7 @@ export default function ChelzooPage({
           <ChelzooHero />
           <ChelzooAbout />
           <ChelzooTasks />
+          <ChelzooDiscovery />
         </div>
       </LayoutRedesign>
     </>
@@ -108,5 +110,6 @@ async function getStaticTranslation({
     `chelzooHero`,
     `chelzooAbout`,
     `chelzooTasks`,
+    `chelzooDiscovery`,
   ]);
 }
