@@ -2,7 +2,7 @@
   position: relative;
   padding: 48px 0;
   color: $color-black;
-  background-color: #f6f5f5;
+  background-color: $color-off-white;
 
   &__wrapper {
     display: flex;
@@ -136,7 +136,7 @@
     margin-bottom: 24px;
     border-radius: 30px;
     padding: 4px 12px;
-    background-color: #ffacd4;
+    background-color: $color-pastel-pink;
 
     @include desktop-xl {
       margin-bottom: 32px;
