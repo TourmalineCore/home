@@ -1,0 +1,48 @@
+{
+  "sectionTitle": "Tech Stack",
+  "description": "We combined all our approaches and tested new tools in real-world scenarios. We focused on quality, not speed.",
+  "list": [
+    {
+      "title": "Automation and\u00A0Deployment",
+      "data": [
+        "Docker",
+        "Kubernetes",
+        "kind",
+        "helm",
+        "DevContainers"
+      ]
+    },
+    {
+      "title": "Frontend",
+      "data": [
+        "React",
+        "Next.js",
+        "TypeScript"
+      ]
+    },
+    {
+      "title": "Backend",
+      "data": [
+        "Strapi",
+        "PostgreSQL",
+        "S3",
+        "Swagger"
+      ]
+    },
+    {
+      "title": "Testing",
+      "data": [
+        "Playwright",
+        "axe-core",
+        "JMeter",
+        "Step CI"
+      ]
+    },
+    {
+      "title": "Approaches",
+      "data": [
+        "Test-Driven Development"
+      ]
+    }
+  ]
+}
