@@ -40,8 +40,6 @@
   }
 
   &__wrapper {
-    padding: 0 16px;
-
     @include tablet {
       padding: 0 32px;
     }
