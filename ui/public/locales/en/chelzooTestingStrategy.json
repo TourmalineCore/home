@@ -1,7 +1,7 @@
 {
   "title": "Testing Strategy",
   "description": "We use test-driven development to ensure the project's stability, so we carefully thought out the project's testing strategy in advance.",
-  "linkText": "Watch our presentation at UWDC 2025",
+  "linkText": "More details about our testing strategy at Heisenbug 2025",
   "list": [
     {
       "label": "e2e",
