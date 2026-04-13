@@ -41,9 +41,9 @@ export function ChelzooTestingStrategy() {
                 <span className="chelzoo-testing-strategy__label">
                   {label}
                 </span>
-                <h4 className="chelzoo-testing-strategy__subtitle">
+                <h3 className="chelzoo-testing-strategy__subtitle">
                   {title}
-                </h4>
+                </h3>
                 <p className="chelzoo-testing-strategy__text">
                   {text}
                 </p>
