@@ -35,7 +35,7 @@ export function ChelzooStack() {
               key={title}
               className="chelzoo-stack__item"
             >
-              <h4 className="chelzoo-stack__direction">{title}</h4>
+              <h3 className="chelzoo-stack__direction">{title}</h3>
               <ul className="chelzoo-stack__technologies">
                 {data.map((text) => (
                   <li
