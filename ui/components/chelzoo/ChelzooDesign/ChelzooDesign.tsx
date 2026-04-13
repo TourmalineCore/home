@@ -39,11 +39,11 @@ export function ChelzooDesign() {
     >
       <div className="container-cases chelzoo-design__wrapper">
         <ul className="chelzoo-design__cards grid">
-          <li className="chelzoo-design__item col-tablet-12">
+          <li className="chelzoo-design__item col-tablet-12 col-tablet-xl-4">
             <h2 className="chelzoo-design__title">{t(`title`)}</h2>
             <div className="chelzoo-design__description">{t(`description`)}</div>
           </li>
-          <li className="chelzoo-design__item col-tablet-6">
+          <li className="chelzoo-design__item col-tablet-6 col-tablet-xl-4">
             <div className="chelzoo-design__image-container">
               <Image
                 src={ConceptImage}
@@ -56,10 +56,10 @@ export function ChelzooDesign() {
           <DesignCard
             title={concept.title}
             description={concept.description}
-            className="chelzoo-design__item col-tablet-6"
+            className="chelzoo-design__item col-tablet-6 col-tablet-xl-4"
             theme="purple"
           />
-          <li className="chelzoo-design__item col-tablet-6">
+          <li className="chelzoo-design__item col-tablet-6 col-tablet-xl-4">
             <div className="chelzoo-design__image-container">
               <Image
                 src={IllustrationsImage}
@@ -72,10 +72,10 @@ export function ChelzooDesign() {
           <DesignCard
             title={illustration.title}
             description={illustration.description}
-            className="chelzoo-design__item col-tablet-6"
+            className="chelzoo-design__item col-tablet-6 col-tablet-xl-4"
             theme="pink"
           />
-          <li className="chelzoo-design__item col-tablet-6">
+          <li className="chelzoo-design__item col-tablet-6 col-tablet-xl-4">
             <div className="chelzoo-design__image-container">
               <Image
                 src={PhotosImage}
@@ -88,10 +88,10 @@ export function ChelzooDesign() {
           <DesignCard
             title={photos.title}
             description={photos.description}
-            className="chelzoo-design__item col-tablet-5"
+            className="chelzoo-design__item col-tablet-6 col-tablet-xl-4"
             theme="yellow"
           />
-          <li className="chelzoo-design__item col-tablet-5">
+          <li className="chelzoo-design__item col-tablet-6 col-tablet-xl-4">
             <div className="chelzoo-design__image-container">
               <Image
                 src={TypographyImage}
@@ -104,7 +104,7 @@ export function ChelzooDesign() {
           <DesignCard
             title={typography.title}
             description={typography.description}
-            className="chelzoo-design__item col-tablet-6"
+            className="chelzoo-design__item col-tablet-6 col-tablet-xl-4"
             theme="green"
           />
         </ul>
