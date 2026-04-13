@@ -25,6 +25,7 @@ export type CustomTestFixtures = {
       pageName: string;
       breakpoint: Breakpoint;
       breakpointName: BreakpointName;
+      disableRules?: string[];
     }) => void;
 };
 
@@ -41,7 +42,7 @@ export const test = base.extend<CustomTestFixtures>({
       // interrupting the connection for gif, for more stable work of tests
       await page.route(`**/**.gif`, (route) => route.abort());
 
-      await page.goto(`${process.env.FRONTEND_URL}/${path}`, {
+      await page.goto(`${path}`, {
         waitUntil: `networkidle`,
       });
     };
@@ -170,10 +171,12 @@ export const test = base.extend<CustomTestFixtures>({
       pageName,
       breakpoint,
       breakpointName,
+      disableRules,
     }: {
       pageName: string;
       breakpoint: Breakpoint;
       breakpointName: BreakpointName;
+      disableRules?: string[];
     }) => {
       await setViewportSize({
         width: breakpoint,
@@ -182,6 +185,7 @@ export const test = base.extend<CustomTestFixtures>({
       const results = await new AxeBuilder({
         page,
       })
+        .disableRules(disableRules || [])
         .analyze();
 
       const {
