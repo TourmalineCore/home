@@ -45,6 +45,7 @@ test.describe(`Analyzing chelzoo page for accessibility using axe core`, () => {
         breakpoint,
         breakpointName,
         // Chelzoo page has mobile-only scroll container because keyboard navigation not required
+        // This rule is not valid for our case
         disableRules: [`scrollable-region-focusable`],
       });
     });
