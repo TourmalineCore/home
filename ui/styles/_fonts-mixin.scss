@@ -252,6 +252,22 @@
   }
 }
 
+@mixin chelzoo-h3 {
+  @include medium-font;
+  @include inter-font;
+
+  font-size: 24px;
+  line-height: 1.2;
+
+  @include tablet-xl {
+    font-size: 28px;
+  }
+
+  @include desktop-xl {
+    font-size: 40px;
+  }
+}
+
 @mixin chelzoo-h4 {
   @include medium-font;
   @include inter-font;
