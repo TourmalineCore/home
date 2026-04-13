@@ -8,8 +8,12 @@ import { loadTranslations } from '../../common/utils';
 import { LayoutRedesign } from '../../components/redesign/LayoutRedesign/LayoutRedesign';
 import { ChelzooHero } from '../../components/chelzoo/ChelzooHero/ChelzooHero';
 import { ChelzooAbout } from '../../components/chelzoo/ChelzooAbout/ChelzooAbout';
+import { ChelzooStack } from '../../components/chelzoo/ChelzooStack/ChelzooStack';
 import { ChelzooTasks } from '../../components/chelzoo/ChelzooTasks/ChelzooTasks';
+import { ChelzooAccessibility } from '../../components/chelzoo/ChelzooAccessibility/ChelzooAccessibility';
+import { ChelzooPodcast } from '../../components/chelzoo/ChelzooPodcast/ChelzooPodcast';
 import { ChelzooDiscovery } from '../../components/chelzoo/ChelzooDiscovery/ChelzooDiscovery';
+import { ChelzooDesign } from '../../components/chelzoo/ChelzooDesign/ChelzooDesign';
 
 export default function ChelzooPage({
   layoutData,
@@ -50,7 +54,11 @@ export default function ChelzooPage({
           <ChelzooHero />
           <ChelzooAbout />
           <ChelzooTasks />
+          <ChelzooPodcast />
           <ChelzooDiscovery />
+          <ChelzooStack />
+          <ChelzooAccessibility />
+          <ChelzooDesign />
         </div>
       </LayoutRedesign>
     </>
@@ -109,7 +117,11 @@ async function getStaticTranslation({
     `formBlockRedesign`,
     `chelzooHero`,
     `chelzooAbout`,
+    `chelzooStack`,
     `chelzooTasks`,
+    `chelzooAccessibility`,
+    `chelzooPodcast`,
     `chelzooDiscovery`,
+    `chelzooDesign`,
   ]);
 }

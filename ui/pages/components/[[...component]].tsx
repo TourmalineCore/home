@@ -20,8 +20,12 @@ import { ThreeColumnGrid } from "../../components/ThreeColumnGrid/ThreeColumnGri
 import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLink";
 import { ChelzooHero } from "../../components/chelzoo/ChelzooHero/ChelzooHero";
 import { ChelzooAbout } from "../../components/chelzoo/ChelzooAbout/ChelzooAbout";
+import { ChelzooStack } from "../../components/chelzoo/ChelzooStack/ChelzooStack";
 import { ChelzooTasks } from "../../components/chelzoo/ChelzooTasks/ChelzooTasks";
+import { ChelzooAccessibility } from "../../components/chelzoo/ChelzooAccessibility/ChelzooAccessibility";
+import { ChelzooPodcast } from "../../components/chelzoo/ChelzooPodcast/ChelzooPodcast";
 import { ChelzooDiscovery } from "../../components/chelzoo/ChelzooDiscovery/ChelzooDiscovery";
+import { ChelzooDesign } from "../../components/chelzoo/ChelzooDesign/ChelzooDesign";
 
 export default function ComponentsPage({
   pageData,
@@ -252,15 +256,39 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_STACK) {
+    return (
+      <ChelzooStack />
+    );
+  }
+
   if (componentName === ComponentName.CHELZOO_TASKS) {
     return (
       <ChelzooTasks />
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_ACCESSIBILITY) {
+    return (
+      <ChelzooAccessibility />
+    );
+  }
+
+  if (componentName === ComponentName.CHELZOO_PODCAST) {
+    return (
+      <ChelzooPodcast isComponentPage />
+    );
+  }
+
   if (componentName === ComponentName.CHELZOO_DISCOVERY) {
     return (
       <ChelzooDiscovery />
+    );
+  }
+
+  if (componentName === ComponentName.CHELZOO_DESIGN) {
+    return (
+      <ChelzooDesign />
     );
   }
 
@@ -338,7 +366,16 @@ export default function ComponentsPage({
           <Link href={ComponentName.CHELZOO_TASKS}>Chelzoo Tasks</Link>
         </li>
         <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_PODCAST}>Chelzoo Podcast</Link>
+        </li>
+        <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_DISCOVERY}>Chelzoo Discovery</Link>
+        </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_ACCESSIBILITY}>Chelzoo Accessibility</Link>
+        </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_DESIGN}>Chelzoo Design</Link>
         </li>
       </ul>
     </div>
@@ -374,8 +411,12 @@ export async function getStaticProps({
         `formBlockRedesign`,
         `chelzooHero`,
         `chelzooAbout`,
+        `chelzooStack`,
         `chelzooTasks`,
+        `chelzooAccessibility`,
+        `chelzooPodcast`,
         `chelzooDiscovery`,
+        `chelzooDesign`,
       ])),
     },
   };
