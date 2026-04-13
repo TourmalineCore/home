@@ -1,8 +1,47 @@
 .chelzoo-testing-strategy {
   position: relative;
+  padding: 48px 0;
+  color: $color-black;
+  background-color: #f6f5f5;
 
   &__wrapper {
     display: flex;
     flex-direction: column;
+    padding: 0 16px;
+  }
+
+  &__title {
+    @include chelzoo-h2;
+
+    margin-bottom: 12px;
+  }
+
+  &__description {
+    @include chelzoo-body;
+
+    margin-bottom: 32px;
+  }
+
+  &__item {
+    border-radius: 24px;
+    padding: 20px;
+    background-color: $color-white;
+  }
+
+  &__label {
+    margin-bottom: 24px;
+    padding: 4px 12px;
+    color: $color-white;
+    background-color: #ffacd4;
+  }
+
+  &__subtitle {
+    @include chelzoo-h4;
+
+    margin-bottom: 8px;
+  }
+
+  &__text {
+    @include chelzoo-body;
   }
 }
