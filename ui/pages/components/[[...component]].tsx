@@ -21,6 +21,9 @@ import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLin
 import { ChelzooHero } from "../../components/chelzoo/ChelzooHero/ChelzooHero";
 import { ChelzooAbout } from "../../components/chelzoo/ChelzooAbout/ChelzooAbout";
 import { ChelzooStack } from "../../components/chelzoo/ChelzooStack/ChelzooStack";
+import { ChelzooTasks } from "../../components/chelzoo/ChelzooTasks/ChelzooTasks";
+import { ChelzooAccessibility } from "../../components/chelzoo/ChelzooAccessibility/ChelzooAccessibility";
+import { ChelzooPodcast } from "../../components/chelzoo/ChelzooPodcast/ChelzooPodcast";
 
 export default function ComponentsPage({
   pageData,
@@ -257,6 +260,24 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_TASKS) {
+    return (
+      <ChelzooTasks />
+    );
+  }
+
+  if (componentName === ComponentName.CHELZOO_ACCESSIBILITY) {
+    return (
+      <ChelzooAccessibility />
+    );
+  }
+
+  if (componentName === ComponentName.CHELZOO_PODCAST) {
+    return (
+      <ChelzooPodcast isComponentPage />
+    );
+  }
+
   return (
     <div className="components-page container-redesign">
       <h2 className="components-page__subtitle">
@@ -327,6 +348,15 @@ export default function ComponentsPage({
         <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_ABOUT}>Chelzoo About</Link>
         </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_TASKS}>Chelzoo Tasks</Link>
+        </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_PODCAST}>Chelzoo Podcast</Link>
+        </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_ACCESSIBILITY}>Chelzoo Accessibility</Link>
+        </li>
       </ul>
     </div>
   );
@@ -362,6 +392,9 @@ export async function getStaticProps({
         `chelzooHero`,
         `chelzooAbout`,
         `chelzooStack`,
+        `chelzooTasks`,
+        `chelzooAccessibility`,
+        `chelzooPodcast`,
       ])),
     },
   };

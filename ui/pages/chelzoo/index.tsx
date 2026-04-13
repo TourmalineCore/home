@@ -9,6 +9,9 @@ import { LayoutRedesign } from '../../components/redesign/LayoutRedesign/LayoutR
 import { ChelzooHero } from '../../components/chelzoo/ChelzooHero/ChelzooHero';
 import { ChelzooAbout } from '../../components/chelzoo/ChelzooAbout/ChelzooAbout';
 import { ChelzooStack } from '../../components/chelzoo/ChelzooStack/ChelzooStack';
+import { ChelzooTasks } from '../../components/chelzoo/ChelzooTasks/ChelzooTasks';
+import { ChelzooAccessibility } from '../../components/chelzoo/ChelzooAccessibility/ChelzooAccessibility';
+import { ChelzooPodcast } from '../../components/chelzoo/ChelzooPodcast/ChelzooPodcast';
 
 export default function ChelzooPage({
   layoutData,
@@ -49,6 +52,9 @@ export default function ChelzooPage({
           <ChelzooHero />
           <ChelzooAbout />
           <ChelzooStack />
+          <ChelzooPodcast />
+          <ChelzooTasks />
+          <ChelzooAccessibility />
         </div>
       </LayoutRedesign>
     </>
@@ -108,5 +114,8 @@ async function getStaticTranslation({
     `chelzooHero`,
     `chelzooAbout`,
     `chelzooStack`,
+    `chelzooTasks`,
+    `chelzooAccessibility`,
+    `chelzooPodcast`,
   ]);
 }
