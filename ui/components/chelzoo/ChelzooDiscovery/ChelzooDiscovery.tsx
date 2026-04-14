@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useTranslation } from "next-i18next";
 
 import { useRouter } from "next/router";
+import clsx from "clsx";
 import MobileImg1 from "../../../public/images/img_impact-map.jpg";
 import MobileImg2 from "../../../public/images/img_cjm.jpg";
 import MobileImg3 from "../../../public/images/img_usm.jpg";
@@ -31,24 +32,28 @@ export function ChelzooDiscovery() {
       mobileImg: MobileImg1,
       desktopImg: locale === `ru` ? DesktopImg1 : EngDesktopImg1,
       label: `Impact map`,
+      className: `impact-map`,
     },
     {
       id: 2,
       mobileImg: MobileImg2,
       desktopImg: DesktopImg2,
       label: `Customer Journey Mapping`,
+      className: `cjm`,
     },
     {
       id: 3,
       mobileImg: MobileImg3,
       desktopImg: locale === `ru` ? DesktopImg3 : EngDesktopImg3,
       label: `User Story Mapping`,
+      className: `usm`,
     },
     {
       id: 4,
       mobileImg: locale === `ru` ? MobileImg4 : EngMobileImg4,
       desktopImg: locale === `ru` ? DesktopImg4 : EngDesktopImg4,
       label: t(`label`),
+      className: `concepts`,
     },
   ];
 
@@ -63,9 +68,13 @@ export function ChelzooDiscovery() {
           {CARDS.map((card) => (
             <div
               key={card.id}
-              className="chelzoo-discovery__card"
+              className={clsx(`chelzoo-discovery__card`, `chelzoo-discovery__card--${card.className}`)}
             >
-              <div className="chelzoo-discovery__image chelzoo-discovery__image--mobile">
+              <div className={clsx(
+                `chelzoo-discovery__image chelzoo-discovery__image--mobile`,
+                `chelzoo-discovery__image--${card.className}`,
+              )}
+              >
                 <Image
                   src={card.mobileImg}
                   fill
@@ -73,9 +82,18 @@ export function ChelzooDiscovery() {
                   placeholder="blur"
                 />
               </div>
-              <span className="chelzoo-discovery__label">{card.label}</span>
-              <p className="chelzoo-discovery__text">{t(`cards.${card.id}`)}</p>
-              <div className="chelzoo-discovery__image chelzoo-discovery__image--desktop">
+              <span className={clsx(`chelzoo-discovery__label`, `chelzoo-discovery__label--${card.className}`)}>
+                {card.label}
+              </span>
+              <p className={clsx(`chelzoo-discovery__text`, `chelzoo-discovery__text--${card.className}`)}>
+                {t(`cards.${card.id}`)}
+              </p>
+              <div className={clsx(
+                `chelzoo-discovery__image--${card.className}`,
+                `chelzoo-discovery__image chelzoo-discovery__image--desktop`
+                ,
+              )}
+              >
                 <Image
                   src={card.desktopImg}
                   fill
