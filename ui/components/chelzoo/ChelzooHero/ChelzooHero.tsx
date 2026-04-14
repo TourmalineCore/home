@@ -18,7 +18,7 @@ export function ChelzooHero({
 
   return (
     <section
-      className="chelzoo-hero test-class"
+      className="chelzoo-hero"
       data-testid="chelzoo-hero"
     >
       <div className="chelzoo-hero__decor chelzoo-hero__decor--left" />
