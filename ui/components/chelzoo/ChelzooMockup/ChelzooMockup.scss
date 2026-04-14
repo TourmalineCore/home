@@ -11,7 +11,7 @@
       aspect-ratio: 4 / 5;
     }
 
-    @media desktop-xxl {
+    @include desktop-xxl {
       height: 3953px;
     }
   }
@@ -28,7 +28,7 @@
       border-radius: 112px;
     }
 
-    @media desktop-xxl {
+    @include desktop-xxl {
       object-position: top;
     }
   }

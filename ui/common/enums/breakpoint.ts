@@ -4,6 +4,7 @@ export enum Breakpoint {
   TABLET_XL = 1024,
   DESKTOP = 1366,
   DESKTOP_XL = 1920,
+  DESKTOP_XXL = 3920,
 }
 
 export enum BreakpointName {
@@ -12,4 +13,5 @@ export enum BreakpointName {
   TABLET_XL = `tablet-xl`,
   DESKTOP = `desktop`,
   DESKTOP_XL = `desktop-xl`,
+  DESKTOP_XXL = `desktop-xxl`,
 }
