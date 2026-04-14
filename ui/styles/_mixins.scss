@@ -45,3 +45,14 @@
     }
   }
 }
+
+@mixin chelzoo-link {
+  @include chelzoo-body;
+
+  display: block;
+  text-decoration: underline;
+  text-decoration-color: $color-black;
+  color: $color-black;
+  cursor: pointer;
+  text-underline-offset: 3px;
+}

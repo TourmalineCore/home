@@ -35,6 +35,8 @@ export function ChelzooPodcast({
           <a
             className="chelzoo-podcast__link"
             href={t(`link`)}
+            target="_blank"
+            rel="noreferrer"
           >
             {t(`linkText`)}
             {` `}

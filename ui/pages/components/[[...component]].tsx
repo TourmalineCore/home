@@ -26,6 +26,7 @@ import { ChelzooAccessibility } from "../../components/chelzoo/ChelzooAccessibil
 import { ChelzooPodcast } from "../../components/chelzoo/ChelzooPodcast/ChelzooPodcast";
 import { ChelzooDesign } from "../../components/chelzoo/ChelzooDesign/ChelzooDesign";
 import { ChelzooMockup } from "../../components/chelzoo/ChelzooMockup/ChelzooMockup";
+import { ChelzooTestingStrategy } from "../../components/chelzoo/ChelzooTestingStrategy/ChelzooTestingStrategy";
 
 export default function ComponentsPage({
   pageData,
@@ -292,6 +293,12 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_TESTING_STRATEGY) {
+    return (
+      <ChelzooTestingStrategy />
+    );
+  }
+
   return (
     <div className="components-page container-redesign">
       <h2 className="components-page__subtitle">
@@ -377,6 +384,9 @@ export default function ComponentsPage({
         <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_MOCKUP}>Chelzoo Mockup</Link>
         </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_TESTING_STRATEGY}>Chelzoo Testing Strategy</Link>
+        </li>
       </ul>
     </div>
   );
@@ -417,6 +427,7 @@ export async function getStaticProps({
         `chelzooPodcast`,
         `chelzooDesign`,
         `chelzooMockup`,
+        `chelzooTestingStrategy`,
       ])),
     },
   };
