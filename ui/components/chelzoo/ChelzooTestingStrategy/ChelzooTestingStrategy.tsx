@@ -54,6 +54,8 @@ export function ChelzooTestingStrategy() {
         <a
           className="chelzoo-testing-strategy__link"
           href="https://heisenbug.ru/archive/2025%20Spring/talks/2f023c42771843ff8efb2e9aeb9aa1e5/"
+          target="_blank"
+          rel="noreferrer"
         >
           {t(`linkText`)}
           {` `}
