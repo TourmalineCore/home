@@ -1,0 +1,56 @@
+.design-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 24px;
+  padding: 24px;
+  min-height: 215px;
+  color: $color-black;
+
+  &__title {
+    @include chelzoo-h3;
+  }
+
+  &__description {
+    @include chelzoo-body;
+  }
+
+  @include tablet {
+    min-height: 240px;
+  }
+
+  @include tablet-xl {
+    border-radius: 48px;
+    padding: 32px;
+    min-height: 380px;
+  }
+
+  @include desktop {
+    min-height: 320px;
+  }
+
+  @include desktop-xl {
+    padding: 44px;
+    min-height: 460px;
+  }
+
+  &--purple {
+    color: $color-dark-purple;
+    background-color: $color-light-purple;
+  }
+
+  &--pink {
+    color: $color-dark-pink;
+    background-color: $color-light-pink;
+  }
+
+  &--yellow {
+    color: $color-dark-yellow;
+    background-color: $color-light-yellow;
+  }
+
+  &--green {
+    color: $color-dark-green;
+    background-color: $color-light-green;
+  }
+}

@@ -1,5 +1,6 @@
 import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import IconDownArrow from '../../../icons/icon-arrow-chelzoo.svg';
 
 export function ChelzooHero({
@@ -10,6 +11,10 @@ export function ChelzooHero({
   const {
     t,
   } = useTranslation(`chelzooHero`);
+
+  const {
+    locale,
+  } = useRouter();
 
   return (
     <section
@@ -29,9 +34,9 @@ export function ChelzooHero({
           <span className="chelzoo-hero__label">
             {t(`yearLabel`)}
           </span>
-          <h3 className="chelzoo-hero__subtitle">
+          <h2 className="chelzoo-hero__subtitle">
             {t(`subtitle`)}
-          </h3>
+          </h2>
           <p className="chelzoo-hero__description">
             {t(`description`)}
           </p>
@@ -39,6 +44,7 @@ export function ChelzooHero({
       </div>
       <button
         type="button"
+        aria-label={locale === `ru` ? `Перейти к следующей секции` : `Go to the next section`}
         onClick={() => {
           const element = document.getElementById(`chelzoo-about`);
           if (element) {

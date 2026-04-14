@@ -98,10 +98,6 @@ export async function getServerSideProps({
       `formBlockRedesign`,
       `headerRedesign`,
       `footerRedesign`,
-      `chelzooHero`,
-      `chelzooTasks`,
-      `chelzooPodcast`,
-      `chelzooTestingStrategy`,
     ]);
 
     const mapStaticBlocksWithId = (blocks: Block[]) => blocks.map((block) => ({

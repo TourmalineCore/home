@@ -20,9 +20,11 @@ import { ThreeColumnGrid } from "../../components/ThreeColumnGrid/ThreeColumnGri
 import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLink";
 import { ChelzooHero } from "../../components/chelzoo/ChelzooHero/ChelzooHero";
 import { ChelzooAbout } from "../../components/chelzoo/ChelzooAbout/ChelzooAbout";
+import { ChelzooStack } from "../../components/chelzoo/ChelzooStack/ChelzooStack";
 import { ChelzooTasks } from "../../components/chelzoo/ChelzooTasks/ChelzooTasks";
 import { ChelzooAccessibility } from "../../components/chelzoo/ChelzooAccessibility/ChelzooAccessibility";
 import { ChelzooPodcast } from "../../components/chelzoo/ChelzooPodcast/ChelzooPodcast";
+import { ChelzooDesign } from "../../components/chelzoo/ChelzooDesign/ChelzooDesign";
 import { ChelzooTestingStrategy } from "../../components/chelzoo/ChelzooTestingStrategy/ChelzooTestingStrategy";
 
 export default function ComponentsPage({
@@ -254,6 +256,12 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_STACK) {
+    return (
+      <ChelzooStack />
+    );
+  }
+
   if (componentName === ComponentName.CHELZOO_TASKS) {
     return (
       <ChelzooTasks />
@@ -269,6 +277,12 @@ export default function ComponentsPage({
   if (componentName === ComponentName.CHELZOO_PODCAST) {
     return (
       <ChelzooPodcast isComponentPage />
+    );
+  }
+
+  if (componentName === ComponentName.CHELZOO_DESIGN) {
+    return (
+      <ChelzooDesign />
     );
   }
 
@@ -358,6 +372,9 @@ export default function ComponentsPage({
           <Link href={ComponentName.CHELZOO_ACCESSIBILITY}>Chelzoo Accessibility</Link>
         </li>
         <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_DESIGN}>Chelzoo Design</Link>
+        </li>
+		<li className="components-page__item">
           <Link href={ComponentName.CHELZOO_TESTING_STRATEGY}>Chelzoo Testing Strategy</Link>
         </li>
       </ul>
@@ -394,9 +411,11 @@ export async function getStaticProps({
         `formBlockRedesign`,
         `chelzooHero`,
         `chelzooAbout`,
+        `chelzooStack`,
         `chelzooTasks`,
         `chelzooAccessibility`,
         `chelzooPodcast`,
+        `chelzooDesign`,
         `chelzooTestingStrategy`,
       ])),
     },
