@@ -97,6 +97,11 @@
     }
   }
 
+  video,
+  img {
+    width: 100%;
+  }
+
   @include tablet-xl {
     padding: 64px 0 116px;
   }

@@ -1,6 +1,11 @@
 import { useTranslation } from "next-i18next";
+import Image from 'next/image';
 
-export function ChelzooCMS() {
+export function ChelzooCMS({
+  isComponentPage,
+}:{
+  isComponentPage?: boolean;
+}) {
   const {
     t,
   } = useTranslation(`chelzooCMS`);
@@ -18,7 +23,32 @@ export function ChelzooCMS() {
         <p className="chelzoo-cms__description">
           {t(`description`)}
         </p>
+        <div className="chelzoo-podcast__media">
+          {renderMedia()}
+        </div>
       </div>
     </section>
   );
+
+  function renderMedia() {
+    if (isComponentPage) {
+      return (
+        <Image
+          src="/images/hero-slider-image-6.png"
+          alt=""
+          fill
+        />
+      );
+    }
+
+    return (
+      <video
+        src="/video/chelzoo-cms-video.mp4"
+        playsInline
+        loop
+        muted
+        autoPlay
+      />
+    );
+  }
 }

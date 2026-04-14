@@ -295,7 +295,7 @@ export default function ComponentsPage({
 
   if (componentName === ComponentName.CHELZOO_CMS) {
     return (
-      <ChelzooCMS />
+      <ChelzooCMS isComponentPage />
     );
   }
 
