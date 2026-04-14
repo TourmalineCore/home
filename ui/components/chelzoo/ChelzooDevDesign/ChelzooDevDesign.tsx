@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import { useTranslation } from "next-i18next";
+import { useRouter } from 'next/router';
 import { useDeviceSize } from "../../../common/hooks";
-import TaskImage from "../../../public/images/img-chelzoo-dev-design.jpg";
+import DevDesignImage from "../../../public/images/chelzoo-dev-design.jpg";
+import DevDesignImageEng from "../../../public/images/chelzoo-dev-design-eng.jpg";
 
 export function ChelzooDevDesign() {
   const {
@@ -11,6 +13,10 @@ export function ChelzooDevDesign() {
   const {
     isMobile,
   } = useDeviceSize();
+
+  const {
+    locale,
+  } = useRouter();
 
   return (
     <section
@@ -33,7 +39,7 @@ export function ChelzooDevDesign() {
         <div className="chelzoo-dev-design__image-wrapper">
           <Image
             className="chelzoo-dev-design__image"
-            src={TaskImage}
+            src={locale === `ru` ? DevDesignImage : DevDesignImageEng}
             alt=""
             fill
             placeholder="blur"
