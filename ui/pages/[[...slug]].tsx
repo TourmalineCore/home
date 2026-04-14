@@ -101,7 +101,6 @@ export async function getServerSideProps({
       `chelzooHero`,
       `chelzooTasks`,
       `chelzooPodcast`,
-      `chelzooDiscovery`,
     ]);
 
     const mapStaticBlocksWithId = (blocks: Block[]) => blocks.map((block) => ({
