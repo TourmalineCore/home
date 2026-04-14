@@ -1,6 +1,6 @@
 import { useTranslation } from 'next-i18next';
 
-type TestingStrategyList = {
+type TestingTypes = {
   label: string;
   title: string;
   text: string;
@@ -11,7 +11,7 @@ export function ChelzooTestingStrategy() {
     t,
   } = useTranslation(`chelzooTestingStrategy`);
 
-  const testingStrategyList: TestingStrategyList = t(`list`, {
+  const testingTypes: TestingTypes = t(`testingTypes`, {
     returnObjects: true,
   });
 
@@ -28,7 +28,7 @@ export function ChelzooTestingStrategy() {
           {t(`description`)}
         </p>
         <ul className="chelzoo-testing-strategy__list">
-          {testingStrategyList.map(({
+          {testingTypes.map(({
             label,
             title,
             text,
