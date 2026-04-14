@@ -26,6 +26,7 @@ import { ChelzooAccessibility } from "../../components/chelzoo/ChelzooAccessibil
 import { ChelzooPodcast } from "../../components/chelzoo/ChelzooPodcast/ChelzooPodcast";
 import { ChelzooDesign } from "../../components/chelzoo/ChelzooDesign/ChelzooDesign";
 import { ChelzooTestingStrategy } from "../../components/chelzoo/ChelzooTestingStrategy/ChelzooTestingStrategy";
+import { ChelzooCMS } from "../../components/chelzoo/ChelzooCMS/ChelzooCMS";
 
 export default function ComponentsPage({
   pageData,
@@ -292,6 +293,12 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_CMS) {
+    return (
+      <ChelzooCMS />
+    );
+  }
+
   return (
     <div className="components-page container-redesign">
       <h2 className="components-page__subtitle">
@@ -344,7 +351,6 @@ export default function ComponentsPage({
           <Link href={ComponentName.SUBMITTED_FORM_BLOCK}>Submitted form</Link>
         </li>
         <li className="components-page__item">
-
           <Link href={ComponentName.NOT_FOUND}>Not found</Link>
         </li>
         <li className="components-page__item">
@@ -376,6 +382,9 @@ export default function ComponentsPage({
         </li>
         <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_TESTING_STRATEGY}>Chelzoo Testing Strategy</Link>
+        </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_CMS}>Chelzoo CMS</Link>
         </li>
       </ul>
     </div>
@@ -417,6 +426,7 @@ export async function getStaticProps({
         `chelzooPodcast`,
         `chelzooDesign`,
         `chelzooTestingStrategy`,
+        `chelzooCMS`,
       ])),
     },
   };
