@@ -42,6 +42,8 @@ export function ChelzooDevDesign() {
         <a
           className="chelzoo-dev-design__link"
           href={t(`link`)}
+          target="_blank"
+          rel="noreferrer"
         >
           {t(`linkText`)}
           {` `}
