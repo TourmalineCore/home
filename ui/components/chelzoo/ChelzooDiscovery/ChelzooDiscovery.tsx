@@ -7,15 +7,15 @@ import MobileImg1 from "../../../public/images/img_impact-map.jpg";
 import MobileImg2 from "../../../public/images/img_cjm.jpg";
 import MobileImg3 from "../../../public/images/img_usm.jpg";
 import MobileImg4 from "../../../public/images/img_concept.jpg";
-import EngMobileImg4 from "../../../public/images/img_concept-eng.jpg";
+import MobileImg4Eng from "../../../public/images/img_concept-eng.jpg";
 
 import DesktopImg1 from "../../../public/images/img-full-impact-map.png";
-import EngDesktopImg1 from "../../../public/images/img-impact-map-eng.jpg";
+import DesktopImg1Eng from "../../../public/images/img-impact-map-eng.jpg";
 import DesktopImg2 from "../../../public/images/img-full-cjm.png";
 import DesktopImg3 from "../../../public/images/img-full-usm.png";
-import EngDesktopImg3 from "../../../public/images/img-usm-eng.png";
+import DesktopImg3Eng from "../../../public/images/img-usm-eng.png";
 import DesktopImg4 from "../../../public/images/img-full-concept.png";
-import EngDesktopImg4 from "../../../public/images/img-concept-eng.jpg";
+import DesktopImg4Eng from "../../../public/images/img-concept-eng.jpg";
 
 export function ChelzooDiscovery() {
   const {
@@ -30,7 +30,7 @@ export function ChelzooDiscovery() {
     {
       id: 1,
       mobileImg: MobileImg1,
-      desktopImg: locale === `ru` ? DesktopImg1 : EngDesktopImg1,
+      desktopImg: locale === `ru` ? DesktopImg1 : DesktopImg1Eng,
       label: `Impact map`,
       className: `impact-map`,
     },
@@ -44,14 +44,14 @@ export function ChelzooDiscovery() {
     {
       id: 3,
       mobileImg: MobileImg3,
-      desktopImg: locale === `ru` ? DesktopImg3 : EngDesktopImg3,
+      desktopImg: locale === `ru` ? DesktopImg3 : DesktopImg3Eng,
       label: `User Story Mapping`,
       className: `usm`,
     },
     {
       id: 4,
-      mobileImg: locale === `ru` ? MobileImg4 : EngMobileImg4,
-      desktopImg: locale === `ru` ? DesktopImg4 : EngDesktopImg4,
+      mobileImg: locale === `ru` ? MobileImg4 : MobileImg4Eng,
+      desktopImg: locale === `ru` ? DesktopImg4 : DesktopImg4Eng,
       label: t(`label`),
       className: `concepts`,
     },
