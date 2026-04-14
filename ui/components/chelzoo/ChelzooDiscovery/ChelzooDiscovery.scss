@@ -80,13 +80,19 @@
   &__list {
     display: flex;
     overflow-x: auto;
+    margin: 0 -16px;
     gap: 12px;
     scrollbar-width: none;
+
+    @include tablet {
+      margin: 0 -32px;
+    }
 
     @include tablet-xl {
       position: relative;
       display: block;
       overflow-x: unset;
+      margin: 0;
       height: 2260px;
     }
 
@@ -101,6 +107,30 @@
 
   &__card {
     min-width: 240px;
+
+    &:first-child {
+      margin-left: 16px;
+
+      @include tablet {
+        margin-left: 32px;
+      }
+
+      @include tablet-xl {
+        margin-left: 0;
+      }
+    }
+
+    &:last-child {
+      margin-right: 16px;
+
+      @include tablet {
+        margin-right: 32px;
+      }
+
+      @include tablet-xl {
+        margin-right: 0;
+      }
+    }
 
     @include tablet {
       min-width: 288px;

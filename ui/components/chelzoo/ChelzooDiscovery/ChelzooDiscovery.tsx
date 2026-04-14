@@ -64,9 +64,9 @@ export function ChelzooDiscovery() {
     >
       <div className="chelzoo-discovery__wrapper">
         <h2 className="chelzoo-discovery__title">{t(`title`)}</h2>
-        <div className="chelzoo-discovery__list">
+        <ul className="chelzoo-discovery__list">
           {CARDS.map((card) => (
-            <div
+            <li
               key={card.id}
               className={clsx(`chelzoo-discovery__card`, `chelzoo-discovery__card--${card.className}`)}
             >
@@ -101,9 +101,9 @@ export function ChelzooDiscovery() {
                   placeholder="blur"
                 />
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
