@@ -10,6 +10,10 @@
     @include desktop-xl {
       aspect-ratio: 4 / 5;
     }
+
+    @media desktop-xxl {
+      height: 3953px;
+    }
   }
 
   &__image {
@@ -22,6 +26,10 @@
 
     @include desktop-xl {
       border-radius: 112px;
+    }
+
+    @media desktop-xxl {
+      object-position: top;
     }
   }
 }

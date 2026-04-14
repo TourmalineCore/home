@@ -3,6 +3,7 @@ $tablet-width: 768px;
 $tablet-xl-width: 1024px;
 $desktop-width: 1366px;
 $desktop-xl-width: 1920px;
+$desktop-xxl-width: 3920px; // clarify with designer
 
 @mixin mobile-xl {
   @media (min-width: #{$mobile-width}) {
@@ -30,6 +31,12 @@ $desktop-xl-width: 1920px;
 
 @mixin desktop-xl {
   @media (min-width: #{$desktop-xl-width}) {
+    @content;
+  }
+}
+
+@mixin desktop-xxl {
+  @media (min-width: #{$desktop-xxl-width}) {
     @content;
   }
 }
