@@ -118,6 +118,14 @@
     @include tablet-xl {
       max-width: 34%;
     }
+
+    @include desktop {
+      max-width: 25%;
+    }
+
+    @include desktop-xl {
+      max-width: 27%;
+    }
   }
 
   @include tablet-xl {
