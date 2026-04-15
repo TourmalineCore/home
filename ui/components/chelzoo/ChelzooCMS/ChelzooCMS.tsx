@@ -19,7 +19,6 @@ export function ChelzooCMS({
         <h1 className="chelzoo-cms__title">
           {t(`title`)}
         </h1>
-        {` `}
         <p className="chelzoo-cms__description">
           {t(`description`)}
         </p>
