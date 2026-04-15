@@ -20,7 +20,6 @@ export function ChelzooSeo({
       className="chelzoo-seo"
       data-testid="chelzoo-seo"
     >
-
       <div className="container-cases chelzoo-seo__wrapper">
         <h2 className="chelzoo-seo__title">{t(`title`)}</h2>
         <div className="chelzoo-seo__description">{t(`description`)}</div>
