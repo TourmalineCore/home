@@ -1,0 +1,26 @@
+.chelzoo-adaptation {
+  background-color: $color-dark-green;
+
+  &__wrapper {
+    padding: 64px 16px;
+
+    @include tablet {
+      padding: 64px 32px;
+    }
+
+    @include tablet-xl {
+      padding: 116px 64px 200px;
+    }
+
+    @include desktop-xl {
+      padding: 164px 88px 280px;
+    }
+  }
+
+  &__title {
+    @include chelzoo-h2;
+
+    text-align: center;
+    color: $color-white;
+  }
+}
