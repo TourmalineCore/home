@@ -4,6 +4,9 @@
   background-color: $color-off-white;
 
   &__wrapper {
+    display: flex;
+    flex-direction: column;
+
     @include tablet {
       padding: 0 32px;
     }
@@ -18,11 +21,19 @@
   }
 
   &__content {
-    padding: 20px;
+    padding: 16px;
+
+    @include tablet-xl {
+      padding: 24px;
+    }
+
+    @include desktop-xl {
+      padding: 32px;
+    }
   }
 
   &__list {
-    margin-bottom: 12px;
+    margin-bottom: 24px;
 
     @include tablet {
       display: flex;
@@ -32,35 +43,67 @@
     }
 
     @include tablet-xl {
-      margin-bottom: 20px;
-      gap: 20px;
-    }
-
-    @include desktop {
-      margin-bottom: 16px;
+      margin-bottom: 24px;
+      gap: 24px;
     }
 
     @include desktop-xl {
-      margin-bottom: 20px;
-      gap: 28px;
+      margin-bottom: 32px;
+      gap: 32px;
     }
+  }
+
+  &__step {
+    @include chelzoo-body;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    color: $color-white;
+    background-color: $color-pastel-pink;
+
+    @include desktop {
+      width: 32px;
+      height: 32px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 32px;
+      width: 44px;
+      height: 44px;
+    }
+  }
+
+  &__subtitle {
+    @include chelzoo-h4;
+
+    margin-bottom: 8px;
+
+    @include desktop-xl {
+      margin-bottom: 12px;
+    }
+  }
+
+  &__text {
+    @include chelzoo-body;
   }
 
   &__title {
     @include chelzoo-h2;
 
-    margin-bottom: 12px;
+    margin-bottom: 32px;
 
-    @include tablet {
+    @include tablet-xl {
+      margin-bottom: 64px;
       text-align: center;
     }
 
-    @include tablet-xl {
-      margin-bottom: 20px;
-    }
-
     @include desktop-xl {
-      margin-bottom: 28px;
+      margin-bottom: 88px;
     }
   }
 
@@ -77,32 +120,126 @@
     }
 
     @include tablet {
-      width: 33%;
-      max-width: 224px;
+      width: 33.3%;
+      max-width: 226px;
     }
 
     @include tablet-xl {
-      max-width: 280px;
+      max-width: 282px;
     }
 
     @include desktop {
-      max-width: 330px;
+      max-width: 396px;
     }
 
     @include desktop-xl {
-      max-width: 468px;
+      border-radius: 32px;
+      max-width: 560px;
     }
   }
 
-  &__text {
-    @include chelzoo-body;
+  &__arrows {
+    position: relative;
+    align-self: center;
+
+    @include tablet {
+      width: 100%;
+      max-width: 704px;
+    }
+
+    @include tablet-xl {
+      max-width: 896px;
+    }
+
+    @include desktop {
+      max-width: 1238px;
+    }
+
+    @include desktop-xl {
+      max-width: 1744px;
+    }
+  }
+
+  &__arrow {
+    &--left,
+    &--right {
+      display: none;
+
+      @include tablet {
+        position: absolute;
+        top: 24px;
+        display: block;
+      }
+
+      @include tablet-xl {
+        top: 50px;
+      }
+
+      @include desktop {
+        top: 12px;
+      }
+    }
+
+    &--center {
+      @include tablet {
+        margin: 0 auto;
+      }
+    }
+
+    &--left {
+      @include tablet {
+        left: 20px;
+      }
+
+      @include tablet-xl {
+        left: 36px;
+      }
+
+      @include desktop {
+        left: 216px;
+      }
+    }
+
+    &--right {
+      @include tablet {
+        right: 20px;
+      }
+
+      @include tablet-xl {
+        right: 36px;
+      }
+
+      @include desktop {
+        right: 216px;
+      }
+    }
+  }
+
+  &__result {
+    @include chelzoo-h2;
+
+    margin-top: 24px;
+    text-align: center;
+
+    @include tablet {
+      align-self: center;
+      max-width: 280px;
+    }
+
+    @include tablet-xl {
+      max-width: 396px;
+    }
+
+    @include desktop-xl {
+      max-width: 558px;
+    }
   }
 
   @include tablet-xl {
-    padding: 64px 0;
+    padding: 116px 0;
   }
 
   @include desktop-xl {
-    padding: 88px 0;
+    padding: 164px 0;
   }
 }
