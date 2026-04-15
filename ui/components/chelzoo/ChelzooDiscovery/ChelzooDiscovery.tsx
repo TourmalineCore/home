@@ -26,7 +26,7 @@ export function ChelzooDiscovery() {
     locale,
   } = useRouter();
 
-  const CARDS = [
+  const cards = [
     {
       id: 1,
       mobileImg: MobileImg1,
@@ -69,7 +69,7 @@ export function ChelzooDiscovery() {
       <div className="chelzoo-discovery__wrapper">
         <h2 className="chelzoo-discovery__title">{t(`title`)}</h2>
         <ul className="chelzoo-discovery__list">
-          {CARDS.map((card) => (
+          {cards.map((card) => (
             <li
               key={card.id}
               className={clsx(`chelzoo-discovery__card`, `chelzoo-discovery__card--${card.className}`)}
@@ -94,8 +94,7 @@ export function ChelzooDiscovery() {
               </p>
               <div className={clsx(
                 `chelzoo-discovery__image--${card.className}`,
-                `chelzoo-discovery__image chelzoo-discovery__image--desktop`
-                ,
+                `chelzoo-discovery__image chelzoo-discovery__image--desktop`,
               )}
               >
                 <Image
