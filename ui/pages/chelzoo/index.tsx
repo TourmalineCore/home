@@ -18,6 +18,7 @@ import { ChelzooMockup } from '../../components/chelzoo/ChelzooMockup/ChelzooMoc
 import { ChelzooTestingStrategy } from '../../components/chelzoo/ChelzooTestingStrategy/ChelzooTestingStrategy';
 import { ChelzooSeo } from '../../components/chelzoo/ChelzooSeo/ChelzooSeo';
 import { ChelzooDevDesign } from '../../components/chelzoo/ChelzooDevDesign/ChelzooDevDesign';
+import { ChelzooAutotests } from '../../components/chelzoo/ChelzooAutotests/ChelzooAutotests';
 
 export default function ChelzooPage({
   layoutData,
@@ -67,6 +68,7 @@ export default function ChelzooPage({
           <ChelzooDevDesign />
           <ChelzooTestingStrategy />
           <ChelzooSeo />
+          <ChelzooAutotests />
         </div>
       </LayoutRedesign>
     </>
@@ -135,5 +137,6 @@ async function getStaticTranslation({
     `chelzooTestingStrategy`,
     `chelzooSeo`,
     `chelzooDevDesign`,
+    `chelzooAutotests`,
   ]);
 }

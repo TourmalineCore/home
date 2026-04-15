@@ -1,0 +1,108 @@
+.chelzoo-autotests {
+  padding: 48px 0;
+  color: $color-black;
+  background-color: $color-off-white;
+
+  &__wrapper {
+    @include tablet {
+      padding: 0 32px;
+    }
+
+    @include tablet-xl {
+      padding: 0 64px;
+    }
+
+    @include desktop-xl {
+      padding: 0 88px;
+    }
+  }
+
+  &__content {
+    padding: 20px;
+  }
+
+  &__list {
+    margin-bottom: 12px;
+
+    @include tablet {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    @include tablet-xl {
+      margin-bottom: 20px;
+      gap: 20px;
+    }
+
+    @include desktop {
+      margin-bottom: 16px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 20px;
+      gap: 28px;
+    }
+  }
+
+  &__title {
+    @include chelzoo-h2;
+
+    margin-bottom: 12px;
+
+    @include tablet {
+      text-align: center;
+    }
+
+    @include tablet-xl {
+      margin-bottom: 20px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 28px;
+    }
+  }
+
+  &__item {
+    border-radius: 24px;
+    background-color: $color-white;
+
+    & + & {
+      margin-top: 12px;
+
+      @include tablet {
+        margin-top: 0;
+      }
+    }
+
+    @include tablet {
+      width: 33%;
+      max-width: 224px;
+    }
+
+    @include tablet-xl {
+      max-width: 280px;
+    }
+
+    @include desktop {
+      max-width: 330px;
+    }
+
+    @include desktop-xl {
+      max-width: 468px;
+    }
+  }
+
+  &__text {
+    @include chelzoo-body;
+  }
+
+  @include tablet-xl {
+    padding: 64px 0;
+  }
+
+  @include desktop-xl {
+    padding: 88px 0;
+  }
+}
