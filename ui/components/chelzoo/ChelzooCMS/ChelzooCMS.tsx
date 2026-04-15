@@ -23,7 +23,7 @@ export function ChelzooCMS({
         <p className="chelzoo-cms__description">
           {t(`description`)}
         </p>
-        <div className="chelzoo-podcast__media">
+        <div className="chelzoo-cms__media">
           {renderMedia()}
         </div>
       </div>
