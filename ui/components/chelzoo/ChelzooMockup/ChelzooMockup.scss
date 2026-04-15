@@ -8,11 +8,8 @@
     aspect-ratio: 25 / 32;
 
     @include desktop-xl {
+      max-height: 3953px;
       aspect-ratio: 4 / 5;
-    }
-
-    @include desktop-xxl {
-      height: 3953px;
     }
   }
 
@@ -26,9 +23,6 @@
 
     @include desktop-xl {
       border-radius: 112px;
-    }
-
-    @include desktop-xxl {
       object-position: top;
     }
   }

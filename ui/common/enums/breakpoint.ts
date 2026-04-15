@@ -13,5 +13,4 @@ export enum BreakpointName {
   TABLET_XL = `tablet-xl`,
   DESKTOP = `desktop`,
   DESKTOP_XL = `desktop-xl`,
-  DESKTOP_XXL = `desktop-xxl`,
 }
