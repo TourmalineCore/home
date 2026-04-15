@@ -22,8 +22,11 @@ export enum ComponentName {
   CHELZOO_ABOUT = `chelzoo-about`,
   CHELZOO_TASKS = `chelzoo-tasks`,
   CHELZOO_PODCAST = `chelzoo-podcast`,
+  CHELZOO_DISCOVERY = `chelzoo-discovery`,
   CHELZOO_STACK = `chelzoo-stack`,
   CHELZOO_ACCESSIBILITY = `chelzoo-accessibility`,
   CHELZOO_DESIGN = `chelzoo-design`,
+  CHELZOO_MOCKUP = `chelzoo-mockup`,
+  CHELZOO_TESTING_STRATEGY = `chelzoo-testing-strategy`,
   CHELZOO_DEV_DESIGN = `chelzoo-dev-design`,
 }

@@ -127,16 +127,10 @@
   }
 
   &__link {
-    @include chelzoo-body;
+    @include chelzoo-link;
 
-    display: block;
     align-self: center;
     text-align: center;
-    text-decoration: underline;
-    text-decoration-color: $color-black;
-    color: $color-black;
-    cursor: pointer;
-    text-underline-offset: 3px;
 
     @include tablet {
       margin-left: auto;
