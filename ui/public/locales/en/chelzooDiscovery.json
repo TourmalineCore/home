@@ -1,10 +1,8 @@
 {
   "title": "Immersion in Project",
-  "cards": {
-    "1": "We linked the project's goals with the website users, their actions and tasks, to ensure we only deliver what's valuable.",
-    "2": "We studied how users interacted with the old website to keep successful patterns and improve the new experience.",
-    "3": "We visualized user scenarios on the website and divided them into releases to start with the most important things.",
-    "4": "We intentionally included some controversial solutions to not only agree on the desired style but also to identify the ideas definitely not suitable for the project."
-  },
+  "impactMapCardText":  "We linked the project's goals with the website users, their actions and tasks, to ensure we only deliver what's valuable.",
+  "cjmCardText": "We studied how users interacted with the old website to keep successful patterns and improve the new experience.",
+  "usmCardText": "We visualized user scenarios on the website and divided them into releases to start with the most important things.",
+  "conceptsCardText": "We intentionally included some controversial solutions to not only agree on the desired style but also to identify the ideas definitely not suitable for the project.",
   "label": "Visual concept"
 }

@@ -33,6 +33,7 @@ export function ChelzooDiscovery() {
       desktopImg: locale === `ru` ? DesktopImg1 : DesktopImg1Eng,
       label: `Impact map`,
       className: `impact-map`,
+      text: t(`impactMapCardText`),
     },
     {
       id: 2,
@@ -40,6 +41,7 @@ export function ChelzooDiscovery() {
       desktopImg: DesktopImg2,
       label: `Customer Journey Mapping`,
       className: `cjm`,
+      text: t(`cjmCardText`),
     },
     {
       id: 3,
@@ -47,6 +49,7 @@ export function ChelzooDiscovery() {
       desktopImg: locale === `ru` ? DesktopImg3 : DesktopImg3Eng,
       label: `User Story Mapping`,
       className: `usm`,
+      text: t(`usmCardText`),
     },
     {
       id: 4,
@@ -54,6 +57,7 @@ export function ChelzooDiscovery() {
       desktopImg: locale === `ru` ? DesktopImg4 : DesktopImg4Eng,
       label: t(`label`),
       className: `concepts`,
+      text: t(`conceptsCardText`),
     },
   ];
 
@@ -86,7 +90,7 @@ export function ChelzooDiscovery() {
                 {card.label}
               </span>
               <p className={clsx(`chelzoo-discovery__text`, `chelzoo-discovery__text--${card.className}`)}>
-                {t(`cards.${card.id}`)}
+                {card.text}
               </p>
               <div className={clsx(
                 `chelzoo-discovery__image--${card.className}`,
