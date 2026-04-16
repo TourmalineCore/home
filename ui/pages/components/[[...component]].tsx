@@ -24,8 +24,12 @@ import { ChelzooStack } from "../../components/chelzoo/ChelzooStack/ChelzooStack
 import { ChelzooTasks } from "../../components/chelzoo/ChelzooTasks/ChelzooTasks";
 import { ChelzooAccessibility } from "../../components/chelzoo/ChelzooAccessibility/ChelzooAccessibility";
 import { ChelzooPodcast } from "../../components/chelzoo/ChelzooPodcast/ChelzooPodcast";
+import { ChelzooDiscovery } from "../../components/chelzoo/ChelzooDiscovery/ChelzooDiscovery";
 import { ChelzooDesign } from "../../components/chelzoo/ChelzooDesign/ChelzooDesign";
+import { ChelzooMockup } from "../../components/chelzoo/ChelzooMockup/ChelzooMockup";
 import { ChelzooTestingStrategy } from "../../components/chelzoo/ChelzooTestingStrategy/ChelzooTestingStrategy";
+import { ChelzooSeo } from "../../components/chelzoo/ChelzooSeo/ChelzooSeo";
+import { ChelzooDevDesign } from "../../components/chelzoo/ChelzooDevDesign/ChelzooDevDesign";
 import { ChelzooCMS } from "../../components/chelzoo/ChelzooCMS/ChelzooCMS";
 
 export default function ComponentsPage({
@@ -281,15 +285,39 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_DISCOVERY) {
+    return (
+      <ChelzooDiscovery />
+    );
+  }
+
   if (componentName === ComponentName.CHELZOO_DESIGN) {
     return (
       <ChelzooDesign />
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_MOCKUP) {
+    return (
+      <ChelzooMockup />
+    );
+  }
+
   if (componentName === ComponentName.CHELZOO_TESTING_STRATEGY) {
     return (
       <ChelzooTestingStrategy />
+    );
+  }
+
+  if (componentName === ComponentName.CHELZOO_SEO) {
+    return (
+      <ChelzooSeo isComponentPage />
+    );
+  }
+
+  if (componentName === ComponentName.CHELZOO_DEV_DESIGN) {
+    return (
+      <ChelzooDevDesign />
     );
   }
 
@@ -375,13 +403,25 @@ export default function ComponentsPage({
           <Link href={ComponentName.CHELZOO_PODCAST}>Chelzoo Podcast</Link>
         </li>
         <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_DISCOVERY}>Chelzoo Discovery</Link>
+        </li>
+        <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_ACCESSIBILITY}>Chelzoo Accessibility</Link>
         </li>
         <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_DESIGN}>Chelzoo Design</Link>
         </li>
         <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_DEV_DESIGN}>Chelzoo Dev + Design</Link>
+        </li>
+        <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_TESTING_STRATEGY}>Chelzoo Testing Strategy</Link>
+        </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_TESTING_STRATEGY}>Chelzoo Testing Strategy</Link>
+        </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_SEO}>Chelzoo Seo</Link>
         </li>
         <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_CMS}>Chelzoo CMS</Link>
@@ -424,8 +464,12 @@ export async function getStaticProps({
         `chelzooTasks`,
         `chelzooAccessibility`,
         `chelzooPodcast`,
+        `chelzooDiscovery`,
         `chelzooDesign`,
+        `chelzooMockup`,
         `chelzooTestingStrategy`,
+        `chelzooSeo`,
+        `chelzooDevDesign`,
         `chelzooCMS`,
       ])),
     },

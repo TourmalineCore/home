@@ -12,8 +12,12 @@ import { ChelzooStack } from '../../components/chelzoo/ChelzooStack/ChelzooStack
 import { ChelzooTasks } from '../../components/chelzoo/ChelzooTasks/ChelzooTasks';
 import { ChelzooAccessibility } from '../../components/chelzoo/ChelzooAccessibility/ChelzooAccessibility';
 import { ChelzooPodcast } from '../../components/chelzoo/ChelzooPodcast/ChelzooPodcast';
+import { ChelzooDiscovery } from '../../components/chelzoo/ChelzooDiscovery/ChelzooDiscovery';
 import { ChelzooDesign } from '../../components/chelzoo/ChelzooDesign/ChelzooDesign';
+import { ChelzooMockup } from '../../components/chelzoo/ChelzooMockup/ChelzooMockup';
 import { ChelzooTestingStrategy } from '../../components/chelzoo/ChelzooTestingStrategy/ChelzooTestingStrategy';
+import { ChelzooSeo } from '../../components/chelzoo/ChelzooSeo/ChelzooSeo';
+import { ChelzooDevDesign } from '../../components/chelzoo/ChelzooDevDesign/ChelzooDevDesign';
 import { ChelzooCMS } from '../../components/chelzoo/ChelzooCMS/ChelzooCMS';
 
 export default function ChelzooPage({
@@ -56,11 +60,15 @@ export default function ChelzooPage({
           <ChelzooAbout />
           <ChelzooTasks />
           <ChelzooPodcast />
+          <ChelzooDiscovery />
           <ChelzooStack />
           <ChelzooAccessibility />
           <ChelzooDesign />
+          <ChelzooMockup />
+          <ChelzooDevDesign />
           <ChelzooTestingStrategy />
           <ChelzooCMS />
+          <ChelzooSeo />
         </div>
       </LayoutRedesign>
     </>
@@ -123,8 +131,12 @@ async function getStaticTranslation({
     `chelzooTasks`,
     `chelzooAccessibility`,
     `chelzooPodcast`,
+    `chelzooDiscovery`,
     `chelzooDesign`,
+    `chelzooMockup`,
     `chelzooTestingStrategy`,
+    `chelzooSeo`,
+    `chelzooDevDesign`,
     `chelzooCMS`,
   ]);
 }

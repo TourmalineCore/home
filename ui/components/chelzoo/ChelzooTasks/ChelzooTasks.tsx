@@ -1,12 +1,18 @@
 import { useTranslation } from "next-i18next";
 import Image from 'next/image';
-import TaskImage from "../../../public/images/img-chelzoo-tasks.jpg";
+import { useRouter } from "next/router";
+import TaskImage from "../../../public/images/chelzoo-tasks.jpg";
+import TaskImageEng from "../../../public/images/chelzoo-tasks-eng.jpg";
 import { Task } from "./Task/Task";
 
 export function ChelzooTasks() {
   const {
     t,
   } = useTranslation(`chelzooTasks`);
+
+  const {
+    locale,
+  } = useRouter();
 
   return (
     <section
@@ -26,7 +32,7 @@ export function ChelzooTasks() {
         <div className="chelzoo-tasks__image-wrapper">
           <Image
             className="chelzoo-tasks__image"
-            src={TaskImage}
+            src={locale === `ru` ? TaskImage : TaskImageEng}
             alt=""
             fill
             placeholder="blur"
