@@ -44,7 +44,6 @@
     @include chelzoo-h2;
 
     width: 343px;
-    letter-spacing: -0.02px;
     text-align: center;
     color: $color-white;
 
@@ -205,7 +204,7 @@
   &__decorate {
     position: absolute;
     right: -125px;
-    top: 29.03%;
+    top: 29%;
     width: 272px;
     height: 284px;
     background-image: url("/images/chelzoo_bear.png");
