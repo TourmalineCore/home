@@ -1,8 +1,16 @@
 .chelzoo-adaptation {
-  background-color: $color-dark-green;
+  background-color: $color-white;
 
   &__wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 0 auto;
     padding: 64px 16px;
+    max-width: 1920px;
+    gap: 39px;
 
     @include tablet {
       padding: 64px 32px;
@@ -10,17 +18,226 @@
 
     @include tablet-xl {
       padding: 116px 64px 200px;
+      gap: 64px;
     }
 
     @include desktop-xl {
       padding: 164px 88px 280px;
+      gap: 88px;
+    }
+  }
+
+  &__container {
+    border-radius: 0 0 40px 40px;
+    background-color: $color-dark-green;
+
+    @include tablet-xl {
+      border-radius: 0 0 80px 80px;
+    }
+
+    @include desktop-xl {
+      border-radius: 0 0 112px 112px;
     }
   }
 
   &__title {
     @include chelzoo-h2;
 
+    width: 343px;
+    letter-spacing: -0.02px;
     text-align: center;
     color: $color-white;
+
+    @include tablet {
+      width: 544px;
+    }
+
+    @include tablet-xl {
+      width: 656px;
+    }
+
+    @include desktop {
+      width: 678px;
+    }
+
+    @include desktop-xl {
+      width: 984px;
+    }
+  }
+
+  &__mock-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    width: 188px;
+    height: 240px;
+
+    @include tablet-xl {
+      width: 320px;
+      height: 408px;
+    }
+
+    @include desktop-xl {
+      width: 448px;
+      height: 572px;
+    }
+  }
+
+  &__mock {
+    object-fit: cover;
+  }
+
+  &__list {
+    display: flex;
+    gap: 20px;
+
+    @include tablet {
+      gap: 31px;
+    }
+
+    @include tablet-xl {
+      gap: 78px;
+    }
+
+    @include desktop {
+      gap: 52px;
+    }
+
+    @include desktop-xl {
+      gap: 74px;
+    }
+  }
+
+  &__label {
+    @include chelzoo-body;
+
+    color: $color-grey-300-redesign;
+  }
+
+  &__image-wrapper {
+    position: relative;
+    display: none;
+    overflow: hidden;
+    margin-top: 12px;
+
+    @include tablet {
+      display: block;
+    }
+
+    @include desktop {
+      margin-top: 20px;
+    }
+
+    @include desktop-xl {
+      margin-top: 28px;
+    }
+
+    &--1920 {
+      width: 200px;
+      aspect-ratio: 40/151;
+
+      @include desktop {
+        width: 360px;
+      }
+
+      @include desktop-xl {
+        width: 506px;
+      }
+    }
+
+    &--1366 {
+      width: 144px;
+      aspect-ratio: 36/139;
+
+      @include desktop {
+        width: 260px;
+      }
+
+      @include desktop-xl {
+        width: 365px;
+      }
+    }
+
+    &--1024 {
+      width: 108px;
+      aspect-ratio: 9/41;
+
+      @include desktop {
+        width: 194px;
+      }
+
+      @include desktop-xl {
+        width: 273px;
+      }
+    }
+
+    &--768 {
+      width: 80px;
+      aspect-ratio: 2/11;
+
+      @include desktop {
+        width: 144px;
+      }
+
+      @include desktop-xl {
+        width: 203px;
+      }
+    }
+
+    &--375 {
+      width: 40px;
+      aspect-ratio: 5/84;
+
+      @include desktop {
+        width: 72px;
+      }
+
+      @include desktop-xl {
+        width: 101px;
+      }
+    }
+  }
+
+  &__image {
+    object-fit: cover;
+  }
+
+  &__decorate {
+    position: absolute;
+    right: -125px;
+    top: 29.03%;
+    width: 272px;
+    height: 284px;
+
+    @include tablet {
+      right: -80px;
+      top: auto;
+      bottom: -75px;
+      width: 320px;
+      height: 332px;
+    }
+
+    @include tablet-xl {
+      right: -155px;
+      bottom: -156px;
+      width: 600px;
+      height: 620px;
+    }
+
+    @include desktop-xl {
+      right: -162px;
+      bottom: -181px;
+      width: 844px;
+      height: 872px;
+    }
+  }
+
+  &__decorate-image {
+    object-fit: cover;
+    transform: rotate(345deg);
+
+    @include tablet-xl {
+      transform: rotate(0);
+    }
   }
 }
