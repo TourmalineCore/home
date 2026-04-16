@@ -2,11 +2,11 @@ import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import clsx from "clsx";
-import ImageDesktopXL from "../../../public/images/chelzoo_1920.png";
-import ImageDesktop from "../../../public/images/chelzoo_1366.png";
-import ImageTabletXL from "../../../public/images/chelzoo_1024.png";
-import ImageTablet from "../../../public/images/chelzoo_768.png";
-import ImageMobile from "../../../public/images/chelzoo_375.png";
+import ImageDesktopXL from "../../../public/images/chelzoo-1920.png";
+import ImageDesktop from "../../../public/images/chelzoo-1366.png";
+import ImageTabletXL from "../../../public/images/chelzoo-1024.png";
+import ImageTablet from "../../../public/images/chelzoo-768.png";
+import ImageMobile from "../../../public/images/chelzoo-375.png";
 
 import Mockup from "../../../public/images/chelzoo-mockup-lemon.jpg";
 import MockupEng from "../../../public/images/chelzoo-mockup-lemon-eng.jpg";
