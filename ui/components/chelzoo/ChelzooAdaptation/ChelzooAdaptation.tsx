@@ -56,9 +56,8 @@ export function ChelzooAdaptation() {
       <div className="chelzoo-adaptation__container">
         <div className="chelzoo-adaptation__wrapper">
           <h2 className="chelzoo-adaptation__title">{t(`title`)}</h2>
-          <div className="chelzoo-adaptation__mock-wrapper">
+          <div className="chelzoo-adaptation__mockup">
             <Image
-              className="chelzoo-adaptation__mock"
               src={locale === `ru` ? Mockup : MockupEng}
               fill
               placeholder="blur"
@@ -73,12 +72,11 @@ export function ChelzooAdaptation() {
                   px
                 </span>
                 <div className={clsx(
-                  `chelzoo-adaptation__image-wrapper`,
-                  `chelzoo-adaptation__image-wrapper--${adaptation.label}`,
+                  `chelzoo-adaptation__image`,
+                  `chelzoo-adaptation__image--${adaptation.label}`,
                 )}
                 >
                   <Image
-                    className="chelzoo-adaptation__image"
                     src={adaptation.image}
                     fill
                     alt=""
