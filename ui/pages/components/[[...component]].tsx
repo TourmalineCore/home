@@ -31,6 +31,7 @@ import { ChelzooAdaptation } from "../../components/chelzoo/ChelzooAdaptation/Ch
 import { ChelzooTestingStrategy } from "../../components/chelzoo/ChelzooTestingStrategy/ChelzooTestingStrategy";
 import { ChelzooSeo } from "../../components/chelzoo/ChelzooSeo/ChelzooSeo";
 import { ChelzooDevDesign } from "../../components/chelzoo/ChelzooDevDesign/ChelzooDevDesign";
+import { ChelzooInfrastructure } from "../../components/chelzoo/ChelzooInfrastructure/ChelzooInfrastructure";
 import { ChelzooCMS } from "../../components/chelzoo/ChelzooCMS/ChelzooCMS";
 
 export default function ComponentsPage({
@@ -328,6 +329,12 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_INFRASTRUCTURE) {
+    return (
+      <ChelzooInfrastructure />
+    );
+  }
+
   if (componentName === ComponentName.CHELZOO_CMS) {
     return (
       <ChelzooCMS isComponentPage />
@@ -437,6 +444,9 @@ export default function ComponentsPage({
           <Link href={ComponentName.CHELZOO_SEO}>Chelzoo Seo</Link>
         </li>
         <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_INFRASTRUCTURE}>Chelzoo Infrastructure</Link>
+        </li>
+        <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_CMS}>Chelzoo CMS</Link>
         </li>
       </ul>
@@ -484,6 +494,7 @@ export async function getStaticProps({
         `chelzooTestingStrategy`,
         `chelzooSeo`,
         `chelzooDevDesign`,
+        `chelzooInfrastructure`,
         `chelzooCMS`,
       ])),
     },

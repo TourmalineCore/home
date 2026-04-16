@@ -31,5 +31,6 @@ export enum ComponentName {
   CHELZOO_TESTING_STRATEGY = `chelzoo-testing-strategy`,
   CHELZOO_SEO = `chelzoo-seo`,
   CHELZOO_DEV_DESIGN = `chelzoo-dev-design`,
+  CHELZOO_INFRASTRUCTURE = `chelzoo-infrastructure`,
   CHELZOO_CMS = `chelzoo-cms`,
 }
