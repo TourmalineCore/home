@@ -208,6 +208,10 @@
     top: 29.03%;
     width: 272px;
     height: 284px;
+    background-image: url("/images/chelzoo_bear.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: rotate(345deg);
 
     @include tablet {
       right: -80px;
@@ -222,6 +226,7 @@
       bottom: -156px;
       width: 600px;
       height: 620px;
+      transform: rotate(0);
     }
 
     @include desktop-xl {
@@ -229,15 +234,6 @@
       bottom: -181px;
       width: 844px;
       height: 872px;
-    }
-  }
-
-  &__decorate-image {
-    object-fit: cover;
-    transform: rotate(345deg);
-
-    @include tablet-xl {
-      transform: rotate(0);
     }
   }
 }

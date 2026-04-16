@@ -10,7 +10,6 @@ import ImageMobile from "../../../public/images/chelzoo_375.png";
 
 import Mockup from "../../../public/images/chelzoo-mockup-lemon.jpg";
 import MockupEng from "../../../public/images/chelzoo-mockup-lemon-eng.jpg";
-import ImageBear from "../../../public/images/chelzoo_bear.png";
 
 export function ChelzooAdaptation() {
   const {
@@ -89,15 +88,7 @@ export function ChelzooAdaptation() {
               </li>
             ))}
           </ul>
-          <div className="chelzoo-adaptation__decorate">
-            <Image
-              className="chelzoo-adaptation__decorate-image"
-              src={ImageBear}
-              fill
-              alt=""
-              placeholder="blur"
-            />
-          </div>
+          <div className="chelzoo-adaptation__decorate" />
         </div>
       </div>
     </section>
