@@ -419,10 +419,13 @@ export default function ComponentsPage({
           <Link href={ComponentName.CHELZOO_DESIGN}>Chelzoo Design</Link>
         </li>
         <li className="components-page__item">
-          <Link href={ComponentName.CHELZOO_DEV_DESIGN}>Chelzoo Dev + Design</Link>
+          <Link href={ComponentName.CHELZOO_MOCKUP}>Chelzoo Mockup</Link>
         </li>
         <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_ADAPTATION}>Chelzoo Adaptation</Link>
+        </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_DEV_DESIGN}>Chelzoo Dev + Design</Link>
         </li>
         <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_TESTING_STRATEGY}>Chelzoo Testing Strategy</Link>
