@@ -1,0 +1,120 @@
+.chelzoo-cms {
+  padding: 48px 0;
+  background-color: $color-off-white;
+
+  &__wrapper {
+    @include tablet {
+      padding-right: 32px;
+      padding-left: 32px;
+    }
+
+    @include tablet-xl {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      padding-right: 64px;
+      padding-left: 64px;
+      text-align: center;
+    }
+
+    @include desktop-xl {
+      padding-right: 88px;
+      padding-left: 88px;
+    }
+  }
+
+  &__title {
+    @include chelzoo-h2;
+
+    margin-bottom: 12px;
+    color: $color-black;
+
+    @include tablet-xl {
+      margin-bottom: 20px;
+      max-width: 74%;
+    }
+
+    @include desktop {
+      max-width: 60%;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 28px;
+    }
+  }
+
+  &__description {
+    @include chelzoo-body;
+
+    margin-bottom: 32px;
+    color: $color-grey-700-redesign;
+
+    @include tablet {
+      max-width: 90%;
+    }
+
+    @include tablet-xl {
+      margin-bottom: 64px;
+      max-width: 76%;
+    }
+
+    @include desktop {
+      max-width: 56%;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 88px;
+    }
+  }
+
+  &__media {
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+    border-radius: 24px;
+    min-height: 176px;
+    max-width: 343px;
+    aspect-ratio: 343/176;
+
+    @include tablet {
+      min-height: 360px;
+      max-width: 704px;
+      aspect-ratio: 704/360;
+    }
+
+    @include tablet-xl {
+      border-radius: 48px;
+      min-height: 460px;
+      max-width: 896px;
+      aspect-ratio: 896/460;
+    }
+
+    @include desktop {
+      min-height: 635px;
+      max-width: 1238px;
+      aspect-ratio: 1238/635;
+    }
+
+    @include desktop-xl {
+      border-radius: 68px;
+      min-height: 895px;
+      max-width: 1744px;
+      aspect-ratio: 1744/895;
+    }
+  }
+
+  video,
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @include tablet-xl {
+    padding: 64px 0;
+  }
+
+  @include desktop-xl {
+    padding: 88px 0;
+  }
+}
