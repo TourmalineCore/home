@@ -1,6 +1,7 @@
 import { test } from '../../playwright-tests/custom-test';
-import { BreakpointName, ComponentName } from '../../common/enums';
+import { BreakpointName } from '../../common/enums';
 import { BREAKPOINTS } from '../../playwright-tests/constants/breakpoints';
+import { ComponentName } from '../../common/screenshot-component-registry';
 
 const TEST_ID = `submitted-form-modal`;
 

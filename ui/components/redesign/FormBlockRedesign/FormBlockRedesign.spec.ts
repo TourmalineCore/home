@@ -1,7 +1,8 @@
 import { Browser, Page } from '@playwright/test';
 import { expect, test } from '../../../playwright-tests/custom-test';
 import { BREAKPOINTS } from '../../../playwright-tests/constants/breakpoints';
-import { AppRoute, ComponentName } from '../../../common/enums';
+import { AppRoute } from '../../../common/enums';
+import { ComponentName } from '../../../common/screenshot-component-registry';
 
 const TEST_ID = `form-block`;
 
