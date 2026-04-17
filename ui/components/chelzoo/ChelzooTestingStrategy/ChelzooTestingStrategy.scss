@@ -36,20 +36,26 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      margin-right: auto;
+      margin-left: auto;
+      max-width: 704px;
       gap: 12px;
     }
 
     @include tablet-xl {
       margin-bottom: 20px;
+      max-width: 896px;
       gap: 20px;
     }
 
     @include desktop {
       margin-bottom: 16px;
+      max-width: 1238px;
     }
 
     @include desktop-xl {
       margin-bottom: 20px;
+      max-width: 1744px;
       gap: 28px;
     }
   }
@@ -158,6 +164,11 @@
 
     align-self: center;
     text-align: center;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: none;
+    }
 
     @include tablet {
       max-width: 50%;
