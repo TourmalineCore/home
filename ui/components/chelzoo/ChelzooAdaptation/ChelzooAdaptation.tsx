@@ -72,8 +72,8 @@ export function ChelzooAdaptation() {
                   px
                 </span>
                 <div className={clsx(
-                  `chelzoo-adaptation__image`,
-                  `chelzoo-adaptation__image--${adaptation.label}`,
+                  `chelzoo-adaptation__image-wrapper`,
+                  `chelzoo-adaptation__image-wrapper--${adaptation.label}`,
                 )}
                 >
                   <Image
