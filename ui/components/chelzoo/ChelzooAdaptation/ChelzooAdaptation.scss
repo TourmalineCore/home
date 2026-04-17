@@ -20,7 +20,6 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    overflow: hidden;
     padding: 64px 16px;
     max-width: 1920px;
     gap: 39px;
@@ -231,7 +230,7 @@
 
     @include desktop-xl {
       right: -162px;
-      bottom: -181px;
+      bottom: -200px;
       width: 844px;
       height: 872px;
     }
