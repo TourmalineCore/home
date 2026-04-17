@@ -1,0 +1,82 @@
+.chelzoo-promo {
+  padding: 64px 0;
+  background-color: $color-black;
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    @include tablet {
+      padding-right: 32px;
+      padding-left: 32px;
+    }
+
+    @include tablet-xl {
+      padding-right: 64px;
+      padding-left: 64px;
+    }
+
+    @include desktop-xl {
+      padding-right: 88px;
+      padding-left: 88px;
+    }
+  }
+
+  &__title {
+    @include chelzoo-h2;
+
+    margin-bottom: 32px;
+    max-width: 343px;
+    font-weight: 400;
+    text-align: center;
+    color: $color-white;
+
+    @include tablet {
+      max-width: 544px;
+    }
+
+    @include tablet-xl {
+      margin-bottom: 48px;
+      max-width: 654px;
+    }
+
+    @include desktop {
+      max-width: 678px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 64px;
+      max-width: 957px;
+    }
+  }
+
+  &__image-container {
+    position: relative;
+    width: 343px;
+    height: 123px;
+
+    @include tablet-xl {
+      width: 640px;
+      height: 230px;
+    }
+
+    @include desktop {
+      width: 740px;
+      height: 265px;
+    }
+
+    @include desktop-xl {
+      width: 1040px;
+      height: 372px;
+    }
+  }
+
+  @include tablet-xl {
+    padding: 116px 0;
+  }
+
+  @include desktop-xl {
+    padding: 164px 0;
+  }
+}
