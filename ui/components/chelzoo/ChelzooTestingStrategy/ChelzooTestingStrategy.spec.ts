@@ -1,6 +1,6 @@
 import { test } from '../../../playwright-tests/custom-test';
 import { BREAKPOINTS } from '../../../playwright-tests/constants/breakpoints';
-import { ComponentName } from '../../../common/screenshot-component-registry';
+import { ComponentName } from '../../../common/enums';
 
 test.describe(`ChelzooTestingStrategyTests`, () => {
   test.beforeEach(async ({

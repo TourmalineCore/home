@@ -1,7 +1,7 @@
 
 import { test } from '../../playwright-tests/custom-test';
 import { BREAKPOINTS } from '../../playwright-tests/constants/breakpoints';
-import { ComponentName } from '../../common/screenshot-component-registry';
+import { ComponentName } from '../../common/enums';
 
 const TEST_ID = `showcase-grid-with-three-columns`;
 
