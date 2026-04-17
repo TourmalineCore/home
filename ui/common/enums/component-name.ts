@@ -35,6 +35,7 @@ export enum ComponentName {
   CHELZOO_INFRASTRUCTURE = `chelzoo-infrastructure`,
   CHELZOO_CMS = `chelzoo-cms`,
   CHELZOO_PROMO = `chelzoo-promo`,
+  CHELZOO_LINKS = `chelzoo-links`,
 }
 
 export const COMPONENT_LINKS = Object.values(ComponentName)

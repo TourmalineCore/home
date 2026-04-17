@@ -22,6 +22,7 @@ import { ChelzooDevDesign } from '../../components/chelzoo/ChelzooDevDesign/Chel
 import { ChelzooInfrastructure } from '../../components/chelzoo/ChelzooInfrastructure/ChelzooInfrastructure';
 import { ChelzooCMS } from '../../components/chelzoo/ChelzooCMS/ChelzooCMS';
 import { ChelzooPromo } from '../../components/chelzoo/ChelzooPromo/ChelzooPromo';
+import { ChelzooLinks } from '../../components/chelzoo/ChelzooLinks/ChelzooLinks';
 
 export default function ChelzooPage({
   layoutData,
@@ -75,6 +76,7 @@ export default function ChelzooPage({
           <ChelzooSeo />
           <ChelzooInfrastructure />
           <ChelzooPromo />
+          <ChelzooLinks />
         </div>
       </LayoutRedesign>
     </>
@@ -147,5 +149,6 @@ async function getStaticTranslation({
     `chelzooInfrastructure`,
     `chelzooCMS`,
     `chelzooPromo`,
+    `chelzooLinks`,
   ]);
 }
