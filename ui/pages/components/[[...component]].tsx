@@ -3,10 +3,11 @@ import { useRouter } from "next/router";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { loadTranslations } from "../../common/utils/loadTranslations";
 import { COMPONENT_LINKS, ComponentName } from "../../common/enums";
+import { ChelzooCMS } from "../../components/chelzoo/ChelzooCMS/ChelzooCMS";
 import { ChelzooAbout } from "../../components/chelzoo/ChelzooAbout/ChelzooAbout";
 import { ChelzooAccessibility } from "../../components/chelzoo/ChelzooAccessibility/ChelzooAccessibility";
 import { ChelzooAdaptation } from "../../components/chelzoo/ChelzooAdaptation/ChelzooAdaptation";
-import { ChelzooCMS } from "../../components/chelzoo/ChelzooCMS/ChelzooCMS";
+import { ChelzooAutotests } from "../../components/chelzoo/ChelzooAutotests/ChelzooAutotests";
 import { ChelzooDesign } from "../../components/chelzoo/ChelzooDesign/ChelzooDesign";
 import { ChelzooDevDesign } from "../../components/chelzoo/ChelzooDevDesign/ChelzooDevDesign";
 import { ChelzooDiscovery } from "../../components/chelzoo/ChelzooDiscovery/ChelzooDiscovery";
@@ -205,6 +206,7 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   [ComponentName.CHELZOO_DEV_DESIGN]: () => <ChelzooDevDesign />,
   [ComponentName.CHELZOO_CMS]: () => <ChelzooCMS isComponentPage />,
   [ComponentName.CHELZOO_PROMO]: () => <ChelzooPromo />,
+  [ComponentName.CHELZOO_AUTOTESTS]: () => <ChelzooAutotests />,
   [ComponentName.CHELZOO_INFRASTRUCTURE]: () => <ChelzooInfrastructure />,
 };
 
@@ -288,6 +290,7 @@ export async function getStaticProps({
         `chelzooTestingStrategy`,
         `chelzooSeo`,
         `chelzooDevDesign`,
+        `chelzooAutotests`,
         `chelzooInfrastructure`,
         `chelzooCMS`,
         `chelzooPromo`,

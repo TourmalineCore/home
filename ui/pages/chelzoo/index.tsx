@@ -19,6 +19,7 @@ import { ChelzooAdaptation } from '../../components/chelzoo/ChelzooAdaptation/Ch
 import { ChelzooTestingStrategy } from '../../components/chelzoo/ChelzooTestingStrategy/ChelzooTestingStrategy';
 import { ChelzooSeo } from '../../components/chelzoo/ChelzooSeo/ChelzooSeo';
 import { ChelzooDevDesign } from '../../components/chelzoo/ChelzooDevDesign/ChelzooDevDesign';
+import { ChelzooAutotests } from '../../components/chelzoo/ChelzooAutotests/ChelzooAutotests';
 import { ChelzooInfrastructure } from '../../components/chelzoo/ChelzooInfrastructure/ChelzooInfrastructure';
 import { ChelzooCMS } from '../../components/chelzoo/ChelzooCMS/ChelzooCMS';
 import { ChelzooPromo } from '../../components/chelzoo/ChelzooPromo/ChelzooPromo';
@@ -74,6 +75,7 @@ export default function ChelzooPage({
           <ChelzooCMS />
           <ChelzooSeo />
           <ChelzooInfrastructure />
+          <ChelzooAutotests />
           <ChelzooPromo />
         </div>
       </LayoutRedesign>
@@ -144,6 +146,7 @@ async function getStaticTranslation({
     `chelzooTestingStrategy`,
     `chelzooSeo`,
     `chelzooDevDesign`,
+    `chelzooAutotests`,
     `chelzooInfrastructure`,
     `chelzooCMS`,
     `chelzooPromo`,
