@@ -34,6 +34,7 @@ import { ShowcaseGrid } from "../../components/ShowcaseGrid/ShowcaseGrid";
 import { SignpostMultiple } from "../../components/SignpostMultiple/SignpostMultiple";
 import { SingleImage } from "../../components/SingleImage/SingleImage";
 import { ThreeColumnGrid } from "../../components/ThreeColumnGrid/ThreeColumnGrid";
+import { ChelzooInfrastructure } from "../../components/chelzoo/ChelzooInfrastructure/ChelzooInfrastructure";
 
 export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JSX.Element> = {
   [ComponentName.THREE_COLUMN_GRID]: ({
@@ -206,6 +207,7 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   [ComponentName.CHELZOO_CMS]: () => <ChelzooCMS isComponentPage />,
   [ComponentName.CHELZOO_PROMO]: () => <ChelzooPromo />,
   [ComponentName.CHELZOO_AUTOTESTS]: () => <ChelzooAutotests />,
+  [ComponentName.CHELZOO_INFRASTRUCTURE]: () => <ChelzooInfrastructure />,
 };
 
 export default function ComponentsPage({
