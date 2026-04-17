@@ -5,7 +5,8 @@ import {
   test,
 } from '../../../playwright-tests/custom-test';
 import { BREAKPOINTS } from '../../../playwright-tests/constants/breakpoints';
-import { Breakpoint, ComponentName } from '../../../common/enums';
+import { Breakpoint } from '../../../common/enums';
+import { ComponentName } from '../../../common/screenshot-component-registry';
 
 const TEST_ID = `header-redesign`;
 
