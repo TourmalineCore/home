@@ -1,5 +1,5 @@
 import { test } from "../../../playwright-tests/custom-test";
-import { ComponentName } from "../../../common/enums";
+import { ComponentName } from "../../../common/screenshot-component-registry";
 import { BREAKPOINTS } from "../../../playwright-tests/constants/breakpoints";
 
 test.describe(`ChelzooPromoTests`, () => {
