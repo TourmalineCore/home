@@ -27,6 +27,7 @@ import { ChelzooPodcast } from "../../components/chelzoo/ChelzooPodcast/ChelzooP
 import { ChelzooDiscovery } from "../../components/chelzoo/ChelzooDiscovery/ChelzooDiscovery";
 import { ChelzooDesign } from "../../components/chelzoo/ChelzooDesign/ChelzooDesign";
 import { ChelzooMockup } from "../../components/chelzoo/ChelzooMockup/ChelzooMockup";
+import { ChelzooAdaptation } from "../../components/chelzoo/ChelzooAdaptation/ChelzooAdaptation";
 import { ChelzooTestingStrategy } from "../../components/chelzoo/ChelzooTestingStrategy/ChelzooTestingStrategy";
 import { ChelzooSeo } from "../../components/chelzoo/ChelzooSeo/ChelzooSeo";
 import { ChelzooDevDesign } from "../../components/chelzoo/ChelzooDevDesign/ChelzooDevDesign";
@@ -305,6 +306,12 @@ export default function ComponentsPage({
     );
   }
 
+  if (componentName === ComponentName.CHELZOO_ADAPTATION) {
+    return (
+      <ChelzooAdaptation />
+    );
+  }
+
   if (componentName === ComponentName.CHELZOO_TESTING_STRATEGY) {
     return (
       <ChelzooTestingStrategy />
@@ -426,6 +433,12 @@ export default function ComponentsPage({
           <Link href={ComponentName.CHELZOO_DESIGN}>Chelzoo Design</Link>
         </li>
         <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_MOCKUP}>Chelzoo Mockup</Link>
+        </li>
+        <li className="components-page__item">
+          <Link href={ComponentName.CHELZOO_ADAPTATION}>Chelzoo Adaptation</Link>
+        </li>
+        <li className="components-page__item">
           <Link href={ComponentName.CHELZOO_DEV_DESIGN}>Chelzoo Dev + Design</Link>
         </li>
         <li className="components-page__item">
@@ -487,6 +500,7 @@ export async function getStaticProps({
         `chelzooDiscovery`,
         `chelzooDesign`,
         `chelzooMockup`,
+        `chelzooAdaptation`,
         `chelzooTestingStrategy`,
         `chelzooSeo`,
         `chelzooDevDesign`,
