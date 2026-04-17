@@ -37,7 +37,7 @@
 
     @include tablet {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       justify-content: center;
       gap: 12px;
     }
@@ -169,6 +169,8 @@
         position: absolute;
         top: 24px;
         display: block;
+        width: 180px;
+        height: 128px;
       }
 
       @include tablet-xl {
@@ -178,11 +180,26 @@
       @include desktop {
         top: 12px;
       }
+
+      @include desktop-xl {
+        top: 24px;
+        width: 253px;
+        height: 180px;
+      }
     }
 
     &--center {
+      display: block;
+      width: 24px;
+      height: 104px;
+
       @include tablet {
         margin: 0 auto;
+      }
+
+      @include desktop-xl {
+        width: 36px;
+        height: 144px;
       }
     }
 
@@ -198,11 +215,16 @@
       @include desktop {
         left: 216px;
       }
+
+      @include desktop-xl {
+        left: 305px;
+      }
     }
 
     &--right {
       @include tablet {
         right: 20px;
+        transform: rotateY(180deg);
       }
 
       @include tablet-xl {
@@ -211,6 +233,10 @@
 
       @include desktop {
         right: 216px;
+      }
+
+      @include desktop-xl {
+        right: 308px;
       }
     }
   }
@@ -231,6 +257,7 @@
     }
 
     @include desktop-xl {
+      margin-top: 32px;
       max-width: 558px;
     }
   }
