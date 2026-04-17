@@ -73,23 +73,19 @@
     overflow: hidden;
     margin: 0 auto 12px;
     border-radius: 24px;
-    max-width: 343px;
     aspect-ratio: 343/200;
 
     @include tablet {
-      max-width: 704px;
       aspect-ratio: 704/410;
     }
 
     @include tablet-xl {
       margin-bottom: 16px;
       border-radius: 48px;
-      max-width: 896px;
       aspect-ratio: 896/512;
     }
 
     @include desktop {
-      max-width: 1238px;
       aspect-ratio: 1238/720;
     }
 
@@ -107,6 +103,11 @@
     margin: 0 auto;
     max-width: 90%;
     text-align: center;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: none;
+    }
 
     @include tablet {
       margin: 0;
