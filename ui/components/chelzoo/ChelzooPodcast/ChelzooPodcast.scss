@@ -71,14 +71,6 @@
     flex-direction: column;
     margin: 0 auto;
 
-    @include tablet {
-      max-width: 704px;
-    }
-
-    @include tablet-xl {
-      max-width: 896px;
-    }
-
     @include desktop {
       max-width: 1238px;
     }
@@ -99,7 +91,6 @@
 
     @include tablet {
       min-height: 380px;
-      max-width: 704px;
       aspect-ratio: 704/380;
     }
 
@@ -107,7 +98,6 @@
       margin-bottom: 16px;
       border-radius: 46px;
       min-height: 600px;
-      max-width: 896px;
       aspect-ratio: 896/600;
     }
 
