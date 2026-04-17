@@ -1,4 +1,4 @@
-import { ComponentName } from "../../common/screenshot-component-registry";
+import { ComponentName } from "../../common/enums";
 import { BREAKPOINTS } from "../../playwright-tests/constants/breakpoints";
 import { Page, test } from "../../playwright-tests/custom-test";
 
