@@ -63,12 +63,12 @@
     @include chelzoo-h2;
 
     margin-bottom: 32px;
-    text-align: center;
     color: $color-black;
 
     @include tablet-xl {
       margin-top: 16px;
       margin-bottom: 64px;
+      text-align: center;
     }
 
     @include desktop-xl {

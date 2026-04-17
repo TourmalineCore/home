@@ -25,6 +25,10 @@
 
     margin-bottom: 12px;
 
+    @include tablet {
+      text-align: center;
+    }
+
     @include tablet-xl {
       margin-bottom: 20px;
     }
@@ -41,21 +45,24 @@
     color: $color-grey-500-redesign;
 
     @include tablet {
-      max-width: 350px;
+      margin-right: auto;
+      margin-left: auto;
+      max-width: 592px;
+      text-align: center;
     }
 
     @include tablet-xl {
       margin-bottom: 48px;
-      max-width: 436px;
+      max-width: 720px;
     }
 
     @include desktop {
-      max-width: 610px;
+      max-width: 750px;
     }
 
     @include desktop-xl {
       margin-bottom: 64px;
-      max-width: 860px;
+      max-width: 1112px;
     }
   }
 
@@ -88,7 +95,6 @@
     margin-bottom: 12px;
     border-radius: 24px;
     min-height: 380px;
-    max-width: 343px;
     aspect-ratio: 343/380;
 
     @include tablet {
@@ -128,6 +134,7 @@
 
   &__link {
     @include chelzoo-link;
+    @include animated-underline-reverse;
 
     align-self: center;
     text-align: center;

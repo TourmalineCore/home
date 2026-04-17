@@ -1,4 +1,3 @@
-
 export enum ComponentName {
   THREE_COLUMN_GRID = `three-column-grid`,
   COLLAGE_WITH_LINK = `collage-with-link`,
@@ -35,6 +34,7 @@ export enum ComponentName {
   CHELZOO_INFRASTRUCTURE = `chelzoo-infrastructure`,
   CHELZOO_CMS = `chelzoo-cms`,
   CHELZOO_PROMO = `chelzoo-promo`,
+  CHELZOO_AUTOTESTS = `chelzoo-autotests`,
   CHELZOO_LINKS = `chelzoo-links`,
 }
 

@@ -25,9 +25,12 @@
     margin-bottom: 12px;
     color: $color-black;
 
+    @include tablet {
+      text-align: center;
+    }
+
     @include tablet-xl {
       margin-bottom: 20px;
-      text-align: center;
     }
 
     @include desktop-xl {
@@ -42,15 +45,15 @@
     color: $color-grey-500-redesign;
 
     @include tablet {
-      max-width: 624px;
+      margin-right: auto;
+      margin-left: auto;
+      max-width: 578px;
+      text-align: center;
     }
 
     @include tablet-xl {
-      margin-right: auto;
       margin-bottom: 64px;
-      margin-left: auto;
       max-width: 656px;
-      text-align: center;
     }
 
     @include desktop {
@@ -120,13 +123,13 @@
       }
 
       @include tablet {
+        order: 1;
         margin-left: 0;
         width: 225px;
       }
 
       @include tablet-xl {
         z-index: 2;
-        order: 1;
         width: 318px;
         height: 405px;
       }
@@ -143,11 +146,14 @@
     }
 
     &--color {
+      @include tablet {
+        order: 2;
+      }
+
       @include tablet-xl {
         left: -10px;
         top: 50px;
         z-index: 1;
-        order: 2;
         width: 239px;
         height: 304px;
         transform: rotate(20deg);
@@ -172,6 +178,7 @@
       margin-right: 16px;
 
       @include tablet {
+        order: 0;
         margin-right: 0;
       }
 
@@ -179,7 +186,6 @@
         left: 10px;
         top: 50px;
         z-index: 1;
-        order: 0;
         width: 239px;
         height: 304px;
         transform: rotate(-20deg);
