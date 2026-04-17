@@ -97,9 +97,12 @@
 
     margin-bottom: 32px;
 
+    @include tablet {
+      text-align: center;
+    }
+
     @include tablet-xl {
       margin-bottom: 64px;
-      text-align: center;
     }
 
     @include desktop-xl {
