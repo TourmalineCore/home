@@ -58,7 +58,7 @@ export function ChelzooLinks() {
       data-testid="chelzoo-links"
     >
       <div className="chelzoo-links__wrapper">
-        <h4 className="chelzoo-links__title">{t(`title`)}</h4>
+        <h2 className="chelzoo-links__title">{t(`title`)}</h4>
         <ul className="chelzoo-links__list">
           {cards.map((card) => (
             <li
