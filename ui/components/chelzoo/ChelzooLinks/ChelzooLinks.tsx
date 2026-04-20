@@ -65,20 +65,21 @@ export function ChelzooLinks() {
               key={card.id}
               className="chelzoo-links__card"
             >
-              <div className="chelzoo-links__image">
-                <Image
-                  src={card.image}
-                  fill
-                  alt=""
-                  placeholder="blur"
-                />
-              </div>
               <a
                 className="chelzoo-links__link"
                 href={card.link}
                 target="_blank"
                 rel="noreferrer"
               >
+                <div className="chelzoo-links__image-wrapper">
+                  <Image
+                    src={card.image}
+                    fill
+                    alt=""
+                    placeholder="blur"
+                  />
+                </div>
+
                 {card.text}
               </a>
             </li>

@@ -1,7 +1,21 @@
 .chelzoo-links {
-  padding: 48px 16px;
   color: $color-white;
   background-color: $color-black;
+
+  &__wrapper {
+    margin: 0 auto;
+    padding: 48px 16px;
+
+    @include desktop {
+      padding: 64px 16px;
+    }
+
+    @include desktop-xl {
+      margin-left: 24px;
+      padding: 88px 24px;
+      padding-left: max(24px, calc((100vw - 1920px) / 2));
+    }
+  }
 
   &__title {
     @include chelzoo-h4;
@@ -44,13 +58,12 @@
 
   &__list {
     display: flex;
-    overflow-x: auto;
-    margin: 0 -16px;
+    overflow-x: scroll;
+    padding-right: 16px;
     gap: 12px;
     scrollbar-width: none;
 
     @include desktop-xl {
-      margin: 0 -24px;
       gap: 16px;
     }
   }
@@ -60,7 +73,6 @@
     width: 284px;
 
     &:first-child {
-      margin-left: 16px;
       width: 123px;
 
       @include tablet-xl {
@@ -68,16 +80,7 @@
       }
 
       @include desktop-xl {
-        margin-left: 24px;
         width: 288px;
-      }
-    }
-
-    &:last-child {
-      margin-right: 16px;
-
-      @include desktop-xl {
-        margin-right: 24px;
       }
     }
 
@@ -102,7 +105,7 @@
     }
   }
 
-  &__image {
+  &__image-wrapper {
     position: relative;
     overflow: hidden;
     margin-bottom: 8px;
@@ -151,13 +154,5 @@
     @include desktop-xl {
       -webkit-line-clamp: 2;
     }
-  }
-
-  @include desktop {
-    padding: 64px 16px;
-  }
-
-  @include desktop-xl {
-    padding: 88px 24px;
   }
 }
