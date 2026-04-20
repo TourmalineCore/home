@@ -23,7 +23,7 @@ export function ChelzooHero({
     >
       <div className="chelzoo-hero__decor chelzoo-hero__decor--left" />
       <div className="chelzoo-hero__decor chelzoo-hero__decor--right" />
-      <div className="container-cases chelzoo-hero__wrapper">
+      <div className="chelzoo-hero__wrapper">
         <h1 className="chelzoo-hero__title">
           {t(`title`)}
         </h1>

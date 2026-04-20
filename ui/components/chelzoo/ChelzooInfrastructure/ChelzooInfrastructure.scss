@@ -9,11 +9,11 @@
     gap: 32px;
 
     @include tablet {
-      padding: 0 32px;
+      padding-top: 0;
+      padding-bottom: 0;
     }
 
     @include tablet-xl {
-      padding: 0 64px;
       gap: 48px;
     }
 
@@ -24,7 +24,6 @@
     }
 
     @include desktop-xl {
-      padding: 0 88px;
       gap: 32px;
     }
   }

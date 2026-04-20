@@ -19,7 +19,7 @@ export function ChelzooTasks() {
       className="chelzoo-tasks"
       data-testid="chelzoo-tasks"
     >
-      <div className="chelzoo-tasks__wrapper">
+      <div className="container-cases chelzoo-tasks__wrapper">
         <div className="chelzoo-tasks__card">
           <Task
             label={t(`taskLabel`, {

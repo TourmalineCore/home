@@ -3,23 +3,11 @@
   background-color: $color-off-white;
 
   &__wrapper {
-    @include tablet {
-      padding-right: 32px;
-      padding-left: 32px;
-    }
-
     @include tablet-xl {
       display: flex;
       align-items: center;
       flex-direction: column;
-      padding-right: 64px;
-      padding-left: 64px;
       text-align: center;
-    }
-
-    @include desktop-xl {
-      padding-right: 88px;
-      padding-left: 88px;
     }
   }
 

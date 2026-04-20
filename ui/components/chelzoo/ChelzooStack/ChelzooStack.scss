@@ -6,11 +6,8 @@
 
   &__wrapper {
     @include tablet {
-      padding: 0 32px;
-    }
-
-    @include tablet-xl {
-      padding: 0 64px;
+      padding-top: 0;
+      padding-bottom: 0;
     }
 
     @include desktop {
@@ -18,7 +15,6 @@
     }
 
     @include desktop-xl {
-      padding: 0 88px;
       max-width: 1920px;
     }
   }

@@ -66,7 +66,7 @@ export function ChelzooDiscovery() {
       className="chelzoo-discovery"
       data-testid="chelzoo-discovery"
     >
-      <div className="chelzoo-discovery__wrapper">
+      <div className="container-cases chelzoo-discovery__wrapper">
         <h2 className="chelzoo-discovery__title">{t(`title`)}</h2>
         <ul className="chelzoo-discovery__list">
           {cards.map((card) => (

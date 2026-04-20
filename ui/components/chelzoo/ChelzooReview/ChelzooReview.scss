@@ -7,24 +7,26 @@
     flex-direction: column;
     justify-content: center;
     border-radius: 0 0 40px 40px;
-    padding: 48px 16px 64px;
+    padding-top: 48px;
+    padding-bottom: 64px;
     color: $color-black;
     background-color: $color-white;
     gap: 32px;
 
     @include tablet {
       flex-direction: row;
-      padding: 48px 32px 64px;
     }
 
     @include tablet-xl {
       align-items: flex-start;
-      padding: 64px 64px 116px;
+      padding-top: 64px;
+      padding-bottom: 116px;
     }
 
     @include desktop-xl {
       align-items: center;
-      padding: 88px 88px 164px;
+      padding-top: 88px;
+      padding-bottom: 164px;
       gap: 44px;
     }
   }
