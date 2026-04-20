@@ -12,7 +12,8 @@
 
     @include desktop-xl {
       margin-left: 24px;
-      padding: 88px 24px;
+      padding-top: 88px;
+      padding-bottom: 88px;
       padding-left: max(24px, calc((100vw - 1920px) / 2));
     }
   }
