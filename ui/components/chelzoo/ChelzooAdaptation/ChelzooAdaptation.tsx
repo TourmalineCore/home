@@ -2,11 +2,11 @@ import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import clsx from "clsx";
-import ImageDesktopXL from "../../../public/images/chelzoo-1920.png";
-import ImageDesktop from "../../../public/images/chelzoo-1366.png";
-import ImageTabletXL from "../../../public/images/chelzoo-1024.png";
-import ImageTablet from "../../../public/images/chelzoo-768.png";
-import ImageMobile from "../../../public/images/chelzoo-375.png";
+import DesktopXlImage from "../../../public/images/chelzoo-1920.png";
+import ImageDesktopImage from "../../../public/images/chelzoo-1366.png";
+import ImageTabletXlImage from "../../../public/images/chelzoo-1024.png";
+import ImageTabletImage from "../../../public/images/chelzoo-768.png";
+import ImageMobileImage from "../../../public/images/chelzoo-375.png";
 
 import Mockup from "../../../public/images/chelzoo-mockup-lemon.jpg";
 import MockupEng from "../../../public/images/chelzoo-mockup-lemon-eng.jpg";
@@ -23,27 +23,27 @@ export function ChelzooAdaptation() {
   const adaptations = [
     {
       id: 1,
-      image: ImageDesktopXL,
+      image: DesktopXlImage,
       label: `1920`,
     },
     {
       id: 2,
-      image: ImageDesktop,
+      image: ImageDesktopImage,
       label: `1366`,
     },
     {
       id: 3,
-      image: ImageTabletXL,
+      image: ImageTabletXlImage,
       label: `1024`,
     },
     {
       id: 4,
-      image: ImageTablet,
+      image: ImageTabletImage,
       label: `768`,
     },
     {
       id: 5,
-      image: ImageMobile,
+      image: ImageMobileImage,
       label: `375`,
     },
   ];

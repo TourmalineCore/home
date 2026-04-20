@@ -58,8 +58,6 @@ export function ChelzooTestingStrategy() {
           rel="noreferrer"
         >
           {t(`linkText`)}
-          {` `}
-          →
         </a>
       </div>
     </section>

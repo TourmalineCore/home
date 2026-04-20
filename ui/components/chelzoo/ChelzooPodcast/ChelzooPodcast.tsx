@@ -65,6 +65,7 @@ export function ChelzooPodcast({
         loop
         muted
         autoPlay
+        aria-hidden
       />
     );
   }

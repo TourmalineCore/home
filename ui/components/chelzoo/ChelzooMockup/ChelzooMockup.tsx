@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import Image from 'next/image';
-import Mockup from '../../../public/images/chelzoo-mockup.jpg';
-import MockupEng from '../../../public/images/chelzoo-mockup-eng.jpg';
+import MockupImage from '../../../public/images/chelzoo-mockup.jpg';
+import MockupImageEng from '../../../public/images/chelzoo-mockup-eng.jpg';
 
 export function ChelzooMockup() {
   const {
@@ -16,7 +16,7 @@ export function ChelzooMockup() {
       <div className="chelzoo-mockup__wrapper">
         <Image
           className="chelzoo-mockup__image"
-          src={locale === `ru` ? Mockup : MockupEng}
+          src={locale === `ru` ? MockupImage : MockupImageEng}
           fill
           placeholder="blur"
           alt=""
