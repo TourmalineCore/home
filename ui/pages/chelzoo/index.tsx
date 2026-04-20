@@ -65,7 +65,7 @@ export default function ChelzooPage({
         footerContent={layoutData.footerContent}
         isPreview={isPreview}
       >
-        <div className="chelzoo__container">
+        <div>
           <ChelzooHero />
           <ChelzooAbout />
           <ChelzooTasks />
