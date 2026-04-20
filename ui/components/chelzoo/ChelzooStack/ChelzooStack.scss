@@ -114,7 +114,7 @@
 
     @include tablet-xl {
       flex-wrap: nowrap;
-      overflow-x: auto;
+      overflow: auto hidden;
       margin: 0 -64px;
       scrollbar-width: none;
     }
