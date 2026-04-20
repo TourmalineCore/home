@@ -34,6 +34,7 @@ import { ShowcaseGrid } from "../../components/ShowcaseGrid/ShowcaseGrid";
 import { SignpostMultiple } from "../../components/SignpostMultiple/SignpostMultiple";
 import { SingleImage } from "../../components/SingleImage/SingleImage";
 import { ThreeColumnGrid } from "../../components/ThreeColumnGrid/ThreeColumnGrid";
+import { ChelzooWay } from "../../components/chelzoo/ChelzooWay/ChelzooWay";
 import { ChelzooInfrastructure } from "../../components/chelzoo/ChelzooInfrastructure/ChelzooInfrastructure";
 import { ChelzooLinks } from "../../components/chelzoo/ChelzooLinks/ChelzooLinks";
 import { ChelzooReview } from "../../components/chelzoo/ChelzooReview/ChelzooReview";
@@ -197,6 +198,7 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   [ComponentName.CHELZOO_ABOUT]: () => <ChelzooAbout />,
   [ComponentName.CHELZOO_STACK]: () => <ChelzooStack />,
   [ComponentName.CHELZOO_TASKS]: () => <ChelzooTasks />,
+  [ComponentName.CHELZOO_WAY]: () => <ChelzooWay />,
   [ComponentName.CHELZOO_ACCESSIBILITY]: () => <ChelzooAccessibility />,
   [ComponentName.CHELZOO_PODCAST]: () => <ChelzooPodcast isComponentPage />,
   [ComponentName.CHELZOO_DISCOVERY]: () => <ChelzooDiscovery />,
@@ -230,6 +232,12 @@ export default function ComponentsPage({
     const component = COMPONENT_MAP[componentName];
 
     return component(pageData);
+  }
+
+  if (componentName === ComponentName.CHELZOO_WAY) {
+    return (
+      <ChelzooWay />
+    );
   }
 
   return (
@@ -285,6 +293,7 @@ export async function getStaticProps({
         `chelzooAbout`,
         `chelzooStack`,
         `chelzooTasks`,
+        `chelzooWay`,
         `chelzooAccessibility`,
         `chelzooPodcast`,
         `chelzooDiscovery`,
