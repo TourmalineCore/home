@@ -104,13 +104,13 @@ export async function getServerSideProps({
   locale: string;
   preview: boolean;
 }) {
-  if (process.env.IS_STATIC_MODE === `true`) {
-    const translationsPageData = await loadTranslations(locale, [
-      `headerRedesign`,
-      `footerRedesign`,
-      `collageWithLink`,
-    ]);
+  const translationsPageData = await loadTranslations(locale, [
+    `headerRedesign`,
+    `footerRedesign`,
+    `collageWithLink`,
+  ]);
 
+  if (process.env.IS_STATIC_MODE === `true`) {
     return {
       props: {
         layoutData: {
@@ -139,6 +139,11 @@ export async function getServerSideProps({
   return {
     props: {
       layoutData,
+      collageWithLinkData: {
+        text: translationsPageData.collageWithLink.text,
+        link: translationsPageData.collageWithLink.link,
+        imagesWithBlurDataURL: translationsPageData.collageWithLink.imagesWithBlurDataURL,
+      },
       isPreview: preview,
       ...(await getStaticTranslation({
         locale,
