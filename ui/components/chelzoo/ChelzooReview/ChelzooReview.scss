@@ -1,0 +1,64 @@
+.chelzoo-review {
+  padding: 48px 16px;
+  color: $color-black;
+  background-color: $color-white;
+
+  &__wrapper {
+
+  }
+
+  &__quote {
+    @include chelzoo-h2;
+  }
+
+  &__author {
+    @include chelzoo-body;
+  }
+
+  &__image-wrapper {
+    position: relative;
+    overflow: hidden;
+    margin-top: 32px;
+    width: 343px;
+    height: 343px;
+
+    @include tablet {
+      z-index: 0;
+      margin: 0 auto;
+      width: 640px;
+      height: 640px;
+    }
+
+    @include tablet-xl {
+      width: 816px;
+      height: 816px;
+    }
+
+    @include desktop {
+      width: 1046px;
+      height: 1046px;
+    }
+
+    @include desktop-xl {
+      width: 1472px;
+      height: 1472px;
+    }
+  }
+
+  &__image {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  @include tablet {
+    padding: 48px 32px 64px;
+  }
+
+  @include tablet-xl {
+    padding: 64px 64px 116px;
+  }
+
+  @include desktop-xl {
+    padding: 88px 88px 164px;
+  }
+}
