@@ -58,10 +58,12 @@
   &__list {
     display: flex;
     overflow-x: auto;
+    margin: 0 -16px;
     gap: 12px;
     scrollbar-width: none;
 
     @include desktop-xl {
+      margin: 0;
       gap: 16px;
     }
   }
