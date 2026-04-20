@@ -1,6 +1,6 @@
 import { useTranslation } from "next-i18next";
 import Image from 'next/image';
-import ReviewImg from "../../../public/images/chelzoo-review.jpg";
+import ReviewImage from "../../../public/images/chelzoo-review.jpg";
 
 export function ChelzooReview() {
   const {
@@ -15,8 +15,7 @@ export function ChelzooReview() {
       <div className="chelzoo-review__wrapper">
         <div className="chelzoo-review__image-wrapper">
           <Image
-            className="chelzoo-review__image"
-            src={ReviewImg}
+            src={ReviewImage}
             alt=""
             fill
             placeholder="blur"

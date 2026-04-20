@@ -65,8 +65,13 @@
   &__image-wrapper {
     position: relative;
     overflow: hidden;
+    border-radius: 50%;
     width: 343px;
     height: 343px;
+
+    img {
+      object-fit: cover;
+    }
 
     @include tablet {
       width: 140px;
@@ -82,10 +87,5 @@
       width: 504px;
       height: 504px;
     }
-  }
-
-  &__image {
-    border-radius: 50%;
-    object-fit: cover;
   }
 }
