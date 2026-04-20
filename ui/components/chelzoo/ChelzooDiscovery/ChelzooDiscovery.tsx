@@ -3,19 +3,19 @@ import { useTranslation } from "next-i18next";
 
 import { useRouter } from "next/router";
 import clsx from "clsx";
-import MobileImg1 from "../../../public/images/img_impact-map.jpg";
-import MobileImg2 from "../../../public/images/img_cjm.jpg";
-import MobileImg3 from "../../../public/images/img_usm.jpg";
-import MobileImg4 from "../../../public/images/img_concept.jpg";
-import MobileImg4Eng from "../../../public/images/img_concept-eng.jpg";
+import MobileImage1 from "../../../public/images/img_impact-map.jpg";
+import MobileImage2 from "../../../public/images/img_cjm.jpg";
+import MobileImage3 from "../../../public/images/img_usm.jpg";
+import MobileImage4 from "../../../public/images/img_concept.jpg";
+import MobileImage4Eng from "../../../public/images/img_concept-eng.jpg";
 
-import DesktopImg1 from "../../../public/images/img-full-impact-map.png";
-import DesktopImg1Eng from "../../../public/images/img-impact-map-eng.jpg";
-import DesktopImg2 from "../../../public/images/img-full-cjm.png";
-import DesktopImg3 from "../../../public/images/img-full-usm.png";
-import DesktopImg3Eng from "../../../public/images/img-usm-eng.png";
-import DesktopImg4 from "../../../public/images/img-full-concept.png";
-import DesktopImg4Eng from "../../../public/images/img-concept-eng.jpg";
+import DesktopImage1 from "../../../public/images/img-full-impact-map.png";
+import DesktopImage1Eng from "../../../public/images/img-impact-map-eng.jpg";
+import DesktopImage2 from "../../../public/images/img-full-cjm.png";
+import DesktopImage3 from "../../../public/images/img-full-usm.png";
+import DesktopImage3Eng from "../../../public/images/img-usm-eng.png";
+import DesktopImage4 from "../../../public/images/img-full-concept.png";
+import DesktopImage4Eng from "../../../public/images/img-concept-eng.jpg";
 
 export function ChelzooDiscovery() {
   const {
@@ -29,32 +29,32 @@ export function ChelzooDiscovery() {
   const cards = [
     {
       id: 1,
-      mobileImg: MobileImg1,
-      desktopImg: locale === `ru` ? DesktopImg1 : DesktopImg1Eng,
+      mobileImg: MobileImage1,
+      desktopImg: locale === `ru` ? DesktopImage1 : DesktopImage1Eng,
       label: `Impact map`,
       className: `impact-map`,
       text: t(`impactMapCardText`),
     },
     {
       id: 2,
-      mobileImg: MobileImg2,
-      desktopImg: DesktopImg2,
+      mobileImg: MobileImage2,
+      desktopImg: DesktopImage2,
       label: `Customer Journey Mapping`,
       className: `cjm`,
       text: t(`cjmCardText`),
     },
     {
       id: 3,
-      mobileImg: MobileImg3,
-      desktopImg: locale === `ru` ? DesktopImg3 : DesktopImg3Eng,
+      mobileImg: MobileImage3,
+      desktopImg: locale === `ru` ? DesktopImage3 : DesktopImage3Eng,
       label: `User Story Mapping`,
       className: `usm`,
       text: t(`usmCardText`),
     },
     {
       id: 4,
-      mobileImg: locale === `ru` ? MobileImg4 : MobileImg4Eng,
-      desktopImg: locale === `ru` ? DesktopImg4 : DesktopImg4Eng,
+      mobileImg: locale === `ru` ? MobileImage4 : MobileImage4Eng,
+      desktopImg: locale === `ru` ? DesktopImage4 : DesktopImage4Eng,
       label: t(`label`),
       className: `concepts`,
       text: t(`conceptsCardText`),

@@ -1,6 +1,6 @@
 import { useTranslation } from 'next-i18next';
-import ArrowCenter from '../../../icons/chelzoo-arrow-center.svg';
-import CurvedArrow from '../../../icons/chelzoo-curved-arrow.svg';
+import IconArrowCenter from '../../../icons/chelzoo-arrow-center.svg';
+import IconCurvedArrow from '../../../icons/chelzoo-curved-arrow.svg';
 
 type TestingTypes = {
   title: string;
@@ -47,9 +47,18 @@ export function ChelzooAutotests() {
           ))}
         </ul>
         <div className="chelzoo-autotests__arrows">
-          <CurvedArrow className="chelzoo-autotests__arrow chelzoo-autotests__arrow--left" />
-          <ArrowCenter className="chelzoo-autotests__arrow chelzoo-autotests__arrow--center" />
-          <CurvedArrow className="chelzoo-autotests__arrow chelzoo-autotests__arrow--right" />
+          <IconCurvedArrow
+            className="chelzoo-autotests__arrow chelzoo-autotests__arrow--left"
+            aria-hidden
+          />
+          <IconArrowCenter
+            className="chelzoo-autotests__arrow chelzoo-autotests__arrow--center"
+            aria-hidden
+          />
+          <IconCurvedArrow
+            className="chelzoo-autotests__arrow chelzoo-autotests__arrow--right"
+            aria-hidden
+          />
         </div>
         <div className="chelzoo-autotests__result">
           {t(`result`)}

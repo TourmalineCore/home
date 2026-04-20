@@ -52,8 +52,6 @@ export function ChelzooDevDesign() {
           rel="noreferrer"
         >
           {t(`linkText`)}
-          {` `}
-          →
         </a>
       </div>
     </section>

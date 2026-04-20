@@ -31,7 +31,7 @@ export function ChelzooAccessibility() {
               src={locale === `ru` ? DevImage : DevImageEng}
               fill
               placeholder="blur"
-              alt=""
+              alt="Семантическая верстка"
             />
           </div>
 
@@ -40,7 +40,7 @@ export function ChelzooAccessibility() {
               src={locale === `ru` ? ColorImage : ColorImageEng}
               fill
               placeholder="blur"
-              alt=""
+              alt="Колористика по WCAG"
             />
           </div>
 
@@ -49,7 +49,7 @@ export function ChelzooAccessibility() {
               src={locale === `ru` ? TypographyImage : TypographyImageEng}
               fill
               placeholder="blur"
-              alt=""
+              alt="Иерархия типографики"
             />
           </div>
         </div>
