@@ -39,8 +39,6 @@ export function ChelzooPodcast({
             rel="noreferrer"
           >
             {t(`linkText`)}
-            {` `}
-            →
           </a>
         </div>
       </div>
