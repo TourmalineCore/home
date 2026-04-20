@@ -34,7 +34,7 @@ export function ChelzooAbout() {
             />
           </div>
           <span className="chelzoo-about__arrow">
-            <IconPinkArrow />
+            <IconPinkArrow aria-hidden />
           </span>
           <div className="chelzoo-about__new-image-container">
             <Image

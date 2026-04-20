@@ -47,9 +47,18 @@ export function ChelzooAutotests() {
           ))}
         </ul>
         <div className="chelzoo-autotests__arrows">
-          <IconCurvedArrow className="chelzoo-autotests__arrow chelzoo-autotests__arrow--left" />
-          <IconArrowCenter className="chelzoo-autotests__arrow chelzoo-autotests__arrow--center" />
-          <IconCurvedArrow className="chelzoo-autotests__arrow chelzoo-autotests__arrow--right" />
+          <IconCurvedArrow
+            className="chelzoo-autotests__arrow chelzoo-autotests__arrow--left"
+            aria-hidden
+          />
+          <IconArrowCenter
+            className="chelzoo-autotests__arrow chelzoo-autotests__arrow--center"
+            aria-hidden
+          />
+          <IconCurvedArrow
+            className="chelzoo-autotests__arrow chelzoo-autotests__arrow--right"
+            aria-hidden
+          />
         </div>
         <div className="chelzoo-autotests__result">
           {t(`result`)}
