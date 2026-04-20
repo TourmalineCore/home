@@ -4,8 +4,8 @@ import {
   Page,
   test,
 } from '../../../../../playwright-tests/custom-test';
-import { ComponentName } from '../../../../../common/enums';
 import { BREAKPOINTS } from '../../../../../playwright-tests/constants/breakpoints';
+import { ComponentName } from '../../../../../common/enums';
 
 const TEST_ID = `mobile-menu-redesign`;
 

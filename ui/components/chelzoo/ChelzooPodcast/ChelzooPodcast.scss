@@ -1,0 +1,144 @@
+.chelzoo-podcast {
+  padding: 48px 0;
+  color: $color-black;
+  background-color: $color-white;
+
+  &__wrapper {
+    @include tablet {
+      padding-right: 32px;
+      padding-left: 32px;
+    }
+
+    @include tablet-xl {
+      padding-right: 64px;
+      padding-left: 64px;
+    }
+
+    @include desktop-xl {
+      padding-right: 88px;
+      padding-left: 88px;
+    }
+  }
+
+  &__title {
+    @include chelzoo-h2;
+
+    margin-bottom: 12px;
+
+    @include tablet {
+      text-align: center;
+    }
+
+    @include tablet-xl {
+      margin-bottom: 20px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 28px;
+    }
+  }
+
+  &__description {
+    @include chelzoo-body;
+
+    margin-bottom: 32px;
+    color: $color-grey-500-redesign;
+
+    @include tablet {
+      margin-right: auto;
+      margin-left: auto;
+      max-width: 592px;
+      text-align: center;
+    }
+
+    @include tablet-xl {
+      margin-bottom: 48px;
+      max-width: 720px;
+    }
+
+    @include desktop {
+      max-width: 750px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 64px;
+      max-width: 1112px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+
+    @include desktop {
+      max-width: 1238px;
+    }
+
+    @include desktop-xl {
+      max-width: 1744px;
+    }
+  }
+
+  &__media {
+    position: relative;
+    align-self: center;
+    overflow: hidden;
+    margin-bottom: 12px;
+    border-radius: 24px;
+    min-height: 380px;
+    aspect-ratio: 343/380;
+
+    @include tablet {
+      min-height: 380px;
+      aspect-ratio: 704/380;
+    }
+
+    @include tablet-xl {
+      margin-bottom: 16px;
+      border-radius: 46px;
+      min-height: 600px;
+      aspect-ratio: 896/600;
+    }
+
+    @include desktop {
+      max-width: 1238px;
+      aspect-ratio: 1238/600;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 20px;
+      border-radius: 70px;
+      min-height: 844px;
+      max-width: 1744px;
+      aspect-ratio: 1744/844;
+    }
+  }
+
+  img,
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__link {
+    @include chelzoo-link;
+    @include animated-underline-reverse;
+
+    align-self: center;
+    text-align: center;
+
+    @include tablet {
+      margin-left: auto;
+    }
+  }
+
+  @include tablet-xl {
+    padding: 64px 0 116px;
+  }
+
+  @include desktop-xl {
+    padding: 88px 0 164px;
+  }
+}

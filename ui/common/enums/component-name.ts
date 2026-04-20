@@ -22,4 +22,24 @@ export enum ComponentName {
   CHELZOO_ABOUT = `chelzoo-about`,
   CHELZOO_TASKS = `chelzoo-tasks`,
   CHELZOO_WAY = `chelzoo-way`,
+  CHELZOO_PODCAST = `chelzoo-podcast`,
+  CHELZOO_DISCOVERY = `chelzoo-discovery`,
+  CHELZOO_STACK = `chelzoo-stack`,
+  CHELZOO_ACCESSIBILITY = `chelzoo-accessibility`,
+  CHELZOO_DESIGN = `chelzoo-design`,
+  CHELZOO_MOCKUP = `chelzoo-mockup`,
+  CHELZOO_ADAPTATION = `chelzoo-adaptation`,
+  CHELZOO_TESTING_STRATEGY = `chelzoo-testing-strategy`,
+  CHELZOO_SEO = `chelzoo-seo`,
+  CHELZOO_DEV_DESIGN = `chelzoo-dev-design`,
+  CHELZOO_INFRASTRUCTURE = `chelzoo-infrastructure`,
+  CHELZOO_CMS = `chelzoo-cms`,
+  CHELZOO_PROMO = `chelzoo-promo`,
+  CHELZOO_AUTOTESTS = `chelzoo-autotests`,
 }
+
+export const COMPONENT_LINKS = Object.values(ComponentName)
+  .map((name) => ({
+    href: name,
+    label: name,
+  }));

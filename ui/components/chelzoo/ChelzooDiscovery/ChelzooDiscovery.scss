@@ -1,0 +1,337 @@
+.chelzoo-discovery {
+  background-color: $color-white;
+
+  &__wrapper {
+    padding: 48px 16px;
+
+    @include tablet {
+      padding: 48px 32px;
+    }
+
+    @include tablet-xl {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      border-radius: 80px;
+      padding: 100px 64px;
+      background-color: $color-off-white;
+    }
+
+    @include desktop {
+      padding: 100px 64px 125px;
+    }
+
+    @include desktop-xl {
+      padding: 164px 88px 139px;
+    }
+  }
+
+  &__label {
+    display: none;
+
+    @include tablet-xl {
+      @include chelzoo-body;
+
+      display: block;
+      color: $color-grey-500-redesign;
+
+      &--usm {
+        @include tablet-xl {
+          margin-left: 307px;
+        }
+      }
+
+      &--concepts {
+        order: 2;
+      }
+    }
+
+    @include desktop {
+      &--usm {
+        margin-left: 420px;
+      }
+    }
+
+    @include desktop-xl {
+      &--usm {
+        margin-left: 589px;
+      }
+    }
+  }
+
+  &__title {
+    @include chelzoo-h2;
+
+    margin-bottom: 32px;
+    color: $color-black;
+
+    @include tablet-xl {
+      margin-top: 16px;
+      margin-bottom: 64px;
+      text-align: center;
+    }
+
+    @include desktop-xl {
+      margin-top: 0;
+      margin-bottom: 88px;
+    }
+  }
+
+  &__list {
+    display: flex;
+    overflow-x: auto;
+    margin: 0 -16px;
+    gap: 12px;
+    scrollbar-width: none;
+
+    @include tablet {
+      margin: 0 -32px;
+    }
+
+    @include tablet-xl {
+      position: relative;
+      display: block;
+      overflow-x: unset;
+      margin: 0;
+      height: 2260px;
+    }
+
+    @include desktop {
+      height: 2496px;
+    }
+
+    @include desktop-xl {
+      height: 3548px;
+    }
+  }
+
+  &__card {
+    min-width: 240px;
+
+    &:first-child {
+      margin-left: 16px;
+
+      @include tablet {
+        margin-left: 32px;
+      }
+
+      @include tablet-xl {
+        margin-left: 0;
+      }
+    }
+
+    &:last-child {
+      margin-right: 16px;
+
+      @include tablet {
+        margin-right: 32px;
+      }
+
+      @include tablet-xl {
+        margin-right: 0;
+      }
+    }
+
+    @include tablet {
+      min-width: 288px;
+    }
+
+    @include tablet-xl {
+      position: absolute;
+      width: auto;
+    }
+
+    &--impact-map {
+      @include tablet-xl {
+        position: relative;
+        margin-bottom: 64px;
+        width: 100%;
+      }
+
+      @include desktop-xl {
+        margin-bottom: 88px;
+      }
+    }
+
+    &--usm {
+      @include tablet-xl {
+        left: 153px;
+        top: 1093px;
+        width: 807px;
+      }
+
+      @include desktop {
+        left: 211px;
+        top: 1295px;
+        width: 1027px;
+      }
+
+      @include desktop-xl {
+        left: 297px;
+        top: 1818px;
+        width: 1443px;
+      }
+    }
+
+    &--concepts {
+      @include tablet-xl {
+        left: 0;
+        top: 1824px;
+        display: flex;
+        flex-direction: column;
+        width: 743px;
+      }
+
+      @include desktop {
+        top: 2000px;
+        width: 992px;
+      }
+
+      @include desktop-xl {
+        top: 2809px;
+        width: 1394px;
+      }
+    }
+  }
+
+  &__image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    height: 300px;
+    box-shadow: 0 4px 8px 0 $color-shadow;
+
+    @include tablet {
+      border-radius: 29px;
+      height: 360px;
+    }
+
+    @include tablet-xl {
+      border-radius: 16px;
+      height: auto;
+    }
+
+    &--desktop {
+      display: none;
+      border-radius: 24px;
+    }
+
+    /* stylelint-disable-next-line order/order */
+    @include tablet-xl {
+      &--mobile {
+        display: none;
+      }
+
+      &--desktop {
+        display: block;
+      }
+    }
+
+    &--impact-map {
+      @include tablet-xl {
+        width: 896px;
+        height: 527px;
+      }
+
+      @include desktop {
+        width: 1238px;
+        height: 720px;
+      }
+
+      @include desktop-xl {
+        width: 1744px;
+        height: 1012px;
+      }
+    }
+
+    &--cjm {
+      @include tablet-xl {
+        width: 436px;
+        height: 436px;
+      }
+
+      @include desktop {
+        width: 607px;
+        height: 607px;
+      }
+
+      @include desktop-xl {
+        width: 853px;
+        height: 852px;
+      }
+    }
+
+    &--usm {
+      @include tablet-xl {
+        width: 807px;
+        height: 604px;
+      }
+
+      @include desktop {
+        width: 100%;
+        height: 604px;
+      }
+
+      @include desktop-xl {
+        height: 848px;
+      }
+    }
+
+    &--concepts {
+      @include tablet-xl {
+        order: 1;
+        margin-bottom: 32px;
+        height: 264px;
+      }
+
+      @include desktop {
+        height: 352px;
+      }
+
+      @include desktop-xl {
+        margin-bottom: 44px;
+        height: 492px;
+      }
+    }
+  }
+
+  &__text {
+    @include chelzoo-accent-text;
+
+    margin-top: 8px;
+    color: $color-black;
+
+    @include tablet-xl {
+      margin-top: 12px;
+      margin-bottom: 32px;
+      width: 436px;
+
+      &--usm {
+        margin-left: 307px;
+      }
+
+      &--concepts {
+        order: 3;
+        margin-bottom: 0;
+      }
+    }
+
+    @include desktop {
+      width: 527px;
+
+      &--usm {
+        margin-left: 420px;
+      }
+    }
+
+    @include desktop-xl {
+      margin-top: 16px;
+      margin-bottom: 44px;
+      width: 746px;
+
+      &--usm {
+        margin-left: 589px;
+      }
+    }
+  }
+}

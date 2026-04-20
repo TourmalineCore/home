@@ -8,8 +8,22 @@ import { loadTranslations } from '../../common/utils';
 import { LayoutRedesign } from '../../components/redesign/LayoutRedesign/LayoutRedesign';
 import { ChelzooHero } from '../../components/chelzoo/ChelzooHero/ChelzooHero';
 import { ChelzooAbout } from '../../components/chelzoo/ChelzooAbout/ChelzooAbout';
+import { ChelzooStack } from '../../components/chelzoo/ChelzooStack/ChelzooStack';
 import { ChelzooTasks } from '../../components/chelzoo/ChelzooTasks/ChelzooTasks';
 import { ChelzooWay } from '../../components/chelzoo/ChelzooWay/ChelzooWay';
+import { ChelzooAccessibility } from '../../components/chelzoo/ChelzooAccessibility/ChelzooAccessibility';
+import { ChelzooPodcast } from '../../components/chelzoo/ChelzooPodcast/ChelzooPodcast';
+import { ChelzooDiscovery } from '../../components/chelzoo/ChelzooDiscovery/ChelzooDiscovery';
+import { ChelzooDesign } from '../../components/chelzoo/ChelzooDesign/ChelzooDesign';
+import { ChelzooMockup } from '../../components/chelzoo/ChelzooMockup/ChelzooMockup';
+import { ChelzooAdaptation } from '../../components/chelzoo/ChelzooAdaptation/ChelzooAdaptation';
+import { ChelzooTestingStrategy } from '../../components/chelzoo/ChelzooTestingStrategy/ChelzooTestingStrategy';
+import { ChelzooSeo } from '../../components/chelzoo/ChelzooSeo/ChelzooSeo';
+import { ChelzooDevDesign } from '../../components/chelzoo/ChelzooDevDesign/ChelzooDevDesign';
+import { ChelzooAutotests } from '../../components/chelzoo/ChelzooAutotests/ChelzooAutotests';
+import { ChelzooInfrastructure } from '../../components/chelzoo/ChelzooInfrastructure/ChelzooInfrastructure';
+import { ChelzooCMS } from '../../components/chelzoo/ChelzooCMS/ChelzooCMS';
+import { ChelzooPromo } from '../../components/chelzoo/ChelzooPromo/ChelzooPromo';
 
 export default function ChelzooPage({
   layoutData,
@@ -51,6 +65,20 @@ export default function ChelzooPage({
           <ChelzooAbout />
           <ChelzooTasks />
           <ChelzooWay />
+          <ChelzooPodcast />
+          <ChelzooDiscovery />
+          <ChelzooStack />
+          <ChelzooAccessibility />
+          <ChelzooDesign />
+          <ChelzooMockup />
+          <ChelzooAdaptation />
+          <ChelzooDevDesign />
+          <ChelzooTestingStrategy />
+          <ChelzooCMS />
+          <ChelzooSeo />
+          <ChelzooInfrastructure />
+          <ChelzooAutotests />
+          <ChelzooPromo />
         </div>
       </LayoutRedesign>
     </>
@@ -109,7 +137,21 @@ async function getStaticTranslation({
     `formBlockRedesign`,
     `chelzooHero`,
     `chelzooAbout`,
+    `chelzooStack`,
     `chelzooTasks`,
     `chelzooWay`,
+    `chelzooAccessibility`,
+    `chelzooPodcast`,
+    `chelzooDiscovery`,
+    `chelzooDesign`,
+    `chelzooMockup`,
+    `chelzooAdaptation`,
+    `chelzooTestingStrategy`,
+    `chelzooSeo`,
+    `chelzooDevDesign`,
+    `chelzooAutotests`,
+    `chelzooInfrastructure`,
+    `chelzooCMS`,
+    `chelzooPromo`,
   ]);
 }

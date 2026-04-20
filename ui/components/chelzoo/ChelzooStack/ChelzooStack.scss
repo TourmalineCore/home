@@ -1,0 +1,227 @@
+.chelzoo-stack {
+  position: relative;
+  padding: 48px 0;
+  color: $color-black;
+  background-color: $color-white;
+
+  &__wrapper {
+    @include tablet {
+      padding: 0 32px;
+    }
+
+    @include tablet-xl {
+      padding: 0 64px;
+    }
+
+    @include desktop {
+      max-width: 1366px;
+    }
+
+    @include desktop-xl {
+      padding: 0 88px;
+      max-width: 1920px;
+    }
+  }
+
+  &__title {
+    @include chelzoo-h2;
+
+    margin-bottom: 12px;
+
+    @include tablet-xl {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 28px;
+    }
+  }
+
+  &__description {
+    @include chelzoo-body;
+
+    margin-bottom: 32px;
+    color: $color-grey-500-redesign;
+
+    @include tablet {
+      max-width: 80%;
+    }
+
+    @include tablet-xl {
+      margin-right: auto;
+      margin-bottom: 64px;
+      margin-left: auto;
+      text-align: center;
+    }
+
+    @include desktop {
+      max-width: 53%;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 90px;
+    }
+  }
+
+  &__list {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 24px;
+
+    &::after {
+      content: url("../../../public/images/flower-pink.svg");
+      position: absolute;
+      right: -17px;
+      top: 244px;
+      width: 85px;
+      height: 104px;
+      animation: rotate 5s ease-out infinite;
+      animation-direction: alternate;
+
+      @include tablet {
+        right: -38px;
+        top: unset;
+        bottom: 70px;
+      }
+
+      @include tablet-xl {
+        right: 37px;
+        bottom: -24px;
+        width: 160px;
+        height: 195px;
+      }
+
+      @include desktop {
+        right: -82px;
+        bottom: 35px;
+        width: 160px;
+        height: 195px;
+      }
+
+      @include desktop-xl {
+        right: -83px;
+        bottom: -34px;
+        width: 228px;
+        height: 278px;
+      }
+    }
+
+    @include tablet {
+      gap: 24px;
+    }
+
+    @include tablet-xl {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      margin: 0 -64px;
+      scrollbar-width: none;
+    }
+
+    @include desktop {
+      overflow: unset;
+      margin: 0;
+      gap: 56px;
+    }
+
+    @include desktop-xl {
+      gap: 74px;
+    }
+  }
+
+  &__item {
+    width: min-content;
+
+    &:first-child {
+      @include tablet-xl {
+        margin-left: 64px;
+      }
+
+      @include desktop {
+        margin-left: 0;
+      }
+    }
+
+    &:last-child {
+      @include tablet-xl {
+        margin-right: 64px;
+      }
+
+      @include desktop {
+        margin-right: 0;
+      }
+    }
+  }
+
+  &__direction {
+    @include chelzoo-body;
+
+    margin-bottom: 12px;
+    min-height: 38px;
+    color: $color-grass-green;
+
+    @include tablet-xl {
+      margin-bottom: 20px;
+    }
+
+    @include desktop {
+      max-width: 290px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 24px;
+    }
+  }
+
+  &__technology {
+    @include chelzoo-h4;
+
+    border-radius: 25px;
+    padding: 12px 18px;
+    width: fit-content;
+    background-color: #f6f5f5;
+
+    & + & {
+      margin-top: 8px;
+
+      @include tablet-xl {
+        margin-top: 12px;
+      }
+
+      @include desktop-xl {
+        margin-top: 16px;
+      }
+    }
+
+    @include tablet-xl {
+      padding: 12px 24px;
+    }
+
+    @include desktop-xl {
+      padding: 16px 32px;
+    }
+  }
+
+  &__name {
+    white-space: pre;
+  }
+
+  @include tablet-xl {
+    padding: 116px 0 64px;
+  }
+
+  @include desktop-xl {
+    padding: 164px 0 88px;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(180deg);
+  }
+}
