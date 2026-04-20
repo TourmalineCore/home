@@ -2,7 +2,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { PageHead } from '../../components/PageHead/PageHead';
 import { useScrollTop } from '../../common/hooks/useScrollTop';
-import { LayoutData } from '../../common/types';
+import { CollageWithLinkBlock, LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
 import { LayoutRedesign } from '../../components/redesign/LayoutRedesign/LayoutRedesign';
@@ -25,12 +25,15 @@ import { ChelzooCMS } from '../../components/chelzoo/ChelzooCMS/ChelzooCMS';
 import { ChelzooPromo } from '../../components/chelzoo/ChelzooPromo/ChelzooPromo';
 import { ChelzooLinks } from '../../components/chelzoo/ChelzooLinks/ChelzooLinks';
 import { ChelzooReview } from '../../components/chelzoo/ChelzooReview/ChelzooReview';
+import { CollageWithLink } from '../../components/CollageWithLink/CollageWithLink';
 
 export default function ChelzooPage({
   layoutData,
+  collageWithLinkData,
   isPreview,
 }: {
   layoutData: LayoutData;
+  collageWithLinkData: CollageWithLinkBlock;
   isPreview: boolean;
 }) {
   const {
@@ -81,6 +84,11 @@ export default function ChelzooPage({
           <ChelzooReview />
           <ChelzooPromo />
           <ChelzooLinks />
+          <CollageWithLink
+            text={collageWithLinkData.text}
+            link={collageWithLinkData.link}
+            imagesWithBlurDataURL={collageWithLinkData.imagesWithBlurDataURL}
+          />
         </div>
       </LayoutRedesign>
     </>
@@ -95,13 +103,22 @@ export async function getServerSideProps({
   preview: boolean;
 }) {
   if (process.env.IS_STATIC_MODE === `true`) {
-    const translationsPageData = await loadTranslations(locale, [`headerRedesign`, `footerRedesign`]);
+    const translationsPageData = await loadTranslations(locale, [
+      `headerRedesign`,
+      `footerRedesign`,
+      `collageWithLink`,
+    ]);
 
     return {
       props: {
         layoutData: {
           headerContent: translationsPageData.headerRedesign,
           footerContent: translationsPageData.footerRedesign,
+        },
+        collageWithLinkData: {
+          text: translationsPageData.collageWithLink.text,
+          link: translationsPageData.collageWithLink.link,
+          imagesWithBlurDataURL: translationsPageData.collageWithLink.imagesWithBlurDataURL,
         },
         ...(await getStaticTranslation({
           locale,
