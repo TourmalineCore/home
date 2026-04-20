@@ -19,6 +19,7 @@
 
     @include desktop {
       flex-direction: row;
+      justify-content: center;
       gap: 24px;
     }
 
@@ -33,7 +34,7 @@
 
     color: $color-black;
 
-    @include tablet-xl {
+    @include desktop {
       max-width: 397px;
     }
 
