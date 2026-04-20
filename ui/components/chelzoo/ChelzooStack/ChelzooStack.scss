@@ -4,41 +4,6 @@
   color: $color-black;
   background-color: $color-white;
 
-  &::after {
-    content: url("../../../public/images/flower-pink.svg");
-    position: absolute;
-    right: 0;
-    bottom: 3px;
-    width: 85px;
-    height: 104px;
-
-    @include tablet {
-      right: -6px;
-      bottom: -4px;
-    }
-
-    @include tablet-xl {
-      right: 38px;
-      bottom: 40px;
-      width: 160px;
-      height: 195px;
-    }
-
-    @include desktop {
-      right: -18px;
-      bottom: 98px;
-      width: 160px;
-      height: 195px;
-    }
-
-    @include desktop-xl {
-      right: 4px;
-      bottom: 52px;
-      width: 228px;
-      height: 278px;
-    }
-  }
-
   &__wrapper {
     @include tablet {
       padding: 0 32px;
@@ -100,22 +65,62 @@
   }
 
   &__list {
+    position: relative;
     display: flex;
-    overflow: auto;
-    margin: 0 -16px;
-    gap: 24px;
-    scrollbar-width: none;
+    flex-wrap: wrap;
+    gap: 48px 24px;
+
+    &::after {
+      content: url("../../../public/images/flower-pink.svg");
+      position: absolute;
+      right: -17px;
+      top: 244px;
+      width: 85px;
+      height: 104px;
+      animation: rotate 5s ease-out infinite;
+      animation-direction: alternate;
+
+      @include tablet {
+        right: -38px;
+        top: unset;
+        bottom: 70px;
+      }
+
+      @include tablet-xl {
+        right: 37px;
+        bottom: -24px;
+        width: 160px;
+        height: 195px;
+      }
+
+      @include desktop {
+        right: -82px;
+        bottom: 35px;
+        width: 160px;
+        height: 195px;
+      }
+
+      @include desktop-xl {
+        right: -83px;
+        bottom: -34px;
+        width: 228px;
+        height: 278px;
+      }
+    }
 
     @include tablet {
-      margin: 0 -32px;
+      gap: 24px;
     }
 
     @include tablet-xl {
+      flex-wrap: nowrap;
+      overflow-x: auto;
       margin: 0 -64px;
+      scrollbar-width: none;
     }
 
     @include desktop {
-      overflow: hidden;
+      overflow: unset;
       margin: 0;
       gap: 56px;
     }
@@ -126,13 +131,9 @@
   }
 
   &__item {
+    width: min-content;
+
     &:first-child {
-      margin-left: 16px;
-
-      @include tablet {
-        margin-left: 32px;
-      }
-
       @include tablet-xl {
         margin-left: 64px;
       }
@@ -143,12 +144,6 @@
     }
 
     &:last-child {
-      margin-right: 16px;
-
-      @include tablet {
-        margin-right: 32px;
-      }
-
       @include tablet-xl {
         margin-right: 64px;
       }
@@ -218,5 +213,15 @@
 
   @include desktop-xl {
     padding: 164px 0 88px;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(180deg);
   }
 }
