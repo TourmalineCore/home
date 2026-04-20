@@ -18,6 +18,7 @@
     }
 
     @include tablet-xl {
+      align-items: flex-start;
       padding: 64px 64px 116px;
     }
 
@@ -34,9 +35,13 @@
 
   &__author {
     @include chelzoo-body;
+
+    color: $color-grey-500-redesign;
   }
 
   &__text {
+    display: flex;
+    flex-direction: column;
     gap: 12px;
 
     @include tablet {
@@ -49,7 +54,6 @@
 
     @include desktop {
       width: 846px;
-      gap: 35px;
     }
 
     @include desktop-xl {
