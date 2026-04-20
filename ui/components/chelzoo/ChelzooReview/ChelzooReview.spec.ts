@@ -18,7 +18,7 @@ test.describe(`ChelzooReviewTests`, () => {
       testScreenshotAtBreakpoint,
     }) => {
       await testScreenshotAtBreakpoint({
-        testId: ComponentName.CHELZOO_TASKS,
+        testId: ComponentName.CHELZOO_REVIEW,
         breakpoint,
         breakpointName,
       });
