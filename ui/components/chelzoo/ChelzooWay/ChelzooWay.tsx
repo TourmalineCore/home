@@ -1,8 +1,12 @@
 import { useTranslation } from "next-i18next";
 import Image from 'next/image';
-import { useRouter } from "next/router";
 import Result from '../../../public/images/chelzoo-way-result.png';
 import { useDeviceSize } from "../../../common/hooks";
+
+type PreparationImage = {
+  url: string;
+  blurDataURL: string;
+};
 
 export function ChelzooWay() {
   const {
@@ -10,17 +14,16 @@ export function ChelzooWay() {
   } = useTranslation(`chelzooWay`);
 
   const {
-    locale,
-  } = useRouter();
-
-  const {
     isMobile,
   } = useDeviceSize();
 
-  const preparationImage = {
-    ru: isMobile ? `/images/chelzoo-way-preparation-mobile.svg` : `/images/chelzoo-way-preparation.svg`,
-    eng: isMobile ? `/images/chelzoo-way-preparation-mobile-eng.svg` : `/images/chelzoo-way-preparation-eng.svg`,
-  };
+  const preparationImage: PreparationImage = t(`preparationImage`, {
+    returnObjects: true,
+  });
+
+  const preparationImageMobile: PreparationImage = t(`preparationImageSmall`, {
+    returnObjects: true,
+  });
 
   return (
     <section
@@ -33,9 +36,11 @@ export function ChelzooWay() {
           className="chelzoo-way__preparation-image-wrapper"
         >
           <Image
-            src={locale === `ru` ? preparationImage.ru : preparationImage.eng}
+            src={isMobile ? preparationImageMobile.url : preparationImage.url}
             fill
             unoptimized
+            placeholder="blur"
+            blurDataURL={isMobile ? preparationImageMobile.blurDataURL : preparationImage.blurDataURL}
             alt=""
           />
         </div>
