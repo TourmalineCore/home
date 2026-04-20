@@ -11,10 +11,8 @@
     }
 
     @include desktop-xl {
-      margin-left: 24px;
-      padding-top: 88px;
-      padding-bottom: 88px;
-      padding-left: max(24px, calc((100vw - 1920px) / 2));
+      padding: 88px 24px;
+      max-width: 1920px;
     }
   }
 
@@ -59,13 +57,11 @@
 
   &__list {
     display: flex;
-    overflow-x: scroll;
-    margin: 0 -16px;
+    overflow-x: auto;
     gap: 12px;
     scrollbar-width: none;
 
     @include desktop-xl {
-      margin: 0 -24px;
       gap: 16px;
     }
   }
@@ -83,7 +79,7 @@
       }
 
       @include desktop-xl {
-        margin-left: 24px;
+        margin-left: 0;
         width: 288px;
       }
     }
