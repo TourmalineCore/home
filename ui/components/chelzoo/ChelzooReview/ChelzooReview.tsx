@@ -1,6 +1,6 @@
 import { useTranslation } from "next-i18next";
 import Image from 'next/image';
-import ReviewImg from "../../../public/images/chelzoo-review.png";
+import ReviewImg from "../../../public/images/chelzoo-review.jpg";
 
 export function ChelzooReview() {
   const {
@@ -22,8 +22,10 @@ export function ChelzooReview() {
             placeholder="blur"
           />
         </div>
-        <div className="chelzoo-review__quote">{t(`quote`)}</div>
-        <div className="chelzoo-review__author">{t(`author`)}</div>
+        <div className="chelzoo-review__text">
+          <div className="chelzoo-review__quote">{t(`quote`)}</div>
+          <div className="chelzoo-review__author">{t(`author`)}</div>
+        </div>
       </div>
     </section>
   );

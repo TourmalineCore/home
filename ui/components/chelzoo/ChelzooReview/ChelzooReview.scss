@@ -1,10 +1,31 @@
 .chelzoo-review {
-  padding: 48px 16px;
-  color: $color-black;
-  background-color: $color-white;
+  background-color: $color-black;
 
   &__wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 0 0 40px 40px;
+    padding: 48px 16px 64px;
+    color: $color-black;
+    background-color: $color-white;
+    gap: 32px;
 
+    @include tablet {
+      flex-direction: row;
+      padding: 48px 32px 64px;
+    }
+
+    @include tablet-xl {
+      padding: 64px 64px 116px;
+    }
+
+    @include desktop-xl {
+      align-items: center;
+      padding: 88px 88px 164px;
+      gap: 44px;
+    }
   }
 
   &__quote {
@@ -15,50 +36,52 @@
     @include chelzoo-body;
   }
 
+  &__text {
+    gap: 12px;
+
+    @include tablet {
+      width: 532px;
+    }
+
+    @include tablet-xl {
+      width: 504px;
+    }
+
+    @include desktop {
+      width: 846px;
+      gap: 35px;
+    }
+
+    @include desktop-xl {
+      width: 1196px;
+      gap: 17px;
+    }
+  }
+
   &__image-wrapper {
     position: relative;
     overflow: hidden;
-    margin-top: 32px;
     width: 343px;
     height: 343px;
 
     @include tablet {
-      z-index: 0;
-      margin: 0 auto;
-      width: 640px;
-      height: 640px;
+      width: 140px;
+      height: 140px;
     }
 
     @include tablet-xl {
-      width: 816px;
-      height: 816px;
-    }
-
-    @include desktop {
-      width: 1046px;
-      height: 1046px;
+      width: 360px;
+      height: 360px;
     }
 
     @include desktop-xl {
-      width: 1472px;
-      height: 1472px;
+      width: 504px;
+      height: 504px;
     }
   }
 
   &__image {
     border-radius: 50%;
     object-fit: cover;
-  }
-
-  @include tablet {
-    padding: 48px 32px 64px;
-  }
-
-  @include tablet-xl {
-    padding: 64px 64px 116px;
-  }
-
-  @include desktop-xl {
-    padding: 88px 88px 164px;
   }
 }
