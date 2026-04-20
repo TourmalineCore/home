@@ -1,0 +1,91 @@
+.chelzoo-review {
+  background-color: $color-black;
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 0 0 40px 40px;
+    padding: 48px 16px 64px;
+    color: $color-black;
+    background-color: $color-white;
+    gap: 32px;
+
+    @include tablet {
+      flex-direction: row;
+      padding: 48px 32px 64px;
+    }
+
+    @include tablet-xl {
+      align-items: flex-start;
+      padding: 64px 64px 116px;
+    }
+
+    @include desktop-xl {
+      align-items: center;
+      padding: 88px 88px 164px;
+      gap: 44px;
+    }
+  }
+
+  &__quote {
+    @include chelzoo-h2;
+  }
+
+  &__author {
+    @include chelzoo-body;
+
+    color: $color-grey-500-redesign;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    @include tablet {
+      width: 532px;
+    }
+
+    @include tablet-xl {
+      width: 504px;
+    }
+
+    @include desktop {
+      width: 846px;
+    }
+
+    @include desktop-xl {
+      width: 1196px;
+      gap: 17px;
+    }
+  }
+
+  &__image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    width: 343px;
+    height: 343px;
+
+    img {
+      object-fit: cover;
+    }
+
+    @include tablet {
+      width: 140px;
+      height: 140px;
+    }
+
+    @include tablet-xl {
+      width: 360px;
+      height: 360px;
+    }
+
+    @include desktop-xl {
+      width: 504px;
+      height: 504px;
+    }
+  }
+}
