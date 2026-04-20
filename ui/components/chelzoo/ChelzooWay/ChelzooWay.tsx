@@ -1,9 +1,8 @@
 import { useTranslation } from "next-i18next";
 import Image from 'next/image';
 import { useRouter } from "next/router";
-import PreparationImage from '../../../public/images/chelzoo-way-preparation.png';
-import PreparationImageEng from '../../../public/images/chelzoo-way-preparation-eng.png';
 import Result from '../../../public/images/chelzoo-way-result.png';
+import { useDeviceSize } from "../../../common/hooks";
 
 export function ChelzooWay() {
   const {
@@ -14,6 +13,15 @@ export function ChelzooWay() {
     locale,
   } = useRouter();
 
+  const {
+    isMobile,
+  } = useDeviceSize();
+
+  const preparationImage = {
+    ru: isMobile ? `/images/chelzoo-way-preparation-mobile.svg` : `/images/chelzoo-way-preparation.svg`,
+    eng: isMobile ? `/images/chelzoo-way-preparation-mobile-eng.svg` : `/images/chelzoo-way-preparation-eng.svg`,
+  };
+
   return (
     <section
       className="chelzoo-way"
@@ -22,18 +30,14 @@ export function ChelzooWay() {
       <div className="container-cases chelzoo-way__wrapper">
         <h2 className="chelzoo-way__title">{t(`preparationTitle`)}</h2>
         <div
-          className="chelzoo-way__preparation-image-container"
+          className="chelzoo-way__preparation-image-wrapper"
         >
-          <div
-            className="chelzoo-way__preparation-image-wrapper"
-          >
-            <Image
-              src={locale === `ru` ? PreparationImage : PreparationImageEng}
-              placeholder="blur"
-              fill
-              alt=""
-            />
-          </div>
+          <Image
+            src={locale === `ru` ? preparationImage.ru : preparationImage.eng}
+            fill
+            unoptimized
+            alt=""
+          />
         </div>
 
         <h2 className="chelzoo-way__title">{t(`resultTitle`)}</h2>
