@@ -318,3 +318,20 @@
     font-size: 32px;
   }
 }
+
+@mixin chelzoo-caption {
+  @include medium-font;
+  @include inter-font;
+
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: -0.01px;
+
+  @include tablet-xl {
+    font-size: 16px;
+  }
+
+  @include desktop-xl {
+    font-size: 22px;
+  }
+}

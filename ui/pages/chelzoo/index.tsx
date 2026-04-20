@@ -23,6 +23,7 @@ import { ChelzooAutotests } from '../../components/chelzoo/ChelzooAutotests/Chel
 import { ChelzooInfrastructure } from '../../components/chelzoo/ChelzooInfrastructure/ChelzooInfrastructure';
 import { ChelzooCMS } from '../../components/chelzoo/ChelzooCMS/ChelzooCMS';
 import { ChelzooPromo } from '../../components/chelzoo/ChelzooPromo/ChelzooPromo';
+import { ChelzooLinks } from '../../components/chelzoo/ChelzooLinks/ChelzooLinks';
 import { ChelzooReview } from '../../components/chelzoo/ChelzooReview/ChelzooReview';
 import { CollageWithLink } from '../../components/CollageWithLink/CollageWithLink';
 
@@ -82,6 +83,7 @@ export default function ChelzooPage({
           <ChelzooAutotests />
           <ChelzooReview />
           <ChelzooPromo />
+          <ChelzooLinks />
           <CollageWithLink
             text={collageWithLinkData.text}
             link={collageWithLinkData.link}
@@ -170,5 +172,6 @@ async function getStaticTranslation({
     `chelzooInfrastructure`,
     `chelzooCMS`,
     `chelzooPromo`,
+    `chelzooLinks`,
   ]);
 }

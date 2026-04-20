@@ -35,6 +35,7 @@ import { SignpostMultiple } from "../../components/SignpostMultiple/SignpostMult
 import { SingleImage } from "../../components/SingleImage/SingleImage";
 import { ThreeColumnGrid } from "../../components/ThreeColumnGrid/ThreeColumnGrid";
 import { ChelzooInfrastructure } from "../../components/chelzoo/ChelzooInfrastructure/ChelzooInfrastructure";
+import { ChelzooLinks } from "../../components/chelzoo/ChelzooLinks/ChelzooLinks";
 import { ChelzooReview } from "../../components/chelzoo/ChelzooReview/ChelzooReview";
 
 export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JSX.Element> = {
@@ -210,6 +211,7 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   [ComponentName.CHELZOO_AUTOTESTS]: () => <ChelzooAutotests />,
   [ComponentName.CHELZOO_REVIEW]: () => <ChelzooReview />,
   [ComponentName.CHELZOO_INFRASTRUCTURE]: () => <ChelzooInfrastructure />,
+  [ComponentName.CHELZOO_LINKS]: () => <ChelzooLinks />,
 };
 
 export default function ComponentsPage({
@@ -297,6 +299,7 @@ export async function getStaticProps({
         `chelzooInfrastructure`,
         `chelzooCMS`,
         `chelzooPromo`,
+        `chelzooLinks`,
       ])),
     },
   };
