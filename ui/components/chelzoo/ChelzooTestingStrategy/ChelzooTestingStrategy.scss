@@ -7,11 +7,6 @@
   &__wrapper {
     display: flex;
     flex-direction: column;
-
-    @include tablet {
-      padding-top: 0;
-      padding-bottom: 0;
-    }
   }
 
   &__content {

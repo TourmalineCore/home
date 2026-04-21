@@ -8,11 +8,6 @@
     flex-direction: column;
     gap: 32px;
 
-    @include tablet {
-      padding-top: 0;
-      padding-bottom: 0;
-    }
-
     @include tablet-xl {
       gap: 48px;
     }
