@@ -1,4 +1,6 @@
+import clsx from "clsx";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 type Steps = {
   title: string;
@@ -9,6 +11,10 @@ export function ChelzooInfrastructure() {
   const {
     t,
   } = useTranslation(`chelzooInfrastructure`);
+
+  const {
+    locale,
+  } = useRouter();
 
   const steps: Steps = t(`steps`, {
     returnObjects: true,
@@ -28,7 +34,9 @@ export function ChelzooInfrastructure() {
           }) => (
             <li
               key={title}
-              className="chelzoo-infrastructure__step col-tablet-6"
+              className={clsx(`chelzoo-infrastructure__step col-tablet-6`, {
+                'chelzoo-infrastructure__step--eng': locale !== `ru`,
+              })}
             >
               <div className="chelzoo-infrastructure__step-inner">
                 <h3 className="chelzoo-infrastructure__step-title">{title}</h3>

@@ -1,4 +1,6 @@
 .chelzoo-infrastructure {
+  $this: &;
+
   padding-top: 48px;
   padding-bottom: 116px;
   background-color: $color-off-white;
@@ -65,12 +67,11 @@
       position: absolute;
       right: -5px;
       bottom: -85px;
-      width: 123px;
-      height: 46px;
-      background-image: url("../../../public/images/chelzoo-infrastructure-price.png");
+      width: 130px;
+      height: 80px;
+      background-image: url("../../../public/images/chelzoo-infrastructure-price.svg");
       background-size: contain;
       background-repeat: no-repeat;
-      transform: rotate(15deg);
 
       @include tablet {
         right: -143px;
@@ -94,6 +95,12 @@
         bottom: 32px;
         width: 292px;
         height: 112px;
+      }
+    }
+
+    &--eng {
+      &:last-child::after {
+        background-image: url("../../../public/images/chelzoo-infrastructure-price-eng.svg");
       }
     }
   }
