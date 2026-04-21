@@ -1,6 +1,7 @@
 import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import clsx from 'clsx';
 import IconDownArrow from '../../../icons/icon-arrow-chelzoo.svg';
 
 export function ChelzooHero({
@@ -24,7 +25,10 @@ export function ChelzooHero({
       <div className="chelzoo-hero__decor chelzoo-hero__decor--left" />
       <div className="chelzoo-hero__decor chelzoo-hero__decor--right" />
       <div className="chelzoo-hero__wrapper">
-        <h1 className="chelzoo-hero__title">
+        <h1 className={clsx(`chelzoo-hero__title`, {
+          'chelzoo-hero__title--max-width-lg': locale !== `ru`,
+        })}
+        >
           {t(`title`)}
         </h1>
         <div className="chelzoo-hero__media">

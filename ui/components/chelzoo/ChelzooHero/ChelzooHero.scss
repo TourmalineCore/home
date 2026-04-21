@@ -113,6 +113,11 @@
       max-width: 1080px;
       font-size: 112px;
     }
+
+    &--max-width-lg {
+      max-width: unset;
+      line-height: 1.1;
+    }
   }
 
   &__media {
