@@ -79,6 +79,8 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    padding-right: 16px;
+    padding-left: 16px;
 
     @include desktop-xl {
       padding-right: 24px;
@@ -157,7 +159,6 @@
 
   &__content {
     align-self: flex-start;
-    margin-left: 16px;
     max-width: 336px;
 
     @include tablet-xl {
@@ -169,7 +170,6 @@
     }
 
     @include desktop-xl {
-      margin-left: 24px;
       max-width: 544px;
     }
   }
