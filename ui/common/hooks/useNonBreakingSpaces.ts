@@ -13,7 +13,7 @@ export function useNonBreakingSpaces({
       null,
     );
 
-    const russianRules = /((?<![^\s\(«'"])(с|со|см\.|в|во|вне|у|к|ко|на|не|ни|над|по|под|про|при|за|о|от|об|обо|до|для|и|из|им\.|без|а|или|\/\/)(\s+|$))/gi;
+    const russianRules = /((?<![^\s\(«'"])(с|со|я|в|во|вы|вне|у|к|ко|но|их|ее|её|на|не|ни|над|по|под|про|при|за|о|от|об|обо|до|для|и|из|им\.|без|а|или|\/\/)(\s+|$))/gi;
 
     const englishRules = /((?<![^\s\(«"'])(a|an|the|of|in|to|for|with|on|at|by|as|is|be|are|was|were|and|or|but|nor|so|for|yet)(\s+|$))/gi;
 
