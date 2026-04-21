@@ -65,35 +65,42 @@
       position: absolute;
       right: -5px;
       bottom: -85px;
-      width: 123px;
-      height: 46px;
-      background-image: url("../../../public/images/chelzoo-infrastructure-price.png");
+      width: 130px;
+      height: 80px;
+      background-image: url("../../../public/images/chelzoo-infrastructure-price.svg");
       background-size: contain;
       background-repeat: no-repeat;
-      transform: rotate(15deg);
 
       @include tablet {
-        right: -143px;
-        bottom: 52px;
+        right: -142px;
+        bottom: 37px;
       }
 
       @include tablet-xl {
-        right: -245px;
-        bottom: -3px;
-        width: 207px;
-        height: 76px;
+        right: -243px;
+        bottom: -28px;
+        width: 218px;
+        height: 134px;
       }
 
       @include desktop {
-        right: -244px;
-        bottom: 23px;
+        right: -232px;
+        bottom: 6px;
+        width: 208px;
+        height: 128px;
       }
 
       @include desktop-xl {
-        right: -336px;
-        bottom: 32px;
-        width: 292px;
-        height: 112px;
+        right: -358px;
+        bottom: 18px;
+        width: 325px;
+        height: 200px;
+      }
+    }
+
+    &--eng {
+      &:last-child::after {
+        background-image: url("../../../public/images/chelzoo-infrastructure-price-eng.svg");
       }
     }
   }
