@@ -74,27 +74,29 @@
       background-repeat: no-repeat;
 
       @include tablet {
-        right: -143px;
-        bottom: 52px;
+        right: -142px;
+        bottom: 37px;
       }
 
       @include tablet-xl {
-        right: -245px;
-        bottom: -3px;
-        width: 207px;
-        height: 76px;
+        right: -243px;
+        bottom: -28px;
+        width: 218px;
+        height: 134px;
       }
 
       @include desktop {
-        right: -244px;
-        bottom: 23px;
+        right: -232px;
+        bottom: 6px;
+        width: 208px;
+        height: 128px;
       }
 
       @include desktop-xl {
-        right: -336px;
-        bottom: 32px;
-        width: 292px;
-        height: 112px;
+        right: -358px;
+        bottom: 18px;
+        width: 325px;
+        height: 200px;
       }
     }
 
