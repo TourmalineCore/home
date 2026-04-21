@@ -3,19 +3,19 @@ import { useTranslation } from "next-i18next";
 
 import { useRouter } from "next/router";
 import clsx from "clsx";
-import MobileImage1 from "../../../public/images/img_impact-map.jpg";
-import MobileImage2 from "../../../public/images/img_cjm.jpg";
-import MobileImage3 from "../../../public/images/img_usm.jpg";
-import MobileImage4 from "../../../public/images/img_concept.jpg";
-import MobileImage4Eng from "../../../public/images/img_concept-eng.jpg";
+import MobileImage1 from "../../../public/images/chelzoo-discovery-impact-map-mobile.jpg";
+import MobileImage2 from "../../../public/images/chelzoo-discovery-cjm-mobile.jpg";
+import MobileImage3 from "../../../public/images/chelzoo-discovery-usm-mobile.jpg";
+import MobileImage4 from "../../../public/images/chelzoo-discovery-concept-mobile.jpg";
+import MobileImage4Eng from "../../../public/images/chelzoo-discovery-concept-mobile-eng.jpg";
 
-import DesktopImage1 from "../../../public/images/img-full-impact-map.png";
-import DesktopImage1Eng from "../../../public/images/img-impact-map-eng.jpg";
-import DesktopImage2 from "../../../public/images/img-full-cjm.png";
-import DesktopImage3 from "../../../public/images/img-full-usm.png";
-import DesktopImage3Eng from "../../../public/images/img-usm-eng.png";
-import DesktopImage4 from "../../../public/images/img-full-concept.png";
-import DesktopImage4Eng from "../../../public/images/img-concept-eng.jpg";
+import DesktopImage1 from "../../../public/images/chelzoo-discovery-impact-map.png";
+import DesktopImage1Eng from "../../../public/images/chelzoo-discovery-impact-map-eng.jpg";
+import DesktopImage2 from "../../../public/images/chelzoo-discovery-cjm.png";
+import DesktopImage3 from "../../../public/images/chelzoo-discovery-usm.png";
+import DesktopImage3Eng from "../../../public/images/chelzoo-discovery-usm-eng.png";
+import DesktopImage4 from "../../../public/images/chelzoo-discovery-concept.png";
+import DesktopImage4Eng from "../../../public/images/chelzoo-discovery-concept-eng.jpg";
 
 export function ChelzooDiscovery() {
   const {
