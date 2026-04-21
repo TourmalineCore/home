@@ -107,7 +107,6 @@
 
   &__link {
     @include chelzoo-link;
-    @include animated-underline-reverse;
 
     align-self: center;
     text-align: center;
@@ -116,6 +115,11 @@
     // the arrow had to be removed from the react markup in css
     &::after {
       content: " →";
+    }
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: none;
     }
 
     @include tablet {
