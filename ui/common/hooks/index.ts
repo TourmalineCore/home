@@ -6,3 +6,4 @@ export * from './usePath';
 export * from './useIsRussianCountry';
 export * from './useTranslationNamespace';
 export * from './useOnScrollDirections';
+export * from './useNonBreakingSpaces';
