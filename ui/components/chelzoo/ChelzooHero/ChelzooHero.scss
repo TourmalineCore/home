@@ -157,6 +157,7 @@
 
   &__content {
     align-self: flex-start;
+    margin-left: 16px;
     max-width: 336px;
 
     @include tablet-xl {
@@ -168,6 +169,7 @@
     }
 
     @include desktop-xl {
+      margin-left: 24px;
       max-width: 544px;
     }
   }

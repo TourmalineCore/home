@@ -53,7 +53,7 @@ export function ChelzooAdaptation() {
       className="chelzoo-adaptation"
       data-testid="chelzoo-adaptation"
     >
-      <div className="container-cases chelzoo-adaptation__container">
+      <div className="chelzoo-adaptation__container">
         <div className="chelzoo-adaptation__wrapper">
           <h2 className="chelzoo-adaptation__title">{t(`title`)}</h2>
           <div className="chelzoo-adaptation__mockup">
