@@ -1,6 +1,8 @@
 import { useTranslation } from "next-i18next";
 import Image from 'next/image';
-import Result from '../../../public/images/chelzoo-way-result.png';
+import { useRouter } from "next/router";
+import ResultImage from '../../../public/images/chelzoo-way-result.png';
+import ResultImageEng from '../../../public/images/chelzoo-way-result-eng.png';
 import { useDeviceSize } from "../../../common/hooks";
 
 type PreparationImage = {
@@ -12,6 +14,10 @@ export function ChelzooWay() {
   const {
     t,
   } = useTranslation(`chelzooWay`);
+
+  const {
+    locale,
+  } = useRouter();
 
   const {
     isMobile,
@@ -48,7 +54,7 @@ export function ChelzooWay() {
         <h2 className="chelzoo-way__title">{t(`resultTitle`)}</h2>
         <div className="chelzoo-way__result-image-container">
           <Image
-            src={Result}
+            src={locale === `ru` ? ResultImage : ResultImageEng}
             fill
             placeholder="blur"
             alt=""
