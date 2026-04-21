@@ -5,11 +5,6 @@ import ResultImage from '../../../public/images/chelzoo-way-result.png';
 import ResultImageEng from '../../../public/images/chelzoo-way-result-eng.png';
 import { useDeviceSize } from "../../../common/hooks";
 
-type PreparationImage = {
-  url: string;
-  blurDataURL: string;
-};
-
 export function ChelzooWay() {
   const {
     t,
@@ -23,14 +18,6 @@ export function ChelzooWay() {
     isMobile,
   } = useDeviceSize();
 
-  const preparationImage: PreparationImage = t(`preparationImage`, {
-    returnObjects: true,
-  });
-
-  const preparationImageMobile: PreparationImage = t(`preparationImageSmall`, {
-    returnObjects: true,
-  });
-
   return (
     <section
       className="chelzoo-way"
@@ -42,11 +29,9 @@ export function ChelzooWay() {
           className="chelzoo-way__preparation-image-wrapper"
         >
           <Image
-            src={isMobile ? preparationImageMobile.url : preparationImage.url}
+            src={isMobile ? t(`preparationImageSmallUrl`) : t(`preparationImageUrl`)}
             fill
             unoptimized
-            placeholder="blur"
-            blurDataURL={isMobile ? preparationImageMobile.blurDataURL : preparationImage.blurDataURL}
             alt=""
           />
         </div>

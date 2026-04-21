@@ -114,13 +114,13 @@ export async function getServerSideProps({
   locale: string;
   preview: boolean;
 }) {
-  const translationsPageData = await loadTranslations(locale, [
-    `headerRedesign`,
-    `footerRedesign`,
-    `collageWithLink`,
-  ]);
-
   if (process.env.IS_STATIC_MODE === `true`) {
+    const translationsPageData = await loadTranslations(locale, [
+      `headerRedesign`,
+      `footerRedesign`,
+      `collageWithLink`,
+    ]);
+
     return {
       props: {
         layoutData: {
@@ -145,6 +145,8 @@ export async function getServerSideProps({
     locale,
     status,
   });
+
+  const translationsPageData = await loadTranslations(locale, [`collageWithLink`]);
 
   return {
     props: {
