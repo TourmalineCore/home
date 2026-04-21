@@ -38,6 +38,7 @@ import { ChelzooWay } from "../../components/chelzoo/ChelzooWay/ChelzooWay";
 import { ChelzooInfrastructure } from "../../components/chelzoo/ChelzooInfrastructure/ChelzooInfrastructure";
 import { ChelzooLinks } from "../../components/chelzoo/ChelzooLinks/ChelzooLinks";
 import { ChelzooReview } from "../../components/chelzoo/ChelzooReview/ChelzooReview";
+import { useNonBreakingSpaces } from "../../common/hooks";
 
 export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JSX.Element> = {
   [ComponentName.THREE_COLUMN_GRID]: ({
@@ -226,18 +227,20 @@ export default function ComponentsPage({
     query,
   } = router;
 
+  const {
+    locale,
+  } = useRouter();
+
+  useNonBreakingSpaces({
+    locale: locale!,
+  });
+
   const componentName = query.component?.[0];
 
   if (componentName) {
     const component = COMPONENT_MAP[componentName];
 
     return component(pageData);
-  }
-
-  if (componentName === ComponentName.CHELZOO_WAY) {
-    return (
-      <ChelzooWay />
-    );
   }
 
   return (
