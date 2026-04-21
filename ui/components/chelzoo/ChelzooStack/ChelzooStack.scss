@@ -5,20 +5,11 @@
   background-color: $color-white;
 
   &__wrapper {
-    @include tablet {
-      padding: 0 32px;
-    }
-
-    @include tablet-xl {
-      padding: 0 64px;
-    }
-
     @include desktop {
       max-width: 1366px;
     }
 
     @include desktop-xl {
-      padding: 0 88px;
       max-width: 1920px;
     }
   }

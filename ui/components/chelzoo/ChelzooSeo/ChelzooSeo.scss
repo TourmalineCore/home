@@ -2,20 +2,6 @@
   padding: 48px 0;
   background-color: $color-off-white;
 
-  &__wrapper {
-    @include tablet {
-      padding: 0 32px;
-    }
-
-    @include tablet-xl {
-      padding: 0  64px;
-    }
-
-    @include desktop-xl {
-      padding: 0  88px;
-    }
-  }
-
   &__title {
     @include chelzoo-h2;
 

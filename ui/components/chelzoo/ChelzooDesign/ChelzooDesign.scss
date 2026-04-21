@@ -5,17 +5,14 @@
     padding-top: 48px;
     padding-bottom: 48px;
 
-    @include tablet {
-      padding-right: 32px;
-      padding-left: 32px;
-    }
-
     @include tablet-xl {
-      padding: 64px 64px 116px;
+      padding-top: 64px;
+      padding-bottom: 116px;
     }
 
     @include desktop-xl {
-      padding: 88px 88px 164px;
+      padding-top: 88px;
+      padding-bottom: 164px;
     }
   }
 

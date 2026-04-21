@@ -2,27 +2,26 @@
   background-color: $color-white;
 
   &__wrapper {
-    padding: 48px 16px;
-
-    @include tablet {
-      padding: 48px 32px;
-    }
+    padding-top: 48px;
+    padding-bottom: 48px;
 
     @include tablet-xl {
       display: flex;
       align-items: center;
       flex-direction: column;
       border-radius: 80px;
-      padding: 100px 64px;
+      padding-top: 100px;
+      padding-bottom: 100px;
       background-color: $color-off-white;
     }
 
     @include desktop {
-      padding: 100px 64px 125px;
+      padding-bottom: 125px;
     }
 
     @include desktop-xl {
-      padding: 164px 88px 139px;
+      padding-top: 164px;
+      padding-bottom: 139px;
     }
   }
 

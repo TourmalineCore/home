@@ -8,11 +8,6 @@
     padding-top: 48px;
     padding-bottom: 48px;
 
-    @include tablet {
-      padding-right: 32px;
-      padding-left: 32px;
-    }
-
     @include tablet-xl {
       padding: 64px;
     }

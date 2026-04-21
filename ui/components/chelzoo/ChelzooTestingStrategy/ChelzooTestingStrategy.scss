@@ -7,18 +7,6 @@
   &__wrapper {
     display: flex;
     flex-direction: column;
-
-    @include tablet {
-      padding: 0 32px;
-    }
-
-    @include tablet-xl {
-      padding: 0 64px;
-    }
-
-    @include desktop-xl {
-      padding: 0 88px;
-    }
   }
 
   &__content {

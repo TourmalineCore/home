@@ -12,7 +12,7 @@ export function ChelzooReview() {
       className="chelzoo-review"
       data-testid="chelzoo-review"
     >
-      <div className="chelzoo-review__wrapper">
+      <div className="container-cases chelzoo-review__wrapper">
         <div className="chelzoo-review__image-wrapper">
           <Image
             src={ReviewImage}
