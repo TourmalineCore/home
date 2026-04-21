@@ -1,16 +1,15 @@
 .chelzoo-review {
-  background-color: $color-black;
+  border-radius: 0 0 40px 40px;
+  padding-top: 48px;
+  padding-bottom: 64px;
+  background-color: $color-off-white;
 
   &__wrapper {
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    border-radius: 0 0 40px 40px;
-    padding-top: 48px;
-    padding-bottom: 64px;
     color: $color-black;
-    background-color: $color-white;
     gap: 32px;
 
     @include tablet {
@@ -19,14 +18,10 @@
 
     @include tablet-xl {
       align-items: flex-start;
-      padding-top: 64px;
-      padding-bottom: 116px;
     }
 
     @include desktop-xl {
       align-items: center;
-      padding-top: 88px;
-      padding-bottom: 164px;
       gap: 44px;
     }
   }
@@ -89,5 +84,15 @@
       width: 504px;
       height: 504px;
     }
+  }
+
+  @include tablet-xl {
+    padding-top: 64px;
+    padding-bottom: 116px;
+  }
+
+  @include desktop-xl {
+    padding-top: 88px;
+    padding-bottom: 164px;
   }
 }
