@@ -1,5 +1,6 @@
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { PageHead } from '../../components/PageHead/PageHead';
 import { useScrollTop } from '../../common/hooks/useScrollTop';
 import { CollageWithLinkBlock, LayoutData } from '../../common/types';
@@ -27,6 +28,7 @@ import { ChelzooPromo } from '../../components/chelzoo/ChelzooPromo/ChelzooPromo
 import { ChelzooLinks } from '../../components/chelzoo/ChelzooLinks/ChelzooLinks';
 import { ChelzooReview } from '../../components/chelzoo/ChelzooReview/ChelzooReview';
 import { CollageWithLink } from '../../components/CollageWithLink/CollageWithLink';
+import { useNonBreakingSpaces } from '../../common/hooks';
 
 export default function ChelzooPage({
   layoutData,
@@ -40,6 +42,14 @@ export default function ChelzooPage({
   const {
     t,
   } = useTranslation(`common`);
+
+  const {
+    locale,
+  } = useRouter();
+
+  useNonBreakingSpaces({
+    locale: locale!,
+  });
 
   useScrollTop({
     dependencies: [],
