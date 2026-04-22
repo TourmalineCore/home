@@ -88,7 +88,7 @@ export function Cookie({
     </aside>
   );
 
-  function acceptCookie() {
+  async function acceptCookie() {
     if (!isComponentPage) {
       localStorage.setItem(STORAGE_KEY, `true`);
 
@@ -99,6 +99,20 @@ export function Cookie({
         window.ym(Number(yandexId), `init`, optionYandexMetrika);
       }
     }
+
+    await fetch(`/api/save-cookie-consent`, {
+      method: `POST`,
+      headers: {
+        'Content-Type': `application/json`,
+      },
+      body: JSON.stringify({
+        accepted: true,
+        consentVersion: `1.0`,
+        categories: {
+          analytics: true,
+        },
+      }),
+    });
 
     setIsCookieVisible(false);
   }
