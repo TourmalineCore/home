@@ -95,7 +95,7 @@ module.exports = withReactSvg({
     // https://nextjs.org/docs/pages/api-reference/components/image#minimumcachettl
     // 604800 is 60 seconds * 60 minutes * 24 hours * 7 days = 1 week
     minimumCacheTTL: 604800,
-    formats: ['image/avif', 'image/webp'],
+    formats: ['image/webp'],
     remotePatterns: [
       {
         protocol: 'http',
