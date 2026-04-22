@@ -1,0 +1,9 @@
+{
+  "title": "Talking about the project in our own words",
+  "textDevOps": "Presentation on DevOps development",
+  "textKuber": "YouTube talk: Deploying the Chelyabinsk Zoo's open-source website in Kubernetes",
+  "textFrontend": "Presentation on frontend development",
+  "textSite": "How we developed the open-source website for the Chelyabinsk Zoo through TDD and screenshot testing",
+  "textTests": "Presentation on testing strategy",
+  "textDesign": "Visual language of the Chelyabinsk Zoo website: communication through the interface"
+}

@@ -1,0 +1,152 @@
+.chelzoo-infrastructure {
+  padding-top: 48px;
+  padding-bottom: 116px;
+  background-color: $color-off-white;
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+
+    @include tablet-xl {
+      gap: 48px;
+    }
+
+    @include desktop {
+      flex-direction: row;
+      justify-content: center;
+      gap: 24px;
+    }
+
+    @include desktop-xl {
+      gap: 32px;
+    }
+  }
+
+  &__title {
+    @include chelzoo-h2;
+
+    color: $color-black;
+
+    @include desktop {
+      max-width: 397px;
+    }
+
+    @include desktop-xl {
+      max-width: 558px;
+    }
+  }
+
+  &__steps {
+    grid-gap: 24px;
+
+    @include tablet {
+      column-gap: 12px;
+    }
+
+    @include tablet-xl {
+      gap: 40px 24px;
+    }
+
+    @include desktop-xl {
+      gap: 56px 32px;
+    }
+  }
+
+  &__step {
+    color: $color-black;
+
+    &:last-child {
+      position: relative;
+    }
+
+    &:last-child::after {
+      content: "";
+      position: absolute;
+      right: -5px;
+      bottom: -85px;
+      width: 130px;
+      height: 80px;
+      background-image: url("../../../public/images/chelzoo-infrastructure-price.svg");
+      background-size: contain;
+      background-repeat: no-repeat;
+
+      @include tablet {
+        right: -142px;
+        bottom: 37px;
+      }
+
+      @include tablet-xl {
+        right: -243px;
+        bottom: -28px;
+        width: 218px;
+        height: 134px;
+      }
+
+      @include desktop {
+        right: -232px;
+        bottom: 6px;
+        width: 208px;
+        height: 128px;
+      }
+
+      @include desktop-xl {
+        right: -358px;
+        bottom: 18px;
+        width: 325px;
+        height: 200px;
+      }
+    }
+
+    &--eng {
+      &:last-child::after {
+        background-image: url("../../../public/images/chelzoo-infrastructure-price-eng.svg");
+      }
+    }
+  }
+
+  &__step-inner {
+    @include tablet {
+      max-width: 326px;
+    }
+
+    @include tablet-xl {
+      max-width: 416px;
+    }
+
+    @include desktop {
+      max-width: 377px;
+    }
+
+    @include desktop-xl {
+      margin-bottom: 12px;
+      max-width: 533px;
+    }
+  }
+
+  &__step-title {
+    @include chelzoo-h4;
+
+    margin-bottom: 8px;
+
+    @include desktop-xl {
+      margin-bottom: 12px;
+    }
+  }
+
+  &__step-description {
+    @include chelzoo-body;
+  }
+
+  @include tablet {
+    padding: 48px 0;
+  }
+
+  @include tablet-xl {
+    padding: 116px 0;
+  }
+
+  @include desktop-xl {
+    padding: 164px 0;
+  }
+}

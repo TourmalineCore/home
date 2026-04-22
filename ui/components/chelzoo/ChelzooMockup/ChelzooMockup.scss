@@ -1,0 +1,29 @@
+.chelzoo-mockup {
+  background: linear-gradient(to bottom, $color-white 50%, $color-dark-green 50%);
+
+  &__wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 40px;
+    width: 100%;
+    aspect-ratio: 25/32;
+
+    @include tablet-xl {
+      border-radius: 80px;
+    }
+
+    @include desktop-xl {
+      border-radius: 112px;
+      max-height: 3953px;
+      aspect-ratio: 4/5;
+    }
+  }
+
+  &__image {
+    object-fit: cover;
+
+    @include desktop-xl {
+      object-position: top;
+    }
+  }
+}

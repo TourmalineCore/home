@@ -1,0 +1,17 @@
+{
+  "title": "Flexible and scalable infrastructure",
+  "steps": [
+    {
+      "title": "Deployed the website on a k8s cluster",
+      "description": "This allowed us to establish a scalable and resilient project architecture from the start."
+    },
+    {
+      "title": "Universal setup",
+      "description": "Created a setup that will be reused in future projects of various sizes."
+    },
+    {
+      "title": "Optimized the costs of hosting",
+      "description": "Additionally, we set the goal of making cluster maintenance cost-effective without sacrificing stability."
+    }
+  ]
+}

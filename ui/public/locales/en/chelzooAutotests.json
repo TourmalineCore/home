@@ -1,0 +1,18 @@
+{
+  "title": "Automated tests and monitoring of stability",
+  "testingTypes": [
+    {
+      "title": "GitHub Actions",
+      "text": "Running automated tests directly in the pipeline"
+    },
+     {
+      "title": "Before merging to master",
+      "text": "Checking changes on the environment built in the pipeline"
+    },
+     {
+      "title": "Scheduled tests",
+      "text": "Running daily checks to spot problems early"
+    }
+  ],
+  "result": "Finding problems quickly"
+}
