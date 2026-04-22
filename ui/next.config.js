@@ -88,7 +88,8 @@ module.exports = withReactSvg({
     ...(process.env.CDN_ENABLED === 'true' && process.env.CDN_DOMAIN && {
       // https://nextjs.org/docs/app/api-reference/components/image#domains
       domains: [process.env.CDN_DOMAIN],
-      path: `https://${process.env.CDN_DOMAIN}/_next/image`
+      path: `https://${process.env.CDN_DOMAIN}/_next/image`,
+      unoptimized: true
     }),
 
     // lifetime in seconds for cached optimized images
