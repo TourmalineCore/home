@@ -18,7 +18,6 @@ export function ChelzooMockup() {
           className="chelzoo-mockup__image"
           src={locale === `ru` ? MockupImage : MockupImageEng}
           fill
-          placeholder="blur"
           alt=""
         />
       </div>

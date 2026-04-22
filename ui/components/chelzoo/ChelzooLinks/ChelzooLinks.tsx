@@ -76,7 +76,6 @@ export function ChelzooLinks() {
                     src={card.image}
                     fill
                     alt=""
-                    placeholder="blur"
                   />
                 </div>
 

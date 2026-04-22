@@ -83,7 +83,6 @@ export function ChelzooDiscovery() {
                   src={card.mobileImg}
                   fill
                   alt=""
-                  placeholder="blur"
                 />
               </div>
               <span className={clsx(`chelzoo-discovery__label`, `chelzoo-discovery__label--${card.className}`)}>
@@ -101,7 +100,6 @@ export function ChelzooDiscovery() {
                   src={card.desktopImg}
                   fill
                   alt=""
-                  placeholder="blur"
                 />
               </div>
             </li>

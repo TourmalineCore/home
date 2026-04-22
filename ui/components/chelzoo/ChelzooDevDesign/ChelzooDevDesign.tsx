@@ -42,7 +42,6 @@ export function ChelzooDevDesign() {
             src={locale === `ru` ? DevDesignImage : DevDesignImageEng}
             alt=""
             fill
-            placeholder="blur"
           />
         </div>
         <a

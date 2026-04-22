@@ -29,7 +29,6 @@ export function ChelzooAbout() {
             <Image
               src={OldChelzooImage}
               fill
-              placeholder="blur"
               alt=""
             />
           </div>
@@ -40,7 +39,6 @@ export function ChelzooAbout() {
             <Image
               src={locale === `ru` ? NewChelzooImage : NewChelzooImageEng}
               fill
-              placeholder="blur"
               alt=""
             />
           </div>

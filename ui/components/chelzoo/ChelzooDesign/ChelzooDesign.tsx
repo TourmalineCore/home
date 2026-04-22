@@ -48,7 +48,6 @@ export function ChelzooDesign() {
               <Image
                 src={ConceptImage}
                 fill
-                placeholder="blur"
                 alt=""
               />
             </div>
@@ -64,7 +63,6 @@ export function ChelzooDesign() {
               <Image
                 src={IllustrationsImage}
                 fill
-                placeholder="blur"
                 alt=""
               />
             </div>
@@ -80,7 +78,6 @@ export function ChelzooDesign() {
               <Image
                 src={PhotosImage}
                 fill
-                placeholder="blur"
                 alt=""
               />
             </div>
@@ -96,7 +93,6 @@ export function ChelzooDesign() {
               <Image
                 src={TypographyImage}
                 fill
-                placeholder="blur"
                 alt=""
               />
             </div>

@@ -24,7 +24,6 @@ export function ChelzooPromo() {
           <Image
             src={locale === `ru` ? ResultImage : ResultImageEng}
             fill
-            placeholder="blur"
             alt=""
           />
         </div>

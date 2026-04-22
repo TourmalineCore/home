@@ -35,7 +35,6 @@ export function ChelzooTasks() {
             src={locale === `ru` ? TaskImage : TaskImageEng}
             alt=""
             fill
-            placeholder="blur"
           />
         </div>
 

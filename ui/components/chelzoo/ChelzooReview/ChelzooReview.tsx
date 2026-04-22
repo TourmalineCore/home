@@ -18,7 +18,6 @@ export function ChelzooReview() {
             src={ReviewImage}
             alt=""
             fill
-            placeholder="blur"
           />
         </div>
         <div className="chelzoo-review__text">

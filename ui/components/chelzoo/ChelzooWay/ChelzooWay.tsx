@@ -41,7 +41,6 @@ export function ChelzooWay() {
           <Image
             src={locale === `ru` ? ResultImage : ResultImageEng}
             fill
-            placeholder="blur"
             alt=""
           />
         </div>

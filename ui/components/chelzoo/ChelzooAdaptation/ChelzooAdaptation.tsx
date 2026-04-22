@@ -60,7 +60,6 @@ export function ChelzooAdaptation() {
             <Image
               src={locale === `ru` ? Mockup : MockupEng}
               fill
-              placeholder="blur"
               alt=""
             />
           </div>
@@ -80,7 +79,6 @@ export function ChelzooAdaptation() {
                     src={adaptation.image}
                     fill
                     alt=""
-                    placeholder="blur"
                   />
                 </div>
               </li>
