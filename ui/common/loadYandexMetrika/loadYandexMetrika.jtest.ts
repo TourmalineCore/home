@@ -43,4 +43,48 @@ describe(`loadYandexMetrika`, () => {
     delete process.env.NEXT_PUBLIC_METRICS_ENABLED;
     delete process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
   });
+
+  it(`
+    GIVEN env METRICS_ENABLED = false and cookie accepted
+    WHEN loadYandexMetrika is called
+    SHOULD not initialize yandex metrics
+    `, () => {
+    process.env.NEXT_PUBLIC_METRICS_ENABLED = `false`;
+    (getCookie as jest.Mock).mockReturnValue(`true`);
+
+    // Create mock for document.head.appendChild
+    const appendChildSpy = jest.spyOn(document.head, `appendChild`);
+
+    loadYandexMetrika();
+
+    // Check that two scripts are not added to the document head
+    expect(appendChildSpy)
+      .toHaveBeenCalledTimes(0);
+
+    // Cleanup
+    appendChildSpy.mockRestore();
+    delete process.env.NEXT_PUBLIC_METRICS_ENABLED;
+  });
+
+  it(`
+    GIVEN env METRICS_ENABLED = true and cookie reject
+    WHEN loadYandexMetrika is called
+    SHOULD not initialize yandex metrics
+    `, () => {
+    process.env.NEXT_PUBLIC_METRICS_ENABLED = `true`;
+    (getCookie as jest.Mock).mockReturnValue(`false`);
+
+    // Create mock for document.head.appendChild
+    const appendChildSpy = jest.spyOn(document.head, `appendChild`);
+
+    loadYandexMetrika();
+
+    // Check that two scripts are not added to the document head
+    expect(appendChildSpy)
+      .toHaveBeenCalledTimes(0);
+
+    // Cleanup
+    appendChildSpy.mockRestore();
+    delete process.env.NEXT_PUBLIC_METRICS_ENABLED;
+  });
 });
