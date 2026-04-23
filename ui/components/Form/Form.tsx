@@ -14,10 +14,9 @@ import { PrimaryButton } from '../PrimaryButton/PrimaryButton';
 import { Textarea } from './components/Textarea/Textarea';
 import { Spinner } from '../Spinner/Spinner';
 import { isChineseLanguage } from '../../common/utils';
-import { DEFAULT_LOCALE } from '../../common/constants';
+import { DEFAULT_LOCALE, POLICY_VERSION } from '../../common/constants';
 import { CheckBox } from '../Checkbox/Checkbox';
 import { validateCaptchaToken } from '../../services/smartCaptcha/validateCaptchaToken';
-import { POLICY_VERSION } from '../../common/constants/policyVersion';
 
 export function Form({
   onSubmit = () => {},

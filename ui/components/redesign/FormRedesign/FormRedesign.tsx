@@ -14,10 +14,9 @@ import { InvisibleSmartCaptcha } from '@yandex/smart-captcha';
 import { InputRedesign } from './components/InputRedesign/InputRedesign';
 import { TextareaRedesign } from './components/TextareaRedesign/TextareaRedesign';
 import { Spinner } from '../../Spinner/Spinner';
-import { DEFAULT_LOCALE } from '../../../common/constants';
+import { DEFAULT_LOCALE, POLICY_VERSION } from '../../../common/constants';
 import { CheckBox } from '../../Checkbox/Checkbox';
 import { validateCaptchaToken } from '../../../services/smartCaptcha/validateCaptchaToken';
-import { POLICY_VERSION } from '../../../common/constants/policyVersion';
 
 export function FormRedesign({
   onSubmit,

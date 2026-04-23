@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 import { getCookie, setCookie } from 'cookies-next';
 import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
-import { POLICY_VERSION } from '../../common/constants/policyVersion';
+import { POLICY_VERSION } from '../../common/constants';
 
 const cookieAccept = `cookieAccept`;
 
