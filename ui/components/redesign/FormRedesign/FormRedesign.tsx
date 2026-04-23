@@ -17,6 +17,7 @@ import { Spinner } from '../../Spinner/Spinner';
 import { DEFAULT_LOCALE } from '../../../common/constants';
 import { CheckBox } from '../../Checkbox/Checkbox';
 import { validateCaptchaToken } from '../../../services/smartCaptcha/validateCaptchaToken';
+import { POLICY_VERSION } from '../../../common/constants/policyVersion';
 
 export function FormRedesign({
   onSubmit,
@@ -178,7 +179,7 @@ export function FormRedesign({
                   components={{
                     personalData: <a
                       className="form-redesign__consent-link"
-                      href={`/documents/policy-${routerLocale}.pdf#page=${routerLocale === `ru` ? `4` : `3`}`}
+                      href={`/documents/policy/policy-${POLICY_VERSION}-${routerLocale}.pdf#page=${routerLocale === `ru` ? `4` : `3`}`}
                       target="_blank"
                       rel="noreferrer"
                       aria-label={
@@ -189,7 +190,7 @@ export function FormRedesign({
                     />,
                     privacyPolicy: <a
                       className="form-redesign__consent-link"
-                      href={`/documents/policy-${locale}.pdf`}
+                      href={`/documents/policy/policy-${POLICY_VERSION}-${locale}.pdf`}
                       target="_blank"
                       rel="noreferrer"
                       aria-label={

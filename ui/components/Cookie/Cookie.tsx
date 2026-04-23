@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 
 import { getCookie, setCookie } from 'cookies-next';
 import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
+import { POLICY_VERSION } from '../../common/constants/policyVersion';
 
 const cookieAccept = `cookieAccept`;
 
@@ -53,7 +54,7 @@ export function Cookie({
           components={{
             bolt: <a
               className="cookie__link"
-              href={`/documents/policy-${locale}.pdf#page=5`}
+              href={`/documents/policy/policy-${POLICY_VERSION}-${locale}.pdf#page=5`}
               target="_blank"
               rel="noreferrer"
               aria-label=""

@@ -1,0 +1,1 @@
+export const POLICY_VERSION = process.env.NEXT_PUBLIC_POLICY_VERSION;
