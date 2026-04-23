@@ -5,7 +5,6 @@ import Document, {
   NextScript,
   DocumentContext,
 } from 'next/document';
-import { yandexId } from '../common/hooks/useYandexMetrika';
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -95,19 +94,6 @@ export default class MyDocument extends Document {
 
           <Main />
           <NextScript />
-          <noscript>
-            <div>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`https://mc.yandex.ru/watch/${yandexId}`}
-                style={{
-                  position: `absolute`,
-                  left: `-9999px`,
-                }}
-                alt=""
-              />
-            </div>
-          </noscript>
         </body>
       </Html>
     );
