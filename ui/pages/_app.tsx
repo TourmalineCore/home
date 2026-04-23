@@ -6,21 +6,32 @@ import Head from 'next/head';
 import { AppProps } from 'next/dist/shared/lib/router/router';
 import { useEffect } from 'react';
 import { Cookie } from '../components/Cookie/Cookie';
+import { useYandexMetrika, yandexId } from '../common/hooks/useYandexMetrika';
 
 const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
-
-const yandexId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
-const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
+// const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 
 function MyApp({
-  Component, pageProps, router,
+  Component,
+  pageProps,
+  router,
 }: AppProps) {
+  const {
+    loadMetrika,
+  } = useYandexMetrika();
+
+  useEffect(() => {
+    loadMetrika();
+  }, []);
+
   useEffect(() => {
     const handleRouteChange = (url: string) => {
       if (document.cookie.includes(`cookieAccept=true`) && typeof window !== `undefined` && isMetricsEnabled) {
-        window.gtag(`event`, url, {
-          send_to: googleId,
-        });
+        // Google metrics are temporarily disabled
+        // window.gtag(`event`, url, {
+        //   send_to: googleId,
+        // });
+
         window.ym(Number(yandexId), `hit`, url);
       }
     };

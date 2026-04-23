@@ -56,9 +56,16 @@ export const test = base.extend<CustomTestFixtures>({
   }, use) => {
     const goToComponentsPage = async (path: string) => {
       // hide cookie banner
-      await page.addInitScript(() => {
-        localStorage.setItem(`cookieAccept`, `false`);
-      });
+      await page.context()
+        .addCookies([
+          {
+            name: `cookieAccept`,
+            value: `false`,
+            domain: `localhost`,
+            path: `/`,
+          },
+        ]);
+
       await apiImageMock();
 
       // interrupting the connection for gif, for more stable work of tests

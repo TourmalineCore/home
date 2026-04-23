@@ -4,14 +4,15 @@ import { cmsFetch } from '../../services/cms/api/http-client';
 // It is needed in order to save cookie consent to Strapi.
 export default async function saveCookieConsent(req: NextApiRequest, res: NextApiResponse) {
   const {
-    accepted, consentVersion, categories,
+    accepted,
+    consentVersion,
+    categories,
   } = req.body;
 
   const consentId = crypto.randomUUID();
 
   try {
     await cmsFetch<Response>(`/cookie-consents`, {
-      allResponse: true,
       method: `POST`,
       body: JSON.stringify({
         data: {

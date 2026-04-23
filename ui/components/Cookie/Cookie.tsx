@@ -2,19 +2,13 @@ import { Trans, useTranslation } from 'next-i18next';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { OptionYM } from '../../types/globals';
+import { getCookie, setCookie } from 'cookies-next';
+import { useYandexMetrika } from '../../common/hooks/useYandexMetrika';
 
-const STORAGE_KEY = `cookieAccept`;
+const cookieAccept = `cookieAccept`;
 
-const yandexId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
-const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ``;
-
-export const optionYandexMetrika: OptionYM = {
-  clickmap: true,
-  trackLinks: true,
-  accurateTrackBounce: true,
-  webvisor: true,
-};
+// Google metrics are temporarily disabled
+// const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ``;
 
 export function Cookie({
   isComponentPage,
@@ -29,13 +23,17 @@ export function Cookie({
   } = useRouter();
 
   const [isCookieVisible, setIsCookieVisible] = useState(isComponentPage || false);
-  const [date, setDate] = useState<Date | null>(null);
+  // const [date, setDate] = useState<Date | null>(null);
   const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
+
+  const {
+    loadMetrika,
+  } = useYandexMetrika();
 
   useEffect(() => {
     if (!isComponentPage) {
-      setDate(new Date());
-      if (localStorage.getItem(STORAGE_KEY)) {
+      // setDate(new Date());
+      if (getCookie(cookieAccept) !== undefined) {
         setIsCookieVisible(false);
       } else {
         setIsCookieVisible(true);
@@ -90,13 +88,13 @@ export function Cookie({
 
   async function acceptCookie() {
     if (!isComponentPage) {
-      localStorage.setItem(STORAGE_KEY, `true`);
+      setCookie(cookieAccept, true);
 
       if (isMetricsEnabled) {
-        window.gtag(`js`, date);
-        window.gtag(`config`, googleId);
+        // window.gtag(`js`, date);
+        // window.gtag(`config`, googleId);
 
-        window.ym(Number(yandexId), `init`, optionYandexMetrika);
+        loadMetrika();
       }
     }
 
@@ -119,7 +117,7 @@ export function Cookie({
 
   function rejectCookie() {
     if (!isComponentPage) {
-      localStorage.setItem(STORAGE_KEY, `false`);
+      setCookie(cookieAccept, false);
     }
 
     setIsCookieVisible(false);
