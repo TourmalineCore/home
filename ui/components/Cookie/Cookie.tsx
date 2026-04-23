@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import { getCookie, setCookie } from 'cookies-next';
-import { useYandexMetrika } from '../../common/hooks/useYandexMetrika';
+import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
 
 const cookieAccept = `cookieAccept`;
 
@@ -25,10 +25,6 @@ export function Cookie({
   const [isCookieVisible, setIsCookieVisible] = useState(isComponentPage || false);
   // const [date, setDate] = useState<Date | null>(null);
   const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
-
-  const {
-    loadMetrika,
-  } = useYandexMetrika();
 
   useEffect(() => {
     if (!isComponentPage) {
@@ -94,7 +90,7 @@ export function Cookie({
         // window.gtag(`js`, date);
         // window.gtag(`config`, googleId);
 
-        loadMetrika();
+        loadYandexMetrika();
       }
     }
 
