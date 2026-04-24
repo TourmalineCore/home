@@ -4,9 +4,7 @@ import { useRouter } from 'next/router';
 
 import { getCookie, setCookie } from 'cookies-next';
 import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
-import { POLICY_VERSION } from '../../common/constants';
-
-const cookieAccept = `cookieAccept`;
+import { COOKIE_ACCEPT, POLICY_VERSION } from '../../common/constants';
 
 const cookieOptions = {
   // 1 year
@@ -35,7 +33,7 @@ export function Cookie({
   useEffect(() => {
     if (!isComponentPage) {
       // setDate(new Date());
-      if (getCookie(cookieAccept) !== undefined) {
+      if (getCookie(COOKIE_ACCEPT) !== undefined) {
         setIsCookieVisible(false);
       } else {
         setIsCookieVisible(true);
@@ -90,7 +88,7 @@ export function Cookie({
 
   async function acceptCookie() {
     if (!isComponentPage) {
-      setCookie(cookieAccept, true, cookieOptions);
+      setCookie(COOKIE_ACCEPT, true, cookieOptions);
 
       if (isMetricsEnabled) {
         // window.gtag(`js`, date);
@@ -106,8 +104,7 @@ export function Cookie({
         'Content-Type': `application/json`,
       },
       body: JSON.stringify({
-        accepted: true,
-        consentVersion: `1.0`,
+        consentVersion: POLICY_VERSION,
         categories: {
           analytics: true,
         },
@@ -119,7 +116,7 @@ export function Cookie({
 
   function rejectCookie() {
     if (!isComponentPage) {
-      setCookie(cookieAccept, false, cookieOptions);
+      setCookie(COOKIE_ACCEPT, false, cookieOptions);
     }
 
     setIsCookieVisible(false);

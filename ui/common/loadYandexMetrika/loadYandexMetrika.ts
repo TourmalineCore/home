@@ -1,5 +1,6 @@
 import { getCookie } from "cookies-next";
 import { OptionYM } from "../../types/globals";
+import { COOKIE_ACCEPT } from "../constants";
 
 export const optionYandexMetrika: OptionYM = {
   clickmap: true,
@@ -11,7 +12,7 @@ export const optionYandexMetrika: OptionYM = {
 export function loadYandexMetrika() {
   const yandexId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
   const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
-  const isCookieAccept = getCookie(`cookieAccept`) === `true`;
+  const isCookieAccept = getCookie(COOKIE_ACCEPT) === `true`;
 
   if (isMetricsEnabled && isCookieAccept) {
     const counterCode = `

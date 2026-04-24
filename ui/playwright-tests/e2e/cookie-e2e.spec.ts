@@ -1,3 +1,4 @@
+import { COOKIE_ACCEPT } from "../../common/constants";
 import {
   CustomTestFixtures,
   expect,
@@ -51,7 +52,7 @@ async function acceptCookieTest() {
       await expect(await getCookies(page))
         .toMatchObject([
           {
-            name: `cookieAccept`,
+            name: `${COOKIE_ACCEPT}`,
             value: `true`,
           },
         ]);
@@ -105,7 +106,7 @@ async function rejectCookieTest() {
       await expect(await getCookies(page))
         .toMatchObject([
           {
-            name: `cookieAccept`,
+            name: `${COOKIE_ACCEPT}`,
             value: `false`,
           },
         ]);
