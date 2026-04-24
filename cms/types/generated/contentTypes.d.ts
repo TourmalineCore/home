@@ -386,7 +386,7 @@ export interface ApiCookieConsentCookieConsent
   };
   attributes: {
     categories: Schema.Attribute.JSON & Schema.Attribute.Required;
-    consentId: Schema.Attribute.UID & Schema.Attribute.Required;
+    consentId: Schema.Attribute.String & Schema.Attribute.Required;
     consentVersion: Schema.Attribute.String & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
