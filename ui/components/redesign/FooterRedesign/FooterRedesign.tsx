@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { FooterNavigationListRedesign } from './components/FooterNavigationListRedesign/FooterNavigationListRedesign';
 import { FooterRedesignProps } from '../../../common/types';
-import { POLICY_VERSION } from '../../../common/constants';
+import { POLICY_VERSION } from '../../../common/constants/cookie';
 
 export function FooterRedesign({
   emailCaption,
