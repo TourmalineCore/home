@@ -385,7 +385,6 @@ export interface ApiCookieConsentCookieConsent
     draftAndPublish: true;
   };
   attributes: {
-    accepted: Schema.Attribute.Boolean & Schema.Attribute.Required;
     categories: Schema.Attribute.JSON & Schema.Attribute.Required;
     consentId: Schema.Attribute.UID & Schema.Attribute.Required;
     consentVersion: Schema.Attribute.String & Schema.Attribute.Required;

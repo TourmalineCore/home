@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2026-04-22T10:33:19.892Z"
+    "x-generation-date": "2026-04-24T05:18:50.220Z"
   },
   "x-strapi-config": {
     "plugins": []
@@ -2257,7 +2257,6 @@
           "data": {
             "required": [
               "consentId",
-              "accepted",
               "consentVersion",
               "categories"
             ],
@@ -2265,9 +2264,6 @@
             "properties": {
               "consentId": {
                 "type": "string"
-              },
-              "accepted": {
-                "type": "boolean"
               },
               "consentVersion": {
                 "type": "string"
@@ -2333,7 +2329,6 @@
         "type": "object",
         "required": [
           "consentId",
-          "accepted",
           "consentVersion",
           "categories"
         ],
@@ -2346,9 +2341,6 @@
           },
           "consentId": {
             "type": "string"
-          },
-          "accepted": {
-            "type": "boolean"
           },
           "consentVersion": {
             "type": "string"
@@ -2656,9 +2648,6 @@
                 },
                 "consentId": {
                   "type": "string"
-                },
-                "accepted": {
-                  "type": "boolean"
                 },
                 "consentVersion": {
                   "type": "string"

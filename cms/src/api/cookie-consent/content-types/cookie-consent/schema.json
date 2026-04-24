@@ -15,10 +15,6 @@
       "type": "uid",
       "required": true
     },
-    "accepted": {
-      "type": "boolean",
-      "required": true
-    },
     "consentVersion": {
       "type": "string",
       "required": true
