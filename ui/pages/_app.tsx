@@ -6,9 +6,10 @@ import Head from 'next/head';
 import { AppProps } from 'next/dist/shared/lib/router/router';
 import { useEffect } from 'react';
 import { Cookie } from '../components/Cookie/Cookie';
-import { loadYandexMetrika, yandexId } from '../common/loadYandexMetrika/loadYandexMetrika';
+import { loadYandexMetrika } from '../common/loadYandexMetrika/loadYandexMetrika';
 
 const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
+const yandexId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
 // const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 
 function MyApp({

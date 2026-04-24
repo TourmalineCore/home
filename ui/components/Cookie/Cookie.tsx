@@ -8,6 +8,11 @@ import { POLICY_VERSION } from '../../common/constants';
 
 const cookieAccept = `cookieAccept`;
 
+const cookieOptions = {
+  // 1 year
+  maxAge: 365 * 24 * 3600,
+};
+
 // Google metrics are temporarily disabled
 // const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ``;
 
@@ -85,7 +90,7 @@ export function Cookie({
 
   async function acceptCookie() {
     if (!isComponentPage) {
-      setCookie(cookieAccept, true);
+      setCookie(cookieAccept, true, cookieOptions);
 
       if (isMetricsEnabled) {
         // window.gtag(`js`, date);
@@ -114,7 +119,7 @@ export function Cookie({
 
   function rejectCookie() {
     if (!isComponentPage) {
-      setCookie(cookieAccept, false);
+      setCookie(cookieAccept, false, cookieOptions);
     }
 
     setIsCookieVisible(false);
