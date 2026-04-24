@@ -1,4 +1,4 @@
-import { COOKIE_ACCEPT } from "../../common/constants";
+import { COOKIE_ACCEPT } from "../../common/constants/cookie";
 import {
   CustomTestFixtures,
   expect,

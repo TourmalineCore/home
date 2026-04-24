@@ -4,7 +4,7 @@ import { AxeBuilder } from '@axe-core/playwright';
 import fs, { mkdirSync, writeFileSync } from 'fs';
 import { dirname } from "path";
 import { Breakpoint, BreakpointName } from '../common/enums';
-import { COOKIE_ACCEPT } from '../common/constants';
+import { COOKIE_ACCEPT } from '../common/constants/cookie';
 
 export type CustomTestFixtures = {
   apiImageMock: () => void;
