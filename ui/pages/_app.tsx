@@ -7,6 +7,7 @@ import { AppProps } from 'next/dist/shared/lib/router/router';
 import { useEffect } from 'react';
 import { Cookie } from '../components/Cookie/Cookie';
 import { loadYandexMetrika } from '../common/loadYandexMetrika/loadYandexMetrika';
+import { COOKIE_ACCEPT } from '../common/constants';
 
 const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
 const yandexId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
@@ -23,7 +24,7 @@ function MyApp({
 
   useEffect(() => {
     const handleRouteChange = (url: string) => {
-      if (document.cookie.includes(`cookieAccept=true`) && typeof window !== `undefined` && isMetricsEnabled) {
+      if (document.cookie.includes(`${COOKIE_ACCEPT}=true`) && typeof window !== `undefined` && isMetricsEnabled) {
         // Google metrics are temporarily disabled
         // window.gtag(`event`, url, {
         //   send_to: googleId,
