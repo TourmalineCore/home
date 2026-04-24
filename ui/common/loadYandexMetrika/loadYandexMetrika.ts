@@ -1,6 +1,6 @@
 import { getCookie } from "cookies-next";
 import { OptionYM } from "../../types/globals";
-import { COOKIE_ACCEPT } from "../constants";
+import { COOKIE_ACCEPT } from "../constants/cookie";
 
 export const optionYandexMetrika: OptionYM = {
   clickmap: true,

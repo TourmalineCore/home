@@ -7,7 +7,7 @@ import { AppProps } from 'next/dist/shared/lib/router/router';
 import { useEffect } from 'react';
 import { Cookie } from '../components/Cookie/Cookie';
 import { loadYandexMetrika } from '../common/loadYandexMetrika/loadYandexMetrika';
-import { COOKIE_ACCEPT } from '../common/constants';
+import { COOKIE_ACCEPT } from '../common/constants/cookie';
 
 const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
 const yandexId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
