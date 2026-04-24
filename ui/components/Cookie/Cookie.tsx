@@ -93,24 +93,30 @@ export function Cookie({
       if (isMetricsEnabled) {
         // window.gtag(`js`, date);
         // window.gtag(`config`, googleId);
+        let consentId = localStorage.getItem(`consentId`);
+
+        if (!consentId) {
+          consentId = crypto.randomUUID();
+          localStorage.setItem(`consentId`, consentId);
+        }
 
         loadYandexMetrika();
+
+        await fetch(`/api/save-cookie-consent`, {
+          method: `POST`,
+          headers: {
+            'Content-Type': `application/json`,
+          },
+          body: JSON.stringify({
+            consentId,
+            consentVersion: POLICY_VERSION,
+            categories: {
+              analytics: true,
+            },
+          }),
+        });
       }
     }
-
-    await fetch(`/api/save-cookie-consent`, {
-      method: `POST`,
-      headers: {
-        'Content-Type': `application/json`,
-      },
-      body: JSON.stringify({
-        consentVersion: POLICY_VERSION,
-        categories: {
-          analytics: true,
-        },
-      }),
-    });
-
     setIsCookieVisible(false);
   }
 
