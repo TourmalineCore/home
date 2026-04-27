@@ -1,4 +1,6 @@
 {
-  "accept":"Accept",
-  "reject":"Reject",
-  "text":"We use <bolt>cookies</bolt> for analytics and marketing to make the website more convenient. You can manage them in your browser settings."}
+  "accept":"Accept all",
+  "reject":"Reject all",
+  "settings":"Settings",
+  "text":"We use Yandex.Metrica, including website interaction recording (Webvisor), for analytics and website improvement. You can consent to data processing or customize how your data is used. Data processing will only take place after we obtain your consent. You can change your settings at any time using the link at the bottom of the page. For more details, see our <bolt>Privacy Policy</bolt>."
+}
