@@ -20,7 +20,7 @@ export function TextareaRedesign({
       <div className="textarea-redesign__box">
         <textarea
           id={id}
-          className="textarea-redesign__control"
+          className="textarea-redesign__control ym-disable-keys"
           placeholder=""
           {...props}
         />

@@ -31,7 +31,7 @@ export function Input({
       <div className="input__box">
         <input
           id={id}
-          className="input__control"
+          className="input__control ym-disable-keys"
           placeholder=" "
           {...props}
         />
