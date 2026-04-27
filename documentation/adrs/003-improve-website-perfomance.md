@@ -24,4 +24,4 @@ Advantages:
 
 Disadvantages:
  - You will have to manually pre-optimize each image for different screen resolutions and convert it to WEBP
- - You lose the NextJS features that allow images to be automatically adapted to different screen resolutions
+ - You lose the Next.js features that allow images to be automatically adapted to different screen resolutions
