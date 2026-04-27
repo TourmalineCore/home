@@ -68,12 +68,13 @@ export function Cookie({
       <div className="cookie__buttons">
         <button
           type="button"
-          className="cookie__button"
+          className="cookie__button cookie__button--settings"
           onClick={acceptCookie}
-          data-testid="accept-button"
+          data-testid="settings-button"
         >
-          {t(`accept`)}
+          {t(`settings`)}
         </button>
+
         <button
           type="button"
           className="cookie__button"
@@ -81,6 +82,14 @@ export function Cookie({
           data-testid="reject-button"
         >
           {t(`reject`)}
+        </button>
+        <button
+          type="button"
+          className="cookie__button"
+          onClick={acceptCookie}
+          data-testid="accept-button"
+        >
+          {t(`accept`)}
         </button>
       </div>
     </aside>
