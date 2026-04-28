@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { useTranslation } from "next-i18next";
 
 import DevOpsImage from "../../../public/images/chelzoo-hohma.jpg";
@@ -7,6 +7,7 @@ import FrontendImage from "../../../public/images/chelzoo-jora.jpg";
 import SiteImage from "../../../public/images/chelzoo-uwds.jpg";
 import TestsImage from "../../../public/images/chelzoo-sudno.jpg";
 import DesignImage from "../../../public/images/chelzoo-soon.jpg";
+import { SmartLink } from "../../SmartLink/SmartLink";
 
 export function ChelzooLinks() {
   const {
@@ -48,7 +49,7 @@ export function ChelzooLinks() {
       id: 6,
       image: DesignImage,
       text: t(`textDesign`),
-      link: `https://heisenbug.ru/archive/2025%20Spring/talks/2f023c42771843ff8efb2e9aeb9aa1e5/`,
+      link: ``,
     },
   ];
 
@@ -60,32 +61,69 @@ export function ChelzooLinks() {
       <div className="chelzoo-links__wrapper">
         <h2 className="chelzoo-links__title">{t(`title`)}</h2>
         <ul className="chelzoo-links__list">
-          {cards.map((card) => (
+          {cards.map(({
+            id,
+            text,
+            link,
+            image,
+          }) => (
             <li
-              key={card.id}
+              key={id}
               className="chelzoo-links__card"
             >
-              <a
-                className="chelzoo-links__link"
-                href={card.link}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <div className="chelzoo-links__image-wrapper">
-                  <Image
-                    src={card.image}
-                    fill
-                    alt=""
-                    placeholder="blur"
-                  />
-                </div>
-
-                {card.text}
-              </a>
+              {renderCardContent({
+                text,
+                link,
+                image,
+              })}
             </li>
           ))}
         </ul>
       </div>
     </section>
+  );
+}
+
+function renderCardContent({
+  text,
+  link,
+  image,
+}: {
+  text: string;
+  link: string;
+  image: StaticImageData;
+}) {
+  if (link) {
+    return (
+      <SmartLink
+        className="chelzoo-links__link"
+        href={link}
+      >
+        <div className="chelzoo-links__image-wrapper">
+          <Image
+            src={image}
+            fill
+            alt=""
+            placeholder="blur"
+          />
+        </div>
+        {text}
+      </SmartLink>
+    );
+  }
+
+  return (
+    <div>
+      <div className="chelzoo-links__image-wrapper">
+        <Image
+          src={image}
+          fill
+          alt=""
+          placeholder="blur"
+        />
+      </div>
+
+      {text}
+    </div>
   );
 }
