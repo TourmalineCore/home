@@ -119,6 +119,7 @@ async function getStaticTranslation({
     `common`,
     `footer`,
     `cookie`,
+    `cookieSettings`,
     `form`,
     `formBlock`,
     `heroTeams`,

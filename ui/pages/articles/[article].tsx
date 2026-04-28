@@ -125,6 +125,7 @@ async function getStaticTranslation({
     `footer`,
     `articles`,
     `cookie`,
+    `cookieSettings`,
   ]);
 }
 

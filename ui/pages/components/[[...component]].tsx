@@ -39,6 +39,7 @@ import { ChelzooInfrastructure } from "../../components/chelzoo/ChelzooInfrastru
 import { ChelzooLinks } from "../../components/chelzoo/ChelzooLinks/ChelzooLinks";
 import { ChelzooReview } from "../../components/chelzoo/ChelzooReview/ChelzooReview";
 import { useNonBreakingSpaces } from "../../common/hooks";
+import { CookieSettingsModal } from "../../components/CookieSettingsModal/CookieSettingsModal";
 
 export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JSX.Element> = {
   [ComponentName.THREE_COLUMN_GRID]: ({
@@ -170,6 +171,12 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
     />
   ),
   [ComponentName.COOKIE]: () => <Cookie isComponentPage />,
+  [ComponentName.COOKIE_SETTINGS_MODAL]: () => (
+    <CookieSettingsModal
+      isModalOpen
+      onCloseModal={() => {}}
+    />
+  ),
   [ComponentName.NOT_FOUND]: ({
     pageNotFound,
   }) => (
@@ -291,6 +298,7 @@ export async function getStaticProps({
       pageData: translationsPageData,
       ...(await serverSideTranslations(locale, [
         `cookie`,
+        `cookieSettings`,
         `formBlockRedesign`,
         `chelzooHero`,
         `chelzooAbout`,

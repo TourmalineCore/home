@@ -236,6 +236,7 @@ async function getStaticTranslation({
   return serverSideTranslations(locale, [
     `common`,
     `cookie`,
+    `cookieSettings`,
     `formBlockRedesign`,
   ]);
 }
