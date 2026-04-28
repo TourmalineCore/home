@@ -47,7 +47,7 @@ export function ChelzooDevDesign() {
         </div>
         <a
           className="chelzoo-dev-design__link"
-          href={t(`link`)}
+          href="https://vk.com/wall-215630045_158"
           target="_blank"
           rel="noreferrer"
         >
