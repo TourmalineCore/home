@@ -31,11 +31,12 @@ export function CookieSettingsModal({
     <>
       {isModalOpen && isTablet && <div className="cookie-settings-modal-overlay" />}
       <Modal
-        className={clsx(`cookie-settings-modal modal--cookie-settings`, {
+        className={clsx(`cookie-settings-modal`, {
           'cookie-settings-modal--open': isModalOpen,
         })}
         data-testid="cookie-settings-modal"
         onClose={onCloseModal}
+        type="cookie"
       >
         <div className="cookie-settings-modal__inner">
           <h2 className="cookie-settings-modal__title">{t(`title`)}</h2>
