@@ -34,7 +34,7 @@ export function CookieSettingsModal({
         className={clsx(`cookie-settings-modal`, {
           'cookie-settings-modal--open': isModalOpen,
         })}
-        data-testid="cookie-settings-modal"
+        testId="cookie-settings-modal"
         onClose={onCloseModal}
         type="cookie"
       >

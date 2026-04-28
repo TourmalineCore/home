@@ -2,8 +2,6 @@ import { ComponentName } from "../../common/enums";
 import { BREAKPOINTS } from "../../playwright-tests/constants/breakpoints";
 import { test } from "../../playwright-tests/custom-test";
 
-const TEST_ID = `cookie-settings-modal`;
-
 test.describe(`CookieSettingsModal`, () => {
   test.beforeEach(async ({
     goToComponentsPage,
@@ -20,7 +18,7 @@ test.describe(`CookieSettingsModal`, () => {
       testScreenshotAtBreakpoint,
     }) => {
       await testScreenshotAtBreakpoint({
-        testId: TEST_ID,
+        testId: ComponentName.COOKIE_SETTINGS_MODAL,
         breakpoint,
         breakpointName,
       });
