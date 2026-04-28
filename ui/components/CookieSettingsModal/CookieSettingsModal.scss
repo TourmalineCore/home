@@ -112,6 +112,7 @@
     @include body-m;
 
     padding-left: 52px;
+    color: $color-grey-300-redesign;
   }
 
   &__list {
@@ -144,11 +145,11 @@
       top: -2px;
       width: 31px;
       height: 51px;
-      background-image: url("../../public/images/cookie-button-edge.svg");
+      background-image: url("../../public/images/cookie-button-edge-black.svg");
       background-repeat: no-repeat;
 
-      svg path {
-        fill: $color-black;
+      @include tablet {
+        background-image: url("../../public/images/cookie-button-edge.svg");
       }
 
       @include desktop-xl {

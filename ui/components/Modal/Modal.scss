@@ -105,6 +105,10 @@
     bottom: 0;
     background-color: $color-black;
 
+    #{$this}__cross {
+      top: 20px;
+    }
+
     @include tablet {
       top: 102px;
       bottom: unset;
@@ -118,7 +122,6 @@
       }
 
       #{$this}__cross {
-        top: 20px;
         background-color: unset;
 
         svg path {
