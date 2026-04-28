@@ -38,6 +38,8 @@ export function ChelzooPodcast({
             href={t(`link`)}
           >
             {t(`linkText`)}
+            {` `}
+            →
           </SmartLink>
         </div>
       </div>

@@ -57,6 +57,8 @@ export function ChelzooTestingStrategy() {
           href="https://heisenbug.ru/archive/2025%20Spring/talks/2f023c42771843ff8efb2e9aeb9aa1e5/"
         >
           {t(`linkText`)}
+          {` `}
+          →
         </SmartLink>
       </div>
     </section>

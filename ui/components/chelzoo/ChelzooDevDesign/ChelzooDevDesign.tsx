@@ -51,6 +51,8 @@ export function ChelzooDevDesign() {
           href="https://vk.com/wall-215630045_158"
         >
           {t(`linkText`)}
+          {` `}
+          →
         </SmartLink>
       </div>
     </section>

@@ -106,16 +106,11 @@
   }
 
   &__link {
-    @include chelzoo-link;
+    @include animated-underline-reverse;
+    @include chelzoo-body;
 
     align-self: center;
     text-align: center;
-
-    // To prevent the screen reader from reading the link twice,
-    // the arrow had to be removed from the react markup in css
-    &::after {
-      content: " →";
-    }
 
     &:hover,
     &:focus-visible {
