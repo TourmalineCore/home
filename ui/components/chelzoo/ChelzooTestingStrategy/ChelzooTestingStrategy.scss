@@ -147,16 +147,9 @@
     @include chelzoo-body;
   }
 
-  &__link {
-    @include chelzoo-link;
-
+  &__link-wrapper {
     align-self: center;
     text-align: center;
-
-    &:hover,
-    &:focus-visible {
-      text-decoration: none;
-    }
 
     @include tablet {
       max-width: 50%;
@@ -169,6 +162,13 @@
     @include desktop {
       max-width: 30%;
     }
+  }
+
+  &__link {
+    @include animated-underline-reverse(1.5px);
+    @include chelzoo-body;
+
+    color: $color-black;
   }
 
   @include tablet-xl {

@@ -209,29 +209,10 @@
   }
 
   &__link {
+    @include animated-underline-reverse(1.5px);
+
     position: relative;
-    text-decoration: none;
-    color: inherit;
-
-    &::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      height: 1px;
-      background-color: $color-white;
-      transform: scaleX(1);
-      transform-origin: bottom left;
-      transition: transform 0.25s ease-out;
-    }
-
-    &:hover,
-    &:focus-visible {
-      &::after {
-        transform: scaleX(0);
-      }
-    }
+    color: $color-white;
   }
 
   &__description {

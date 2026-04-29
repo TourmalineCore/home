@@ -105,21 +105,20 @@
     object-fit: cover;
   }
 
-  &__link {
-    @include animated-underline-reverse;
-    @include chelzoo-body;
-
+  &__link-wrapper {
     align-self: center;
     text-align: center;
-
-    &:hover,
-    &:focus-visible {
-      text-decoration: none;
-    }
 
     @include tablet {
       margin-left: auto;
     }
+  }
+
+  &__link {
+    @include animated-underline-reverse(1.5px);
+    @include chelzoo-body;
+
+    color: $color-black;
   }
 
   @include tablet-xl {

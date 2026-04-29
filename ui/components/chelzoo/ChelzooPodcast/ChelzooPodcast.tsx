@@ -33,14 +33,16 @@ export function ChelzooPodcast({
           <div className="chelzoo-podcast__media">
             {renderMedia()}
           </div>
-          <SmartLink
-            className="chelzoo-podcast__link"
-            href={t(`link`)}
-          >
-            {t(`linkText`)}
-            {` `}
-            →
-          </SmartLink>
+          <div className="chelzoo-podcast__link-wrapper">
+            <SmartLink
+              className="chelzoo-podcast__link"
+              href={t(`link`)}
+            >
+              {t(`linkText`)}
+              {` `}
+              →
+            </SmartLink>
+          </div>
         </div>
       </div>
     </section>

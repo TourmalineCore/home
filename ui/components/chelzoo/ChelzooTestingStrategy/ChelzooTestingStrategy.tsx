@@ -52,14 +52,16 @@ export function ChelzooTestingStrategy() {
             </li>
           ))}
         </ul>
-        <SmartLink
-          className="chelzoo-testing-strategy__link"
-          href="https://heisenbug.ru/archive/2025%20Spring/talks/2f023c42771843ff8efb2e9aeb9aa1e5/"
-        >
-          {t(`linkText`)}
-          {` `}
-          →
-        </SmartLink>
+        <div className="chelzoo-testing-strategy__link-wrapper">
+          <SmartLink
+            className="chelzoo-testing-strategy__link"
+            href="https://heisenbug.ru/archive/2025%20Spring/talks/2f023c42771843ff8efb2e9aeb9aa1e5/"
+          >
+            {t(`linkText`)}
+            {` `}
+            →
+          </SmartLink>
+        </div>
       </div>
     </section>
   );

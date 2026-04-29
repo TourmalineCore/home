@@ -46,14 +46,16 @@ export function ChelzooDevDesign() {
             placeholder="blur"
           />
         </div>
-        <SmartLink
-          className="chelzoo-dev-design__link"
-          href="https://vk.com/wall-215630045_158"
-        >
-          {t(`linkText`)}
-          {` `}
-          →
-        </SmartLink>
+        <div className="chelzoo-dev-design__link-wrapper">
+          <SmartLink
+            className="chelzoo-dev-design__link"
+            href="https://vk.com/wall-215630045_158"
+          >
+            {t(`linkText`)}
+            {` `}
+            →
+          </SmartLink>
+        </div>
       </div>
     </section>
   );
