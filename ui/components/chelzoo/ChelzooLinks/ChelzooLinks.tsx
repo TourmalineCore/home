@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import Image, { StaticImageData } from "next/image";
 import { useTranslation } from "next-i18next";
 
@@ -8,11 +9,21 @@ import SiteImage from "../../../public/images/chelzoo-uwds.jpg";
 import TestsImage from "../../../public/images/chelzoo-sudno.jpg";
 import DesignImage from "../../../public/images/chelzoo-soon.jpg";
 import { SmartLink } from "../../SmartLink/SmartLink";
+import { useHorizontalDragScroll } from "../../../common/hooks/useHorizontalDragScroll";
 
 export function ChelzooLinks() {
   const {
     t,
   } = useTranslation(`chelzooLinks`);
+
+  const {
+    containerRef,
+    hasDragged,
+    handleMouseDown,
+    handleMouseLeave,
+    handleMouseMove,
+    handleMouseUp,
+  } = useHorizontalDragScroll();
 
   const cards = [
     {
@@ -60,25 +71,37 @@ export function ChelzooLinks() {
     >
       <div className="chelzoo-links__wrapper">
         <h2 className="chelzoo-links__title">{t(`title`)}</h2>
-        <ul className="chelzoo-links__list">
-          {cards.map(({
-            id,
-            text,
-            link,
-            image,
-          }) => (
-            <li
-              key={id}
-              className="chelzoo-links__card"
-            >
-              {renderCardContent({
-                text,
-                link,
-                image,
-              })}
-            </li>
-          ))}
-        </ul>
+        <div
+          className="chelzoo-links__list-container"
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
+        >
+          <ul
+            className="chelzoo-links__list"
+            ref={containerRef}
+          >
+            {cards.map(({
+              id,
+              text,
+              link,
+              image,
+            }) => (
+              <li
+                key={id}
+                className="chelzoo-links__card"
+              >
+                {renderCardContent({
+                  text,
+                  link,
+                  image,
+                  hasDragged,
+                })}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );
@@ -88,16 +111,24 @@ function renderCardContent({
   text,
   link,
   image,
+  hasDragged,
 }: {
   text: string;
   link: string;
   image: StaticImageData;
+  hasDragged: boolean;
 }) {
   if (link) {
     return (
       <SmartLink
         className="chelzoo-links__link"
         href={link}
+        onClick={(e) => {
+          if (hasDragged) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
       >
         <div className="chelzoo-links__image-wrapper">
           <Image
