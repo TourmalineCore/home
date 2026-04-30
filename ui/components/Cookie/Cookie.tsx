@@ -4,12 +4,13 @@ import { useRouter } from 'next/router';
 
 import { getCookie, setCookie } from 'cookies-next';
 import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
-import { COOKIE_ACCEPT, POLICY_VERSION } from '../../common/constants/cookie';
-
-const cookieOptions = {
-  // 1 year
-  maxAge: 365 * 24 * 3600,
-};
+import {
+  COOKIE_ACCEPT,
+  COOKIE_SETTINGS,
+  GENERAL_COOKIE_OPTIONS,
+  POLICY_VERSION,
+} from '../../common/constants/cookie';
+import { CookieSettingsModal } from '../CookieSettingsModal/CookieSettingsModal';
 
 // Google metrics are temporarily disabled
 // const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ``;
@@ -27,6 +28,7 @@ export function Cookie({
   } = useRouter();
 
   const [isCookieVisible, setIsCookieVisible] = useState(isComponentPage || false);
+  const [isCookieSettingsModalOpen, setIsCookieSettingsModalOpen] = useState(false);
   // const [date, setDate] = useState<Date | null>(null);
   const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
 
@@ -47,53 +49,107 @@ export function Cookie({
   }
 
   return (
-    <aside
-      className="cookie"
-      data-testid="cookie"
-    >
-      <div className="cookie__text">
-        <Trans
-          i18nKey="cookie:text"
-          components={{
-            bolt: <a
-              className="cookie__link"
-              href={`/documents/policy/policy-${POLICY_VERSION}-${locale}.pdf#page=5`}
-              target="_blank"
-              rel="noreferrer"
-              aria-label=""
-            />,
-          }}
-        />
-      </div>
-      <div className="cookie__buttons">
-        <button
-          type="button"
-          className="cookie__button"
-          onClick={acceptCookie}
-          data-testid="accept-button"
-        >
-          {t(`accept`)}
-        </button>
-        <button
-          type="button"
-          className="cookie__button"
-          onClick={rejectCookie}
-          data-testid="reject-button"
-        >
-          {t(`reject`)}
-        </button>
-      </div>
-    </aside>
+    <>
+      <aside
+        className="cookie"
+        data-testid="cookie"
+      >
+        <div className="cookie__text">
+          <Trans
+            i18nKey="cookie:text"
+            components={{
+              bolt: <a
+                className="cookie__link"
+                href={`/documents/policy/policy-${POLICY_VERSION}-${locale}.pdf#page=5`}
+                target="_blank"
+                rel="noreferrer"
+                aria-label=""
+              />,
+            }}
+          />
+        </div>
+        <div className="cookie__buttons">
+          <button
+            type="button"
+            className="cookie__button cookie__button--settings"
+            onClick={() => setIsCookieSettingsModalOpen(true)}
+            data-testid="cookie-settings-button"
+          >
+            {t(`settings`)}
+          </button>
+
+          <button
+            type="button"
+            className="cookie__button"
+            onClick={rejectCookie}
+            data-testid="reject-button"
+          >
+            {t(`reject`)}
+          </button>
+          <button
+            type="button"
+            className="cookie__button"
+            onClick={acceptCookie}
+            data-testid="accept-button"
+          >
+            {t(`accept`)}
+          </button>
+        </div>
+      </aside>
+
+      <CookieSettingsModal
+        isModalOpen={isCookieSettingsModalOpen}
+        onCloseModal={() => setIsCookieSettingsModalOpen(false)}
+        onSaveSettings={() => {
+          setIsCookieSettingsModalOpen(false);
+          setIsCookieVisible(false);
+        }}
+      />
+    </>
   );
 
-  function acceptCookie() {
+  async function acceptCookie() {
     if (!isComponentPage) {
-      setCookie(COOKIE_ACCEPT, true, cookieOptions);
+      setCookie(
+        COOKIE_ACCEPT,
+        true,
+        GENERAL_COOKIE_OPTIONS,
+      );
+
+      setCookie(
+        COOKIE_SETTINGS,
+        JSON.stringify({
+          analytics: true,
+          webVisor: true,
+        }),
+        GENERAL_COOKIE_OPTIONS,
+      );
 
       if (isMetricsEnabled) {
         // window.gtag(`js`, date);
         // window.gtag(`config`, googleId);
+        let consentId = localStorage.getItem(`consentId`);
+
+        if (!consentId) {
+          consentId = crypto.randomUUID();
+          localStorage.setItem(`consentId`, consentId);
+        }
+
         loadYandexMetrika();
+
+        await fetch(`/api/save-cookie-consent`, {
+          method: `POST`,
+          headers: {
+            'Content-Type': `application/json`,
+          },
+          body: JSON.stringify({
+            consentId,
+            consentVersion: POLICY_VERSION,
+            categories: {
+              analytics: true,
+            },
+          }),
+        });
       }
       setIsCookieVisible(false);
     }
@@ -101,7 +157,20 @@ export function Cookie({
 
   function rejectCookie() {
     if (!isComponentPage) {
-      setCookie(COOKIE_ACCEPT, false, cookieOptions);
+      setCookie(
+        COOKIE_ACCEPT,
+        false,
+        GENERAL_COOKIE_OPTIONS,
+      );
+
+      setCookie(
+        COOKIE_SETTINGS,
+        JSON.stringify({
+          analytics: false,
+          webVisor: false,
+        }),
+        GENERAL_COOKIE_OPTIONS,
+      );
     }
 
     setIsCookieVisible(false);

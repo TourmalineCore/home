@@ -8,11 +8,13 @@ import { useOnClickOutside } from '../../common/hooks';
 export function Modal({
   children,
   className,
+  type = `default`,
   onClose = () => {},
   testId,
 }: {
   children: ReactNode;
   className: string;
+  type?: 'cookie' | 'default';
   onClose?:() => unknown;
   testId?: string;
 }) {
@@ -45,7 +47,9 @@ export function Modal({
       returnFocus
     >
       <div
-        className={clsx(`default-scroll modal`, className)}
+        className={clsx(`default-scroll modal`, className, {
+          'modal--cookie': type === `cookie`,
+        })}
         data-testid={testId}
       >
         <div className="modal__container">

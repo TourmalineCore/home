@@ -12,13 +12,16 @@
   background-color: $color-black-900;
 
   &__link {
-    @include animated-underline-reverse;
-
     font-size: inherit;
+    text-decoration: underline;
+    text-decoration-color: $color-white;
     color: inherit;
+    cursor: pointer;
+    text-underline-offset: 3px;
 
-    &::after {
-      background-color: $color-white;
+    &:hover,
+    &:focus-visible {
+      text-decoration: none;
     }
   }
 
@@ -31,7 +34,12 @@
 
   &__buttons {
     display: flex;
+    flex-direction: column;
     gap: 12px;
+
+    @include tablet {
+      flex-direction: row;
+    }
   }
 
   &__button {
@@ -82,22 +90,48 @@
     @include desktop-xl {
       height: 70px;
     }
+
+    &--settings {
+      padding: 12px 20px;
+      height: 42px;
+      background-color: $color-black-900;
+
+      &::before,
+      &::after {
+        content: none;
+      }
+
+      &:hover,
+      &:focus-visible {
+        color: $color-pink-redesign;
+        background-color: $color-black-900;
+      }
+
+      @include tablet {
+        padding: 15px 20px;
+        height: unset;
+        max-width: fit-content;
+      }
+    }
   }
 
   @include tablet {
-    left: unset;
     right: 12px;
-    width: 369px;
+  }
+
+  @include tablet-xl {
+    left: unset;
+    max-width: 756px;
   }
 
   @include desktop {
     right: 16px;
     bottom: 48px;
-    width: 437px;
+    max-width: 673px;
   }
 
   @include desktop-xl {
     right: 24px;
-    width: 618px;
+    max-width: 1097px;
   }
 }
