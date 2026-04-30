@@ -33,7 +33,7 @@ export function ChelzooCMS({
     if (isComponentPage) {
       return (
         <Image
-          src="/images/hero-slider-image-6.png"
+          src="/images/hero-slider-image-8.png"
           alt=""
           fill
         />

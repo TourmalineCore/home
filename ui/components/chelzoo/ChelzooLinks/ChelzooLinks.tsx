@@ -1,4 +1,5 @@
-import Image from "next/image";
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import Image, { StaticImageData } from "next/image";
 import { useTranslation } from "next-i18next";
 
 import DevOpsImage from "../../../public/images/chelzoo-hohma.jpg";
@@ -7,11 +8,22 @@ import FrontendImage from "../../../public/images/chelzoo-jora.jpg";
 import SiteImage from "../../../public/images/chelzoo-uwds.jpg";
 import TestsImage from "../../../public/images/chelzoo-sudno.jpg";
 import DesignImage from "../../../public/images/chelzoo-soon.jpg";
+import { SmartLink } from "../../SmartLink/SmartLink";
+import { useHorizontalDragScroll } from "../../../common/hooks/useHorizontalDragScroll";
 
 export function ChelzooLinks() {
   const {
     t,
   } = useTranslation(`chelzooLinks`);
+
+  const {
+    containerRef,
+    hasDragged,
+    handleMouseDown,
+    handleMouseLeave,
+    handleMouseMove,
+    handleMouseUp,
+  } = useHorizontalDragScroll();
 
   const cards = [
     {
@@ -48,7 +60,7 @@ export function ChelzooLinks() {
       id: 6,
       image: DesignImage,
       text: t(`textDesign`),
-      link: `https://heisenbug.ru/archive/2025%20Spring/talks/2f023c42771843ff8efb2e9aeb9aa1e5/`,
+      link: ``,
     },
   ];
 
@@ -59,33 +71,90 @@ export function ChelzooLinks() {
     >
       <div className="chelzoo-links__wrapper">
         <h2 className="chelzoo-links__title">{t(`title`)}</h2>
-        <ul className="chelzoo-links__list">
-          {cards.map((card) => (
-            <li
-              key={card.id}
-              className="chelzoo-links__card"
-            >
-              <a
-                className="chelzoo-links__link"
-                href={card.link}
-                target="_blank"
-                rel="noreferrer"
+        <div
+          className="chelzoo-links__list-container"
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
+        >
+          <ul
+            className="chelzoo-links__list"
+            ref={containerRef}
+          >
+            {cards.map(({
+              id,
+              text,
+              link,
+              image,
+            }) => (
+              <li
+                key={id}
+                className="chelzoo-links__card"
               >
-                <div className="chelzoo-links__image-wrapper">
-                  <Image
-                    src={card.image}
-                    fill
-                    alt=""
-                    placeholder="blur"
-                  />
-                </div>
-
-                {card.text}
-              </a>
-            </li>
-          ))}
-        </ul>
+                {renderCardContent({
+                  text,
+                  link,
+                  image,
+                  hasDragged,
+                })}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
+  );
+}
+
+function renderCardContent({
+  text,
+  link,
+  image,
+  hasDragged,
+}: {
+  text: string;
+  link: string;
+  image: StaticImageData;
+  hasDragged: boolean;
+}) {
+  if (link) {
+    return (
+      <SmartLink
+        className="chelzoo-links__link"
+        href={link}
+        onClick={(e) => {
+          if (hasDragged) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+      >
+        <div className="chelzoo-links__image-wrapper">
+          <Image
+            src={image}
+            fill
+            alt=""
+            placeholder="blur"
+          />
+        </div>
+        {text}
+      </SmartLink>
+    );
+  }
+
+  return (
+    <div>
+      <div className="chelzoo-links__image-wrapper">
+        <Image
+          src={image}
+          fill
+          alt=""
+          placeholder="blur"
+        />
+      </div>
+
+      {text}
+    </div>
   );
 }

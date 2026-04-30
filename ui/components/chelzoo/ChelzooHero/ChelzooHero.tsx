@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import IconDownArrow from '../../../icons/icon-arrow-chelzoo.svg';
+import { SmartLink } from '../../SmartLink/SmartLink';
 
 export function ChelzooHero({
   isComponentPage,
@@ -40,6 +41,14 @@ export function ChelzooHero({
           </span>
           <h2 className="chelzoo-hero__subtitle">
             {t(`subtitle`)}
+            {` `}
+            —&nbsp;
+            <SmartLink
+              className="chelzoo-hero__link"
+              href="https://chelzoo.ru/"
+            >
+              chelzoo.ru
+            </SmartLink>
           </h2>
           <p className="chelzoo-hero__description">
             {t(`description`)}
@@ -68,7 +77,7 @@ export function ChelzooHero({
     if (isComponentPage) {
       return (
         <Image
-          src="/images/hero-slider-image-6.png"
+          src="/images/hero-slider-image-8.png"
           alt=""
           fill
         />

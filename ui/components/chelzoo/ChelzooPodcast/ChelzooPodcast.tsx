@@ -1,6 +1,7 @@
 import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
 import { useDeviceSize } from '../../../common/hooks';
+import { SmartLink } from '../../SmartLink/SmartLink';
 
 export function ChelzooPodcast({
   isComponentPage,
@@ -32,14 +33,16 @@ export function ChelzooPodcast({
           <div className="chelzoo-podcast__media">
             {renderMedia()}
           </div>
-          <a
-            className="chelzoo-podcast__link"
-            href={t(`link`)}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {t(`linkText`)}
-          </a>
+          <div className="chelzoo-podcast__link-wrapper">
+            <SmartLink
+              className="chelzoo-podcast__link"
+              href={t(`link`)}
+            >
+              {t(`linkText`)}
+              {` `}
+              →
+            </SmartLink>
+          </div>
         </div>
       </div>
     </section>
@@ -49,7 +52,7 @@ export function ChelzooPodcast({
     if (isComponentPage) {
       return (
         <Image
-          src="/images/hero-slider-image-6.png"
+          src="/images/hero-slider-image-8.png"
           alt=""
           fill
         />

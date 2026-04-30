@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useDeviceSize } from "../../../common/hooks";
 import DevDesignImage from "../../../public/images/chelzoo-dev-design.jpg";
 import DevDesignImageEng from "../../../public/images/chelzoo-dev-design-eng.jpg";
+import { SmartLink } from '../../SmartLink/SmartLink';
 
 export function ChelzooDevDesign() {
   const {
@@ -45,14 +46,16 @@ export function ChelzooDevDesign() {
             placeholder="blur"
           />
         </div>
-        <a
-          className="chelzoo-dev-design__link"
-          href={t(`link`)}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {t(`linkText`)}
-        </a>
+        <div className="chelzoo-dev-design__link-wrapper">
+          <SmartLink
+            className="chelzoo-dev-design__link"
+            href="https://vk.com/wall-215630045_158"
+          >
+            {t(`linkText`)}
+            {` `}
+            →
+          </SmartLink>
+        </div>
       </div>
     </section>
   );
