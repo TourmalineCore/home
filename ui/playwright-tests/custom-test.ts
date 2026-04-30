@@ -4,6 +4,7 @@ import { AxeBuilder } from '@axe-core/playwright';
 import fs, { mkdirSync, writeFileSync } from 'fs';
 import { dirname } from "path";
 import { Breakpoint, BreakpointName } from '../common/enums';
+import { COOKIE_ACCEPT } from '../common/constants/cookie';
 
 export type CustomTestFixtures = {
   apiImageMock: () => void;
@@ -56,9 +57,15 @@ export const test = base.extend<CustomTestFixtures>({
   }, use) => {
     const goToComponentsPage = async (path: string) => {
       // hide cookie banner
-      await page.addInitScript(() => {
-        localStorage.setItem(`cookieAccept`, `false`);
-      });
+      await page.context()
+        .addCookies([
+          {
+            name: `${COOKIE_ACCEPT}`,
+            value: `false`,
+            domain: `localhost`,
+            path: `/`,
+          },
+        ]);
       await apiImageMock();
 
       // interrupting the connection for gif, for more stable work of tests

@@ -1,8 +1,8 @@
-
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { FooterNavigationListRedesign } from './components/FooterNavigationListRedesign/FooterNavigationListRedesign';
 import { FooterRedesignProps } from '../../../common/types';
+import { POLICY_VERSION } from '../../../common/constants/cookie';
 
 export function FooterRedesign({
   emailCaption,
@@ -43,7 +43,7 @@ export function FooterRedesign({
             {`© 2019-${currentYear} Tourmaline Core`}
           </span>
           <a
-            href={`/documents/policy-${locale}.pdf`}
+            href={`/documents/policy/policy-${POLICY_VERSION}-${locale}.pdf`}
             target="_blank"
             rel="noreferrer"
             className="footer-redesign__privacy-policy"

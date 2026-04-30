@@ -2,19 +2,17 @@ import { Trans, useTranslation } from 'next-i18next';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { OptionYM } from '../../types/globals';
+import { getCookie, setCookie } from 'cookies-next';
+import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
+import { COOKIE_ACCEPT, POLICY_VERSION } from '../../common/constants/cookie';
 
-const STORAGE_KEY = `cookieAccept`;
-
-const yandexId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
-const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ``;
-
-export const optionYandexMetrika: OptionYM = {
-  clickmap: true,
-  trackLinks: true,
-  accurateTrackBounce: true,
-  webvisor: true,
+const cookieOptions = {
+  // 1 year
+  maxAge: 365 * 24 * 3600,
 };
+
+// Google metrics are temporarily disabled
+// const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ``;
 
 export function Cookie({
   isComponentPage,
@@ -29,13 +27,13 @@ export function Cookie({
   } = useRouter();
 
   const [isCookieVisible, setIsCookieVisible] = useState(isComponentPage || false);
-  const [date, setDate] = useState<Date | null>(null);
+  // const [date, setDate] = useState<Date | null>(null);
   const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
 
   useEffect(() => {
     if (!isComponentPage) {
-      setDate(new Date());
-      if (localStorage.getItem(STORAGE_KEY)) {
+      // setDate(new Date());
+      if (getCookie(COOKIE_ACCEPT) !== undefined) {
         setIsCookieVisible(false);
       } else {
         setIsCookieVisible(true);
@@ -59,7 +57,7 @@ export function Cookie({
           components={{
             bolt: <a
               className="cookie__link"
-              href={`/documents/policy-${locale}.pdf#page=5`}
+              href={`/documents/policy/policy-${POLICY_VERSION}-${locale}.pdf#page=5`}
               target="_blank"
               rel="noreferrer"
               aria-label=""
@@ -90,22 +88,20 @@ export function Cookie({
 
   function acceptCookie() {
     if (!isComponentPage) {
-      localStorage.setItem(STORAGE_KEY, `true`);
+      setCookie(COOKIE_ACCEPT, true, cookieOptions);
 
       if (isMetricsEnabled) {
-        window.gtag(`js`, date);
-        window.gtag(`config`, googleId);
-
-        window.ym(Number(yandexId), `init`, optionYandexMetrika);
+        // window.gtag(`js`, date);
+        // window.gtag(`config`, googleId);
+        loadYandexMetrika();
       }
+      setIsCookieVisible(false);
     }
-
-    setIsCookieVisible(false);
   }
 
   function rejectCookie() {
     if (!isComponentPage) {
-      localStorage.setItem(STORAGE_KEY, `false`);
+      setCookie(COOKIE_ACCEPT, false, cookieOptions);
     }
 
     setIsCookieVisible(false);
