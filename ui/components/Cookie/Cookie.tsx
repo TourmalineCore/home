@@ -4,13 +4,8 @@ import { useRouter } from 'next/router';
 
 import { getCookie, setCookie } from 'cookies-next';
 import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
-import { COOKIE_ACCEPT, POLICY_VERSION } from '../../common/constants/cookie';
+import { COOKIE_ACCEPT, GENERAL_COOKIE_OPTIONS, POLICY_VERSION } from '../../common/constants/cookie';
 import { CookieSettingsModal } from '../CookieSettingsModal/CookieSettingsModal';
-
-const cookieOptions = {
-  // 1 year
-  maxAge: 365 * 24 * 3600,
-};
 
 // Google metrics are temporarily disabled
 // const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ``;
@@ -110,7 +105,7 @@ export function Cookie({
 
   async function acceptCookie() {
     if (!isComponentPage) {
-      setCookie(COOKIE_ACCEPT, true, cookieOptions);
+      setCookie(COOKIE_ACCEPT, true, GENERAL_COOKIE_OPTIONS);
 
       if (isMetricsEnabled) {
         // window.gtag(`js`, date);
@@ -144,7 +139,7 @@ export function Cookie({
 
   function rejectCookie() {
     if (!isComponentPage) {
-      setCookie(COOKIE_ACCEPT, false, cookieOptions);
+      setCookie(COOKIE_ACCEPT, false, GENERAL_COOKIE_OPTIONS);
     }
 
     setIsCookieVisible(false);

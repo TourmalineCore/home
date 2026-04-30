@@ -2,8 +2,10 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 
 import clsx from 'clsx';
+import { getCookie, setCookie } from 'cookies-next';
 import { Modal } from '../Modal/Modal';
 import { useDeviceSize } from '../../common/hooks';
+import { GENERAL_COOKIE_OPTIONS } from '../../common/constants/cookie';
 
 type Options = {
   title: string;
@@ -44,9 +46,10 @@ export function CookieSettingsModal({
 
   useEffect(() => {
     if (isModalOpen) {
-      const savedCookieSettings = localStorage.getItem(`cookieSettings`);
+      const savedCookieSettings = getCookie(`cookieSettings`);
+
       if (savedCookieSettings) {
-        const parsedSettings = JSON.parse(savedCookieSettings);
+        const parsedSettings = JSON.parse(savedCookieSettings as string);
         setCookieSettings({
           analytics: parsedSettings.analytics,
           webVisor: parsedSettings.webVisor,
@@ -125,7 +128,7 @@ export function CookieSettingsModal({
   }
 
   function handleSaveSettings() {
-    localStorage.setItem(`cookieSettings`, JSON.stringify(cookieSettings));
+    setCookie(`cookieSettings`, JSON.stringify(cookieSettings), GENERAL_COOKIE_OPTIONS);
     onSaveSettings();
   }
 }
