@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { getCookie, setCookie } from 'cookies-next';
 import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
 import { COOKIE_ACCEPT, POLICY_VERSION } from '../../common/constants/cookie';
+import { CookieSettingsModal } from '../CookieSettingsModal/CookieSettingsModal';
 
 const cookieOptions = {
   // 1 year
@@ -27,6 +28,7 @@ export function Cookie({
   } = useRouter();
 
   const [isCookieVisible, setIsCookieVisible] = useState(isComponentPage || false);
+  const [isCookieSettingsModalOpen, setIsCookieSettingsModalOpen] = useState(false);
   // const [date, setDate] = useState<Date | null>(null);
   const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
 
@@ -47,52 +49,63 @@ export function Cookie({
   }
 
   return (
-    <aside
-      className="cookie"
-      data-testid="cookie"
-    >
-      <div className="cookie__text">
-        <Trans
-          i18nKey="cookie:text"
-          components={{
-            bolt: <a
-              className="cookie__link"
-              href={`/documents/policy/policy-${POLICY_VERSION}-${locale}.pdf#page=5`}
-              target="_blank"
-              rel="noreferrer"
-              aria-label=""
-            />,
-          }}
-        />
-      </div>
-      <div className="cookie__buttons">
-        <button
-          type="button"
-          className="cookie__button cookie__button--settings"
-          onClick={acceptCookie}
-          data-testid="settings-button"
-        >
-          {t(`settings`)}
-        </button>
+    <>
+      <aside
+        className="cookie"
+        data-testid="cookie"
+      >
+        <div className="cookie__text">
+          <Trans
+            i18nKey="cookie:text"
+            components={{
+              bolt: <a
+                className="cookie__link"
+                href={`/documents/policy/policy-${POLICY_VERSION}-${locale}.pdf#page=5`}
+                target="_blank"
+                rel="noreferrer"
+                aria-label=""
+              />,
+            }}
+          />
+        </div>
+        <div className="cookie__buttons">
+          <button
+            type="button"
+            className="cookie__button cookie__button--settings"
+            onClick={customizeCookieSettings}
+            data-testid="cookie-settings-button"
+          >
+            {t(`settings`)}
+          </button>
 
-        <button
-          type="button"
-          className="cookie__button"
-          onClick={rejectCookie}
-          data-testid="reject-button"
-        >
-          {t(`reject`)}
-        </button>
-        <button
-          type="button"
-          className="cookie__button"
-          onClick={acceptCookie}
-          data-testid="accept-button"
-        >
-          {t(`accept`)}
-        </button>
-      </div>
-    </aside>
+          <button
+            type="button"
+            className="cookie__button"
+            onClick={rejectCookie}
+            data-testid="reject-button"
+          >
+            {t(`reject`)}
+          </button>
+          <button
+            type="button"
+            className="cookie__button"
+            onClick={acceptCookie}
+            data-testid="accept-button"
+          >
+            {t(`accept`)}
+          </button>
+        </div>
+      </aside>
+
+      <CookieSettingsModal
+        isModalOpen={isCookieSettingsModalOpen}
+        onCloseModal={() => setIsCookieSettingsModalOpen(false)}
+        onSaveSettings={() => {
+          setIsCookieSettingsModalOpen(false);
+          setIsCookieVisible(false);
+        }}
+      />
+    </>
   );
 
   async function acceptCookie() {
@@ -135,5 +148,9 @@ export function Cookie({
     }
 
     setIsCookieVisible(false);
+  }
+
+  function customizeCookieSettings() {
+    setIsCookieSettingsModalOpen(true);
   }
 }

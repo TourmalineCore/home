@@ -3,13 +3,15 @@
   "options": [
     {
       "title": "Analytics",
-      "text": "Collects data on popular pages, clicks on elements, and link navigation. This helps us understand the site's strengths and areas for improvement."
+      "text": "Collects data on popular pages, clicks on elements, and link navigation. This helps us understand the site's strengths and areas for improvement.",
+      "name": "analytics"
     },
     {
       "title": "Session Recording (Webvisor)",
-      "text": "Records a video of cursor movements, scrolling, and clicks. This helps us see how users interact with the interface to improve site quality."
+      "text": "Records a video of cursor movements, scrolling, and clicks. This helps us see how users interact with the interface to improve site quality.",
+      "name": "webVisor"
     }
   ],
   "note": "Data is processed anonymously; we do not collect passwords or sensitive data. You can change your settings at any time using the link at the bottom of the page.",
-  "buttonText": "Save settings"
+  "buttonText": "Confirm"
 }
