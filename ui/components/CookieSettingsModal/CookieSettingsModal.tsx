@@ -75,16 +75,15 @@ export function CookieSettingsModal({
               name,
             }) => (
               <li
-                key={title}
+                key={name}
                 className="cookie-settings-modal__item"
               >
                 <div className="cookie-settings-modal__option">
                   <div className="cookie-settings-modal__checkbox">
                     <input
                       id={title}
-                      name={name}
-                      onChange={(e) => handleCheckboxChange(e.target.name)}
-                      onKeyDown={(e) => handleCheckboxChange(e.target.name)}
+                      onChange={() => handleCheckboxChange(name)}
+                      onKeyDown={() => handleCheckboxChange(name)}
                       type="checkbox"
                       className="cookie-settings-modal__checkbox-input"
                       checked={cookieSettings[name as keyof CookieSettings]}
