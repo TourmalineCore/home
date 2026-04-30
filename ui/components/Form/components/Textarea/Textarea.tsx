@@ -31,7 +31,7 @@ export function Textarea({
       <div className="textarea__box">
         <textarea
           id={id}
-          className="textarea__control"
+          className="textarea__control ym-disable-keys"
           placeholder=" "
           {...props}
         />

@@ -20,7 +20,7 @@ export function InputRedesign({
       <div className="input-redesign__box">
         <input
           id={id}
-          className="input-redesign__control"
+          className="input-redesign__control ym-disable-keys"
           placeholder=""
           {...props}
         />
