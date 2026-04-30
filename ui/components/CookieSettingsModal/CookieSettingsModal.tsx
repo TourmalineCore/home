@@ -116,14 +116,10 @@ export function CookieSettingsModal({
   );
 
   function handleCheckboxChange(field: keyof CookieSettings) {
-    setCookieSettings((prev) => {
-      const newCookieSettings = {
-        ...prev,
-        [field]: !prev[field],
-      };
-      localStorage.setItem(`cookieSettings`, JSON.stringify(newCookieSettings));
-      return newCookieSettings;
-    });
+    setCookieSettings((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
   }
 
   function getFieldName(title: string): keyof CookieSettings {
@@ -141,6 +137,7 @@ export function CookieSettingsModal({
   }
 
   function handleSaveSettings() {
+    localStorage.setItem(`cookieSettings`, JSON.stringify(cookieSettings));
     onCloseModal();
   }
 }
