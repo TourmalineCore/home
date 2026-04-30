@@ -38,6 +38,7 @@ export enum ComponentName {
   CHELZOO_AUTOTESTS = `chelzoo-autotests`,
   CHELZOO_REVIEW = `chelzoo-review`,
   CHELZOO_LINKS = `chelzoo-links`,
+  COOKIE_SETTINGS_MODAL = `cookie-settings-modal`,
 }
 
 export const COMPONENT_LINKS = Object.values(ComponentName)
