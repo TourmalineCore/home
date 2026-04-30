@@ -1,13 +1,14 @@
 import { useTranslation } from 'next-i18next';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import clsx from 'clsx';
 import { Modal } from '../Modal/Modal';
 import { useDeviceSize } from '../../common/hooks';
 
-type OptionsList = {
+type Options = {
   title: string;
   text: string;
+  name: string;
 }[];
 
 type CookieSettings = {
@@ -26,7 +27,7 @@ export function CookieSettingsModal({
     t,
   } = useTranslation(`cookieSettings`);
 
-  const optionsList: OptionsList = t(`options`, {
+  const options: Options = t(`options`, {
     returnObjects: true,
   });
 
@@ -45,8 +46,8 @@ export function CookieSettingsModal({
       if (savedCookieSettings) {
         const parsedSettings = JSON.parse(savedCookieSettings);
         setCookieSettings({
-          analytics: parsedSettings.analytics || false,
-          webVisor: parsedSettings.webVisor || false,
+          analytics: parsedSettings.analytics,
+          webVisor: parsedSettings.webVisor,
         });
       }
     }
@@ -66,40 +67,40 @@ export function CookieSettingsModal({
         <div className="cookie-settings-modal__inner">
           <h2 className="cookie-settings-modal__title">{t(`title`)}</h2>
           <ul className="cookie-settings-modal__list">
-            {optionsList.map(({
-              text, title,
-            }) => {
-              const fieldName = getFieldName(title);
-              return (
-                <li
-                  key={title}
-                  className="cookie-settings-modal__item"
-                >
-                  <div className="cookie-settings-modal__option">
-                    <div className="cookie-settings-modal__checkbox">
-                      <input
-                        onChange={() => handleCheckboxChange(fieldName)}
-                        onKeyDown={() => handleCheckboxChange(fieldName)}
-                        type="checkbox"
-                        className="cookie-settings-modal__checkbox-input"
-                        id={title}
-                        checked={cookieSettings[fieldName]}
-                      />
-                      <div className="cookie-settings-modal__checkbox-indicator" />
-                    </div>
-                    <label
-                      className="cookie-settings-modal__label"
-                      htmlFor={title}
-                    >
-                      {title}
-                    </label>
+            {options.map(({
+              text,
+              title,
+              name,
+            }) => (
+              <li
+                key={title}
+                className="cookie-settings-modal__item"
+              >
+                <div className="cookie-settings-modal__option">
+                  <div className="cookie-settings-modal__checkbox">
+                    <input
+                      id={title}
+                      name={name}
+                      onChange={(e) => handleCheckboxChange(e.target.name)}
+                      onKeyDown={(e) => handleCheckboxChange(e.target.name)}
+                      type="checkbox"
+                      className="cookie-settings-modal__checkbox-input"
+                      checked={cookieSettings[name as keyof CookieSettings]}
+                    />
+                    <div className="cookie-settings-modal__checkbox-indicator" />
                   </div>
-                  <p className="cookie-settings-modal__description">
-                    {text}
-                  </p>
-                </li>
-              );
-            })}
+                  <label
+                    className="cookie-settings-modal__label"
+                    htmlFor={title}
+                  >
+                    {title}
+                  </label>
+                </div>
+                <p className="cookie-settings-modal__description">
+                  {text}
+                </p>
+              </li>
+            ))}
           </ul>
           <div className="cookie-settings-modal__note">{t(`note`)}</div>
           <button
@@ -115,25 +116,11 @@ export function CookieSettingsModal({
     </>
   );
 
-  function handleCheckboxChange(field: keyof CookieSettings) {
+  function handleCheckboxChange(fieldName: string) {
     setCookieSettings((prev) => ({
       ...prev,
-      [field]: !prev[field],
+      [fieldName]: !prev[fieldName as keyof CookieSettings],
     }));
-  }
-
-  function getFieldName(title: string): keyof CookieSettings {
-    if (title.toLowerCase()
-      .includes(`analytics`) || title.toLowerCase()
-      .includes(`аналитика`)) {
-      return `analytics`;
-    }
-    if (title.toLowerCase()
-      .includes(`webvisor`) || title.toLowerCase()
-      .includes(`вебвизор`)) {
-      return `webVisor`;
-    }
-    return `analytics`;
   }
 
   function handleSaveSettings() {
