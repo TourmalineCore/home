@@ -31,7 +31,7 @@ export function ChelzooDiscovery() {
       id: 1,
       mobileImg: MobileImage1,
       desktopImg: locale === `ru` ? DesktopImage1 : DesktopImage1Eng,
-      label: `Impact map`,
+      label: `Impact Mapping`,
       className: `impact-map`,
       text: t(`impactMapCardText`),
     },
