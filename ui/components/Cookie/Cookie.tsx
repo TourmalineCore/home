@@ -100,6 +100,10 @@ export function Cookie({
       <CookieSettingsModal
         isModalOpen={isCookieSettingsModalOpen}
         onCloseModal={() => setIsCookieSettingsModalOpen(false)}
+        onSaveSettings={() => {
+          setIsCookieSettingsModalOpen(false);
+          setIsCookieVisible(false);
+        }}
       />
     </>
   );

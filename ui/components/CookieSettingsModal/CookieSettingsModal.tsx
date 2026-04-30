@@ -18,9 +18,11 @@ type CookieSettings = {
 
 export function CookieSettingsModal({
   onCloseModal,
+  onSaveSettings,
   isModalOpen,
 }:{
   onCloseModal: () => void;
+  onSaveSettings: () => void;
   isModalOpen: boolean;
 }) {
   const {
@@ -125,6 +127,6 @@ export function CookieSettingsModal({
 
   function handleSaveSettings() {
     localStorage.setItem(`cookieSettings`, JSON.stringify(cookieSettings));
-    onCloseModal();
+    onSaveSettings();
   }
 }
