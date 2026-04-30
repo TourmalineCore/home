@@ -138,8 +138,8 @@ export function Cookie({
           }),
         });
       }
+      setIsCookieVisible(false);
     }
-    setIsCookieVisible(false);
   }
 
   function rejectCookie() {

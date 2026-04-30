@@ -66,7 +66,6 @@ export const test = base.extend<CustomTestFixtures>({
             path: `/`,
           },
         ]);
-
       await apiImageMock();
 
       // interrupting the connection for gif, for more stable work of tests
