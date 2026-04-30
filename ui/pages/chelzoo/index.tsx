@@ -41,7 +41,7 @@ export default function ChelzooPage({
 }) {
   const {
     t,
-  } = useTranslation(`common`);
+  } = useTranslation(`chelzooMeta`);
 
   const {
     locale,
@@ -170,7 +170,7 @@ async function getStaticTranslation({
   locale: string;
 }) {
   return serverSideTranslations(locale, [
-    `common`,
+    `chelzooMeta`,
     `cookie`,
     `formBlockRedesign`,
     `chelzooHero`,

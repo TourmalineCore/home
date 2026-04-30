@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import IconCasesArrow from '../../../../icons/cases-arrow.svg';
 import { usePath } from '../../../../common/hooks';
+import { SmartLink } from '../../../SmartLink/SmartLink';
 
 export function CasesCard(
   {
@@ -20,7 +21,7 @@ export function CasesCard(
   } = usePath();
 
   return (
-    <a
+    <SmartLink
       href={link}
       className={clsx(`cases-card cases-card--${slicePathname}`, {
         'cases-card--hover': link,
@@ -29,8 +30,6 @@ export function CasesCard(
         link
           ? e.stopPropagation()
           : e.preventDefault())}
-      target="_blank"
-      rel="noreferrer"
     >
       <div className="cases-card__inner">
         <div className="cases-card__icon">{icon}</div>
@@ -42,6 +41,6 @@ export function CasesCard(
           <IconCasesArrow />
         </span>
       )}
-    </a>
+    </SmartLink>
   );
 }

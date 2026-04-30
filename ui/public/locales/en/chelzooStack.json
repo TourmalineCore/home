@@ -3,7 +3,7 @@
   "description": "We combined all our approaches and tested new tools in real-world scenarios. We focused on quality, not speed.",
   "list": [
     {
-      "title": "Automation and Deployment",
+      "title": "Infrastructure",
       "data": [
         "Docker",
         "Kubernetes",

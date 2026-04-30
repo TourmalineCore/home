@@ -80,8 +80,10 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    margin: 0 auto;
     padding-right: 16px;
     padding-left: 16px;
+    max-width: 1920px;
 
     @include desktop-xl {
       padding-right: 24px;
@@ -165,19 +167,6 @@
 
   &__content {
     align-self: flex-start;
-    max-width: 336px;
-
-    @include tablet-xl {
-      max-width: 408px;
-    }
-
-    @include desktop {
-      max-width: 390px;
-    }
-
-    @include desktop-xl {
-      max-width: 544px;
-    }
   }
 
   &__label {
@@ -221,16 +210,30 @@
     }
   }
 
+  &__link {
+    @include animated-underline-reverse(1.5px);
+
+    position: relative;
+    color: $color-white;
+  }
+
   &__description {
+    max-width: 336px;
     font-size: 16px;
     line-height: 1.3;
     color: $color-grey-300-redesign;
 
     @include tablet-xl {
+      max-width: 408px;
       font-size: 18px;
     }
 
+    @include desktop {
+      max-width: 390px;
+    }
+
     @include desktop-xl {
+      max-width: 544px;
       font-size: 26px;
     }
   }

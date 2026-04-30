@@ -105,26 +105,20 @@
     object-fit: cover;
   }
 
-  &__link {
-    @include chelzoo-link;
-
+  &__link-wrapper {
     align-self: center;
     text-align: center;
-
-    // To prevent the screen reader from reading the link twice,
-    // the arrow had to be removed from the react markup in css
-    &::after {
-      content: " →";
-    }
-
-    &:hover,
-    &:focus-visible {
-      text-decoration: none;
-    }
 
     @include tablet {
       margin-left: auto;
     }
+  }
+
+  &__link {
+    @include animated-underline-reverse(1.5px);
+    @include chelzoo-body;
+
+    color: $color-black;
   }
 
   @include tablet-xl {

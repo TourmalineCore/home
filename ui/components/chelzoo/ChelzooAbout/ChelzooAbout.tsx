@@ -5,6 +5,8 @@ import OldChelzooImage from '../../../public/images/chelzoo-old-zoo.jpg';
 import NewChelzooImage from '../../../public/images/chelzoo-new-zoo.jpg';
 import NewChelzooImageEng from '../../../public/images/chelzoo-new-zoo-eng.jpg';
 import IconPinkArrow from '../../../icons/icon-pink-arrow.svg';
+import Chelzoo2014 from '../../../icons/chelzoo-2014.svg';
+import Chelzoo2025 from '../../../icons/chelzoo-2025.svg';
 
 export function ChelzooAbout() {
   const {
@@ -32,6 +34,9 @@ export function ChelzooAbout() {
               placeholder="blur"
               alt=""
             />
+            <span className="chelzoo-about__2014">
+              <Chelzoo2014 />
+            </span>
           </div>
           <span className="chelzoo-about__arrow">
             <IconPinkArrow aria-hidden />
@@ -43,6 +48,9 @@ export function ChelzooAbout() {
               placeholder="blur"
               alt=""
             />
+            <span className="chelzoo-about__2025">
+              <Chelzoo2025 />
+            </span>
           </div>
         </div>
       </div>
