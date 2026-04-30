@@ -5,7 +5,8 @@ import clsx from 'clsx';
 import { getCookie, setCookie } from 'cookies-next';
 import { Modal } from '../Modal/Modal';
 import { useDeviceSize } from '../../common/hooks';
-import { GENERAL_COOKIE_OPTIONS } from '../../common/constants/cookie';
+import { COOKIE_ACCEPT, COOKIE_SETTINGS, GENERAL_COOKIE_OPTIONS } from '../../common/constants/cookie';
+import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
 
 type Options = {
   title: string;
@@ -46,7 +47,7 @@ export function CookieSettingsModal({
 
   useEffect(() => {
     if (isModalOpen) {
-      const savedCookieSettings = getCookie(`cookieSettings`);
+      const savedCookieSettings = getCookie(COOKIE_SETTINGS);
 
       if (savedCookieSettings) {
         const parsedSettings = JSON.parse(savedCookieSettings as string);
@@ -128,7 +129,29 @@ export function CookieSettingsModal({
   }
 
   function handleSaveSettings() {
-    setCookie(`cookieSettings`, JSON.stringify(cookieSettings), GENERAL_COOKIE_OPTIONS);
+    setCookie(
+      COOKIE_SETTINGS,
+      JSON.stringify(cookieSettings),
+      GENERAL_COOKIE_OPTIONS,
+    );
+
+    const {
+      analytics,
+      webVisor,
+    } = cookieSettings;
+
+    const isCookieAccept = analytics || webVisor;
+
+    setCookie(
+      COOKIE_ACCEPT,
+      isCookieAccept,
+      GENERAL_COOKIE_OPTIONS,
+    );
+
+    if (isCookieAccept) {
+      loadYandexMetrika();
+    }
+
     onSaveSettings();
   }
 }

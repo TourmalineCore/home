@@ -1,4 +1,4 @@
-import { COOKIE_ACCEPT } from "../../common/constants/cookie";
+import { COOKIE_ACCEPT, COOKIE_SETTINGS } from "../../common/constants/cookie";
 import { createCmsActions } from "../create-cms-actions";
 import {
   CustomTestFixtures,
@@ -39,13 +39,18 @@ async function acceptCookieTest() {
         .getByTestId(`cookie`))
         .toBeHidden();
 
-      await expect(await getCookies(page))
-        .toMatchObject([
-          {
-            name: `${COOKIE_ACCEPT}`,
-            value: `true`,
-          },
-        ]);
+      const cookieAccept = await getCookieAcceptFromCookie(page);
+
+      const cookieSettings = await getCookieSettingsFromCookie(page);
+
+      await expect(cookieAccept)
+        .toEqual(`true`);
+
+      await expect(cookieSettings)
+        .toEqual({
+          analytics: true,
+          webVisor: true,
+        });
 
       const consentIdAfterAccept = await getConsentIdFromLocalStorage(page);
 
@@ -116,13 +121,18 @@ async function rejectCookieTest() {
         .getByTestId(`cookie`))
         .toBeHidden();
 
-      await expect(await getCookies(page))
-        .toMatchObject([
-          {
-            name: `${COOKIE_ACCEPT}`,
-            value: `false`,
-          },
-        ]);
+      const cookieAccept = await getCookieAcceptFromCookie(page);
+
+      const cookieSettings = await getCookieSettingsFromCookie(page);
+
+      await expect(cookieAccept)
+        .toEqual(`false`);
+
+      await expect(cookieSettings)
+        .toEqual({
+          analytics: false,
+          webVisor: false,
+        });
 
       const metricTagAfterAcceptCookies = await getYandexMetricTag(page);
 
@@ -132,9 +142,26 @@ async function rejectCookieTest() {
   );
 }
 
-async function getCookies(page: Page) {
-  return page.context()
+async function getCookieAcceptFromCookie(page: Page) {
+  const cookies = await page.context()
     .cookies();
+
+  return cookies.find(({
+    name,
+  }) => name === COOKIE_ACCEPT)?.value;
+}
+
+async function getCookieSettingsFromCookie(page: Page) {
+  const cookies = await page.context()
+    .cookies();
+
+  const cookieSettings = cookies.find(({
+    name,
+  }) => name === COOKIE_SETTINGS)?.value;
+
+  const decodeCookieSettings = decodeURIComponent(cookieSettings as string);
+
+  return JSON.parse(decodeCookieSettings);
 }
 
 async function getConsentIdFromLocalStorage(page: Page) {
@@ -150,7 +177,8 @@ async function getYandexMetricTag(page: Page) {
 // }
 
 async function checkNoConsentState(page: Page) {
-  await expect(await getCookies(page))
+  await expect(await page.context()
+    .cookies())
     .toEqual([]);
 
   const metricTagBeforeAcceptCookies = await getYandexMetricTag(page);

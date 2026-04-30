@@ -4,7 +4,12 @@ import { useRouter } from 'next/router';
 
 import { getCookie, setCookie } from 'cookies-next';
 import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
-import { COOKIE_ACCEPT, GENERAL_COOKIE_OPTIONS, POLICY_VERSION } from '../../common/constants/cookie';
+import {
+  COOKIE_ACCEPT,
+  COOKIE_SETTINGS,
+  GENERAL_COOKIE_OPTIONS,
+  POLICY_VERSION,
+} from '../../common/constants/cookie';
 import { CookieSettingsModal } from '../CookieSettingsModal/CookieSettingsModal';
 
 // Google metrics are temporarily disabled
@@ -67,7 +72,7 @@ export function Cookie({
           <button
             type="button"
             className="cookie__button cookie__button--settings"
-            onClick={customizeCookieSettings}
+            onClick={() => setIsCookieSettingsModalOpen(true)}
             data-testid="cookie-settings-button"
           >
             {t(`settings`)}
@@ -105,7 +110,20 @@ export function Cookie({
 
   async function acceptCookie() {
     if (!isComponentPage) {
-      setCookie(COOKIE_ACCEPT, true, GENERAL_COOKIE_OPTIONS);
+      setCookie(
+        COOKIE_ACCEPT,
+        true,
+        GENERAL_COOKIE_OPTIONS,
+      );
+
+      setCookie(
+        COOKIE_SETTINGS,
+        JSON.stringify({
+          analytics: true,
+          webVisor: true,
+        }),
+        GENERAL_COOKIE_OPTIONS,
+      );
 
       if (isMetricsEnabled) {
         // window.gtag(`js`, date);
@@ -139,13 +157,22 @@ export function Cookie({
 
   function rejectCookie() {
     if (!isComponentPage) {
-      setCookie(COOKIE_ACCEPT, false, GENERAL_COOKIE_OPTIONS);
+      setCookie(
+        COOKIE_ACCEPT,
+        false,
+        GENERAL_COOKIE_OPTIONS,
+      );
+
+      setCookie(
+        COOKIE_SETTINGS,
+        JSON.stringify({
+          analytics: false,
+          webVisor: false,
+        }),
+        GENERAL_COOKIE_OPTIONS,
+      );
     }
 
     setIsCookieVisible(false);
-  }
-
-  function customizeCookieSettings() {
-    setIsCookieSettingsModalOpen(true);
   }
 }
