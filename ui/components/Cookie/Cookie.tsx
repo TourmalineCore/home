@@ -120,7 +120,7 @@ export function Cookie({
         COOKIE_SETTINGS,
         JSON.stringify({
           analytics: true,
-          webVisor: true,
+          webvisor: true,
         }),
         GENERAL_COOKIE_OPTIONS,
       );
@@ -169,7 +169,7 @@ export function Cookie({
         COOKIE_SETTINGS,
         JSON.stringify({
           analytics: false,
-          webVisor: false,
+          webvisor: false,
         }),
         GENERAL_COOKIE_OPTIONS,
       );

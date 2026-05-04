@@ -9,7 +9,7 @@
     {
       "title": "Session Recording (Webvisor)",
       "text": "Records a video of cursor movements, scrolling, and clicks. This helps us see how users interact with the interface to improve site quality.",
-      "name": "webVisor"
+      "name": "webvisor"
     }
   ],
   "note": "Data is processed anonymously; we do not collect passwords or sensitive data. You can change your settings at any time using the link at the bottom of the page.",

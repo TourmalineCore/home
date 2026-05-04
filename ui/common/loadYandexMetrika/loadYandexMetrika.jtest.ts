@@ -19,7 +19,7 @@ const OPTION_YANDEX_METRIKA = {
 
 describe(`loadYandexMetrika`, () => {
   it(`
-    GIVEN env METRICS_ENABLED = true, cookie accepted and webVisor disabled
+    GIVEN env METRICS_ENABLED = true, cookie accepted and webvisor disabled
     WHEN loadYandexMetrika is called
     SHOULD initialize yandex metrics with correct options
     `, () => {

@@ -16,7 +16,7 @@ type Options = {
 
 type CookieSettings = {
   analytics: boolean;
-  webVisor: boolean;
+  webvisor: boolean;
 };
 
 export function CookieSettingsModal({
@@ -42,7 +42,7 @@ export function CookieSettingsModal({
 
   const [cookieSettings, setCookieSettings] = useState<CookieSettings>({
     analytics: false,
-    webVisor: false,
+    webvisor: false,
   });
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export function CookieSettingsModal({
         const parsedSettings = JSON.parse(savedCookieSettings as string);
         setCookieSettings({
           analytics: parsedSettings.analytics,
-          webVisor: parsedSettings.webVisor,
+          webvisor: parsedSettings.webvisor,
         });
       }
     }
@@ -137,10 +137,10 @@ export function CookieSettingsModal({
 
     const {
       analytics,
-      webVisor,
+      webvisor,
     } = cookieSettings;
 
-    const isCookieAccept = analytics || webVisor;
+    const isCookieAccept = analytics || webvisor;
 
     setCookie(
       COOKIE_ACCEPT,
@@ -150,7 +150,7 @@ export function CookieSettingsModal({
 
     if (isCookieAccept) {
       loadYandexMetrika({
-        webvisor: webVisor,
+        webvisor,
       });
     }
 
