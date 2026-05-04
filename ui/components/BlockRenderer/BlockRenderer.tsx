@@ -3,7 +3,7 @@ import { Block } from '../../common/types';
 import { ThreeColumnGrid } from '../ThreeColumnGrid/ThreeColumnGrid';
 import { FeaturedCardsList } from '../FeaturedCardsList/FeaturedCardsList';
 import { CollageWithTitle } from '../CollageWithTitle/CollageWithTitle';
-import { FormBlockRedesign } from '../redesign/FormBlockRedesign/FormBlockRedesign';
+// import { FormBlockRedesign } from '../redesign/FormBlockRedesign/FormBlockRedesign';
 import { Hero } from '../Hero/Hero';
 import { ShowcaseGrid } from '../ShowcaseGrid/ShowcaseGrid';
 import { SignpostMultiple } from '../SignpostMultiple/SignpostMultiple';
@@ -92,11 +92,11 @@ export const BlockRenderer = ({
     );
   }
 
-  if (block.__component === BlockType.SHARED_FORM_BLOCK) {
-    return (
-      <FormBlockRedesign />
-    );
-  }
+  // if (block.__component === BlockType.SHARED_FORM_BLOCK) {
+  //   return (
+  //     <FormBlockRedesign />
+  //   );
+  // }
 
   return null;
 };

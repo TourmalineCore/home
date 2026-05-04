@@ -24,10 +24,8 @@ import { CollageWithTitle } from "../../components/CollageWithTitle/CollageWithT
 import { Cookie } from "../../components/Cookie/Cookie";
 import { CustomError } from "../../components/CustomError/CustomError";
 import { FeaturedCardsList } from "../../components/FeaturedCardsList/FeaturedCardsList";
-import { FormModal } from "../../components/FormModal/FormModal";
 import { Hero } from "../../components/Hero/Hero";
 import { FooterRedesign } from "../../components/redesign/FooterRedesign/FooterRedesign";
-import { FormBlockRedesign } from "../../components/redesign/FormBlockRedesign/FormBlockRedesign";
 import { MobileMenu } from "../../components/redesign/HeaderRedesign/components/MobileMenuRedesign/MobileMenuRedesign";
 import { HeaderRedesign } from "../../components/redesign/HeaderRedesign/HeaderRedesign";
 import { ShowcaseGrid } from "../../components/ShowcaseGrid/ShowcaseGrid";
@@ -101,7 +99,7 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
       emailCaption={headerRedesign.emailCaption}
       emailAddress={headerRedesign.emailAddress}
       socialLinks={headerRedesign.socialLinks}
-      onOpenModal={() => {}}
+      // onOpenModal={() => {}}
       isMobileMenuOpen
     />
   ),
@@ -156,19 +154,19 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   }) => (
     <SingleImage imageWithBlurDataURL={singleImage.imageWithBlurDataURL} />
   ),
-  [ComponentName.FORM_BLOCK]: () => (
-    <FormBlockRedesign
-      testId="form-block"
-      isComponentPage
-    />
-  ),
-  [ComponentName.SUBMITTED_FORM_BLOCK]: () => (
-    <FormBlockRedesign
-      initializeIsSubmit
-      testId="submitted-form-block"
-      isComponentPage
-    />
-  ),
+  // [ComponentName.FORM_BLOCK]: () => (
+  //   <FormBlockRedesign
+  //     testId="form-block"
+  //     isComponentPage
+  //   />
+  // ),
+  // [ComponentName.SUBMITTED_FORM_BLOCK]: () => (
+  //   <FormBlockRedesign
+  //     initializeIsSubmit
+  //     testId="submitted-form-block"
+  //     isComponentPage
+  //   />
+  // ),
   [ComponentName.COOKIE]: () => <Cookie isComponentPage />,
   [ComponentName.NOT_FOUND]: ({
     pageNotFound,
@@ -178,23 +176,23 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
       message={pageNotFound.message}
     />
   ),
-  [ComponentName.FORM_MODAL]: () => (
-    <FormModal
-      onCloseModal={() => {}}
-      isModalOpen
-      testId="form-modal"
-      isComponentPage
-    />
-  ),
-  [ComponentName.SUBMITTED_FORM_MODAL]: () => (
-    <FormModal
-      onCloseModal={() => {}}
-      isModalOpen
-      testId="submitted-form-modal"
-      initializeIsSubmit
-      isComponentPage
-    />
-  ),
+  // [ComponentName.FORM_MODAL]: () => (
+  //   <FormModal
+  //     onCloseModal={() => {}}
+  //     isModalOpen
+  //     testId="form-modal"
+  //     isComponentPage
+  //   />
+  // ),
+  // [ComponentName.SUBMITTED_FORM_MODAL]: () => (
+  //   <FormModal
+  //     onCloseModal={() => {}}
+  //     isModalOpen
+  //     testId="submitted-form-modal"
+  //     initializeIsSubmit
+  //     isComponentPage
+  //   />
+  // ),
   [ComponentName.CHELZOO_HERO]: () => <ChelzooHero isComponentPage />,
   [ComponentName.CHELZOO_ABOUT]: () => <ChelzooAbout />,
   [ComponentName.CHELZOO_STACK]: () => <ChelzooStack />,
@@ -291,7 +289,7 @@ export async function getStaticProps({
       pageData: translationsPageData,
       ...(await serverSideTranslations(locale, [
         `cookie`,
-        `formBlockRedesign`,
+        // `formBlockRedesign`,
         `chelzooHero`,
         `chelzooAbout`,
         `chelzooStack`,
