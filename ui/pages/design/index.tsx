@@ -13,9 +13,6 @@ import { Payment } from '../../components/Payment/Payment';
 import { Cooperation } from '../../components/Cooperation/Cooperation';
 import { ServicesTechnology } from '../../components/ServicesTechnology/ServicesTechnology';
 import { useScrollTop } from '../../common/hooks/useScrollTop';
-import { useIsRussianCountry } from '../../common/hooks';
-import { FormBlock } from '../../components/FormBlock/FormBlock';
-import { TechnologyPageAnchorLink } from '../../common/enums';
 import { LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
@@ -35,7 +32,7 @@ export default function DesignPage({
     dependencies: [],
   });
 
-  const isCountryRus = useIsRussianCountry();
+  // const isCountryRus = useIsRussianCountry();
 
   return (
     <>
@@ -67,12 +64,12 @@ export default function DesignPage({
         <Payment />
         <Cooperation />
         <ServicesTechnology />
-        {isCountryRus && (
+        {/* {isCountryRus && (
           <FormBlock
             id={TechnologyPageAnchorLink.Contact}
             buttonClassName="design__form-button"
           />
-        )}
+        )} */}
       </Layout>
     </>
   );

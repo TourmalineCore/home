@@ -11,7 +11,6 @@ import { HeaderRedesignProps } from "../../../common/types";
 import { useOnScrollDirections } from "../../../common/hooks";
 import { HeaderNavigationList } from "./components/HeaderNavigationList/HeaderNavigationList";
 import { AppRoute } from "../../../common/enums";
-import { FormModal } from "../../FormModal/FormModal";
 
 export function HeaderRedesign({
   navigationLists,
@@ -25,7 +24,7 @@ export function HeaderRedesign({
   } = useRouter();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -98,17 +97,17 @@ export function HeaderRedesign({
           {buttonLabel && (
             <HeaderButton
               className="header-redesign__button"
-              onClick={setIsModalOpen}
+              // onClick={setIsModalOpen}
               isMobileMenu={false}
             >
               {buttonLabel}
             </HeaderButton>
           )}
         </div>
-        <FormModal
+        {/* <FormModal
           onCloseModal={() => setIsModalOpen(false)}
           isModalOpen={isModalOpen}
-        />
+        /> */}
       </header>
 
       <MobileMenu
@@ -117,7 +116,7 @@ export function HeaderRedesign({
         emailCaption={emailCaption}
         emailAddress={emailAddress}
         socialLinks={socialLinks}
-        onOpenModal={() => setIsModalOpen(true)}
+        // onOpenModal={() => setIsModalOpen(true)}
         isMobileMenuOpen={isMobileMenuOpen}
       />
     </>
