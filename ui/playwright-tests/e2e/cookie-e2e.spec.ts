@@ -13,133 +13,132 @@ test.describe(`Cookie`, () => {
 });
 
 async function acceptCookieTest() {
-  test(
-    `
+  test(`
     GIVEN no cookie consent
     WHEN the user accepts cookies
     THEN metrics are initialized and tracking starts
-    `,
-    async ({
-      goto,
-      page,
-    }: {
-      goto: CustomTestFixtures['goto'];
-      setViewportSize: CustomTestFixtures['setViewportSize'];
-      page: Page;
-    }) => {
-      await goto(process.env.FRONTEND_URL as string);
+    `, async ({
+    goto,
+    page,
+  }: {
+    goto: CustomTestFixtures['goto'];
+    setViewportSize: CustomTestFixtures['setViewportSize'];
+    page: Page;
+  }) => {
+    await goto(process.env.FRONTEND_URL as string);
 
-      checkNoConsentState(page);
+    await checkNoConsentState(page);
 
-      await page
-        .getByTestId(`accept-button`)
-        .click();
+    await page
+      .getByTestId(`accept-button`)
+      .click();
 
-      await expect(page
-        .getByTestId(`cookie`))
-        .toBeHidden();
+    await expect(page
+      .getByTestId(`cookie`))
+      .toBeHidden();
 
-      const cookieAccept = await getCookieAcceptFromCookie(page);
+    const cookieAccept = await getCookieAcceptFromCookie(page);
 
-      const cookieSettings = await getCookieSettingsFromCookie(page);
+    const cookieSettings = await getCookieSettingsFromCookie(page);
 
-      await expect(cookieAccept)
-        .toEqual(`true`);
+    await expect(cookieAccept)
+      .toEqual(`true`);
 
-      await expect(cookieSettings)
-        .toEqual({
-          analytics: true,
-          webVisor: true,
-        });
+    await expect(cookieSettings)
+      .toEqual({
+        analytics: true,
+        webvisor: true,
+      });
 
-      const consentIdAfterAccept = await getConsentIdFromLocalStorage(page);
+    const consentId = await getConsentIdFromLocalStorage(page);
 
-      await expect(consentIdAfterAccept)
-        .not
-        .toBeNull();
+    await expect(consentId)
+      .not
+      .toBeNull();
 
-      const metricTagAfterAcceptCookies = await getYandexMetricTag(page);
+    const metricTag = await getYandexMetricTag(page);
 
-      await expect(metricTagAfterAcceptCookies)
-        .toHaveCount(1);
+    await expect(metricTag)
+      .toHaveCount(1);
 
-      // const metricTagPhonoAfterAcceptCookies = await getYandexMetricTagPhono(page);
+    const metricTagPhono = await getYandexMetricTagPhono(page);
 
-      // await expect(metricTagPhonoAfterAcceptCookies)
-      //   .toHaveCount(1);
+    await expect(metricTagPhono)
+      .toHaveCount(1);
 
-      const cms = createCmsActions(page);
+    const cms = createCmsActions(page);
 
-      await test.step(
-        `Check cookie consentId in CMS`,
-        () => page.goto(process.env.CMS_URL as string),
-      );
+    await test.step(
+      `Check cookie consentId in CMS`,
+      () => page.goto(process.env.CMS_URL as string),
+    );
 
-      await cms.authorize();
+    await cms.authorize();
 
-      await cms.navigateToContentManager();
+    await cms.navigateToContentManager();
 
-      await cms.skipTutorial();
+    await cms.skipTutorial();
 
-      await cms.navigateToContentTypeByName(`Cookie consent`);
+    await cms.navigateToContentTypeByName(`Cookie consent`);
 
-      await expect(page.getByText(consentIdAfterAccept!))
-        .toBeVisible();
-    },
-  );
+    await expect(page.getByText(consentId!))
+      .toBeVisible();
+  });
 }
 
 async function rejectCookieTest() {
-  test(
-    `
+  test(`
     GIVEN no cookie consent
     WHEN the user rejects cookies
     THEN metrics are not initialized and tracking does not start
-    `,
-    async ({
-      goto,
-      page,
-    }: {
-      goto: CustomTestFixtures['goto'];
-      setViewportSize: CustomTestFixtures['setViewportSize'];
-      page: Page;
-    }) => {
-      await goto(process.env.FRONTEND_URL as string);
+    `, async ({
+    goto,
+    page,
+  }: {
+    goto: CustomTestFixtures['goto'];
+    setViewportSize: CustomTestFixtures['setViewportSize'];
+    page: Page;
+  }) => {
+    await goto(process.env.FRONTEND_URL as string);
 
-      checkNoConsentState(page);
+    await checkNoConsentState(page);
 
-      await page
-        .getByTestId(`reject-button`)
-        .click();
+    await page
+      .getByTestId(`reject-button`)
+      .click();
 
-      const consentIdAfterReject = await getConsentIdFromLocalStorage(page);
+    await expect(page
+      .getByTestId(`cookie`))
+      .toBeHidden();
 
-      await expect(consentIdAfterReject)
-        .toBeNull();
+    const consentId = await getConsentIdFromLocalStorage(page);
 
-      await expect(page
-        .getByTestId(`cookie`))
-        .toBeHidden();
+    await expect(consentId)
+      .toBeNull();
 
-      const cookieAccept = await getCookieAcceptFromCookie(page);
+    const cookieAccept = await getCookieAcceptFromCookie(page);
 
-      const cookieSettings = await getCookieSettingsFromCookie(page);
+    const cookieSettings = await getCookieSettingsFromCookie(page);
 
-      await expect(cookieAccept)
-        .toEqual(`false`);
+    await expect(cookieAccept)
+      .toEqual(`false`);
 
-      await expect(cookieSettings)
-        .toEqual({
-          analytics: false,
-          webVisor: false,
-        });
+    await expect(cookieSettings)
+      .toEqual({
+        analytics: false,
+        webvisor: false,
+      });
 
-      const metricTagAfterAcceptCookies = await getYandexMetricTag(page);
+    const metricTag = await getYandexMetricTag(page);
 
-      await expect(metricTagAfterAcceptCookies)
-        .toHaveCount(0);
-    },
-  );
+    await expect(metricTag)
+      .toHaveCount(0);
+
+    const metricTagPhono = await getYandexMetricTagPhono(page);
+
+    await expect(metricTagPhono)
+      .toHaveCount(0);
+  });
 }
 
 async function getCookieAcceptFromCookie(page: Page) {
@@ -172,27 +171,27 @@ async function getYandexMetricTag(page: Page) {
   return page.locator(`script[src="https://mc.yandex.ru/metrika/tag.js"]`);
 }
 
-// async function getYandexMetricTagPhono(page: Page) {
-//   return page.locator(`script[src="https://mc.yandex.ru/metrika/tag_phono.js"]`);
-// }
+async function getYandexMetricTagPhono(page: Page) {
+  return page.locator(`script[src="https://mc.yandex.ru/metrika/tag_phono.js"]`);
+}
 
 async function checkNoConsentState(page: Page) {
   await expect(await page.context()
     .cookies())
     .toEqual([]);
 
-  const metricTagBeforeAcceptCookies = await getYandexMetricTag(page);
+  const metricTag = await getYandexMetricTag(page);
 
-  await expect(metricTagBeforeAcceptCookies)
+  await expect(metricTag)
     .toHaveCount(0);
 
-  // const metricTagPhonoBeforeAcceptCookies = await getYandexMetricTagPhono(page);
+  const metricTagPhono = await getYandexMetricTagPhono(page);
 
-  // await expect(metricTagPhonoBeforeAcceptCookies)
-  //   .toHaveCount(0);
+  await expect(metricTagPhono)
+    .toHaveCount(0);
 
-  const consentIdBeforeReject = await getConsentIdFromLocalStorage(page);
+  const consentId = await getConsentIdFromLocalStorage(page);
 
-  await expect(consentIdBeforeReject)
+  await expect(consentId)
     .toBeNull();
 }
