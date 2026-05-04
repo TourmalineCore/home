@@ -99,7 +99,7 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
       emailCaption={headerRedesign.emailCaption}
       emailAddress={headerRedesign.emailAddress}
       socialLinks={headerRedesign.socialLinks}
-      onOpenModal={() => {}}
+      // onOpenModal={() => {}}
       isMobileMenuOpen
     />
   ),
