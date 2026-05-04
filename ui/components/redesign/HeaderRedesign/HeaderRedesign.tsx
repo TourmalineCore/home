@@ -98,7 +98,7 @@ export function HeaderRedesign({
           {buttonLabel && (
             <HeaderButton
               className="header-redesign__button"
-              onClick={setIsModalOpen}
+              // onClick={setIsModalOpen}
               isMobileMenu={false}
             >
               {buttonLabel}
@@ -117,7 +117,7 @@ export function HeaderRedesign({
         emailCaption={emailCaption}
         emailAddress={emailAddress}
         socialLinks={socialLinks}
-        onOpenModal={() => setIsModalOpen(true)}
+        // onOpenModal={() => setIsModalOpen(true)}
         isMobileMenuOpen={isMobileMenuOpen}
       />
     </>
