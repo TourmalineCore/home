@@ -149,7 +149,9 @@ export function CookieSettingsModal({
     );
 
     if (isCookieAccept) {
-      loadYandexMetrika();
+      loadYandexMetrika({
+        webvisor: webVisor,
+      });
     }
 
     onSaveSettings();

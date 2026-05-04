@@ -135,7 +135,9 @@ export function Cookie({
           localStorage.setItem(`consentId`, consentId);
         }
 
-        loadYandexMetrika();
+        loadYandexMetrika({
+          webvisor: true,
+        });
 
         await fetch(`/api/save-cookie-consent`, {
           method: `POST`,

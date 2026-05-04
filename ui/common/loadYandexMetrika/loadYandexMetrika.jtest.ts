@@ -5,15 +5,21 @@ import {
   jest,
 } from '@jest/globals';
 import { getCookie } from 'cookies-next';
-import { loadYandexMetrika, optionYandexMetrika } from './loadYandexMetrika';
+import { loadYandexMetrika } from './loadYandexMetrika';
 
 jest.mock(`cookies-next`, () => ({
   getCookie: jest.fn(),
 }));
 
+const OPTION_YANDEX_METRIKA = {
+  clickmap: true,
+  trackLinks: true,
+  accurateTrackBounce: true,
+};
+
 describe(`loadYandexMetrika`, () => {
   it(`
-    GIVEN env METRICS_ENABLED = true and cookie accepted
+    GIVEN env METRICS_ENABLED = true, cookie accepted and webVisor disabled
     WHEN loadYandexMetrika is called
     SHOULD initialize yandex metrics with correct options
     `, () => {
@@ -26,7 +32,9 @@ describe(`loadYandexMetrika`, () => {
     // Create mock for document.head.appendChild
     const appendChildSpy = jest.spyOn(document.head, `appendChild`);
 
-    loadYandexMetrika();
+    loadYandexMetrika({
+      webvisor: false,
+    });
 
     // Check that two scripts have been added to the document head
     expect(appendChildSpy)
@@ -36,7 +44,10 @@ describe(`loadYandexMetrika`, () => {
 
     // Check that yandex metrics init with correctly options
     expect(secondScript.textContent)
-      .toContain(`window["ym"](${yandexId}, "init", ${JSON.stringify(optionYandexMetrika)}`);
+      .toContain(`window["ym"](${yandexId}, "init", ${JSON.stringify({
+        ...OPTION_YANDEX_METRIKA,
+        webvisor: false,
+      })}`);
 
     // Cleanup
     appendChildSpy.mockRestore();
@@ -55,7 +66,9 @@ describe(`loadYandexMetrika`, () => {
     // Create mock for document.head.appendChild
     const appendChildSpy = jest.spyOn(document.head, `appendChild`);
 
-    loadYandexMetrika();
+    loadYandexMetrika({
+      webvisor: true,
+    });
 
     // Check that two scripts are not added to the document head
     expect(appendChildSpy)
@@ -77,7 +90,9 @@ describe(`loadYandexMetrika`, () => {
     // Create mock for document.head.appendChild
     const appendChildSpy = jest.spyOn(document.head, `appendChild`);
 
-    loadYandexMetrika();
+    loadYandexMetrika({
+      webvisor: true,
+    });
 
     // Check that two scripts are not added to the document head
     expect(appendChildSpy)
