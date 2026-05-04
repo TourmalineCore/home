@@ -38,18 +38,6 @@
     }
   }
 
-  &__privacy-policy {
-    @include body-m;
-    @include animated-underline;
-
-    width: fit-content;
-    color: $color-grey-300-redesign;
-
-    &::after {
-      background-color: $color-grey-300-redesign;
-    }
-  }
-
   &__navigation {
     display: grid;
     gap: 8px;
@@ -57,7 +45,7 @@
 
     @include tablet {
       margin-right: 56px;
-      margin-bottom: 26px;
+      margin-bottom: 58px;
       gap: 16px;
       grid-column: 2;
       grid-row: 1;
@@ -74,11 +62,12 @@
 
     @include desktop {
       margin-right: 108px;
+      margin-bottom: 50px;
     }
 
     @include desktop-xl {
       margin-right: 157px;
-      margin-bottom: 38px;
+      margin-bottom: 58px;
       gap: 16px;
     }
   }
@@ -114,6 +103,27 @@
     @include tablet {
       grid-column: 1;
       grid-row: 1 / span 2;
+    }
+  }
+
+  &__cookie-button {
+    outline: none;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+  }
+
+  &__privacy-policy,
+  &__cookie-button {
+    @include body-m;
+    @include animated-underline;
+
+    margin-top: 4px;
+    width: fit-content;
+    color: $color-grey-300-redesign;
+
+    &::after {
+      background-color: $color-grey-300-redesign;
     }
   }
 

@@ -50,6 +50,14 @@ export function FooterRedesign({
           >
             {locale === `ru` ? `Политика конфиденциальности` : `Privacy policy`}
           </a>
+          <button
+            type="button"
+            className="footer-redesign__cookie-button"
+            onClick={() => {}}
+            data-testid="footer-cookie-settings-button"
+          >
+            {locale === `ru` ? `Настройки пользовательских данных` : `User privacy settings`}
+          </button>
         </div>
         {navigationLists.length > 0 && (
           <ul
