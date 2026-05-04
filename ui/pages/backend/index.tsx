@@ -9,9 +9,6 @@ import { Cta } from '../../components/Cta/Cta';
 import { Payment } from '../../components/Payment/Payment';
 import { Cooperation } from '../../components/Cooperation/Cooperation';
 import { ServicesTechnology } from '../../components/ServicesTechnology/ServicesTechnology';
-import { TechnologyPageAnchorLink } from '../../common/enums';
-import { FormBlock } from '../../components/FormBlock/FormBlock';
-import { useIsRussianCountry } from '../../common/hooks';
 import { useScrollTop } from '../../common/hooks/useScrollTop';
 import { LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
@@ -28,7 +25,7 @@ export default function BackendPage({
     t,
   } = useTranslation(`common`);
 
-  const isCountryRus = useIsRussianCountry();
+  // const isCountryRus = useIsRussianCountry();
 
   useScrollTop({
     dependencies: [],
@@ -61,12 +58,12 @@ export default function BackendPage({
         <Payment />
         <Cooperation />
         <ServicesTechnology />
-        {isCountryRus && (
+        {/* {isCountryRus && (
           <FormBlock
             id={TechnologyPageAnchorLink.Contact}
             buttonClassName="backend__form-button"
           />
-        )}
+        )} */}
       </Layout>
     </>
   );

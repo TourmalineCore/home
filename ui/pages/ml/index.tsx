@@ -12,9 +12,6 @@ import { Payment } from '../../components/Payment/Payment';
 import { Cooperation } from '../../components/Cooperation/Cooperation';
 import { ServicesTechnology } from '../../components/ServicesTechnology/ServicesTechnology';
 import { useScrollTop } from '../../common/hooks/useScrollTop';
-import { useIsRussianCountry } from '../../common/hooks';
-import { TechnologyPageAnchorLink } from '../../common/enums';
-import { FormBlock } from '../../components/FormBlock/FormBlock';
 import { LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
@@ -30,7 +27,7 @@ export default function MlPage({
     t,
   } = useTranslation(`common`);
 
-  const isCountryRus = useIsRussianCountry();
+  // const isCountryRus = useIsRussianCountry();
 
   useScrollTop({
     dependencies: [],
@@ -65,12 +62,12 @@ export default function MlPage({
         <Payment />
         <Cooperation />
         <ServicesTechnology />
-        {isCountryRus && (
+        {/* {isCountryRus && (
           <FormBlock
             id={TechnologyPageAnchorLink.Contact}
             buttonClassName="ml__form-button"
           />
-        )}
+        )} */}
       </Layout>
     </>
   );

@@ -1,23 +1,20 @@
-import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
-import { useBodyScrollHidden, useIsRussianCountry, usePath } from '../../common/hooks';
+import { usePath } from '../../common/hooks';
 import { TechnologyPageAnchorLink } from '../../common/enums';
-import { FormModal } from '../FormModal/FormModal';
-import { PrimaryButton } from '../PrimaryButton/PrimaryButton';
 
 export function Cta() {
   const {
     slicePathname,
   } = usePath();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     t,
   } = useTranslation(`cta`);
 
-  useBodyScrollHidden(isModalOpen);
+  // useBodyScrollHidden(isModalOpen);
 
-  const isCountryRus = useIsRussianCountry();
+  // const isCountryRus = useIsRussianCountry();
 
   return (
     <section
@@ -27,7 +24,14 @@ export function Cta() {
       <div className="container cta__wrapper">
         <div className={`cta__inner cta__inner--${slicePathname}`}>
           <h2 className="title-technology-type-1 cta__title">{t(`title`)}</h2>
-          {isCountryRus ? (
+          <a
+            href="mailto:contact@tourmalinecore.com"
+            className={`cta__button cta__button--${slicePathname}`}
+            role="button"
+          >
+            {t(`buttonText`)}
+          </a>
+          {/* {isCountryRus ? (
             <PrimaryButton
               onClick={() => setIsModalOpen(true)}
               className={`cta__button cta__button--${slicePathname}`}
@@ -42,14 +46,14 @@ export function Cta() {
             >
               {t(`buttonText`)}
             </a>
-          )}
+          )} */}
           <div className="cta__image" />
         </div>
       </div>
-      <FormModal
+      {/* <FormModal
         onCloseModal={() => setIsModalOpen(false)}
         isModalOpen={isModalOpen}
-      />
+      /> */}
     </section>
   );
 }
