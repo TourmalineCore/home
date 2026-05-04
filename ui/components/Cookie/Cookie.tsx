@@ -149,6 +149,7 @@ export function Cookie({
             consentVersion: POLICY_VERSION,
             categories: {
               analytics: true,
+              webvisor: true,
             },
           }),
         });
