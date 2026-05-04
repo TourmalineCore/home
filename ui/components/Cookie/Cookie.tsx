@@ -60,7 +60,7 @@ export function Cookie({
             components={{
               bolt: <a
                 className="cookie__link"
-                href={`/documents/policy/policy-${POLICY_VERSION}-${locale}.pdf#page=5`}
+                href={`/documents/policy/policy-${locale}.pdf#page=5`}
                 target="_blank"
                 rel="noreferrer"
                 aria-label=""
