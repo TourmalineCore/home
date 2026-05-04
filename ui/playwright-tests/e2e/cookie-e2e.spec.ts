@@ -61,7 +61,7 @@ async function acceptCookieTest() {
     await expect(metricTag)
       .toHaveCount(1);
 
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(10000);
 
     const metricTagPhono = await getYandexMetricTagPhono(page);
 
