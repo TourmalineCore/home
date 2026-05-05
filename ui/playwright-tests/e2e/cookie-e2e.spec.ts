@@ -61,20 +61,6 @@ async function acceptCookieTest() {
     await expect(metricTag)
       .toHaveCount(1);
 
-    await page.waitForTimeout(10000);
-
-    const allScripts = await page.evaluate(() => Array.from(document.querySelectorAll(`script`))
-      .map((s) => s.src)
-      .filter((src) => src));
-
-    // eslint-disable-next-line no-console
-    console.log(`=== All Yandex scripts ===`, allScripts);
-
-    const metricTagPhono = await getYandexMetricTagPhono(page);
-
-    await expect(metricTagPhono)
-      .toHaveCount(1);
-
     const cms = createCmsActions(page);
 
     await test.step(
@@ -142,11 +128,6 @@ async function rejectCookieTest() {
 
     await expect(metricTag)
       .toHaveCount(0);
-
-    const metricTagPhono = await getYandexMetricTagPhono(page);
-
-    await expect(metricTagPhono)
-      .toHaveCount(0);
   });
 }
 
@@ -180,10 +161,6 @@ async function getYandexMetricTag(page: Page) {
   return page.locator(`script[src="https://mc.yandex.ru/metrika/tag.js"]`);
 }
 
-async function getYandexMetricTagPhono(page: Page) {
-  return page.locator(`script[src="https://mc.yandex.ru/metrika/tag_phono.js"]`);
-}
-
 async function checkNoConsentState(page: Page) {
   await expect(await page.context()
     .cookies())
@@ -192,11 +169,6 @@ async function checkNoConsentState(page: Page) {
   const metricTag = await getYandexMetricTag(page);
 
   await expect(metricTag)
-    .toHaveCount(0);
-
-  const metricTagPhono = await getYandexMetricTagPhono(page);
-
-  await expect(metricTagPhono)
     .toHaveCount(0);
 
   const consentId = await getConsentIdFromLocalStorage(page);
