@@ -67,6 +67,7 @@ async function acceptCookieTest() {
       .map((s) => s.src)
       .filter((src) => src));
 
+    // eslint-disable-next-line no-console
     console.log(`=== All Yandex scripts ===`, allScripts);
 
     const metricTagPhono = await getYandexMetricTagPhono(page);
