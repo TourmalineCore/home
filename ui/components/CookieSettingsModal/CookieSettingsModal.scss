@@ -71,9 +71,14 @@
   }
 
   &__checkbox-input {
+    position: absolute;
     z-index: 2;
+    margin: 0;
+    width: 100%;
+    height: 100%;
     opacity: 0;
     cursor: pointer;
+    inset: 0;
 
     &:checked ~ #{$this}__checkbox-indicator {
       background: $color-pink-redesign;
@@ -101,8 +106,13 @@
   }
 
   &__checkbox-indicator {
+    position: absolute;
+    margin: 0;
+    width: 100%;
+    height: 100%;
     background: $color-grey-300-redesign;
     transition: background 0.25s ease;
+    inset: 0;
 
     &::after {
       content: "";
@@ -191,15 +201,6 @@
     @include desktop-xl {
       height: 70px;
     }
-  }
-
-  &__checkbox-input,
-  &__checkbox-indicator {
-    position: absolute;
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    inset: 0;
   }
 
   &--open {
