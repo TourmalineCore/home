@@ -81,6 +81,5 @@ export function FooterRedesign({
         )}
       </div>
     </footer>
-
   );
 }
