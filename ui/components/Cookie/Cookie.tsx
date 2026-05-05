@@ -4,12 +4,7 @@ import { useRouter } from 'next/router';
 
 import { getCookie, setCookie } from 'cookies-next';
 import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
-import {
-  COOKIE_ACCEPT,
-  COOKIE_SETTINGS,
-  GENERAL_COOKIE_OPTIONS,
-  POLICY_VERSION,
-} from '../../common/constants/cookie';
+import { COOKIE_ACCEPT, COOKIE_SETTINGS, GENERAL_COOKIE_OPTIONS } from '../../common/constants/cookie';
 import { CookieSettingsModal } from '../CookieSettingsModal/CookieSettingsModal';
 
 // Google metrics are temporarily disabled
@@ -108,7 +103,7 @@ export function Cookie({
     </>
   );
 
-  async function acceptCookie() {
+  function acceptCookie() {
     if (!isComponentPage) {
       setCookie(
         COOKIE_ACCEPT,
@@ -128,30 +123,8 @@ export function Cookie({
       if (isMetricsEnabled) {
         // window.gtag(`js`, date);
         // window.gtag(`config`, googleId);
-        let consentId = localStorage.getItem(`consentId`);
-
-        if (!consentId) {
-          consentId = crypto.randomUUID();
-          localStorage.setItem(`consentId`, consentId);
-        }
-
         loadYandexMetrika({
           webvisor: true,
-        });
-
-        await fetch(`/api/save-cookie-consent`, {
-          method: `POST`,
-          headers: {
-            'Content-Type': `application/json`,
-          },
-          body: JSON.stringify({
-            consentId,
-            consentVersion: POLICY_VERSION,
-            categories: {
-              analytics: true,
-              webvisor: true,
-            },
-          }),
         });
       }
       setIsCookieVisible(false);
