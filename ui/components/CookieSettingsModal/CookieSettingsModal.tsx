@@ -92,6 +92,7 @@ export function CookieSettingsModal({
                       className="cookie-settings-modal__checkbox-input"
                       checked={cookieSettings[name as keyof CookieSettings]}
                       disabled={name === `webvisor` && !cookieSettings.analytics}
+                      data-testid={`checkbox-${name}`}
                     />
                     <div className="cookie-settings-modal__checkbox-indicator" />
                   </div>
@@ -123,10 +124,24 @@ export function CookieSettingsModal({
   );
 
   function handleCheckboxChange(fieldName: string) {
-    setCookieSettings((prev) => ({
-      ...prev,
-      [fieldName]: !prev[fieldName as keyof CookieSettings],
-    }));
+    if (fieldName === `analytics`) {
+      if (cookieSettings.analytics) {
+        setCookieSettings({
+          analytics: false,
+          webvisor: false,
+        });
+      } else {
+        setCookieSettings(() => ({
+          webvisor: false,
+          analytics: true,
+        }));
+      }
+    } else if (fieldName === `webvisor`) {
+      setCookieSettings((prev) => ({
+        ...prev,
+        webvisor: !prev.webvisor,
+      }));
+    }
   }
 
   function handleSaveSettings() {
