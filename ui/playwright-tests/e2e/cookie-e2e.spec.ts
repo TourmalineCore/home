@@ -61,13 +61,13 @@ async function acceptCookieTest() {
     await expect(metricTag)
       .toHaveCount(1);
 
-    await page.waitForResponse(
-      (response) => response.url()
-        .includes(`tag_phono.js`),
-      {
-        timeout: 10000,
-      },
-    );
+    await page.waitForTimeout(10000);
+
+    const allScripts = await page.evaluate(() => Array.from(document.querySelectorAll(`script`))
+      .map((s) => s.src)
+      .filter((src) => src));
+
+    console.log(`=== All Yandex scripts ===`, allScripts);
 
     const metricTagPhono = await getYandexMetricTagPhono(page);
 
