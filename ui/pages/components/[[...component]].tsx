@@ -169,13 +169,7 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   //   />
   // ),
   [ComponentName.COOKIE]: () => <Cookie isComponentPage />,
-  [ComponentName.COOKIE_SETTINGS_MODAL]: () => (
-    <CookieSettingsModal
-      isModalOpen
-      onCloseModal={() => { }}
-      onSaveSettings={() => {}}
-    />
-  ),
+  [ComponentName.COOKIE_SETTINGS_MODAL]: () => <CookieSettingsModal isComponentPage />,
   [ComponentName.NOT_FOUND]: ({
     pageNotFound,
   }) => (

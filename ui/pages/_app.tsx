@@ -51,7 +51,7 @@ function MyApp({
   }, [router.events]);
 
   return (
-    <>
+    <CookieProvider>
       <Head>
         <meta
           name="viewport"
@@ -60,8 +60,9 @@ function MyApp({
         <title>Tourmaline Core</title>
       </Head>
       <Cookie />
+      <CookieSettingsModal />
       <Component {...pageProps} />
-    </>
+    </CookieProvider>
   );
 }
 
