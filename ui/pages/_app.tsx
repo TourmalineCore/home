@@ -9,6 +9,8 @@ import { getCookie } from 'cookies-next';
 import { Cookie } from '../components/Cookie/Cookie';
 import { loadYandexMetrika } from '../common/loadYandexMetrika/loadYandexMetrika';
 import { COOKIE_ACCEPT, COOKIE_SETTINGS } from '../common/constants/cookie';
+import { CookieProvider } from '../common/providers/CookieProvider';
+import { CookieSettingsModal } from '../components/CookieSettingsModal/CookieSettingsModal';
 
 const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
 const yandexId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
