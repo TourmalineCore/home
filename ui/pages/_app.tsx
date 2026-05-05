@@ -3,14 +3,27 @@ import '../styles/main.scss';
 
 import { appWithTranslation } from 'next-i18next';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 import { AppProps } from 'next/dist/shared/lib/router/router';
 import { useEffect } from 'react';
 import { getCookie } from 'cookies-next';
-import { Cookie } from '../components/Cookie/Cookie';
 import { loadYandexMetrika } from '../common/loadYandexMetrika/loadYandexMetrika';
 import { COOKIE_ACCEPT, COOKIE_SETTINGS } from '../common/constants/cookie';
 import { CookieProvider } from '../common/providers/CookieProvider';
-import { CookieSettingsModal } from '../components/CookieSettingsModal/CookieSettingsModal';
+
+const Cookie = dynamic(
+  () => import(`../components/Cookie/Cookie`).then((component) => component.Cookie),
+  {
+    ssr: false,
+  },
+);
+
+const CookieSettingsModal = dynamic(
+  () => import(`../components/CookieSettingsModal/CookieSettingsModal`).then((component) => component.CookieSettingsModal),
+  {
+    ssr: false,
+  },
+);
 
 const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
 const yandexId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
