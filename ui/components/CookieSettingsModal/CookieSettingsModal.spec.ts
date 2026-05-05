@@ -38,8 +38,8 @@ async function webvisorCheckboxTests() {
   }: {
     page: Page;
   }) => {
-    const analyticsCheckbox = page.getByTestId(`checkbox-analytics`);
-    const webvisorCheckbox = page.getByTestId(`checkbox-webvisor`);
+    const analyticsCheckbox = getAnalyticsCheckbox(page);
+    const webvisorCheckbox = getWebvisorCheckbox(page);
 
     if (await analyticsCheckbox.isChecked()) {
       await analyticsCheckbox.click();
@@ -58,8 +58,8 @@ async function webvisorCheckboxTests() {
   }: {
     page: Page;
   }) => {
-    const analyticsCheckbox = page.getByTestId(`checkbox-analytics`);
-    const webvisorCheckbox = page.getByTestId(`checkbox-webvisor`);
+    const analyticsCheckbox = getAnalyticsCheckbox(page);
+    const webvisorCheckbox = getWebvisorCheckbox(page);
 
     if (!await analyticsCheckbox.isChecked()) {
       await analyticsCheckbox.click();
@@ -79,8 +79,8 @@ async function webvisorCheckboxTests() {
   }: {
     page: Page;
   }) => {
-    const analyticsCheckbox = page.getByTestId(`checkbox-analytics`);
-    const webvisorCheckbox = page.getByTestId(`checkbox-webvisor`);
+    const analyticsCheckbox = getAnalyticsCheckbox(page);
+    const webvisorCheckbox = getWebvisorCheckbox(page);
 
     if (!await analyticsCheckbox.isChecked()) {
       await analyticsCheckbox.click();
@@ -101,4 +101,18 @@ async function webvisorCheckboxTests() {
     await expect(webvisorCheckbox)
       .toBeDisabled();
   });
+}
+
+function getAnalyticsCheckbox(page: Page) {
+  return page.getByTestId(`checkbox-analytics`)
+    .filter({
+      visible: true,
+    });
+}
+
+function getWebvisorCheckbox(page: Page) {
+  return page.getByTestId(`checkbox-webvisor`)
+    .filter({
+      visible: true,
+    });
 }
