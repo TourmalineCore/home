@@ -2,11 +2,13 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 
 import clsx from 'clsx';
-import { getCookie, setCookie } from 'cookies-next';
+import { getCookie, hasCookie, setCookie } from 'cookies-next';
+import { useRouter } from 'next/router';
 import { Modal } from '../Modal/Modal';
 import { useDeviceSize } from '../../common/hooks';
 import { COOKIE_ACCEPT, COOKIE_SETTINGS, GENERAL_COOKIE_OPTIONS } from '../../common/constants/cookie';
 import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
+import { useCookieContext } from '../../common/hooks/useCookieContext';
 
 type Options = {
   title: string;
@@ -20,17 +22,25 @@ type CookieSettings = {
 };
 
 export function CookieSettingsModal({
-  onCloseModal,
-  onSaveSettings,
-  isModalOpen,
-}:{
-  onCloseModal: () => void;
-  onSaveSettings: () => void;
-  isModalOpen: boolean;
+  isComponentPage,
+}: {
+  isComponentPage?: boolean;
 }) {
   const {
     t,
   } = useTranslation(`cookieSettings`);
+
+  const {
+    reload,
+  } = useRouter();
+
+  const {
+    isSettingsModalOpen,
+    setIsBannerVisible,
+    setIsSettingsModalOpen,
+  } = useCookieContext();
+
+  const isModalOpen = isComponentPage || isSettingsModalOpen;
 
   const options: Options = t(`options`, {
     returnObjects: true,
@@ -46,7 +56,7 @@ export function CookieSettingsModal({
   });
 
   useEffect(() => {
-    if (isModalOpen) {
+    if (isModalOpen && !isComponentPage) {
       const savedCookieSettings = getCookie(COOKIE_SETTINGS);
 
       if (savedCookieSettings) {
@@ -57,7 +67,7 @@ export function CookieSettingsModal({
         });
       }
     }
-  }, [isModalOpen]);
+  }, [isModalOpen, isComponentPage]);
 
   return (
     <>
@@ -67,7 +77,7 @@ export function CookieSettingsModal({
           'cookie-settings-modal--open': isModalOpen,
         })}
         testId="cookie-settings-modal"
-        onClose={onCloseModal}
+        onClose={() => setIsSettingsModalOpen(false)}
         type="cookie"
       >
         <div className="cookie-settings-modal__inner">
@@ -145,31 +155,40 @@ export function CookieSettingsModal({
   }
 
   function handleSaveSettings() {
-    setCookie(
-      COOKIE_SETTINGS,
-      JSON.stringify(cookieSettings),
-      GENERAL_COOKIE_OPTIONS,
-    );
+    if (!isComponentPage) {
+      const hasCookieSettings = hasCookie(COOKIE_SETTINGS);
 
-    const {
-      analytics,
-      webvisor,
-    } = cookieSettings;
+      setCookie(
+        COOKIE_SETTINGS,
+        JSON.stringify(cookieSettings),
+        GENERAL_COOKIE_OPTIONS,
+      );
 
-    const isCookieAccept = analytics || webvisor;
-
-    setCookie(
-      COOKIE_ACCEPT,
-      isCookieAccept,
-      GENERAL_COOKIE_OPTIONS,
-    );
-
-    if (isCookieAccept) {
-      loadYandexMetrika({
+      const {
+        analytics,
         webvisor,
-      });
-    }
+      } = cookieSettings;
 
-    onSaveSettings();
+      const isCookieAccept = analytics || webvisor;
+
+      setCookie(
+        COOKIE_ACCEPT,
+        isCookieAccept,
+        GENERAL_COOKIE_OPTIONS,
+      );
+
+      if (isCookieAccept) {
+        loadYandexMetrika({
+          webvisor,
+        });
+      }
+
+      if (hasCookieSettings) {
+        reload();
+      }
+
+      setIsSettingsModalOpen(false);
+      setIsBannerVisible(false);
+    }
   }
 }

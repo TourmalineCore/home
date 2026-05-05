@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useEffect } from 'react';
 import FocusLock from 'react-focus-lock';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
@@ -37,9 +37,7 @@ export function Modal({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const refModal = useRef<HTMLDivElement>(null);
-
-  useOnClickOutside(refModal, onClose);
+  useOnClickOutside(onClose);
 
   return (
     <FocusLock
@@ -55,7 +53,6 @@ export function Modal({
         <div className="modal__container">
           <div
             className="modal__inner"
-            ref={refModal}
           >
             <button
               type="button"
