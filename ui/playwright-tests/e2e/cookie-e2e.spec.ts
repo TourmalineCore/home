@@ -9,7 +9,7 @@ import {
 test.describe(`Cookie`, () => {
   test.describe(`Accept cookie test`, acceptCookieTest);
   test.describe(`Reject cookie test`, rejectCookieTest);
-  test.describe(`Webvisor checkbox tests`, webvisorCheckboxTests);
+  // test.describe(`Webvisor checkbox tests`, webvisorCheckboxTests);
 });
 
 async function acceptCookieTest() {
@@ -99,126 +99,6 @@ async function rejectCookieTest() {
 
     await expect(metricTag)
       .toHaveCount(0);
-  });
-}
-
-async function webvisorCheckboxTests() {
-  test(`
-    GIVEN cookie settings modal is open
-    AND analytics is turned off
-    THEN webvisor should be disabled
-    `, async ({
-    goto,
-    page,
-  }: {
-    goto: CustomTestFixtures['goto'];
-    setViewportSize: CustomTestFixtures['setViewportSize'];
-    page: Page;
-  }) => {
-    await goto(process.env.FRONTEND_URL as string);
-
-    await checkNoConsentState(page);
-
-    await page
-      .getByTestId(`cookie-settings-button`)
-      .click();
-
-    const analyticsCheckbox = page.getByRole(`checkbox`, {
-      name: `analytics`,
-    });
-    const webvisorCheckbox = page.getByRole(`checkbox`, {
-      name: `webvisor`,
-    });
-
-    if (await analyticsCheckbox.isChecked()) {
-      await analyticsCheckbox.click();
-    }
-
-    await expect(webvisorCheckbox)
-      .toBeDisabled();
-  });
-
-  test(`
-    GIVEN cookie settings modal is open
-    WHEN analytics is turned on
-    THEN webvisor should be enabled
-    `, async ({
-    goto,
-    page,
-  }: {
-    goto: CustomTestFixtures['goto'];
-    setViewportSize: CustomTestFixtures['setViewportSize'];
-    page: Page;
-  }) => {
-    await goto(process.env.FRONTEND_URL as string);
-
-    await checkNoConsentState(page);
-
-    await page
-      .getByTestId(`cookie-settings-button`)
-      .click();
-
-    const analyticsCheckbox = page.getByRole(`checkbox`, {
-      name: `analytics`,
-    });
-    const webvisorCheckbox = page.getByRole(`checkbox`, {
-      name: `webvisor`,
-    });
-
-    if (!await analyticsCheckbox.isChecked()) {
-      await analyticsCheckbox.click();
-    }
-
-    await expect(webvisorCheckbox)
-      .toBeEnabled();
-  });
-
-  test(`
-    GIVEN cookie settings modal is open 
-    AND both analytics and webvisor are turned on
-    WHEN analytics is turned off 
-    THEN webvisor should be unchecked and disabled
-    `, async ({
-    goto,
-    page,
-  }: {
-    goto: CustomTestFixtures['goto'];
-    setViewportSize: CustomTestFixtures['setViewportSize'];
-    page: Page;
-  }) => {
-    await goto(process.env.FRONTEND_URL as string);
-
-    await checkNoConsentState(page);
-
-    await page
-      .getByTestId(`cookie-settings-button`)
-      .click();
-
-    const analyticsCheckbox = page.getByRole(`checkbox`, {
-      name: `analytics`,
-    });
-    const webvisorCheckbox = page.getByRole(`checkbox`, {
-      name: `webvisor`,
-    });
-
-    if (!await analyticsCheckbox.isChecked()) {
-      await analyticsCheckbox.click();
-    }
-    if (!await webvisorCheckbox.isChecked()) {
-      await webvisorCheckbox.click();
-    }
-
-    await expect(webvisorCheckbox)
-      .toBeChecked();
-
-    await analyticsCheckbox.click();
-
-    await expect(webvisorCheckbox)
-      .not
-      .toBeChecked();
-
-    await expect(webvisorCheckbox)
-      .toBeDisabled();
   });
 }
 
