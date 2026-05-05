@@ -10,7 +10,6 @@ type CookieContextType = {
   setIsBannerVisible: (value: boolean) => void;
   isSettingsModalOpen: boolean;
   setIsSettingsModalOpen: (value: boolean) => void;
-
 };
 
 export const CookieContext = createContext<CookieContextType>({
