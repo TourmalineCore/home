@@ -9,7 +9,6 @@ import {
 test.describe(`Cookie`, () => {
   test.describe(`Accept cookie test`, acceptCookieTest);
   test.describe(`Reject cookie test`, rejectCookieTest);
-  // test.describe(`Webvisor checkbox tests`, webvisorCheckboxTests);
 });
 
 async function acceptCookieTest() {
