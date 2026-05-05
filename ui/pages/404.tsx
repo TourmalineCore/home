@@ -17,6 +17,8 @@ export default function Custom404() {
   );
 }
 
+
+
 export const getStaticProps: GetServerSideProps = async ({
   locale,
 }) => ({
