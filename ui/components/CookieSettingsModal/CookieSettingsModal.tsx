@@ -91,6 +91,7 @@ export function CookieSettingsModal({
                       type="checkbox"
                       className="cookie-settings-modal__checkbox-input"
                       checked={cookieSettings[name as keyof CookieSettings]}
+                      disabled={name === `webvisor` && !cookieSettings.analytics}
                     />
                     <div className="cookie-settings-modal__checkbox-indicator" />
                   </div>

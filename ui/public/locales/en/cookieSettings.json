@@ -8,7 +8,7 @@
     },
     {
       "title": "Session Recording (Webvisor)",
-      "text": "Records a video of cursor movements, scrolling, and clicks. This helps us see how users interact with the interface to improve site quality.",
+      "text": "Additional analytics feature. Records a video of cursor movements, scrolling, and clicks. This helps us see how users interact with the interface to improve site quality.",
       "name": "webvisor"
     }
   ],

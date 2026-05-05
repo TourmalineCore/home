@@ -86,6 +86,18 @@
         transform: translate(22px, 0);
       }
     }
+
+    &:disabled {
+      cursor: default;
+    }
+
+    &:disabled ~ #{$this}__checkbox-indicator {
+      background: #595959;
+    }
+
+    &:disabled ~ #{$this}__checkbox-indicator::after {
+      background: #999;
+    }
   }
 
   &__checkbox-indicator {
