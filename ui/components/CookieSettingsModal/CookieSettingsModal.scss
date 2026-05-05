@@ -92,11 +92,11 @@
     }
 
     &:disabled ~ #{$this}__checkbox-indicator {
-      background: #595959;
+      background: $color-grey-400-redesign;
     }
 
     &:disabled ~ #{$this}__checkbox-indicator::after {
-      background: #999;
+      background: $color-grey-350-redesign;
     }
   }
 
