@@ -9,6 +9,10 @@ controller:
     nodePorts:
       http: "{{ .Values.HOME_INTERNAL_PORT }}"
       https: 
+    # https://dev.to/u2633/how-to-add-the-whitelist-for-your-ingress-nginx-controller-of-k8s-1a02
+    # this is needed to allow to whitelist IP-addresses for shlink by keeping original client reqest IP
+    # it has differences from Cluster policy. however, for this single node cluster this looks acceptable 
+    externalTrafficPolicy: "Local"
   # not needed in this setup
   admissionWebhooks:
     enabled: false
