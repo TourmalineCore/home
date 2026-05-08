@@ -13,7 +13,7 @@ extraConfigMapEnvVars:
   DB_PORT: "{{ .Values.HOME_DATABASE_PORT }}"
   DB_USER: "{{ .Values.HOME_DATABASE_USERNAME }}"
   DB_PASSWORD: "{{ .Values.HOME_DATABASE_PASSWORD }}"
-
+  MULTI_SEGMENT_SLUGS_ENABLED: "true"
 replicaCount: 1
 
 service:
