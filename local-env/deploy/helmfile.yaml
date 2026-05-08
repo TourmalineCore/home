@@ -89,7 +89,5 @@ releases:
       - ingress-nginx
       - postgresql
     values:
-      # https://helmfile.readthedocs.io/en/latest/#loading-remote-environment-values-files
-      # - git::https://github.com/TourmalineCore/home.git@/cms/ci/values.yaml?ref=master
       - values.yaml.gotmpl
       - values-shlink.yaml.gotmpl
