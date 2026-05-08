@@ -25,8 +25,7 @@ ingress:
   path: "{{ .Values.HOME_URL_SHORTENER_BASE_PATH }}(/|$)(.*)"
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.HOME_SHLINK_BASE_PATH }}/$2
-    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.HOME_URL_SHORTENER_BASE_PATH }}/$2
   ingressClassName: "nginx"
 
 # not needed in this setup
@@ -73,7 +72,6 @@ extraDeploy:
       # the `private` postfix was added to this ingress because all REST requests will be private and protected by a whitelist
       name: home-shlink-private-nginx
       annotations:
-        cert-manager.io/cluster-issuer: letsencrypt
         nginx.ingress.kubernetes.io/use-regex: "true"
         nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.HOME_URL_SHORTENER_BASE_PATH }}/rest/$2
         nginx.ingress.kubernetes.io/whitelist-source-range: {{ .Values.HOME_URL_SHORTENER_ALLOWED_IP_ADDRESSES_WHITELIST | quote }}
