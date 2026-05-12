@@ -58,6 +58,7 @@ export function Modal({
               type="button"
               className="modal__cross"
               onClick={onClose}
+              data-testid="close-modal-button"
               aria-label={
                 locale === `ru`
                   ? `Закрыть модальное окно с формой`
