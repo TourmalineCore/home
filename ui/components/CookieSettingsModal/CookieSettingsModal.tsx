@@ -55,6 +55,12 @@ export function CookieSettingsModal({
     webvisor: false,
   });
 
+  // Store original settings when modal opens
+  const [originalSettings, setOriginalSettings] = useState<CookieSettings>({
+    analytics: false,
+    webvisor: false,
+  });
+
   useEffect(() => {
     if (isModalOpen && !isComponentPage) {
       const savedCookieSettings = getCookie(COOKIE_SETTINGS);
@@ -62,6 +68,10 @@ export function CookieSettingsModal({
       if (savedCookieSettings) {
         const parsedSettings = JSON.parse(savedCookieSettings as string);
         setCookieSettings({
+          analytics: parsedSettings.analytics,
+          webvisor: parsedSettings.webvisor,
+        });
+        setOriginalSettings({
           analytics: parsedSettings.analytics,
           webvisor: parsedSettings.webvisor,
         });
@@ -77,7 +87,7 @@ export function CookieSettingsModal({
           'cookie-settings-modal--open': isModalOpen,
         })}
         testId="cookie-settings-modal"
-        onClose={() => setIsSettingsModalOpen(false)}
+        onClose={handleCloseModal}
         type="cookie"
       >
         <div className="cookie-settings-modal__inner">
@@ -97,7 +107,6 @@ export function CookieSettingsModal({
                     <input
                       id={title}
                       onChange={() => handleCheckboxChange(name)}
-                      onKeyDown={() => handleCheckboxChange(name)}
                       type="checkbox"
                       className="cookie-settings-modal__checkbox-input"
                       checked={cookieSettings[name as keyof CookieSettings]}
@@ -190,5 +199,13 @@ export function CookieSettingsModal({
       setIsSettingsModalOpen(false);
       setIsBannerVisible(false);
     }
+  }
+
+  // Reset to original settings when modal closes without saving
+  function handleCloseModal() {
+    if (originalSettings) {
+      setCookieSettings(originalSettings);
+    }
+    setIsSettingsModalOpen(false);
   }
 }

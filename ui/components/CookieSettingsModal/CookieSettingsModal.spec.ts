@@ -31,7 +31,7 @@ test.describe(`CookieSettingsModal`, () => {
 async function webvisorCheckboxTests() {
   test(`
     GIVEN cookie settings modal is open
-    AND analytics is turned off
+    WHEN analytics is turned off
     THEN webvisor should be disabled
     `, async ({
     page,
