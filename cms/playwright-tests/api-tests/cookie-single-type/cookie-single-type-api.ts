@@ -5,7 +5,7 @@ import { ApiTestFixtures, expect } from "../../api-test-fixtures";
 
 export const COOKIE_ENDPOINT = `/api/cookie`;
 
-export async function updateCookieSingleTypeApi({
+export async function updateCookieSingleType({
   apiRequest
 }: {
   apiRequest: ApiTestFixtures[`apiRequest`];
@@ -30,7 +30,7 @@ export async function updateCookieSingleTypeApi({
   }
 }
 
-export async function cleanupCookieSingleTypeApi({
+export async function cleanupCookieSingleType({
   apiRequest
 }: {
   apiRequest: ApiTestFixtures[`apiRequest`];

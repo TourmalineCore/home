@@ -1,6 +1,6 @@
 import z from "zod";
 import { ApiTestFixtures, expect, test } from "../../api-test-fixtures";
-import { updateCookieSingleTypeApi, COOKIE_ENDPOINT, cleanupCookieSingleTypeApi } from "./cookie-single-type-api";
+import { cleanupCookieSingleType, COOKIE_ENDPOINT, updateCookieSingleType } from "./cookie-single-type-api";
 
 const CookieSchema = z.object({
   bannerText: z.string(),
@@ -13,11 +13,11 @@ test.describe(`Cookie single type response tests`, () => {
   test.beforeEach(async ({
     apiRequest 
   }) => {
-    await cleanupCookieSingleTypeApi({
+    await cleanupCookieSingleType({
       apiRequest 
     });
 
-    await updateCookieSingleTypeApi({
+    await updateCookieSingleType({
       apiRequest 
     });
   });
@@ -25,7 +25,7 @@ test.describe(`Cookie single type response tests`, () => {
   test.afterEach(async ({
     apiRequest 
   }) => {
-    await cleanupCookieSingleTypeApi({
+    await cleanupCookieSingleType({
       apiRequest 
     });
   });
