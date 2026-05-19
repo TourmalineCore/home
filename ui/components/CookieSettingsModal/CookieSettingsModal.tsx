@@ -1,4 +1,3 @@
-import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 
 import clsx from 'clsx';
@@ -10,26 +9,32 @@ import { COOKIE_ACCEPT, COOKIE_SETTINGS, GENERAL_COOKIE_OPTIONS } from '../../co
 import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
 import { useCookieContext } from '../../common/hooks/useCookieContext';
 
-type Options = {
-  title: string;
-  text: string;
-  name: string;
-}[];
-
 type CookieSettings = {
   analytics: boolean;
   webvisor: boolean;
 };
 
 export function CookieSettingsModal({
+  title,
+  note,
+  buttonText,
+  analyticsData,
+  webvisorData,
   isComponentPage,
 }: {
+  title: string;
+  note: string;
+  buttonText: string;
+  analyticsData: {
+    title: string;
+    text: string;
+  };
+  webvisorData: {
+    title: string;
+    text: string;
+  };
   isComponentPage?: boolean;
 }) {
-  const {
-    t,
-  } = useTranslation(`cookieSettings`);
-
   const {
     reload,
   } = useRouter();
@@ -41,10 +46,6 @@ export function CookieSettingsModal({
   } = useCookieContext();
 
   const isModalOpen = isComponentPage || isSettingsModalOpen;
-
-  const options: Options = t(`options`, {
-    returnObjects: true,
-  });
 
   const {
     isTablet,
@@ -81,51 +82,70 @@ export function CookieSettingsModal({
         type="cookie"
       >
         <div className="cookie-settings-modal__inner">
-          <h2 className="cookie-settings-modal__title">{t(`title`)}</h2>
+          <h2 className="cookie-settings-modal__title">{title}</h2>
           <ul className="cookie-settings-modal__list">
-            {options.map(({
-              text,
-              title,
-              name,
-            }) => (
-              <li
-                key={name}
-                className="cookie-settings-modal__item"
-              >
-                <div className="cookie-settings-modal__option">
-                  <div className="cookie-settings-modal__checkbox">
-                    <input
-                      id={title}
-                      onChange={() => handleCheckboxChange(name)}
-                      type="checkbox"
-                      className="cookie-settings-modal__checkbox-input"
-                      checked={cookieSettings[name as keyof CookieSettings]}
-                      disabled={name === `webvisor` && !cookieSettings.analytics}
-                      data-testid={`checkbox-${name}`}
-                    />
-                    <div className="cookie-settings-modal__checkbox-indicator" />
-                  </div>
-                  <label
-                    className="cookie-settings-modal__label"
-                    htmlFor={title}
-                  >
-                    {title}
-                  </label>
+            <li
+              className="cookie-settings-modal__item"
+            >
+              <div className="cookie-settings-modal__option">
+                <div className="cookie-settings-modal__checkbox">
+                  <input
+                    id="analytics"
+                    onChange={() => handleCheckboxChange(`analytics`)}
+                    type="checkbox"
+                    className="cookie-settings-modal__checkbox-input"
+                    checked={cookieSettings.analytics}
+                    data-testid="checkbox-analytics"
+                  />
+                  <div className="cookie-settings-modal__checkbox-indicator" />
                 </div>
-                <p className="cookie-settings-modal__description">
-                  {text}
-                </p>
-              </li>
-            ))}
+                <label
+                  className="cookie-settings-modal__label"
+                  htmlFor="analytics"
+                >
+                  {analyticsData.title}
+                </label>
+              </div>
+              <p className="cookie-settings-modal__description">
+                {analyticsData.text}
+              </p>
+            </li>
+            <li
+              className="cookie-settings-modal__item"
+            >
+              <div className="cookie-settings-modal__option">
+                <div className="cookie-settings-modal__checkbox">
+                  <input
+                    id="webvisor"
+                    onChange={() => handleCheckboxChange(`webvisor`)}
+                    type="checkbox"
+                    className="cookie-settings-modal__checkbox-input"
+                    checked={cookieSettings.webvisor}
+                    disabled={!cookieSettings.analytics}
+                    data-testid="checkbox-webvisor"
+                  />
+                  <div className="cookie-settings-modal__checkbox-indicator" />
+                </div>
+                <label
+                  className="cookie-settings-modal__label"
+                  htmlFor="webvisor"
+                >
+                  {webvisorData.title}
+                </label>
+              </div>
+              <p className="cookie-settings-modal__description">
+                {webvisorData.text}
+              </p>
+            </li>
           </ul>
-          <div className="cookie-settings-modal__note">{t(`note`)}</div>
+          <div className="cookie-settings-modal__note">{note}</div>
           <button
             type="button"
             className="cookie-settings-modal__button"
             onClick={handleSaveSettings}
             data-testid="save-cookie-settings-button"
           >
-            {t(`buttonText`)}
+            {buttonText}
           </button>
         </div>
       </Modal>
