@@ -16,7 +16,7 @@
   },
   "attributes": {
     "bannerText": {
-      "type": "text",
+      "type": "richtext",
       "pluginOptions": {
         "i18n": {
           "localized": true

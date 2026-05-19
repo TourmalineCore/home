@@ -396,7 +396,7 @@ export interface ApiCookieCookie extends Struct.SingleTypeSchema {
           localized: true;
         };
       }>;
-    bannerText: Schema.Attribute.Text &
+    bannerText: Schema.Attribute.RichText &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
