@@ -55,12 +55,6 @@ export function CookieSettingsModal({
     webvisor: false,
   });
 
-  // Store original settings when modal opens
-  const [originalSettings, setOriginalSettings] = useState<CookieSettings>({
-    analytics: false,
-    webvisor: false,
-  });
-
   useEffect(() => {
     if (isModalOpen && !isComponentPage) {
       const savedCookieSettings = getCookie(COOKIE_SETTINGS);
@@ -68,10 +62,6 @@ export function CookieSettingsModal({
       if (savedCookieSettings) {
         const parsedSettings = JSON.parse(savedCookieSettings as string);
         setCookieSettings({
-          analytics: parsedSettings.analytics,
-          webvisor: parsedSettings.webvisor,
-        });
-        setOriginalSettings({
           analytics: parsedSettings.analytics,
           webvisor: parsedSettings.webvisor,
         });
@@ -201,11 +191,12 @@ export function CookieSettingsModal({
     }
   }
 
-  // Reset to original settings when modal closes without saving
   function handleCloseModal() {
-    if (originalSettings) {
-      setCookieSettings(originalSettings);
-    }
+    setCookieSettings({
+      analytics: false,
+      webvisor: false,
+    });
+
     setIsSettingsModalOpen(false);
   }
 }

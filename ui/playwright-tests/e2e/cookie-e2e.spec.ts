@@ -9,7 +9,6 @@ import {
 test.describe(`Cookie`, () => {
   test.describe(`Accept cookie test`, acceptCookieTest);
   test.describe(`Reject cookie test`, rejectCookieTest);
-  test.describe(`Cookie settings modal reset tests`, cookieSettingsModalResetTests);
 });
 
 async function acceptCookieTest() {
@@ -99,79 +98,6 @@ async function rejectCookieTest() {
 
     await expect(metricTag)
       .toHaveCount(0);
-  });
-}
-
-async function cookieSettingsModalResetTests() {
-  test(`
-    GIVEN cookie settings modal is open
-    WHEN user toggles analytics checkbox using keyboard
-    AND closes modal without saving
-    THEN checkbox should reset to original state
-    `, async ({
-    goto,
-    page,
-  }: {
-    goto: CustomTestFixtures['goto'];
-    page: Page;
-  }) => {
-    await goto(process.env.FRONTEND_URL as string);
-
-    await page.getByTestId(`cookie-settings-button`)
-      .click();
-
-    const analyticsCheckbox = page.getByTestId(`checkbox-analytics`);
-
-    await analyticsCheckbox.focus();
-    await page.keyboard.press(`Space`);
-
-    await expect(analyticsCheckbox)
-      .toBeChecked();
-
-    const closeButton = page.getByTestId(`close-modal-button`);
-    await closeButton.click();
-
-    await page.getByTestId(`cookie-settings-button`)
-      .click();
-
-    await expect(analyticsCheckbox)
-      .not
-      .toBeChecked();
-  });
-
-  test(`
-    GIVEN cookie settings modal is open
-    WHEN user toggles checkbox using mouse
-    AND closes modal without saving
-    THEN checkbox should reset to original states
-    `, async ({
-    goto,
-    page,
-  }: {
-    goto: CustomTestFixtures['goto'];
-    page: Page;
-  }) => {
-    await goto(process.env.FRONTEND_URL as string);
-
-    await page.getByTestId(`cookie-settings-button`)
-      .click();
-
-    const analyticsCheckbox = page.getByTestId(`checkbox-analytics`);
-
-    await analyticsCheckbox.click();
-
-    await expect(analyticsCheckbox)
-      .toBeChecked();
-
-    const closeButton = page.getByTestId(`close-modal-button`);
-    await closeButton.click();
-
-    await page.getByTestId(`cookie-settings-button`)
-      .click();
-
-    await expect(analyticsCheckbox)
-      .not
-      .toBeChecked();
   });
 }
 

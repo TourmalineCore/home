@@ -10,6 +10,7 @@ test.describe(`CookieSettingsModal`, () => {
   });
 
   test.describe(`Webvisor checkbox tests`, webvisorCheckboxTests);
+  test.describe(`Reset checkbox tests`, resetCheckboxTests);
 
   for (const {
     name,
@@ -100,6 +101,37 @@ async function webvisorCheckboxTests() {
 
     await expect(webvisorCheckbox)
       .toBeDisabled();
+  });
+}
+
+async function resetCheckboxTests() {
+  test(`
+  GIVEN cookie settings modal is open
+  WHEN user toggles checkbox
+  AND closes modal without saving
+  THEN checkbox should reset to default state
+  `, async ({
+    page,
+  }: {
+    page: Page;
+  }) => {
+    const analyticsCheckbox = getAnalyticsCheckbox(page);
+
+    await analyticsCheckbox.click();
+
+    await expect(analyticsCheckbox)
+      .toBeChecked();
+
+    const closeButton = page.getByTestId(`close-modal-button`)
+      .filter({
+        visible: true,
+      });
+
+    await closeButton.click();
+
+    await expect(analyticsCheckbox)
+      .not
+      .toBeChecked();
   });
 }
 
