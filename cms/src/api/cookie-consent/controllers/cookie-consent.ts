@@ -1,7 +1,7 @@
 /**
- * cookie-consent service
+ * cookie-consent controller
  */
 
-import { factories } from '@strapi/strapi';
+import { factories } from '@strapi/strapi'
 
-export default factories.createCoreService(`api::cookie-consent.cookie-consent`);
+export default factories.createCoreController('api::cookie-consent.cookie-consent');
