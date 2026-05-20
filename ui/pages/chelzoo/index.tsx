@@ -172,6 +172,7 @@ async function getStaticTranslation({
   return serverSideTranslations(locale, [
     `chelzooMeta`,
     `cookie`,
+    `cookieSettings`,
     `formBlockRedesign`,
     `chelzooHero`,
     `chelzooAbout`,

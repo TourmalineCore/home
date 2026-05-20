@@ -2,19 +2,23 @@ import { getCookie } from "cookies-next";
 import { OptionYM } from "../../types/globals";
 import { COOKIE_ACCEPT } from "../constants/cookie";
 
-export const optionYandexMetrika: OptionYM = {
-  clickmap: true,
-  trackLinks: true,
-  accurateTrackBounce: true,
-  webvisor: true,
-};
-
-export function loadYandexMetrika() {
+export function loadYandexMetrika({
+  webvisor,
+}: {
+  webvisor: boolean;
+}) {
   const yandexId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
   const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
   const isCookieAccept = getCookie(COOKIE_ACCEPT) === `true`;
 
   if (isMetricsEnabled && isCookieAccept) {
+    const optionYandexMetrika: OptionYM = {
+      clickmap: true,
+      trackLinks: true,
+      accurateTrackBounce: true,
+      webvisor,
+    };
+
     const counterCode = `
          (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
           var z = null;m[i].l=1*new Date();

@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useEffect } from 'react';
 import FocusLock from 'react-focus-lock';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
@@ -8,11 +8,13 @@ import { useOnClickOutside } from '../../common/hooks';
 export function Modal({
   children,
   className,
+  type = `default`,
   onClose = () => {},
   testId,
 }: {
   children: ReactNode;
   className: string;
+  type?: 'cookie' | 'default';
   onClose?:() => unknown;
   testId?: string;
 }) {
@@ -35,9 +37,7 @@ export function Modal({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const refModal = useRef<HTMLDivElement>(null);
-
-  useOnClickOutside(refModal, onClose);
+  useOnClickOutside(onClose);
 
   return (
     <FocusLock
@@ -45,18 +45,20 @@ export function Modal({
       returnFocus
     >
       <div
-        className={clsx(`default-scroll modal`, className)}
+        className={clsx(`default-scroll modal`, className, {
+          'modal--cookie': type === `cookie`,
+        })}
         data-testid={testId}
       >
         <div className="modal__container">
           <div
             className="modal__inner"
-            ref={refModal}
           >
             <button
               type="button"
               className="modal__cross"
               onClick={onClose}
+              data-testid="close-modal-button"
               aria-label={
                 locale === `ru`
                   ? `Закрыть модальное окно с формой`

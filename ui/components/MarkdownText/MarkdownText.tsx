@@ -6,10 +6,12 @@ import clsx from 'clsx';
 export function MarkdownText({
   children,
   className,
+  linkClassName,
   isTargetBlank,
 }: {
   children: string;
   className?: string;
+  linkClassName?: string;
   isTargetBlank?: boolean;
 }) {
   return (
@@ -22,7 +24,7 @@ export function MarkdownText({
           return (
             <a
               href={props.href}
-              className={clsx(props.className)}
+              className={clsx(linkClassName, props.className)}
               {...(isTargetBlank ? {
                 target: `_blank`,
                 rel: `noopener noreferrer`,

@@ -21,6 +21,10 @@ export const getStaticProps: GetServerSideProps = async ({
   locale,
 }) => ({
   props: {
-    ...(await serverSideTranslations(locale as string, [`pageNotFound`, `cookie`])),
+    ...(await serverSideTranslations(locale as string, [
+      `pageNotFound`,
+      `cookie`,
+      `cookieSettings`,
+    ])),
   },
 });

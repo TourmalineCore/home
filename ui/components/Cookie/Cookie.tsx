@@ -1,32 +1,34 @@
-import { Trans, useTranslation } from 'next-i18next';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 import { getCookie, setCookie } from 'cookies-next';
 import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
-import { COOKIE_ACCEPT, POLICY_VERSION } from '../../common/constants/cookie';
-
-const cookieOptions = {
-  // 1 year
-  maxAge: 365 * 24 * 3600,
-};
+import { COOKIE_ACCEPT, COOKIE_SETTINGS, GENERAL_COOKIE_OPTIONS } from '../../common/constants/cookie';
+import { useCookieContext } from '../../common/hooks/useCookieContext';
+import { MarkdownText } from '../MarkdownText/MarkdownText';
 
 // Google metrics are temporarily disabled
 // const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ``;
 
 export function Cookie({
+  acceptButtonText,
+  rejectButtonText,
+  bannerText,
+  settingsButtonText,
   isComponentPage,
 }: {
+  acceptButtonText: string;
+  rejectButtonText: string;
+  bannerText: string;
+  settingsButtonText: string;
   isComponentPage?: boolean;
 }) {
   const {
-    t,
-  } = useTranslation(`cookie`);
-  const {
-    locale,
-  } = useRouter();
+    isBannerVisible,
+    setIsBannerVisible,
+    setIsSettingsModalOpen,
+  } = useCookieContext();
 
-  const [isCookieVisible, setIsCookieVisible] = useState(isComponentPage || false);
+  const isCookieVisible = isComponentPage || isBannerVisible;
   // const [date, setDate] = useState<Date | null>(null);
   const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
 
@@ -34,9 +36,9 @@ export function Cookie({
     if (!isComponentPage) {
       // setDate(new Date());
       if (getCookie(COOKIE_ACCEPT) !== undefined) {
-        setIsCookieVisible(false);
+        setIsBannerVisible(false);
       } else {
-        setIsCookieVisible(true);
+        setIsBannerVisible(true);
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,35 +54,38 @@ export function Cookie({
       data-testid="cookie"
     >
       <div className="cookie__text">
-        <Trans
-          i18nKey="cookie:text"
-          components={{
-            bolt: <a
-              className="cookie__link"
-              href={`/documents/policy/policy-${POLICY_VERSION}-${locale}.pdf#page=5`}
-              target="_blank"
-              rel="noreferrer"
-              aria-label=""
-            />,
-          }}
-        />
+        <MarkdownText
+          linkClassName="cookie__link"
+          isTargetBlank
+        >
+          {bannerText}
+        </MarkdownText>
       </div>
       <div className="cookie__buttons">
         <button
           type="button"
-          className="cookie__button"
-          onClick={acceptCookie}
-          data-testid="accept-button"
+          className="cookie__button cookie__button--settings"
+          onClick={() => setIsSettingsModalOpen(true)}
+          data-testid="cookie-settings-button"
         >
-          {t(`accept`)}
+          {settingsButtonText}
         </button>
+
         <button
           type="button"
           className="cookie__button"
           onClick={rejectCookie}
           data-testid="reject-button"
         >
-          {t(`reject`)}
+          {rejectButtonText}
+        </button>
+        <button
+          type="button"
+          className="cookie__button"
+          onClick={acceptCookie}
+          data-testid="accept-button"
+        >
+          {acceptButtonText}
         </button>
       </div>
     </aside>
@@ -88,22 +93,50 @@ export function Cookie({
 
   function acceptCookie() {
     if (!isComponentPage) {
-      setCookie(COOKIE_ACCEPT, true, cookieOptions);
+      setCookie(
+        COOKIE_ACCEPT,
+        true,
+        GENERAL_COOKIE_OPTIONS,
+      );
+
+      setCookie(
+        COOKIE_SETTINGS,
+        JSON.stringify({
+          analytics: true,
+          webvisor: true,
+        }),
+        GENERAL_COOKIE_OPTIONS,
+      );
 
       if (isMetricsEnabled) {
         // window.gtag(`js`, date);
         // window.gtag(`config`, googleId);
-        loadYandexMetrika();
+        loadYandexMetrika({
+          webvisor: true,
+        });
       }
-      setIsCookieVisible(false);
+      setIsBannerVisible(false);
     }
   }
 
   function rejectCookie() {
     if (!isComponentPage) {
-      setCookie(COOKIE_ACCEPT, false, cookieOptions);
+      setCookie(
+        COOKIE_ACCEPT,
+        false,
+        GENERAL_COOKIE_OPTIONS,
+      );
+
+      setCookie(
+        COOKIE_SETTINGS,
+        JSON.stringify({
+          analytics: false,
+          webvisor: false,
+        }),
+        GENERAL_COOKIE_OPTIONS,
+      );
     }
 
-    setIsCookieVisible(false);
+    setIsBannerVisible(false);
   }
 }
