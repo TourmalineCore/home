@@ -3,15 +3,15 @@ import '../styles/main.scss';
 
 import { appWithTranslation } from 'next-i18next';
 import Head from 'next/head';
-import dynamic from 'next/dynamic';
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
 import { getCookie } from 'cookies-next';
+import dynamic from 'next/dynamic';
 import { loadYandexMetrika } from '../common/loadYandexMetrika/loadYandexMetrika';
 import { COOKIE_ACCEPT, COOKIE_SETTINGS } from '../common/constants/cookie';
 import { CookieProvider } from '../common/providers/CookieProvider';
-import { loadTranslations } from '../common/utils';
 import { getCookieData } from '../services/cms/api/cookie-api/cookie-api';
+import { loadTranslations } from '../common/utils';
 
 const Cookie = dynamic(
   () => import(`../components/Cookie/Cookie`).then((component) => component.Cookie),
@@ -141,31 +141,38 @@ MyApp.getInitialProps = async ({
     };
   }
 
-  const cookieResponse = await getCookieData({
-    status: router.isPreview ? `draft` : `published`,
-    locale: router.locale,
-  });
+  try {
+    const cookieResponse = await getCookieData({
+      status: router.isPreview ? `draft` : `published`,
+      locale: router.locale,
+    });
 
-  return {
-    cookieData: {
-      acceptButtonText: translationsData.cookie.accept,
-      rejectButtonText: translationsData.cookie.reject,
-      settingsButtonText: translationsData.cookie.settings,
-      bannerText: cookieResponse.bannerText,
-    },
-    cookieSettingsData: {
-      ...translationsData.cookieSettings,
-      analytics: {
-        title: translationsData.cookieSettings.analytics.title,
-        text: cookieResponse.analyticsText,
+    return {
+      cookieData: {
+        acceptButtonText: translationsData.cookie.accept,
+        rejectButtonText: translationsData.cookie.reject,
+        settingsButtonText: translationsData.cookie.settings,
+        bannerText: cookieResponse.bannerText,
       },
-      webvisor: {
-        title: translationsData.cookieSettings.webvisor.title,
-        text: cookieResponse.webvisorText,
+      cookieSettingsData: {
+        ...translationsData.cookieSettings,
+        analytics: {
+          title: translationsData.cookieSettings.analytics.title,
+          text: cookieResponse.analyticsText,
+        },
+        webvisor: {
+          title: translationsData.cookieSettings.webvisor.title,
+          text: cookieResponse.webvisorText,
+        },
+        note: cookieResponse.privacyText,
       },
-      note: cookieResponse.privacyText,
-    },
-  };
+    };
+  } catch {
+    return {
+      cookieData: {},
+      cookieSettingsData: {},
+    };
+  }
 };
 
 export default appWithTranslation(MyApp as unknown as React.ComponentType<AppProps>);
