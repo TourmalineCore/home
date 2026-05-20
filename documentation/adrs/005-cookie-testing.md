@@ -13,7 +13,7 @@ The system of cookie consent in the project involves the following:
 
 ## Decision
 Currently we have three types of tests:
-- **E2E tests** (Playwright) covering accept/reject cookie flows
+- **E2E tests** (Playwright) covering accept/reject cookie flows and integration with CMS
 - **component tests** (Playwright) covering visual part and logic of checkboxes
 - **unit tests** (Jest) covering Yandex Metrika loading logic
 

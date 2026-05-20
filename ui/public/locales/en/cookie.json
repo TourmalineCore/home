@@ -2,5 +2,5 @@
   "accept":"Accept all",
   "reject":"Reject all",
   "settings":"Settings",
-  "text":"We use Yandex.Metrica, including website interaction recording (Webvisor), for analytics and website improvement. You can consent to data processing or customize how your data is used. Data processing will only take place after we obtain your consent. You can change your settings at any time using the link at the bottom of the page. For more details, see our <bolt>Privacy Policy</bolt>."
+  "text":"We use Yandex.Metrica, including website interaction recording (Webvisor), for analytics and website improvement. You can consent to data processing or customize how your data is used. Data processing will only take place after we obtain your consent. You can change your settings at any time using the link at the bottom of the page. For more details, see our <a href=\"/documents/policy/policy-en.pdf#page=5\">Privacy Policy</a>."
 }

@@ -1,28 +1,27 @@
-import { Trans, useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 
 import { getCookie, setCookie } from 'cookies-next';
 import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
 import { COOKIE_ACCEPT, COOKIE_SETTINGS, GENERAL_COOKIE_OPTIONS } from '../../common/constants/cookie';
 import { useCookieContext } from '../../common/hooks/useCookieContext';
+import { MarkdownText } from '../MarkdownText/MarkdownText';
 
 // Google metrics are temporarily disabled
 // const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ``;
 
 export function Cookie({
+  acceptButtonText,
+  rejectButtonText,
+  bannerText,
+  settingsButtonText,
   isComponentPage,
 }: {
+  acceptButtonText: string;
+  rejectButtonText: string;
+  bannerText: string;
+  settingsButtonText: string;
   isComponentPage?: boolean;
 }) {
-  const {
-    t,
-  } = useTranslation(`cookie`);
-
-  const {
-    locale,
-  } = useRouter();
-
   const {
     isBannerVisible,
     setIsBannerVisible,
@@ -55,18 +54,12 @@ export function Cookie({
       data-testid="cookie"
     >
       <div className="cookie__text">
-        <Trans
-          i18nKey="cookie:text"
-          components={{
-            bolt: <a
-              className="cookie__link"
-              href={`/documents/policy/policy-${locale}.pdf#page=5`}
-              target="_blank"
-              rel="noreferrer"
-              aria-label=""
-            />,
-          }}
-        />
+        <MarkdownText
+          linkClassName="cookie__link"
+          isTargetBlank
+        >
+          {bannerText}
+        </MarkdownText>
       </div>
       <div className="cookie__buttons">
         <button
@@ -75,7 +68,7 @@ export function Cookie({
           onClick={() => setIsSettingsModalOpen(true)}
           data-testid="cookie-settings-button"
         >
-          {t(`settings`)}
+          {settingsButtonText}
         </button>
 
         <button
@@ -84,7 +77,7 @@ export function Cookie({
           onClick={rejectCookie}
           data-testid="reject-button"
         >
-          {t(`reject`)}
+          {rejectButtonText}
         </button>
         <button
           type="button"
@@ -92,7 +85,7 @@ export function Cookie({
           onClick={acceptCookie}
           data-testid="accept-button"
         >
-          {t(`accept`)}
+          {acceptButtonText}
         </button>
       </div>
     </aside>
