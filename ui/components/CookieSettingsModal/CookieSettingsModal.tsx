@@ -84,9 +84,7 @@ export function CookieSettingsModal({
         <div className="cookie-settings-modal__inner">
           <h2 className="cookie-settings-modal__title">{title}</h2>
           <ul className="cookie-settings-modal__list">
-            <li
-              className="cookie-settings-modal__item"
-            >
+            <li className="cookie-settings-modal__item">
               <div className="cookie-settings-modal__option">
                 <div className="cookie-settings-modal__checkbox">
                   <input
@@ -110,9 +108,7 @@ export function CookieSettingsModal({
                 {analyticsData.text}
               </p>
             </li>
-            <li
-              className="cookie-settings-modal__item"
-            >
+            <li className="cookie-settings-modal__item">
               <div className="cookie-settings-modal__option">
                 <div className="cookie-settings-modal__checkbox">
                   <input
