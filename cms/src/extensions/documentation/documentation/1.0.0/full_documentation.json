@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2026-05-20T04:43:48.222Z"
+    "x-generation-date": "2026-05-19T08:48:14.485Z"
   },
   "x-strapi-config": {
     "plugins": []
@@ -35,7 +35,7 @@
     }
   ],
   "paths": {
-    "/cookie-consents": {
+    "/cookie": {
       "get": {
         "responses": {
           "200": {
@@ -43,7 +43,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CookieConsentListResponse"
+                  "$ref": "#/components/schemas/CookieResponse"
                 }
               }
             }
@@ -100,7 +100,7 @@
           }
         },
         "tags": [
-          "Cookie-consent"
+          "Cookie"
         ],
         "parameters": [
           {
@@ -206,168 +206,7 @@
             }
           }
         ],
-        "operationId": "get/cookie-consents"
-      },
-      "post": {
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CookieConsentResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Cookie-consent"
-        ],
-        "parameters": [],
-        "operationId": "post/cookie-consents",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CookieConsentRequest"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/cookie-consents/{id}": {
-      "get": {
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CookieConsentResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Cookie-consent"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "",
-            "deprecated": false,
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "operationId": "get/cookie-consents/{id}"
+        "operationId": "get/cookie"
       },
       "put": {
         "responses": {
@@ -376,7 +215,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CookieConsentResponse"
+                  "$ref": "#/components/schemas/CookieResponse"
                 }
               }
             }
@@ -433,27 +272,16 @@
           }
         },
         "tags": [
-          "Cookie-consent"
+          "Cookie"
         ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "",
-            "deprecated": false,
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "operationId": "put/cookie-consents/{id}",
+        "parameters": [],
+        "operationId": "put/cookie",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CookieConsentRequest"
+                "$ref": "#/components/schemas/CookieRequest"
               }
             }
           }
@@ -524,21 +352,10 @@
           }
         },
         "tags": [
-          "Cookie-consent"
+          "Cookie"
         ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "",
-            "deprecated": false,
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "operationId": "delete/cookie-consents/{id}"
+        "parameters": [],
+        "operationId": "delete/cookie"
       }
     },
     "/homepage": {
@@ -2248,7 +2065,7 @@
           }
         }
       },
-      "CookieConsentRequest": {
+      "CookieRequest": {
         "type": "object",
         "required": [
           "data"
@@ -2256,19 +2073,25 @@
         "properties": {
           "data": {
             "required": [
-              "consentId",
-              "consentVersion",
-              "categories"
+              "bannerText",
+              "analyticsText",
+              "webvisorText",
+              "privacyText"
             ],
             "type": "object",
             "properties": {
-              "consentId": {
+              "bannerText": {
                 "type": "string"
               },
-              "consentVersion": {
+              "analyticsText": {
                 "type": "string"
               },
-              "categories": {},
+              "webvisorText": {
+                "type": "string"
+              },
+              "privacyText": {
+                "type": "string"
+              },
               "locale": {
                 "type": "string"
               },
@@ -2290,13 +2113,13 @@
           }
         }
       },
-      "CookieConsentListResponse": {
+      "CookieListResponse": {
         "type": "object",
         "properties": {
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CookieConsent"
+              "$ref": "#/components/schemas/Cookie"
             }
           },
           "meta": {
@@ -2325,12 +2148,13 @@
           }
         }
       },
-      "CookieConsent": {
+      "Cookie": {
         "type": "object",
         "required": [
-          "consentId",
-          "consentVersion",
-          "categories"
+          "bannerText",
+          "analyticsText",
+          "webvisorText",
+          "privacyText"
         ],
         "properties": {
           "id": {
@@ -2339,13 +2163,18 @@
           "documentId": {
             "type": "string"
           },
-          "consentId": {
+          "bannerText": {
             "type": "string"
           },
-          "consentVersion": {
+          "analyticsText": {
             "type": "string"
           },
-          "categories": {},
+          "webvisorText": {
+            "type": "string"
+          },
+          "privacyText": {
+            "type": "string"
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
@@ -2646,13 +2475,18 @@
                 "documentId": {
                   "type": "string"
                 },
-                "consentId": {
+                "bannerText": {
                   "type": "string"
                 },
-                "consentVersion": {
+                "analyticsText": {
                   "type": "string"
                 },
-                "categories": {},
+                "webvisorText": {
+                  "type": "string"
+                },
+                "privacyText": {
+                  "type": "string"
+                },
                 "createdAt": {
                   "type": "string",
                   "format": "date-time"
@@ -2709,11 +2543,11 @@
           }
         }
       },
-      "CookieConsentResponse": {
+      "CookieResponse": {
         "type": "object",
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/CookieConsent"
+            "$ref": "#/components/schemas/Cookie"
           },
           "meta": {
             "type": "object"

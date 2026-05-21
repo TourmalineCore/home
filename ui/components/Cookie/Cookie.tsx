@@ -1,6 +1,4 @@
-import { Trans, useTranslation } from 'next-i18next';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 import { getCookie, setCookie } from 'cookies-next';
 import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
@@ -10,25 +8,32 @@ import {
   GENERAL_COOKIE_OPTIONS,
   POLICY_VERSION,
 } from '../../common/constants/cookie';
-import { CookieSettingsModal } from '../CookieSettingsModal/CookieSettingsModal';
+import { useCookieContext } from '../../common/hooks/useCookieContext';
+import { MarkdownText } from '../MarkdownText/MarkdownText';
 
 // Google metrics are temporarily disabled
 // const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ``;
 
 export function Cookie({
+  acceptButtonText,
+  rejectButtonText,
+  bannerText,
+  settingsButtonText,
   isComponentPage,
 }: {
+  acceptButtonText: string;
+  rejectButtonText: string;
+  bannerText: string;
+  settingsButtonText: string;
   isComponentPage?: boolean;
 }) {
   const {
-    t,
-  } = useTranslation(`cookie`);
-  const {
-    locale,
-  } = useRouter();
+    isBannerVisible,
+    setIsBannerVisible,
+    setIsSettingsModalOpen,
+  } = useCookieContext();
 
-  const [isCookieVisible, setIsCookieVisible] = useState(isComponentPage || false);
-  const [isCookieSettingsModalOpen, setIsCookieSettingsModalOpen] = useState(false);
+  const isCookieVisible = isComponentPage || isBannerVisible;
   // const [date, setDate] = useState<Date | null>(null);
   const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
 
@@ -36,9 +41,9 @@ export function Cookie({
     if (!isComponentPage) {
       // setDate(new Date());
       if (getCookie(COOKIE_ACCEPT) !== undefined) {
-        setIsCookieVisible(false);
+        setIsBannerVisible(false);
       } else {
-        setIsCookieVisible(true);
+        setIsBannerVisible(true);
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,63 +54,46 @@ export function Cookie({
   }
 
   return (
-    <>
-      <aside
-        className="cookie"
-        data-testid="cookie"
-      >
-        <div className="cookie__text">
-          <Trans
-            i18nKey="cookie:text"
-            components={{
-              bolt: <a
-                className="cookie__link"
-                href={`/documents/policy/policy-${locale}.pdf#page=5`}
-                target="_blank"
-                rel="noreferrer"
-                aria-label=""
-              />,
-            }}
-          />
-        </div>
-        <div className="cookie__buttons">
-          <button
-            type="button"
-            className="cookie__button cookie__button--settings"
-            onClick={() => setIsCookieSettingsModalOpen(true)}
-            data-testid="cookie-settings-button"
-          >
-            {t(`settings`)}
-          </button>
+    <aside
+      className="cookie"
+      data-testid="cookie"
+    >
+      <div className="cookie__text">
+        <MarkdownText
+          linkClassName="cookie__link"
+          isTargetBlank
+        >
+          {bannerText}
+        </MarkdownText>
+      </div>
+      <div className="cookie__buttons">
+        <button
+          type="button"
+          className="cookie__button cookie__button--settings"
+          onClick={() => setIsSettingsModalOpen(true)}
+          data-testid="cookie-settings-button"
+        >
+          {settingsButtonText}
+        </button>
 
-          <button
-            type="button"
-            className="cookie__button"
-            onClick={rejectCookie}
-            data-testid="reject-button"
-          >
-            {t(`reject`)}
-          </button>
-          <button
-            type="button"
-            className="cookie__button"
-            onClick={acceptCookie}
-            data-testid="accept-button"
-          >
-            {t(`accept`)}
-          </button>
-        </div>
-      </aside>
-
-      <CookieSettingsModal
-        isModalOpen={isCookieSettingsModalOpen}
-        onCloseModal={() => setIsCookieSettingsModalOpen(false)}
-        onSaveSettings={() => {
-          setIsCookieSettingsModalOpen(false);
-          setIsCookieVisible(false);
-        }}
-      />
-    </>
+        <button
+          type="button"
+          className="cookie__button"
+          onClick={rejectCookie}
+          data-testid="reject-button"
+        >
+          {rejectButtonText}
+        </button>
+        <button
+          type="button"
+          className="cookie__button"
+          onClick={acceptCookie}
+          data-testid="accept-button"
+        >
+          {acceptButtonText}
+        </button>
+      </div>
+    </aside>
   );
 
   async function acceptCookie() {
@@ -154,7 +142,7 @@ export function Cookie({
           }),
         });
       }
-      setIsCookieVisible(false);
+      setIsBannerVisible(false);
     }
   }
 
@@ -176,6 +164,6 @@ export function Cookie({
       );
     }
 
-    setIsCookieVisible(false);
+    setIsBannerVisible(false);
   }
 }

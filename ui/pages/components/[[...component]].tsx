@@ -168,12 +168,27 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   //     isComponentPage
   //   />
   // ),
-  [ComponentName.COOKIE]: () => <Cookie isComponentPage />,
-  [ComponentName.COOKIE_SETTINGS_MODAL]: () => (
+  [ComponentName.COOKIE]: ({
+    cookie,
+  }) => (
+    <Cookie
+      isComponentPage
+      acceptButtonText={cookie.accept}
+      rejectButtonText={cookie.reject}
+      bannerText={cookie.text}
+      settingsButtonText={cookie.settings}
+    />
+  ),
+  [ComponentName.COOKIE_SETTINGS_MODAL]: ({
+    cookieSettings,
+  }) => (
     <CookieSettingsModal
-      isModalOpen
-      onCloseModal={() => { }}
-      onSaveSettings={() => {}}
+      isComponentPage
+      title={cookieSettings.title}
+      note={cookieSettings.note}
+      buttonText={cookieSettings.buttonText}
+      analyticsData={cookieSettings.analytics}
+      webvisorData={cookieSettings.webvisor}
     />
   ),
   [ComponentName.NOT_FOUND]: ({
@@ -290,14 +305,14 @@ export async function getStaticProps({
     `pageNotFound`,
     `headerRedesign`,
     `footerRedesign`,
+    `cookie`,
+    `cookieSettings`,
   ]);
 
   return {
     props: {
       pageData: translationsPageData,
       ...(await serverSideTranslations(locale, [
-        `cookie`,
-        `cookieSettings`,
         // `formBlockRedesign`,
         `chelzooHero`,
         `chelzooAbout`,
