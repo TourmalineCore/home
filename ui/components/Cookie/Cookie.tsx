@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 
-import { getCookie, setCookie } from 'cookies-next';
-import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
-import { COOKIE_ACCEPT, COOKIE_SETTINGS, GENERAL_COOKIE_OPTIONS } from '../../common/constants/cookie';
+import { getCookie } from 'cookies-next';
+import { COOKIE_ACCEPT } from '../../common/constants/cookie';
 import { useCookieContext } from '../../common/hooks/useCookieContext';
 import { MarkdownText } from '../MarkdownText/MarkdownText';
 
@@ -26,11 +25,12 @@ export function Cookie({
     isBannerVisible,
     setIsBannerVisible,
     setIsSettingsModalOpen,
+    acceptCookies,
+    rejectCookies,
   } = useCookieContext();
 
   const isCookieVisible = isComponentPage || isBannerVisible;
   // const [date, setDate] = useState<Date | null>(null);
-  const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
 
   useEffect(() => {
     if (!isComponentPage) {
@@ -91,52 +91,18 @@ export function Cookie({
     </aside>
   );
 
-  function acceptCookie() {
+  async function acceptCookie() {
     if (!isComponentPage) {
-      setCookie(
-        COOKIE_ACCEPT,
-        true,
-        GENERAL_COOKIE_OPTIONS,
-      );
-
-      setCookie(
-        COOKIE_SETTINGS,
-        JSON.stringify({
-          analytics: true,
-          webvisor: true,
-        }),
-        GENERAL_COOKIE_OPTIONS,
-      );
-
-      if (isMetricsEnabled) {
-        // window.gtag(`js`, date);
-        // window.gtag(`config`, googleId);
-        loadYandexMetrika({
-          webvisor: true,
-        });
-      }
-      setIsBannerVisible(false);
+      await acceptCookies({
+        analytics: true,
+        webvisor: true,
+      });
     }
   }
 
   function rejectCookie() {
     if (!isComponentPage) {
-      setCookie(
-        COOKIE_ACCEPT,
-        false,
-        GENERAL_COOKIE_OPTIONS,
-      );
-
-      setCookie(
-        COOKIE_SETTINGS,
-        JSON.stringify({
-          analytics: false,
-          webvisor: false,
-        }),
-        GENERAL_COOKIE_OPTIONS,
-      );
+      rejectCookies();
     }
-
-    setIsBannerVisible(false);
   }
 }
