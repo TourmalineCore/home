@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 
 import clsx from 'clsx';
-import { getCookie, hasCookie, setCookie } from 'cookies-next';
+import { getCookie, hasCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
 import { Modal } from '../Modal/Modal';
 import { useDeviceSize } from '../../common/hooks';
-import { COOKIE_ACCEPT, COOKIE_SETTINGS, GENERAL_COOKIE_OPTIONS } from '../../common/constants/cookie';
-import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
+import { COOKIE_SETTINGS } from '../../common/constants/cookie';
 import { useCookieContext } from '../../common/hooks/useCookieContext';
 
 type CookieSettings = {
@@ -41,8 +40,9 @@ export function CookieSettingsModal({
 
   const {
     isSettingsModalOpen,
-    setIsBannerVisible,
     setIsSettingsModalOpen,
+    acceptCookies,
+    rejectCookies,
   } = useCookieContext();
 
   const isModalOpen = isComponentPage || isSettingsModalOpen;
@@ -169,15 +169,9 @@ export function CookieSettingsModal({
     }
   }
 
-  function handleSaveSettings() {
+  async function handleSaveSettings() {
     if (!isComponentPage) {
       const hasCookieSettings = hasCookie(COOKIE_SETTINGS);
-
-      setCookie(
-        COOKIE_SETTINGS,
-        JSON.stringify(cookieSettings),
-        GENERAL_COOKIE_OPTIONS,
-      );
 
       const {
         analytics,
@@ -186,16 +180,13 @@ export function CookieSettingsModal({
 
       const isCookieAccept = analytics || webvisor;
 
-      setCookie(
-        COOKIE_ACCEPT,
-        isCookieAccept,
-        GENERAL_COOKIE_OPTIONS,
-      );
-
       if (isCookieAccept) {
-        loadYandexMetrika({
+        await acceptCookies({
+          analytics,
           webvisor,
         });
+      } else {
+        rejectCookies();
       }
 
       if (hasCookieSettings) {
@@ -203,7 +194,6 @@ export function CookieSettingsModal({
       }
 
       setIsSettingsModalOpen(false);
-      setIsBannerVisible(false);
     }
   }
 

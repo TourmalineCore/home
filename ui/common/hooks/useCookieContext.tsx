@@ -7,6 +7,8 @@ export function useCookieContext() {
     setIsBannerVisible,
     isSettingsModalOpen,
     setIsSettingsModalOpen,
+    acceptCookies,
+    rejectCookies,
   } = useContext(CookieContext);
 
   return {
@@ -14,5 +16,7 @@ export function useCookieContext() {
     setIsBannerVisible,
     isSettingsModalOpen,
     setIsSettingsModalOpen,
+    acceptCookies,
+    rejectCookies,
   };
 }
