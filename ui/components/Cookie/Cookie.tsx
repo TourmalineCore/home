@@ -1,9 +1,12 @@
 import { useEffect } from 'react';
 
 import { getCookie } from 'cookies-next';
+import { InvisibleSmartCaptcha } from '@yandex/smart-captcha';
+import { useRouter } from 'next/router';
 import { COOKIE_ACCEPT } from '../../common/constants/cookie';
 import { useCookieContext } from '../../common/hooks/useCookieContext';
 import { MarkdownText } from '../MarkdownText/MarkdownText';
+import { useSmartCaptcha } from '../../common/hooks/useSmartCaptcha';
 
 // Google metrics are temporarily disabled
 // const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ``;
@@ -22,12 +25,29 @@ export function Cookie({
   isComponentPage?: boolean;
 }) {
   const {
+    locale,
+  } = useRouter();
+
+  const {
     isBannerVisible,
     setIsBannerVisible,
     setIsSettingsModalOpen,
     acceptCookies,
     rejectCookies,
   } = useCookieContext();
+
+  const {
+    isSmartCaptchaEnabled,
+    isSmartCaptchaVisible,
+    smartCaptchaKey,
+    showSmartCaptcha,
+    hideSmartCaptcha,
+    handleCaptchaSuccess,
+  } = useSmartCaptcha({
+    onSuccess: async () => {
+      await acceptCookie();
+    },
+  });
 
   const isCookieVisible = isComponentPage || isBannerVisible;
   // const [date, setDate] = useState<Date | null>(null);
@@ -82,12 +102,28 @@ export function Cookie({
         <button
           type="button"
           className="cookie__button"
-          onClick={acceptCookie}
+          onClick={async () => {
+            if (isSmartCaptchaEnabled) {
+              showSmartCaptcha();
+            } else {
+              await acceptCookie();
+            }
+          }}
           data-testid="accept-button"
         >
           {acceptButtonText}
         </button>
       </div>
+      {(isSmartCaptchaEnabled && !isComponentPage) && (
+        <InvisibleSmartCaptcha
+          key={smartCaptchaKey}
+          sitekey={process.env.NEXT_PUBLIC_SMARTCAPTCHA_CLIENT_KEY as string}
+          language={locale === `ru` ? `ru` : `en`}
+          onSuccess={handleCaptchaSuccess}
+          onChallengeHidden={hideSmartCaptcha}
+          visible={isSmartCaptchaVisible}
+        />
+      )}
     </aside>
   );
 

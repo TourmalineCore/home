@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { getCookie, hasCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
+import { InvisibleSmartCaptcha } from '@yandex/smart-captcha';
 import { Modal } from '../Modal/Modal';
 import { useDeviceSize } from '../../common/hooks';
 import { COOKIE_SETTINGS } from '../../common/constants/cookie';
 import { useCookieContext } from '../../common/hooks/useCookieContext';
+import { useSmartCaptcha } from '../../common/hooks/useSmartCaptcha';
 
 type CookieSettings = {
   analytics: boolean;
@@ -35,6 +37,7 @@ export function CookieSettingsModal({
   isComponentPage?: boolean;
 }) {
   const {
+    locale,
     reload,
   } = useRouter();
 
@@ -44,6 +47,19 @@ export function CookieSettingsModal({
     acceptCookies,
     rejectCookies,
   } = useCookieContext();
+
+  const {
+    isSmartCaptchaEnabled,
+    isSmartCaptchaVisible,
+    smartCaptchaKey,
+    showSmartCaptcha,
+    hideSmartCaptcha,
+    handleCaptchaSuccess,
+  } = useSmartCaptcha({
+    onSuccess: async () => {
+      await handleSaveSettings();
+    },
+  });
 
   const isModalOpen = isComponentPage || isSettingsModalOpen;
 
@@ -138,13 +154,29 @@ export function CookieSettingsModal({
           <button
             type="button"
             className="cookie-settings-modal__button"
-            onClick={handleSaveSettings}
+            onClick={async () => {
+              if (isSmartCaptchaEnabled) {
+                showSmartCaptcha();
+              } else {
+                await handleSaveSettings();
+              }
+            }}
             data-testid="save-cookie-settings-button"
           >
             {buttonText}
           </button>
         </div>
       </Modal>
+      {(isSmartCaptchaEnabled && !isComponentPage) && (
+        <InvisibleSmartCaptcha
+          key={smartCaptchaKey}
+          sitekey={process.env.NEXT_PUBLIC_SMARTCAPTCHA_CLIENT_KEY as string}
+          language={locale === `ru` ? `ru` : `en`}
+          onSuccess={handleCaptchaSuccess}
+          onChallengeHidden={hideSmartCaptcha}
+          visible={isSmartCaptchaVisible}
+        />
+      )}
     </>
   );
 
