@@ -5,6 +5,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import {
   COOKIE_ACCEPT,
   GENERAL_COOKIE_OPTIONS,
@@ -97,7 +98,7 @@ export function CookieProvider({
       let consentId = localStorage.getItem(`consentId`);
 
       if (!consentId) {
-        consentId = crypto.randomUUID();
+        consentId = uuidv4();
         localStorage.setItem(`consentId`, consentId);
       }
 
