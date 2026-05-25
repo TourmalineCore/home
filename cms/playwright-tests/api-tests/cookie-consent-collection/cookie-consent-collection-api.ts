@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { HttpStatusCode } from "../../enums";
 import { ApiTestFixtures, expect } from "../../api-test-fixtures";
 import { API_SMOKE_NAME_PREFIX } from "../../constants";
@@ -52,7 +51,7 @@ export async function cleanupCookieConsent({
         method: `delete`,
       });
 
-      await expect(response.status, `Cookie consent should be deleted with status 204`)
+      await expect(response.status(), `Cookie consent should be deleted with status 204`)
         .toEqual(204);
     });
   } catch (error: any) {
