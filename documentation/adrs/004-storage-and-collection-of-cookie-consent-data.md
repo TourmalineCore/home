@@ -7,7 +7,7 @@ Accepted (2026-05-25)
 It is necessary to collect and store data about cookie consent according to GDPR.
 
 ## Decision
-Store consent data in a database (Postgres) inside an existing database for the Stapi CMS, and use the CMS interface to manage consent records.
+Store consent data in a database (Postgres) inside an existing database for the Strapi CMS, and use the CMS interface to manage consent records.
 
 ### Storage schema (table `cookie_consents`)
 
