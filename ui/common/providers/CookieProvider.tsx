@@ -96,10 +96,6 @@ export function CookieProvider({
         localStorage.setItem(`consentId`, consentId);
       }
 
-      loadYandexMetrika({
-        webvisor,
-      });
-
       const response = await fetch(`/api/save-cookie-consent`, {
         method: `POST`,
         headers: {
@@ -117,20 +113,20 @@ export function CookieProvider({
       });
 
       if (response.status === 200) {
-        setCookies({
+        setCookiesAndLoadYandexMetrika({
           analytics,
           webvisor,
         });
       }
     } else {
-      setCookies({
+      setCookiesAndLoadYandexMetrika({
         analytics,
         webvisor,
       });
     }
   }
 
-  function setCookies({
+  function setCookiesAndLoadYandexMetrika({
     analytics,
     webvisor,
   }: {
@@ -150,6 +146,10 @@ export function CookieProvider({
       }),
       GENERAL_COOKIE_OPTIONS,
     );
+
+    loadYandexMetrika({
+      webvisor,
+    });
 
     setIsBannerVisible(false);
   }
