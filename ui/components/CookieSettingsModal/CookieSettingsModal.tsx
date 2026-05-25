@@ -54,12 +54,8 @@ export function CookieSettingsModal({
     smartCaptchaKey,
     showSmartCaptcha,
     hideSmartCaptcha,
-    handleCaptchaSuccess,
-  } = useSmartCaptcha({
-    onSuccess: async () => {
-      await handleSaveSettings();
-    },
-  });
+    resetSmartCaptcha,
+  } = useSmartCaptcha();
 
   const isModalOpen = isComponentPage || isSettingsModalOpen;
 
@@ -172,7 +168,11 @@ export function CookieSettingsModal({
           key={smartCaptchaKey}
           sitekey={process.env.NEXT_PUBLIC_SMARTCAPTCHA_CLIENT_KEY as string}
           language={locale === `ru` ? `ru` : `en`}
-          onSuccess={handleCaptchaSuccess}
+          onSuccess={async (token) => {
+            await handleSaveSettings({
+              token,
+            });
+          }}
           onChallengeHidden={hideSmartCaptcha}
           visible={isSmartCaptchaVisible}
         />
@@ -201,7 +201,11 @@ export function CookieSettingsModal({
     }
   }
 
-  async function handleSaveSettings() {
+  async function handleSaveSettings({
+    token = ``,
+  }: {
+    token?: string;
+  } = {}) {
     if (!isComponentPage) {
       const hasCookieSettings = hasCookie(COOKIE_SETTINGS);
 
@@ -216,16 +220,19 @@ export function CookieSettingsModal({
         await acceptCookies({
           analytics,
           webvisor,
+          token,
         });
+
+        resetSmartCaptcha();
       } else {
         rejectCookies();
       }
 
+      setIsSettingsModalOpen(false);
+
       if (hasCookieSettings) {
         reload();
       }
-
-      setIsSettingsModalOpen(false);
     }
   }
 

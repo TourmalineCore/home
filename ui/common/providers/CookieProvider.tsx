@@ -22,10 +22,12 @@ type CookieContextType = {
   acceptCookies: ({
     analytics,
     webvisor,
+    token,
   }: {
     analytics: boolean;
     webvisor: boolean;
-  }) => void;
+    token: string;
+  }) => Promise<void>;
   rejectCookies: () => void;
 };
 
@@ -34,7 +36,7 @@ export const CookieContext = createContext<CookieContextType>({
   setIsBannerVisible: () => {},
   isSettingsModalOpen: false,
   setIsSettingsModalOpen: () => {},
-  acceptCookies: () => {},
+  acceptCookies: async () => {},
   rejectCookies: () => {},
 });
 
@@ -54,13 +56,18 @@ export function CookieProvider({
     acceptCookies: async ({
       analytics,
       webvisor,
+      token,
     }: {
       analytics: boolean;
       webvisor: boolean;
-    }) => handleAcceptCookies({
-      analytics,
-      webvisor,
-    }),
+      token: string;
+    }) => {
+      await handleAcceptCookies({
+        analytics,
+        webvisor,
+        token,
+      });
+    },
     rejectCookies: () => handleRejectCookies(),
   }), [isBannerVisible, isSettingsModalOpen]);
 
@@ -73,25 +80,12 @@ export function CookieProvider({
   async function handleAcceptCookies({
     analytics,
     webvisor,
+    token,
   }: {
     analytics: boolean;
     webvisor: boolean;
+    token: string;
   }) {
-    setCookie(
-      COOKIE_ACCEPT,
-      true,
-      GENERAL_COOKIE_OPTIONS,
-    );
-
-    setCookie(
-      COOKIE_SETTINGS,
-      JSON.stringify({
-        analytics,
-        webvisor,
-      }),
-      GENERAL_COOKIE_OPTIONS,
-    );
-
     if (IS_METRICS_ENABLED) {
       // window.gtag(`js`, date);
       // window.gtag(`config`, googleId);
@@ -106,7 +100,7 @@ export function CookieProvider({
         webvisor,
       });
 
-      await fetch(`/api/save-cookie-consent`, {
+      const response = await fetch(`/api/save-cookie-consent`, {
         method: `POST`,
         headers: {
           'Content-Type': `application/json`,
@@ -118,9 +112,44 @@ export function CookieProvider({
             analytics,
             webvisor,
           },
+          token,
         }),
       });
+
+      if (response.status === 200) {
+        setCookies({
+          analytics,
+          webvisor,
+        });
+      }
+    } else {
+      setCookies({
+        analytics,
+        webvisor,
+      });
     }
+  }
+
+  function setCookies({
+    analytics,
+    webvisor,
+  }: {
+    analytics: boolean;
+    webvisor: boolean;
+  }) {
+    setCookie(
+      COOKIE_ACCEPT,
+      true,
+      GENERAL_COOKIE_OPTIONS,
+    );
+    setCookie(
+      COOKIE_SETTINGS,
+      JSON.stringify({
+        analytics,
+        webvisor,
+      }),
+      GENERAL_COOKIE_OPTIONS,
+    );
 
     setIsBannerVisible(false);
   }

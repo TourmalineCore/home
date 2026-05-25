@@ -1,25 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { RateLimiterMemory } from 'rate-limiter-flexible';
 import { cmsFetch } from '../../services/cms/api/http-client';
-
-const rateLimiter = new RateLimiterMemory({
-  points: 3, // number of allowed requests
-  duration: 30, // 3 requests in 30 seconds,
-  blockDuration: 300, // blocking time 300 seconds (5 minutes)
-});
-
-function getClientIp(req: NextApiRequest): string {
-  const forwarded = req.headers[`x-forwarded-for`];
-  if (forwarded && typeof forwarded === `string`) {
-    return forwarded.split(`,`)[0];
-  }
-  return req.socket.remoteAddress || `unknown`;
-}
 
 // It is needed in order to save cookie consent to Strapi.
 export default async function saveCookieConsent(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== `POST`) {
-    res.status(405)
+    return res.status(405)
       .json({
         error: `Method not allowed`,
       });
@@ -29,22 +14,27 @@ export default async function saveCookieConsent(req: NextApiRequest, res: NextAp
     consentId,
     consentVersion,
     categories,
+    token,
   } = req.body;
 
-  const clientIp = getClientIp(req);
+  const formData = new URLSearchParams();
+  formData.append(`secret`, process.env.SMARTCAPTCHA_SERVER_KEY as string);
+  formData.append(`token`, token);
 
-  // eslint-disable-next-line no-console
-  console.log(clientIp);
-  // Check if the limit of requests from one IP has been exceeded, otherwise block the request.
-  try {
-    await rateLimiter.consume(clientIp);
-  } catch (rateLimitError) {
-    const retryAfter = Math.ceil((rateLimitError as any).msBeforeNext / 1000);
+  const response = await fetch(`https://smartcaptcha.yandexcloud.net/validate`, {
+    method: `POST`,
+    headers: {
+      'Content-Type': `application/x-www-form-urlencoded`,
+    },
+    body: formData,
+  });
 
-    res.status(429)
+  const responseData = await response.json();
+
+  if (responseData.status !== `ok`) {
+    return res.status(400)
       .json({
-        error: `Too many requests`,
-        retryAfter,
+        error: `Invalid captcha token`,
       });
   }
 
@@ -60,12 +50,12 @@ export default async function saveCookieConsent(req: NextApiRequest, res: NextAp
       }),
     });
 
-    res.status(200)
+    return res.status(200)
       .json({
         success: true,
       });
   } catch (error) {
-    res.status(500)
+    return res.status(500)
       .json({
         error: `Internal server error`,
       });

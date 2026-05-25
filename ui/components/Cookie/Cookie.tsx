@@ -42,12 +42,8 @@ export function Cookie({
     smartCaptchaKey,
     showSmartCaptcha,
     hideSmartCaptcha,
-    handleCaptchaSuccess,
-  } = useSmartCaptcha({
-    onSuccess: async () => {
-      await acceptCookie();
-    },
-  });
+    resetSmartCaptcha,
+  } = useSmartCaptcha();
 
   const isCookieVisible = isComponentPage || isBannerVisible;
   // const [date, setDate] = useState<Date | null>(null);
@@ -94,7 +90,7 @@ export function Cookie({
         <button
           type="button"
           className="cookie__button"
-          onClick={rejectCookie}
+          onClick={handleRejectCookie}
           data-testid="reject-button"
         >
           {rejectButtonText}
@@ -106,7 +102,7 @@ export function Cookie({
             if (isSmartCaptchaEnabled) {
               showSmartCaptcha();
             } else {
-              await acceptCookie();
+              await handleAcceptCookie();
             }
           }}
           data-testid="accept-button"
@@ -119,7 +115,11 @@ export function Cookie({
           key={smartCaptchaKey}
           sitekey={process.env.NEXT_PUBLIC_SMARTCAPTCHA_CLIENT_KEY as string}
           language={locale === `ru` ? `ru` : `en`}
-          onSuccess={handleCaptchaSuccess}
+          onSuccess={async (token) => {
+            await handleAcceptCookie({
+              token,
+            });
+          }}
           onChallengeHidden={hideSmartCaptcha}
           visible={isSmartCaptchaVisible}
         />
@@ -127,16 +127,23 @@ export function Cookie({
     </aside>
   );
 
-  async function acceptCookie() {
+  async function handleAcceptCookie({
+    token = ``,
+  }: {
+    token?: string;
+  } = {}) {
     if (!isComponentPage) {
       await acceptCookies({
         analytics: true,
         webvisor: true,
+        token,
       });
+
+      resetSmartCaptcha();
     }
   }
 
-  function rejectCookie() {
+  function handleRejectCookie() {
     if (!isComponentPage) {
       rejectCookies();
     }
