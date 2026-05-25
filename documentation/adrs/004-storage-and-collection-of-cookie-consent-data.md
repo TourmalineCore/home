@@ -1,7 +1,7 @@
 # 004: Storage and collection of cookie consent data
 
 ## Status
-Proposed
+Accepted (2026-05-25)
 
 ## Context
 It is necessary to collect and store data about cookie consent according to GDPR.
@@ -13,7 +13,7 @@ Store consent data in a database (Postgres) inside an existing database for the 
 
 | Field | Type | Description |
 |------|-----|----------|
-| `consent_id` | UUID | User ID (generated on the client side). Needed in case we need to prove that the user actually gave consent to cookie processing. |
+| `consent_id` | UUID | User ID (generated on the client side). Needed in case we need to prove that the user actually gave consent to cookie processing.
 | `created_at` | timestamp | Time of consent (set automatically by the CMS when the record is created). |
 | `consent_version` | string | Version of the privacy policy that the user agreed to. |
 | `categories` | JSON | Allowed cookie categories (for example: `{"analytics": true, "webvisor": false}`). |
