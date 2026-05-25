@@ -1,86 +1,100 @@
-# 003: Storage and collection of cookie consent data
+# 004: Storage and collection of cookie consent data
 
 ## Status
 Proposed
 
 ## Context
-Необходимо собирать и хранить данные о согласии на обработку cookie в соответствии с GDPR.
+It is necessary to collect and store data about cookie consent according to GDPR.
 
 ## Decision
-Хранить данные о согласии в БД (postgres) в уже готовой базе данных для CMS Stapi. И использовать интерфейс CMS для управления записями о согласии.
+Store consent data in a database (Postgres) inside an existing database for the Stapi CMS, and use the CMS interface to manage consent records.
 
-### Схема хранения (таблица `cookie_consents`)
+### Storage schema (table `cookie_consents`)
 
-| Поле | Тип | Описание |
+| Field | Type | Description |
 |------|-----|----------|
-| `consent_id` | UUID | Идентификатор пользователя (генерируется на клиенте). Необходим на случай если пользователь обратиться с просьбой удалить данные о нем из БД. |
-| `created_at` | timestamp | Время согласия (устанавливается CMS автоматически при создании записи). |
-| `consent_version` | string | Версия Политики конфиденциальности на которую согласился пользователь |
-| `categories` | JSON | Разрешенные категории cookies (например: `{"analytics": true, "webvisor": false}`). |
+| `consent_id` | UUID | User ID (generated on the client side). Needed in case we need to prove that the user actually gave consent to cookie processing. |
+| `created_at` | timestamp | Time of consent (set automatically by the CMS when the record is created). |
+| `consent_version` | string | Version of the privacy policy that the user agreed to. |
+| `categories` | JSON | Allowed cookie categories (for example: `{"analytics": true, "webvisor": false}`). |
 
-### Генерация consent_id
-Идентификатор `consent_id` генерируется только после получения согласия пользователя на обработку cookie. Для его генерации используется специальная функция которая создаёт случайный UUID. Сгенерированный UUID сохраняется в localStorage браузера пользователя. Это обеспечивает бессрочное хранение идентификатора (если только пользователь не очистит localStorage вручную).
-
-### Процедура удаления по запросу пользователя
-1. Пользователь отправляет запрос на почту с просьбой удаления данных.
-2. Мы запрашиваем consentId из localStorage для идентификации пользователя.
-2. Если `consent_id` есть в localStorage → поиск и удаление в интерфейсе CMS.
-3. Если `consent_id` отсутствует:
-   - Пытаемся идентифицировать запись по времени.
-   - При невозможности идентификации — отказываем с объяснением причины.
+### Generating a consent_id
+The consent_id is generated only after getting the user's consent for cookie processing. A special function that creates a random UUID is used to generate it. The generated UUID is saved in the user's browser localStorage. This ensures the ID is stored forever (unless the user manually clears localStorage).
 
 ## Consequences:
 
 ### Advantages:
-- Соблюдение требований GDPR.
-- Использование готовой инфраструктуры.
-- Интерфейс CMS позволит легко искать и удалять запись при необходимости.
-- Маленький риск потери данных, т.к у нас есть рабочий механизм резервного копирования БД.
+- Following GDPR requirements.
+- Using existing infrastructure.
+- The CMS interface will make it easy to find and delete a record if needed.
+- Low risk of data loss, because we have a working database backup system.
 
 ### Disadvantages:
-- Невозможность 100% идентификации при потере `consent_id` из-за отсутствия других способов идентификации.
-- Зависимость от CMS.
+- No way to 100% identify the user if consent_id is lost, because there are no other ways to identify them.
+- Dependence on the CMS.
 
 ## Architectural solution
+Below is the sequence of interaction between the user, the captcha, and the API when saving consent for cookie processing.
 
-![alt text](./images/cookie-consent-diagram.png)
+```mermaid
+graph TD
+    A[User clicks Accept cookie button] --> B[Yandex SmartCaptcha Check]
+    B -->|Success| C[Generate one-time token]
+    B -->|Fail| D[It's a robot]
+    C -->|Token| E[Next.js API: /api/save-cookie-consent]
+    E -->|Token| F[Yandex API: /api/validate-captcha-token]
+    F -->|Valid| G[Strapi: /api/cookie-consents]
+    F -->|Invalid| H[Invalid captcha token]
+    G --> I[(Database)]
+    I --> J[Consent saved]
+    H --> K[Error response]
+    D --> K
+```
 
-1. **Client (Next.js)** — собирает согласие, генерирует UUID `consent_id`.
-2. **API (Next.js)** — `/api/save-cookie-consent` эндпоинт для секретного вызова API CMS, вызывается только после согласия пользователя на обработку cookie.
-3. **CMS (Stapi)** — коллекция `cookie_consents` с автоматическими CRUD-эндпоинтами, записывает данные в БД.
+### SmartCaptcha
+To protect against automated threats (including DDoS, bot attacks, mass fake consents, and request forgery), SmartCaptcha with two-level protection has been added:
 
-## Обеспечение безопасности публичного эндпоинта /api/save-cookie-consent
-Публичный эндпоинт /api/save-cookie-consent является самым уязвимым местом, так как доступен без аутентификации, нам необходимо обеспечить его безопасность от массированных автоматизированных угроз, иначе есть риск, что в базу запишется большое количество фейковых согласий на куки. 
+- **On the client side** — an invisible captcha that analyzes suspicious activity and, if something looks suspicious, gives a task to prove the user is human. It usually does not affect normal users.
+- **On the server side** — token validation through the Yandex API.
 
-### Принятые меры безопасности
+This architecture completely stops fake requests sent through `curl`, `Postman`, or any other tools for automating HTTP requests. Even if an attacker intercepts the token, it is one-time only and cannot be used again.
 
-#### 1. SmartCaptcha
-Для защиты от автоматизированных угроз (включая DDoS, бот-атаки и массовые фейковые согласия) на клиентской стороне внедрена SmartCaptcha. Она работает в невидимом режиме, поэтому это не окажет негативное влияние на обычных пользователей.
-
-TODO: Подумать над защитой от postman.
-
-
-#### Другие рассмотреные методы:
-1. x-api-key - не подходит, т.к эндпоинт next.js и можно будет просто вызывать его, а он уже будет отправлять запрос с api ключом в strapi. Защиты в данном случае нет ни какой.
-
-2. Rate limit - частично помогает защищаться от большого количества запросов, но полностью от DDoS это не защитит: можно выставить чтобы 1 атака шла в час или сколько мы позволим в лимитах. Кейс с конференцией не покрывает.
-
-3. CSRF токен - направлен не на защиту от DDoS, в нашем случае CSRF атаки бесполезны у нас нет авторизации и из куки нечего красть. Усложняет выполнения запросов с postman, нужно сначала зайти на сайт, вручную скопировать куки, сделать запрос на сохранение и из заголовка скопировать токен.
+Using SmartCaptcha does not violate GDPR requirements even though it starts collecting personal data without the user's consent. This is because we have a legal right to protect the site from malicious attacks. However, we must add a notice about this.
 
 ## Alternatives
 
-## Хранение данных в JSON файле
-Вместо хранения данных в БД, хранить их в локальном JSON файле и дописывать данные туда.
+## Protection methods considered
+Before choosing SmartCaptcha, the following protection methods were considered:
+
+### 1. x-api-key
+Sending a secret API key in the header of each request.
+
+**Why it is not suitable:** The Next.js endpoint is public. Even if the key is stored in secrets, it still has to be included in the request header to Strapi. In this case, an attacker can still call the public Next.js endpoint, which will automatically add the secret key to the header. There is no real protection here."
+
+### 2. Rate Limit
+Limiting the number of requests from one IP or session within a certain period of time.
+
+**Why it is not suitable:**
+- Only protects against mass identical requests, but not against a distributed DDoS (attack from thousands of IP addresses)
+- Does not solve the case of a conference or presentation, where hundreds of real users open the site at the same time from one IP (corporate Wi-Fi, organizers' office)
+- An attacker can bypass the limit by simply slowing down requests to the allowed threshold
+
+### 3. CSRF-token
+Generating a unique token for each session, which is checked when the form is submitted.
+
+**Why it is not suitable:**
+- CSRF attacks are aimed at performing actions on behalf of an authorized user. We have no authorization or sessions, so there is nothing to steal from cookies.
+- Even if we add it, it will only slightly make it harder to send requests through Postman (an attacker would first need to visit the site, then manually copy cookies and the CSRF token from the header).
+- Does not protect against DDoS or bot attacks.
+
+## Storing data in a JSON file
+Instead of storing data in a database, store it in a local JSON file and append the data there.
 
 Advantages:
-- Нет зависимости от CMS и БД.
+- No dependency on the CMS or database.
 
 Disadvantages:
-- Отсутствие удобного интерфейса.
-- Риск потери данных больше чем в БД.
-- Необходимо настраивать механизм резервного копирования.
-- Необходимо продумывать и настраивать запись данных в удобочитаемом формате.
-
-
-
-
+- No convenient interface.
+- Higher risk of data loss than with a database.
+- Need to set up a backup mechanism.
+- Need to design and configure data storage in a readable format.
