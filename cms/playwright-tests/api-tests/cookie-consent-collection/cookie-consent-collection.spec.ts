@@ -48,8 +48,6 @@ async function checkCookieConsentResponseTest({
   const cookieConsent = await getCookieConsentData({
     apiRequest
   });
-
-  console.log(cookieConsent)
   
   await expect(() => {
     CookieConsentSchema.parse(cookieConsent)
