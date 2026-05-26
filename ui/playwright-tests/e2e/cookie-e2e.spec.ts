@@ -12,6 +12,7 @@ test.describe(`Cookie`, () => {
   test.describe(`Integration with CMS`, integrationWithCMSTest);
   test.describe(`Accept cookie test`, acceptCookieTest);
   test.describe(`Reject cookie test`, rejectCookieTest);
+  test.describe(`Reject cookie after accepting`, rejectAfterAcceptTest);
 });
 
 async function integrationWithCMSTest() {
@@ -138,10 +139,34 @@ async function acceptCookieTest() {
         webvisor: true,
       });
 
+    const consentId = await getConsentIdFromLocalStorage(page);
+
+    await expect(consentId)
+      .not
+      .toBeNull();
+
     const metricTag = getYandexMetricTag(page);
 
     await expect(metricTag)
       .toHaveCount(1);
+
+    const cms = createCmsActions(page);
+
+    await test.step(
+      `Check cookie consentId in CMS`,
+      () => page.goto(process.env.CMS_URL as string),
+    );
+
+    await cms.authorize();
+
+    await cms.navigateToContentManager();
+
+    await cms.skipTutorial();
+
+    await cms.navigateToContentTypeByName(`Cookie consent`);
+
+    await expect(page.getByText(consentId!))
+      .toBeVisible();
   });
 }
 
@@ -170,6 +195,11 @@ async function rejectCookieTest() {
       .getByTestId(`cookie`))
       .toBeHidden();
 
+    const consentId = await getConsentIdFromLocalStorage(page);
+
+    await expect(consentId)
+      .toBeNull();
+
     const cookieAccept = await getCookieAcceptFromCookie(page);
 
     const cookieSettings = await getCookieSettingsFromCookie(page);
@@ -187,6 +217,72 @@ async function rejectCookieTest() {
 
     await expect(metricTag)
       .toHaveCount(0);
+  });
+}
+
+async function rejectAfterAcceptTest() {
+  test(`
+    GIVEN no cookie consent
+    WHEN the user accepts cookies
+    AND then rejects cookies
+    THEN reject should write to Strapi
+    `, async ({
+    goto,
+    page,
+  }: {
+    goto: CustomTestFixtures['goto'];
+    setViewportSize: CustomTestFixtures['setViewportSize'];
+    page: Page;
+  }) => {
+    await goto(process.env.FRONTEND_URL as string);
+
+    await page
+      .getByTestId(`accept-button`)
+      .click();
+
+    await expect(page
+      .getByTestId(`cookie`))
+      .toBeHidden();
+
+    const consentId = await getConsentIdFromLocalStorage(page);
+
+    await expect(consentId)
+      .not
+      .toBeNull();
+
+    await page
+      .getByTestId(`footer-cookie-settings-button`)
+      .click();
+
+    await page
+      .getByTestId(`checkbox-analytics`)
+      .click();
+
+    await page
+      .getByTestId(`save-cookie-settings-button`)
+      .click();
+
+    await page.reload({
+      waitUntil: `networkidle`,
+    });
+
+    await test.step(
+      `Check cookie consentId in CMS`,
+      () => page.goto(process.env.CMS_URL as string),
+    );
+
+    const cms = createCmsActions(page);
+
+    await cms.authorize();
+
+    await cms.navigateToContentManager();
+
+    await cms.skipTutorial();
+
+    await cms.navigateToContentTypeByName(`Cookie consent`);
+
+    await expect(page.getByText(consentId!))
+      .toHaveCount(2);
   });
 }
 
@@ -212,6 +308,10 @@ async function getCookieSettingsFromCookie(page: Page) {
   return JSON.parse(decodeCookieSettings);
 }
 
+async function getConsentIdFromLocalStorage(page: Page) {
+  return page.evaluate(() => localStorage.getItem(`consentId`));
+}
+
 function getYandexMetricTag(page: Page) {
   return page.locator(`script[src="https://mc.yandex.ru/metrika/tag.js"]`);
 }
@@ -225,6 +325,11 @@ async function checkNoConsentState(page: Page) {
 
   await expect(metricTag)
     .toHaveCount(0);
+
+  const consentId = await getConsentIdFromLocalStorage(page);
+
+  await expect(consentId)
+    .toBeNull();
 }
 
 async function cleanupCookieApi() {

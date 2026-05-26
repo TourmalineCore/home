@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 
 import clsx from 'clsx';
-import { getCookie, hasCookie, setCookie } from 'cookies-next';
+import { getCookie, hasCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
+import { InvisibleSmartCaptcha } from '@yandex/smart-captcha';
 import { Modal } from '../Modal/Modal';
 import { useDeviceSize } from '../../common/hooks';
-import { COOKIE_ACCEPT, COOKIE_SETTINGS, GENERAL_COOKIE_OPTIONS } from '../../common/constants/cookie';
-import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
+import { COOKIE_SETTINGS, POLICY_VERSION } from '../../common/constants/cookie';
 import { useCookieContext } from '../../common/hooks/useCookieContext';
+import { useSmartCaptcha } from '../../common/hooks/useSmartCaptcha';
 
 type CookieSettings = {
   analytics: boolean;
@@ -36,14 +37,25 @@ export function CookieSettingsModal({
   isComponentPage?: boolean;
 }) {
   const {
+    locale,
     reload,
   } = useRouter();
 
   const {
     isSettingsModalOpen,
-    setIsBannerVisible,
     setIsSettingsModalOpen,
+    acceptCookies,
+    rejectCookies,
   } = useCookieContext();
+
+  const {
+    isSmartCaptchaEnabled,
+    isSmartCaptchaVisible,
+    smartCaptchaKey,
+    showSmartCaptcha,
+    hideSmartCaptcha,
+    resetSmartCaptcha,
+  } = useSmartCaptcha();
 
   const isModalOpen = isComponentPage || isSettingsModalOpen;
 
@@ -138,13 +150,33 @@ export function CookieSettingsModal({
           <button
             type="button"
             className="cookie-settings-modal__button"
-            onClick={handleSaveSettings}
+            onClick={async () => {
+              if (isSmartCaptchaEnabled) {
+                showSmartCaptcha();
+              } else {
+                await handleSaveSettings();
+              }
+            }}
             data-testid="save-cookie-settings-button"
           >
             {buttonText}
           </button>
         </div>
       </Modal>
+      {(isSmartCaptchaEnabled && !isComponentPage) && (
+        <InvisibleSmartCaptcha
+          key={smartCaptchaKey}
+          sitekey={process.env.NEXT_PUBLIC_SMARTCAPTCHA_CLIENT_KEY as string}
+          language={locale === `ru` ? `ru` : `en`}
+          onSuccess={async (token) => {
+            await handleSaveSettings({
+              token,
+            });
+          }}
+          onChallengeHidden={hideSmartCaptcha}
+          visible={isSmartCaptchaVisible}
+        />
+      )}
     </>
   );
 
@@ -169,15 +201,13 @@ export function CookieSettingsModal({
     }
   }
 
-  function handleSaveSettings() {
+  async function handleSaveSettings({
+    token = ``,
+  }: {
+    token?: string;
+  } = {}) {
     if (!isComponentPage) {
       const hasCookieSettings = hasCookie(COOKIE_SETTINGS);
-
-      setCookie(
-        COOKIE_SETTINGS,
-        JSON.stringify(cookieSettings),
-        GENERAL_COOKIE_OPTIONS,
-      );
 
       const {
         analytics,
@@ -186,24 +216,44 @@ export function CookieSettingsModal({
 
       const isCookieAccept = analytics || webvisor;
 
-      setCookie(
-        COOKIE_ACCEPT,
-        isCookieAccept,
-        GENERAL_COOKIE_OPTIONS,
-      );
-
       if (isCookieAccept) {
-        loadYandexMetrika({
+        await acceptCookies({
+          analytics,
           webvisor,
+          token,
         });
+
+        resetSmartCaptcha();
+      } else {
+        if (hasCookieSettings) {
+          const consentId = localStorage.getItem(`consentId`);
+
+          if (consentId) {
+            await fetch(`/api/save-cookie-consent`, {
+              method: `POST`,
+              headers: {
+                'Content-Type': `application/json`,
+              },
+              body: JSON.stringify({
+                consentId,
+                consentVersion: POLICY_VERSION,
+                categories: {
+                  analytics: false,
+                  webvisor: false,
+                },
+                token,
+              }),
+            });
+          }
+        }
+        rejectCookies();
       }
+
+      setIsSettingsModalOpen(false);
 
       if (hasCookieSettings) {
         reload();
       }
-
-      setIsSettingsModalOpen(false);
-      setIsBannerVisible(false);
     }
   }
 

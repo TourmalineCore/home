@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 
-import { getCookie, setCookie } from 'cookies-next';
-import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
-import { COOKIE_ACCEPT, COOKIE_SETTINGS, GENERAL_COOKIE_OPTIONS } from '../../common/constants/cookie';
+import { getCookie } from 'cookies-next';
+import { InvisibleSmartCaptcha } from '@yandex/smart-captcha';
+import { useRouter } from 'next/router';
+import { COOKIE_ACCEPT } from '../../common/constants/cookie';
 import { useCookieContext } from '../../common/hooks/useCookieContext';
 import { MarkdownText } from '../MarkdownText/MarkdownText';
+import { useSmartCaptcha } from '../../common/hooks/useSmartCaptcha';
 
 // Google metrics are temporarily disabled
 // const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ``;
@@ -23,14 +25,28 @@ export function Cookie({
   isComponentPage?: boolean;
 }) {
   const {
+    locale,
+  } = useRouter();
+
+  const {
     isBannerVisible,
     setIsBannerVisible,
     setIsSettingsModalOpen,
+    acceptCookies,
+    rejectCookies,
   } = useCookieContext();
+
+  const {
+    isSmartCaptchaEnabled,
+    isSmartCaptchaVisible,
+    smartCaptchaKey,
+    showSmartCaptcha,
+    hideSmartCaptcha,
+    resetSmartCaptcha,
+  } = useSmartCaptcha();
 
   const isCookieVisible = isComponentPage || isBannerVisible;
   // const [date, setDate] = useState<Date | null>(null);
-  const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
 
   useEffect(() => {
     if (!isComponentPage) {
@@ -74,7 +90,7 @@ export function Cookie({
         <button
           type="button"
           className="cookie__button"
-          onClick={rejectCookie}
+          onClick={handleRejectCookie}
           data-testid="reject-button"
         >
           {rejectButtonText}
@@ -82,61 +98,54 @@ export function Cookie({
         <button
           type="button"
           className="cookie__button"
-          onClick={acceptCookie}
+          onClick={async () => {
+            if (isSmartCaptchaEnabled) {
+              showSmartCaptcha();
+            } else {
+              await handleAcceptCookie();
+            }
+          }}
           data-testid="accept-button"
         >
           {acceptButtonText}
         </button>
       </div>
+      {(isSmartCaptchaEnabled && !isComponentPage) && (
+        <InvisibleSmartCaptcha
+          key={smartCaptchaKey}
+          sitekey={process.env.NEXT_PUBLIC_SMARTCAPTCHA_CLIENT_KEY as string}
+          language={locale === `ru` ? `ru` : `en`}
+          onSuccess={async (token) => {
+            await handleAcceptCookie({
+              token,
+            });
+          }}
+          onChallengeHidden={hideSmartCaptcha}
+          visible={isSmartCaptchaVisible}
+        />
+      )}
     </aside>
   );
 
-  function acceptCookie() {
+  async function handleAcceptCookie({
+    token = ``,
+  }: {
+    token?: string;
+  } = {}) {
     if (!isComponentPage) {
-      setCookie(
-        COOKIE_ACCEPT,
-        true,
-        GENERAL_COOKIE_OPTIONS,
-      );
+      await acceptCookies({
+        analytics: true,
+        webvisor: true,
+        token,
+      });
 
-      setCookie(
-        COOKIE_SETTINGS,
-        JSON.stringify({
-          analytics: true,
-          webvisor: true,
-        }),
-        GENERAL_COOKIE_OPTIONS,
-      );
-
-      if (isMetricsEnabled) {
-        // window.gtag(`js`, date);
-        // window.gtag(`config`, googleId);
-        loadYandexMetrika({
-          webvisor: true,
-        });
-      }
-      setIsBannerVisible(false);
+      resetSmartCaptcha();
     }
   }
 
-  function rejectCookie() {
+  function handleRejectCookie() {
     if (!isComponentPage) {
-      setCookie(
-        COOKIE_ACCEPT,
-        false,
-        GENERAL_COOKIE_OPTIONS,
-      );
-
-      setCookie(
-        COOKIE_SETTINGS,
-        JSON.stringify({
-          analytics: false,
-          webvisor: false,
-        }),
-        GENERAL_COOKIE_OPTIONS,
-      );
+      rejectCookies();
     }
-
-    setIsBannerVisible(false);
   }
 }

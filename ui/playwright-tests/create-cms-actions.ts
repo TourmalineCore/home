@@ -20,6 +20,7 @@ export const createCmsActions = (page: Page) => ({
   navigateToContentTypeByName: async (name: string) => {
     await page.getByRole(`link`, {
       name,
+      exact: true,
     })
       .click();
   },
