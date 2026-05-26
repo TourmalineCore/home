@@ -12,6 +12,7 @@ test.describe(`Cookie`, () => {
   test.describe(`Integration with CMS`, integrationWithCMSTest);
   test.describe(`Accept cookie test`, acceptCookieTest);
   test.describe(`Reject cookie test`, rejectCookieTest);
+  test.describe(`Reject cookie after accepting`, rejectAfterAcceptTest);
 });
 
 async function integrationWithCMSTest() {
@@ -216,6 +217,72 @@ async function rejectCookieTest() {
 
     await expect(metricTag)
       .toHaveCount(0);
+  });
+}
+
+async function rejectAfterAcceptTest() {
+  test(`
+    GIVEN no cookie consent
+    WHEN the user accepts cookies
+    AND then rejects cookies
+    THEN reject should write to Strapi
+    `, async ({
+    goto,
+    page,
+  }: {
+    goto: CustomTestFixtures['goto'];
+    setViewportSize: CustomTestFixtures['setViewportSize'];
+    page: Page;
+  }) => {
+    await goto(process.env.FRONTEND_URL as string);
+
+    await page
+      .getByTestId(`accept-button`)
+      .click();
+
+    await expect(page
+      .getByTestId(`cookie`))
+      .toBeHidden();
+
+    const consentId = await getConsentIdFromLocalStorage(page);
+
+    await expect(consentId)
+      .not
+      .toBeNull();
+
+    await page
+      .getByTestId(`footer-cookie-settings-button`)
+      .click();
+
+    await page
+      .getByTestId(`checkbox-analytics`)
+      .click();
+
+    await page
+      .getByTestId(`save-cookie-settings-button`)
+      .click();
+
+    await page.reload({
+      waitUntil: `networkidle`,
+    });
+
+    await test.step(
+      `Check cookie consentId in CMS`,
+      () => page.goto(process.env.CMS_URL as string),
+    );
+
+    const cms = createCmsActions(page);
+
+    await cms.authorize();
+
+    await cms.navigateToContentManager();
+
+    await cms.skipTutorial();
+
+    await cms.navigateToContentTypeByName(`Cookie consent`);
+
+    await expect(page.getByText(consentId!))
+      .toHaveCount(2);
   });
 }
 

@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { InvisibleSmartCaptcha } from '@yandex/smart-captcha';
 import { Modal } from '../Modal/Modal';
 import { useDeviceSize } from '../../common/hooks';
-import { COOKIE_SETTINGS } from '../../common/constants/cookie';
+import { COOKIE_SETTINGS, POLICY_VERSION } from '../../common/constants/cookie';
 import { useCookieContext } from '../../common/hooks/useCookieContext';
 import { useSmartCaptcha } from '../../common/hooks/useSmartCaptcha';
 
@@ -225,6 +225,27 @@ export function CookieSettingsModal({
 
         resetSmartCaptcha();
       } else {
+        if (hasCookieSettings) {
+          const consentId = localStorage.getItem(`consentId`);
+
+          if (consentId) {
+            await fetch(`/api/save-cookie-consent`, {
+              method: `POST`,
+              headers: {
+                'Content-Type': `application/json`,
+              },
+              body: JSON.stringify({
+                consentId,
+                consentVersion: POLICY_VERSION,
+                categories: {
+                  analytics: false,
+                  webvisor: false,
+                },
+                token,
+              }),
+            });
+          }
+        }
         rejectCookies();
       }
 
