@@ -19,6 +19,178 @@ export interface Error {
   };
 }
 
+export interface CookieRequest {
+  data: {
+    bannerText: string;
+    analyticsText: string;
+    webvisorText: string;
+    privacyText: string;
+    locale?: string;
+    localizations?: (number | string)[];
+  };
+}
+
+export interface CookieListResponse {
+  data?: Cookie[];
+  meta?: {
+    pagination?: {
+      page?: number;
+      /** @min 25 */
+      pageSize?: number;
+      /** @max 1 */
+      pageCount?: number;
+      total?: number;
+    };
+  };
+}
+
+export interface Cookie {
+  id?: number;
+  documentId?: string;
+  bannerText: string;
+  analyticsText: string;
+  webvisorText: string;
+  privacyText: string;
+  /** @format date-time */
+  createdAt?: string;
+  /** @format date-time */
+  updatedAt?: string;
+  /** @format date-time */
+  publishedAt?: string;
+  createdBy?: {
+    id?: number;
+    documentId?: string;
+    firstname?: string;
+    lastname?: string;
+    username?: string;
+    /** @format email */
+    email?: string;
+    resetPasswordToken?: string;
+    registrationToken?: string;
+    isActive?: boolean;
+    roles?: {
+      id?: number;
+      documentId?: string;
+      name?: string;
+      code?: string;
+      description?: string;
+      users?: {
+        id?: number;
+        documentId?: string;
+      }[];
+      permissions?: {
+        id?: number;
+        documentId?: string;
+        action?: string;
+        actionParameters?: any;
+        subject?: string;
+        properties?: any;
+        conditions?: any;
+        role?: {
+          id?: number;
+          documentId?: string;
+        };
+        /** @format date-time */
+        createdAt?: string;
+        /** @format date-time */
+        updatedAt?: string;
+        /** @format date-time */
+        publishedAt?: string;
+        createdBy?: {
+          id?: number;
+          documentId?: string;
+        };
+        updatedBy?: {
+          id?: number;
+          documentId?: string;
+        };
+        locale?: string;
+        localizations?: {
+          id?: number;
+          documentId?: string;
+        }[];
+      }[];
+      /** @format date-time */
+      createdAt?: string;
+      /** @format date-time */
+      updatedAt?: string;
+      /** @format date-time */
+      publishedAt?: string;
+      createdBy?: {
+        id?: number;
+        documentId?: string;
+      };
+      updatedBy?: {
+        id?: number;
+        documentId?: string;
+      };
+      locale?: string;
+      localizations?: {
+        id?: number;
+        documentId?: string;
+      }[];
+    }[];
+    blocked?: boolean;
+    preferedLanguage?: string;
+    /** @format date-time */
+    createdAt?: string;
+    /** @format date-time */
+    updatedAt?: string;
+    /** @format date-time */
+    publishedAt?: string;
+    createdBy?: {
+      id?: number;
+      documentId?: string;
+    };
+    updatedBy?: {
+      id?: number;
+      documentId?: string;
+    };
+    locale?: string;
+    localizations?: {
+      id?: number;
+      documentId?: string;
+    }[];
+  };
+  updatedBy?: {
+    id?: number;
+    documentId?: string;
+  };
+  locale?: string;
+  localizations?: {
+    id?: number;
+    documentId?: string;
+    bannerText?: string;
+    analyticsText?: string;
+    webvisorText?: string;
+    privacyText?: string;
+    /** @format date-time */
+    createdAt?: string;
+    /** @format date-time */
+    updatedAt?: string;
+    /** @format date-time */
+    publishedAt?: string;
+    createdBy?: {
+      id?: number;
+      documentId?: string;
+    };
+    updatedBy?: {
+      id?: number;
+      documentId?: string;
+    };
+    locale?: string;
+    localizations?: {
+      id?: number;
+      documentId?: string;
+    }[];
+  }[];
+}
+
+export interface CookieResponse {
+  data?: Cookie;
+  meta?: object;
+}
+
 export interface HomepageRequest {
   data: {
     blocks: BaseNull &
@@ -987,16 +1159,16 @@ export interface Navigation {
     }[];
   }[];
   isMultiLevelNavigation: boolean;
-  blocks?: BaseNull1 &
+  blocks?: DiscriminatorNull1 &
     (
-      | BaseNull1ComponentMapping<"shared.three-column-grid", SharedThreeColumnGridComponent>
-      | BaseNull1ComponentMapping<"shared.single-image", SharedSingleImageComponent>
-      | BaseNull1ComponentMapping<"shared.signpost-multiple", SharedSignpostMultipleComponent>
-      | BaseNull1ComponentMapping<"shared.showcase-grid", SharedShowcaseGridComponent>
-      | BaseNull1ComponentMapping<"shared.hero", SharedHeroComponent>
-      | BaseNull1ComponentMapping<"shared.featured-cards-list", SharedFeaturedCardsListComponent>
-      | BaseNull1ComponentMapping<"shared.collage-with-title", SharedCollageWithTitleComponent>
-      | BaseNull1ComponentMapping<"shared.collage-with-link", SharedCollageWithLinkComponent>
+      | DiscriminatorNull1ComponentMapping<"shared.three-column-grid", SharedThreeColumnGridComponent>
+      | DiscriminatorNull1ComponentMapping<"shared.single-image", SharedSingleImageComponent>
+      | DiscriminatorNull1ComponentMapping<"shared.signpost-multiple", SharedSignpostMultipleComponent>
+      | DiscriminatorNull1ComponentMapping<"shared.showcase-grid", SharedShowcaseGridComponent>
+      | DiscriminatorNull1ComponentMapping<"shared.hero", SharedHeroComponent>
+      | DiscriminatorNull1ComponentMapping<"shared.featured-cards-list", SharedFeaturedCardsListComponent>
+      | DiscriminatorNull1ComponentMapping<"shared.collage-with-title", SharedCollageWithTitleComponent>
+      | DiscriminatorNull1ComponentMapping<"shared.collage-with-link", SharedCollageWithLinkComponent>
     );
   seo?: SharedSeoComponent;
   /** @format date-time */
@@ -1269,7 +1441,7 @@ type PolymorphNullComponentMapping<Key, Type> = {
   __component: Key;
 } & Type;
 
-type BaseNull1 = (
+type DiscriminatorNull1 = (
   | SharedThreeColumnGridComponent
   | SharedSingleImageComponent
   | SharedSignpostMultipleComponent
@@ -1280,6 +1452,6 @@ type BaseNull1 = (
   | SharedCollageWithLinkComponent
 )[];
 
-type BaseNull1ComponentMapping<Key, Type> = {
+type DiscriminatorNull1ComponentMapping<Key, Type> = {
   __component: Key;
 } & Type;

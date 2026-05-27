@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "cookie_consents",
+  "info": {
+    "singularName": "cookie-consent",
+    "pluralName": "cookie-consents",
+    "displayName": "Cookie consent"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "consentId": {
+      "type": "string",
+      "required": true
+    },
+    "consentVersion": {
+      "type": "string",
+      "required": true
+    },
+    "categories": {
+      "type": "json",
+      "required": true
+    }
+  }
+}

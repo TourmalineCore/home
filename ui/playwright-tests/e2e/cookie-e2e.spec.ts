@@ -1,4 +1,6 @@
 import { COOKIE_ACCEPT, COOKIE_SETTINGS } from "../../common/constants/cookie";
+import { cmsFetch } from "../../services/cms/api/http-client";
+import { createCmsActions } from "../create-cms-actions";
 import {
   CustomTestFixtures,
   expect,
@@ -7,10 +9,97 @@ import {
 } from "../custom-test";
 
 test.describe(`Cookie`, () => {
+  test.describe(`Integration with CMS`, integrationWithCMSTest);
   test.describe(`Accept cookie test`, acceptCookieTest);
   test.describe(`Reject cookie test`, rejectCookieTest);
-  test.describe(`Cookie settings modal reset tests`, cookieSettingsModalResetTests);
+  test.describe(`Reject cookie after accepting`, rejectAfterAcceptTest);
 });
+
+async function integrationWithCMSTest() {
+  test.beforeEach(async () => {
+    await cleanupCookieApi();
+  });
+
+  test.afterEach(async () => {
+    await cleanupCookieApi();
+  });
+
+  test(`
+    GIVEN an empty cookies data in CMS
+    WHEN filling and publishing cookie in CMS UI
+    SHOULD see filled cookie on frontend UI 
+  `, async ({
+    goto,
+    page,
+  }: {
+    goto: CustomTestFixtures['goto'];
+    page: Page;
+  }) => {
+    const bannerText = `Banner text`;
+    const analyticsText = `Analytics text`;
+    const webvisorText = `Webvisor text`;
+    const privacyText = `Privacy text`;
+
+    const cms = createCmsActions(page);
+
+    await page.goto(process.env.CMS_URL as string);
+
+    await test.step(`Authorize in CMS`, cms.authorize);
+
+    await test.step(`Fill and publish cookie`, fillAndPublishCookie);
+
+    await test.step(`Check cookie content on UI`, checkCookieOnUi);
+
+    async function fillAndPublishCookie() {
+      await cms.navigateToContentManager();
+
+      await cms.skipTutorial();
+
+      await cms.navigateToContentTypeByName(`Cookie`);
+
+      const richTextEditor = page.locator(`.CodeMirror`)
+        .first();
+      await richTextEditor.click();
+      await page.keyboard.type(bannerText);
+
+      await cms.fillTextareaByName({
+        name: `analyticsText`,
+        value: analyticsText,
+      });
+
+      await cms.fillTextareaByName({
+        name: `webvisorText`,
+        value: webvisorText,
+      });
+
+      await cms.fillTextareaByName({
+        name: `privacyText`,
+        value: privacyText,
+      });
+
+      await cms.publish();
+    }
+
+    async function checkCookieOnUi() {
+      await goto();
+
+      await expect(page.getByText(bannerText))
+        .toBeVisible();
+
+      await page.getByTestId(`cookie-settings-button`)
+        .click();
+
+      await expect(page.getByText(analyticsText))
+        .toBeVisible();
+
+      await expect(page.getByText(webvisorText))
+        .toBeVisible();
+
+      await expect(page.getByText(privacyText))
+        .toBeVisible();
+    }
+  });
+}
 
 async function acceptCookieTest() {
   test(`
@@ -50,10 +139,34 @@ async function acceptCookieTest() {
         webvisor: true,
       });
 
-    const metricTag = await getYandexMetricTag(page);
+    const consentId = await getConsentIdFromLocalStorage(page);
+
+    await expect(consentId)
+      .not
+      .toBeNull();
+
+    const metricTag = getYandexMetricTag(page);
 
     await expect(metricTag)
       .toHaveCount(1);
+
+    const cms = createCmsActions(page);
+
+    await test.step(
+      `Check cookie consentId in CMS`,
+      () => page.goto(process.env.CMS_URL as string),
+    );
+
+    await cms.authorize();
+
+    await cms.navigateToContentManager();
+
+    await cms.skipTutorial();
+
+    await cms.navigateToContentTypeByName(`Cookie consent`);
+
+    await expect(page.getByText(consentId!))
+      .toBeVisible();
   });
 }
 
@@ -82,6 +195,11 @@ async function rejectCookieTest() {
       .getByTestId(`cookie`))
       .toBeHidden();
 
+    const consentId = await getConsentIdFromLocalStorage(page);
+
+    await expect(consentId)
+      .toBeNull();
+
     const cookieAccept = await getCookieAcceptFromCookie(page);
 
     const cookieSettings = await getCookieSettingsFromCookie(page);
@@ -95,83 +213,76 @@ async function rejectCookieTest() {
         webvisor: false,
       });
 
-    const metricTag = await getYandexMetricTag(page);
+    const metricTag = getYandexMetricTag(page);
 
     await expect(metricTag)
       .toHaveCount(0);
   });
 }
 
-async function cookieSettingsModalResetTests() {
+async function rejectAfterAcceptTest() {
   test(`
-    GIVEN cookie settings modal is open
-    WHEN user toggles analytics checkbox using keyboard
-    AND closes modal without saving
-    THEN checkbox should reset to original state
+    GIVEN no cookie consent
+    WHEN the user accepts cookies
+    AND then rejects cookies
+    THEN reject should write to Strapi
     `, async ({
     goto,
     page,
   }: {
     goto: CustomTestFixtures['goto'];
+    setViewportSize: CustomTestFixtures['setViewportSize'];
     page: Page;
   }) => {
     await goto(process.env.FRONTEND_URL as string);
 
-    await page.getByTestId(`cookie-settings-button`)
+    await page
+      .getByTestId(`accept-button`)
       .click();
 
-    const analyticsCheckbox = page.getByTestId(`checkbox-analytics`);
+    await expect(page
+      .getByTestId(`cookie`))
+      .toBeHidden();
 
-    await analyticsCheckbox.focus();
-    await page.keyboard.press(`Space`);
+    const consentId = await getConsentIdFromLocalStorage(page);
 
-    await expect(analyticsCheckbox)
-      .toBeChecked();
-
-    const closeButton = page.getByTestId(`close-modal-button`);
-    await closeButton.click();
-
-    await page.getByTestId(`cookie-settings-button`)
-      .click();
-
-    await expect(analyticsCheckbox)
+    await expect(consentId)
       .not
-      .toBeChecked();
-  });
+      .toBeNull();
 
-  test(`
-    GIVEN cookie settings modal is open
-    WHEN user toggles checkbox using mouse
-    AND closes modal without saving
-    THEN checkbox should reset to original states
-    `, async ({
-    goto,
-    page,
-  }: {
-    goto: CustomTestFixtures['goto'];
-    page: Page;
-  }) => {
-    await goto(process.env.FRONTEND_URL as string);
-
-    await page.getByTestId(`cookie-settings-button`)
+    await page
+      .getByTestId(`footer-cookie-settings-button`)
       .click();
 
-    const analyticsCheckbox = page.getByTestId(`checkbox-analytics`);
-
-    await analyticsCheckbox.click();
-
-    await expect(analyticsCheckbox)
-      .toBeChecked();
-
-    const closeButton = page.getByTestId(`close-modal-button`);
-    await closeButton.click();
-
-    await page.getByTestId(`cookie-settings-button`)
+    await page
+      .getByTestId(`checkbox-analytics`)
       .click();
 
-    await expect(analyticsCheckbox)
-      .not
-      .toBeChecked();
+    await page
+      .getByTestId(`save-cookie-settings-button`)
+      .click();
+
+    await page.reload({
+      waitUntil: `networkidle`,
+    });
+
+    await test.step(
+      `Check cookie consentId in CMS`,
+      () => page.goto(process.env.CMS_URL as string),
+    );
+
+    const cms = createCmsActions(page);
+
+    await cms.authorize();
+
+    await cms.navigateToContentManager();
+
+    await cms.skipTutorial();
+
+    await cms.navigateToContentTypeByName(`Cookie consent`);
+
+    await expect(page.getByText(consentId!))
+      .toHaveCount(2);
   });
 }
 
@@ -197,7 +308,11 @@ async function getCookieSettingsFromCookie(page: Page) {
   return JSON.parse(decodeCookieSettings);
 }
 
-async function getYandexMetricTag(page: Page) {
+async function getConsentIdFromLocalStorage(page: Page) {
+  return page.evaluate(() => localStorage.getItem(`consentId`));
+}
+
+function getYandexMetricTag(page: Page) {
   return page.locator(`script[src="https://mc.yandex.ru/metrika/tag.js"]`);
 }
 
@@ -206,8 +321,26 @@ async function checkNoConsentState(page: Page) {
     .cookies())
     .toEqual([]);
 
-  const metricTag = await getYandexMetricTag(page);
+  const metricTag = getYandexMetricTag(page);
 
   await expect(metricTag)
     .toHaveCount(0);
+
+  const consentId = await getConsentIdFromLocalStorage(page);
+
+  await expect(consentId)
+    .toBeNull();
+}
+
+async function cleanupCookieApi() {
+  try {
+    const response = await cmsFetch(`/cookie?locale=en`, {
+      method: `DELETE`,
+    });
+
+    await expect(response.status, `Cookie should be deleted with status 204`)
+      .toEqual(204);
+  } catch (error: any) {
+    throw new Error(`Failed to delete cookie: ${error.message}`);
+  }
 }
