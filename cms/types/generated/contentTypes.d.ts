@@ -382,7 +382,7 @@ export interface ApiCookieConsentCookieConsent
     singularName: 'cookie-consent';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     categories: Schema.Attribute.JSON & Schema.Attribute.Required;
