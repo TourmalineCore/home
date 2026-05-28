@@ -58,7 +58,7 @@ export function FormBlock({
                 <span className="form-block__text">
                   {t(`text`)}
                   {` `}
-                  {email}
+                  <span className="ym-hide-content">{email}</span>
                 </span>
                 <PrimaryButton onClick={() => setIsSubmit(false)}>{t(`buttonText`)}</PrimaryButton>
               </div>
