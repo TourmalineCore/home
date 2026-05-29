@@ -51,7 +51,7 @@
 //     await goToComponentsPage(ComponentName.FORM_BLOCK);
 //   });
 
-//   test(`CheckClassName`, checkClassName);
+//   test(`CheckClassNameTest`, checkClassName);
 // });
 
 // async function checkClassName({

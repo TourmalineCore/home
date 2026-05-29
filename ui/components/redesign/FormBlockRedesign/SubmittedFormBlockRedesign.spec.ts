@@ -28,14 +28,14 @@
 //   }
 // });
 
-// test.describe(`DescriptionTextShouldHasYmHideContentClassNameToDisguiseFromWebvisor`, () => {
+// test.describe(`DescriptionTextShouldHaveYmHideContentClassNameToDisguiseFromWebvisor`, () => {
 //   test.beforeEach(async ({
 //     goToComponentsPage,
 //   }) => {
 //     await goToComponentsPage(ComponentName.SUBMITTED_FORM_BLOCK);
 //   });
 
-//   test(`CheckClassName`, checkClassName);
+//   test(`CheckClassNameTest`, checkClassName);
 // });
 
 // async function checkClassName({
