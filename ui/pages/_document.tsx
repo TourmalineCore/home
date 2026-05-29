@@ -67,7 +67,6 @@ export default class MyDocument extends Document {
         </Head>
 
         <body className="default-scroll">
-
           {/* Google metrics are temporarily disabled
            <script
             defer
@@ -91,7 +90,6 @@ export default class MyDocument extends Document {
             }`,
             }}
           /> */}
-
           <Main />
           <NextScript />
         </body>
