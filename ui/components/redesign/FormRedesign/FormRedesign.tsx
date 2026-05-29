@@ -114,7 +114,7 @@ export function FormRedesign({
       </h2>
       {
         isSubmit ? (
-          <p className="form-redesign__description">
+          <p className="form-redesign__description ym-hide-content">
             {description}
             <Link
               className="form-redesign__contact-link"
