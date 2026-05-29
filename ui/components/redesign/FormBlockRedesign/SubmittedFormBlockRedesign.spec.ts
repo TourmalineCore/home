@@ -1,4 +1,4 @@
-// import { test } from '../../../playwright-tests/custom-test';
+// import { expect, Page, test } from '../../../playwright-tests/custom-test';
 // import { BREAKPOINTS } from '../../../playwright-tests/constants/breakpoints';
 // import { ComponentName } from '../../../common/enums';
 
@@ -27,3 +27,22 @@
 //     });
 //   }
 // });
+
+// test.describe(`DescriptionTextShouldHasYmHideContentClassNameToDisguiseFromWebvisor`, () => {
+//   test.beforeEach(async ({
+//     goToComponentsPage,
+//   }) => {
+//     await goToComponentsPage(ComponentName.SUBMITTED_FORM_BLOCK);
+//   });
+
+//   test(`CheckClassName`, checkClassName);
+// });
+
+// async function checkClassName({
+//   page,
+// }: {
+//   page: Page;
+// }) {
+//   expect(page.getByTestId(`form-redesign-description`))
+//     .toContainClass(`ym-hide-content`);
+// }

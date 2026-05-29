@@ -114,7 +114,10 @@ export function FormRedesign({
       </h2>
       {
         isSubmit ? (
-          <p className="form-redesign__description ym-hide-content">
+          <p
+            className="form-redesign__description ym-hide-content"
+            data-testid="form-redesign-description"
+          >
             {description}
             <Link
               className="form-redesign__contact-link"
@@ -139,6 +142,7 @@ export function FormRedesign({
               className="form-redesign__input"
               label={nameLabel}
               onKeyDown={handleOnKeyDown}
+              data-testid="form-redesign-name-input"
               required
             />
             <InputRedesign
@@ -150,6 +154,7 @@ export function FormRedesign({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onKeyDown={handleOnKeyDown}
+              data-testid="form-redesign-email-input"
               required
             />
             <TextareaRedesign
@@ -158,6 +163,7 @@ export function FormRedesign({
               label={textareaLabel}
               className="form-redesign__input"
               description={t(`message.description`)}
+              data-testid="form-redesign-message-textarea"
             />
             <div className="form-redesign__consent">
               <CheckBox
