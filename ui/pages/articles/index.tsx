@@ -99,6 +99,7 @@ async function getStaticTranslation({
     `articles`,
     `footer`,
     `cookie`,
+    `cookieSettings`,
     `formBlockRedesign`,
   ]);
 }

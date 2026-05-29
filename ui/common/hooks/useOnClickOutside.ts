@@ -1,15 +1,14 @@
-import { MutableRefObject, useEffect } from 'react';
+import { useEffect } from 'react';
 
-export function useOnClickOutside(ref: MutableRefObject<HTMLElement | null>, handler: (evt: Event) => unknown) {
+export function useOnClickOutside(handler: (evt: Event) => unknown) {
   useEffect(
     () => {
       const listener = (event: Event) => {
-        // Do nothing if clicking ref's element or descendent elements
-        if (!ref.current || ref.current.contains(event.target as Node | null)) {
-          return;
-        }
+        const isInside = !!(event.target as Element)?.closest(`.modal__inner`);
 
-        handler(event);
+        if (!isInside) {
+          handler(event);
+        }
       };
 
       document.addEventListener(`mousedown`, listener);
@@ -21,6 +20,6 @@ export function useOnClickOutside(ref: MutableRefObject<HTMLElement | null>, han
       };
     },
 
-    [ref, handler],
+    [handler],
   );
 }

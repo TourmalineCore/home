@@ -121,7 +121,10 @@ export const test = base.extend<CustomTestFixtures>({
         height,
       });
 
-      await expect(page.getByTestId(testId))
+      await expect(page.getByTestId(testId)
+        .filter({
+          visible: true,
+        }))
         .toHaveScreenshot(`${testId}-${breakpointName}.png`);
     };
 

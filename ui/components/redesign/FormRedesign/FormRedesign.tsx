@@ -17,7 +17,6 @@ import { Spinner } from '../../Spinner/Spinner';
 import { DEFAULT_LOCALE } from '../../../common/constants';
 import { CheckBox } from '../../Checkbox/Checkbox';
 import { validateCaptchaToken } from '../../../services/smartCaptcha/validateCaptchaToken';
-import { POLICY_VERSION } from '../../../common/constants/cookie';
 
 export function FormRedesign({
   onSubmit,
@@ -115,7 +114,10 @@ export function FormRedesign({
       </h2>
       {
         isSubmit ? (
-          <p className="form-redesign__description">
+          <p
+            className="form-redesign__description ym-hide-content"
+            data-testid="form-redesign-description"
+          >
             {description}
             <Link
               className="form-redesign__contact-link"
@@ -140,6 +142,7 @@ export function FormRedesign({
               className="form-redesign__input"
               label={nameLabel}
               onKeyDown={handleOnKeyDown}
+              data-testid="form-redesign-name-input"
               required
             />
             <InputRedesign
@@ -151,6 +154,7 @@ export function FormRedesign({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onKeyDown={handleOnKeyDown}
+              data-testid="form-redesign-email-input"
               required
             />
             <TextareaRedesign
@@ -159,6 +163,7 @@ export function FormRedesign({
               label={textareaLabel}
               className="form-redesign__input"
               description={t(`message.description`)}
+              data-testid="form-redesign-message-textarea"
             />
             <div className="form-redesign__consent">
               <CheckBox
@@ -179,7 +184,7 @@ export function FormRedesign({
                   components={{
                     personalData: <a
                       className="form-redesign__consent-link"
-                      href={`/documents/policy/policy-${POLICY_VERSION}-${routerLocale}.pdf#page=${routerLocale === `ru` ? `4` : `3`}`}
+                      href={`/documents/policy/policy-${routerLocale}.pdf#page=3}`}
                       target="_blank"
                       rel="noreferrer"
                       aria-label={
@@ -190,7 +195,7 @@ export function FormRedesign({
                     />,
                     privacyPolicy: <a
                       className="form-redesign__consent-link"
-                      href={`/documents/policy/policy-${POLICY_VERSION}-${locale}.pdf`}
+                      href={`/documents/policy/policy-${locale}.pdf`}
                       target="_blank"
                       rel="noreferrer"
                       aria-label={

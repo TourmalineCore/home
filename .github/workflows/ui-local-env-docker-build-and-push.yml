@@ -17,5 +17,6 @@ jobs:
       # Build-args used to define variables that will be used in image
       build-args: |
         CDN_ENABLED=false
+        NEXT_PUBLIC_ENABLE_SMARTCAPTCHA=false
     # without this it cannot login to the registry
     secrets: inherit

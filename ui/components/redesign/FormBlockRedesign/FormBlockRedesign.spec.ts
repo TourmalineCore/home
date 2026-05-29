@@ -44,6 +44,31 @@
 //   test(`SubmitButtonIsEnabledWithConsentTest`, submitButtonIsEnabledWithConsentTest);
 // });
 
+// test.describe(`FormInputsShouldHaveYmDisableKeysClassNameToDisguiseFromWebvisor`, () => {
+//   test.beforeEach(async ({
+//     goToComponentsPage,
+//   }) => {
+//     await goToComponentsPage(ComponentName.FORM_BLOCK);
+//   });
+
+//   test(`CheckClassNameTest`, checkClassName);
+// });
+
+// async function checkClassName({
+//   page,
+// }: {
+//   page: Page;
+// }) {
+//   expect(page.getByTestId(`form-redesign-name-input`))
+//     .toContainClass(`ym-disable-keys`);
+
+//   expect(page.getByTestId(`form-redesign-email-input`))
+//     .toContainClass(`ym-disable-keys`);
+
+//   expect(page.getByTestId(`form-redesign-message-textarea`))
+//     .toContainClass(`ym-disable-keys`);
+// }
+
 // async function formIsNotDisplayedOutsideOfRussia({
 //   browser,
 // }: {

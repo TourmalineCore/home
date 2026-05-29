@@ -37,6 +37,7 @@ import { ChelzooInfrastructure } from "../../components/chelzoo/ChelzooInfrastru
 import { ChelzooLinks } from "../../components/chelzoo/ChelzooLinks/ChelzooLinks";
 import { ChelzooReview } from "../../components/chelzoo/ChelzooReview/ChelzooReview";
 import { useNonBreakingSpaces } from "../../common/hooks";
+import { CookieSettingsModal } from "../../components/CookieSettingsModal/CookieSettingsModal";
 
 export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JSX.Element> = {
   [ComponentName.THREE_COLUMN_GRID]: ({
@@ -167,7 +168,29 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   //     isComponentPage
   //   />
   // ),
-  [ComponentName.COOKIE]: () => <Cookie isComponentPage />,
+  [ComponentName.COOKIE]: ({
+    cookie,
+  }) => (
+    <Cookie
+      isComponentPage
+      acceptButtonText={cookie.accept}
+      rejectButtonText={cookie.reject}
+      bannerText={cookie.text}
+      settingsButtonText={cookie.settings}
+    />
+  ),
+  [ComponentName.COOKIE_SETTINGS_MODAL]: ({
+    cookieSettings,
+  }) => (
+    <CookieSettingsModal
+      isComponentPage
+      title={cookieSettings.title}
+      note={cookieSettings.note}
+      buttonText={cookieSettings.buttonText}
+      analyticsData={cookieSettings.analytics}
+      webvisorData={cookieSettings.webvisor}
+    />
+  ),
   [ComponentName.NOT_FOUND]: ({
     pageNotFound,
   }) => (
@@ -282,13 +305,14 @@ export async function getStaticProps({
     `pageNotFound`,
     `headerRedesign`,
     `footerRedesign`,
+    `cookie`,
+    `cookieSettings`,
   ]);
 
   return {
     props: {
       pageData: translationsPageData,
       ...(await serverSideTranslations(locale, [
-        `cookie`,
         // `formBlockRedesign`,
         `chelzooHero`,
         `chelzooAbout`,

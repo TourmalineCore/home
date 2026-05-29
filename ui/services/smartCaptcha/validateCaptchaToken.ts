@@ -2,7 +2,7 @@ export async function validateCaptchaToken(
   token: string,
 ) {
   try {
-    const response = await fetch(`/api/validateCaptchaToken`, {
+    const response = await fetch(`/api/validate-captcha-token`, {
       method: `POST`,
       headers: {
         'Content-Type': `application/json`,

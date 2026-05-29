@@ -1,4 +1,6 @@
 .modal {
+  $this: &;
+
   position: fixed;
   z-index: $modal;
   display: flex;
@@ -95,6 +97,63 @@
       top: 36px;
       width: 32px;
       height: 32px;
+    }
+  }
+
+  &--cookie {
+    top: $header-redesign-height;
+    bottom: 0;
+    background-color: $color-black;
+
+    #{$this}__cross {
+      top: 20px;
+    }
+
+    @include tablet {
+      top: 102px;
+      bottom: unset;
+      margin: 0 auto;
+      max-width: 556px;
+
+      #{$this}__inner {
+        padding-top: 0;
+        min-height: 0;
+        background-color: unset;
+      }
+
+      #{$this}__cross {
+        background-color: unset;
+
+        svg path {
+          fill: $color-white;
+        }
+      }
+    }
+
+    @include tablet-xl {
+      #{$this}__cross {
+        right: 20px;
+      }
+    }
+
+    @include desktop {
+      top: 124px;
+      max-width: 716px;
+
+      #{$this}__cross {
+        right: 28px;
+        top: 28px;
+      }
+    }
+
+    @include desktop-xl {
+      top: 174px;
+      max-width: 1120px;
+
+      #{$this}__cross {
+        right: 36px;
+        top: 36px;
+      }
     }
   }
 }
