@@ -315,7 +315,7 @@ export async function getStaticProps({
     props: {
       pageData: translationsPageData,
       ...(await serverSideTranslations(locale, [
-        // `formBlockRedesign`,
+        `formBlockRedesign`,
         `chelzooHero`,
         `chelzooAbout`,
         `chelzooStack`,
