@@ -19,6 +19,7 @@ export function FormBlock({
     locale,
   } = useRouter();
   const [email, setEmail] = useState(``);
+  const [error, setError] = useState(``);
   const [isSubmit, setIsSubmit] = useState(false);
 
   const {
@@ -51,6 +52,7 @@ export function FormBlock({
               <Form
                 onSubmit={onFormSubmit}
                 buttonClassName={buttonClassName}
+                error={error}
               />
             )
             : (
@@ -79,12 +81,20 @@ export function FormBlock({
     };
     token: string;
   }) {
-    await sendEmail({
-      formData,
-      token,
-    });
+    try {
+      await sendEmail({
+        formData,
+        token,
+      });
 
-    setEmail(formData.email);
-    setIsSubmit(true);
+      if (error !== ``) {
+        setError(``);
+      }
+
+      setEmail(formData.email);
+      setIsSubmit(true);
+    } catch {
+      setError(t(`error`));
+    }
   }
 }

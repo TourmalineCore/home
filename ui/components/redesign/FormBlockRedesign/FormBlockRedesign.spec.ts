@@ -54,6 +54,72 @@ test.describe(`FormInputsShouldHaveYmDisableKeysClassNameToDisguiseFromWebvisor`
   test(`CheckClassNameTest`, checkClassName);
 });
 
+test.describe(`Error`, errorTests);
+
+async function errorTests() {
+  test.beforeEach(async ({
+    goToComponentsPage,
+  }) => {
+    await goToComponentsPage(ComponentName.FORM_BLOCK);
+  });
+
+  test(
+    `
+    GIVEN form is displayed
+    WHEN user submits the form and email sending fails
+    THEN error message is displayed
+    AND user can try submitting the form again and email sending succeeds
+    THEN error message is not displayed
+    `,
+    errorMessageDisplayTests,
+  );
+}
+
+async function errorMessageDisplayTests({
+  page,
+}: {
+  page: Page;
+}) {
+  const errorText = `Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже или отправьте ваш запрос на почту contact@tourmalinecore.com.`;
+
+  await page.route(`/api/send-email`, (route) => route.fulfill({
+    status: 500,
+  }));
+
+  await page.getByTestId(`form-redesign-name-input`)
+    .fill(`Test Name`);
+
+  await page.getByTestId(`form-redesign-email-input`)
+    .fill(`test@test.ru`);
+
+  await page.getByTestId(`form-redesign-message-textarea`)
+    .fill(`Test Message`);
+
+  await page.getByTestId(`form-block-consent-checkbox`)
+    .check();
+
+  await page.getByTestId(`form-block-submit-button`)
+    .click();
+
+  await expect(
+    page.getByText(errorText),
+  )
+    .toBeVisible();
+
+  await page.route(`/api/send-email`, (route) => route.fulfill({
+    status: 200,
+  }));
+
+  await page.getByTestId(`form-block-submit-button`)
+    .click();
+
+  await expect(
+    page.getByText(errorText),
+  )
+    .not
+    .toBeVisible();
+}
+
 async function checkClassName({
   page,
 }: {

@@ -24,6 +24,7 @@ export function FormRedesign({
   setIsSubmit,
   isModal,
   onCloseModal,
+  error,
   isComponentPage,
 } : {
   onSubmit: ({
@@ -41,6 +42,7 @@ export function FormRedesign({
   setIsSubmit: (value: boolean) => void;
   isModal?: boolean;
   onCloseModal?: () => void;
+  error: string;
   isComponentPage?: boolean;
 }) {
   const {
@@ -217,6 +219,7 @@ export function FormRedesign({
         )
       }
       <div className="form-redesign__footer">
+        <span className="form-redesign__error">{error}</span>
         {
           isSubmit ? (
             <button

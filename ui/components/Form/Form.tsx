@@ -20,6 +20,7 @@ import { useSmartCaptcha } from '../../common/hooks/useSmartCaptcha';
 
 export function Form({
   onSubmit = () => {},
+  error,
   buttonClassName,
 }: {
   onSubmit: ({
@@ -33,6 +34,7 @@ export function Form({
     };
     token: string;
   }) => unknown;
+  error: string;
   buttonClassName?: string;
 }) {
   const {
@@ -146,6 +148,7 @@ export function Form({
       </div>
 
       <div className="form__footer">
+        <span className="form__error">{error}</span>
         <PrimaryButton
           type="submit"
           ref={submitButtonRef}

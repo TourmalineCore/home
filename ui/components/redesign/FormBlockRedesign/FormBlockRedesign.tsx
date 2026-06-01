@@ -25,6 +25,7 @@ export function FormBlockRedesign({
   } = useTranslation(`formBlockRedesign`);
 
   const [isSubmit, setIsSubmit] = useState(initializeIsSubmit);
+  const [error, setError] = useState(``);
 
   const isCountryRus = useIsRussianCountry();
 
@@ -54,6 +55,7 @@ export function FormBlockRedesign({
                         isModal={isModal}
                         onCloseModal={onCloseModal}
                         isComponentPage={isComponentPage}
+                        error={error}
                       />
                     </div>
                     <div className="form-block-redesign__aside">
@@ -84,6 +86,7 @@ export function FormBlockRedesign({
                       isModal={isModal}
                       onCloseModal={onCloseModal}
                       isComponentPage={isComponentPage}
+                      error={error}
                     />
                   </div>
                 )
@@ -105,12 +108,19 @@ export function FormBlockRedesign({
     };
     token: string;
   }) {
-    if (!isComponentPage) {
+    try {
       await sendEmail({
         formData,
         token,
       });
+
+      if (error !== ``) {
+        setError(``);
+      }
+
       setIsSubmit(true);
+    } catch {
+      setError(t(`error`));
     }
   }
 }
