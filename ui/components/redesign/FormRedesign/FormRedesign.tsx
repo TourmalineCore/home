@@ -144,8 +144,7 @@ export function FormRedesign({
         !isSubmit && (
           <>
             <InputRedesign
-              id={`name-${isModal ? `modal` : ``}`}
-              name={`name-${isModal ? `modal` : ``}`}
+              name="name"
               className="form-redesign__input"
               label={nameLabel}
               onKeyDown={handleOnKeyDown}
@@ -153,8 +152,7 @@ export function FormRedesign({
               required
             />
             <InputRedesign
-              id={`email-${isModal ? `modal` : ``}`}
-              name={`email-${isModal ? `modal` : ``}`}
+              name="email"
               className="form-redesign__input"
               label={emailLabel}
               type="email"
@@ -165,8 +163,7 @@ export function FormRedesign({
               required
             />
             <TextareaRedesign
-              id={`message-${isModal ? `modal` : ``}`}
-              name={`message-${isModal ? `modal` : ``}`}
+              name="message"
               label={textareaLabel}
               className="form-redesign__input"
               description={t(`message.description`)}
@@ -314,9 +311,9 @@ export function FormRedesign({
       const formData = new FormData(formRef.current);
       await onSubmit({
         formData: {
-          email: formData.get(`email-${isModal ? `modal` : ``}`) as string,
-          name: formData.get(`name-${isModal ? `modal` : ``}`) as string,
-          description: formData.get(`message-${isModal ? `modal` : ``}`) as string,
+          email: formData.get(`email`) as string,
+          name: formData.get(`name`) as string,
+          description: formData.get(`message`) as string,
         },
         token,
       });
