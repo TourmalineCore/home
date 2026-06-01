@@ -148,7 +148,7 @@ export function Form({
       </div>
 
       <div className="form__footer">
-        <span className="form__error">{error}</span>
+        {error && <span className="form__error">{error}</span>}
         <PrimaryButton
           type="submit"
           ref={submitButtonRef}

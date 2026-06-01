@@ -219,7 +219,7 @@ export function FormRedesign({
         )
       }
       <div className="form-redesign__footer">
-        <span className="form-redesign__error">{error}</span>
+        {error && <span className="form-redesign__error">{error}</span>}
         {
           isSubmit ? (
             <button
