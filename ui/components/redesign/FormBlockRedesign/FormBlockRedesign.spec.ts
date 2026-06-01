@@ -80,7 +80,7 @@ async function errorMessageDisplayTests({
 }: {
   page: Page;
 }) {
-  const errorText = `Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже или отправьте ваш запрос на почту contact@tourmalinecore.com.`;
+  const errorText = `Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже или отправьте ваш запрос на почту contact@tourmalinecore.com`;
 
   await page.route(`/api/send-email`, (route) => route.fulfill({
     status: 500,
