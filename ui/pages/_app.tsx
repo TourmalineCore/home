@@ -1,4 +1,3 @@
-import 'gitalk/dist/gitalk.css';
 import '../styles/main.scss';
 
 import { appWithTranslation } from 'next-i18next';

@@ -7,10 +7,6 @@ import gfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 
-const DynamicCommentsComponent = dynamic(() => import(`./components/Comments/Comments`), {
-  ssr: false,
-});
-
 export default function Article({
   markdown,
   articleUrl,
@@ -73,10 +69,6 @@ export default function Article({
           {markdown}
         </ReactMarkdown>
       </article>
-
-      <div className="article-page__comments">
-        <DynamicCommentsComponent />
-      </div>
     </div>
   );
 }
