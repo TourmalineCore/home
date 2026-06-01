@@ -9,6 +9,7 @@ import { ShowcaseGrid } from '../ShowcaseGrid/ShowcaseGrid';
 import { SignpostMultiple } from '../SignpostMultiple/SignpostMultiple';
 import { SingleImage } from '../SingleImage/SingleImage';
 import { CollageWithLink } from '../CollageWithLink/CollageWithLink';
+import { FormBlockRedesign } from '../redesign/FormBlockRedesign/FormBlockRedesign';
 
 export const BlockRenderer = ({
   block,
@@ -92,11 +93,11 @@ export const BlockRenderer = ({
     );
   }
 
-  // if (block.__component === BlockType.SHARED_FORM_BLOCK) {
-  //   return (
-  //     <FormBlockRedesign />
-  //   );
-  // }
+  if (block.__component === BlockType.SHARED_FORM_BLOCK) {
+    return (
+      <FormBlockRedesign />
+    );
+  }
 
   return null;
 };

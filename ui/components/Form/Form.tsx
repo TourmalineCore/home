@@ -16,7 +16,7 @@ import { Spinner } from '../Spinner/Spinner';
 import { isChineseLanguage } from '../../common/utils';
 import { DEFAULT_LOCALE } from '../../common/constants';
 import { CheckBox } from '../Checkbox/Checkbox';
-import { validateCaptchaToken } from '../../services/smartCaptcha/validateCaptchaToken';
+import { useSmartCaptcha } from '../../common/hooks/useSmartCaptcha';
 
 export function Form({
   onSubmit = () => {},
@@ -24,12 +24,14 @@ export function Form({
 }: {
   onSubmit: ({
     formData,
+    token,
   }: {
     formData: {
       email: string;
       name: string;
       description: string;
     };
+    token: string;
   }) => unknown;
   buttonClassName?: string;
 }) {
@@ -43,10 +45,14 @@ export function Form({
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [isCaptchaVisible, setIsCaptchaVisible] = useState<boolean>(false);
-  // It is needed to recreate a captcha, because if a captcha has been sent once, its lifecycle ends.
-  // This allows you to use the captcha multiple times without reloading the page.
-  const [captchaKey, setCaptchaKey] = useState(0);
+  const {
+    isSmartCaptchaEnabled,
+    isSmartCaptchaVisible,
+    smartCaptchaKey,
+    showSmartCaptcha,
+    hideSmartCaptcha,
+    resetSmartCaptcha,
+  } = useSmartCaptcha();
 
   const routerLocale = useMemo(() => {
     if (!router.locale) {
@@ -55,8 +61,6 @@ export function Form({
 
     return router.locale;
   }, [router.locale]);
-
-  const isSmartCaptchaEnabled = process.env.NEXT_PUBLIC_ENABLE_SMARTCAPTCHA === `true`;
 
   return (
     <form
@@ -67,7 +71,7 @@ export function Form({
       onSubmit={async (e) => {
         e.preventDefault();
         if (isSmartCaptchaEnabled) {
-          setIsCaptchaVisible(true);
+          showSmartCaptcha();
         } else {
           await handleSubmit();
         }
@@ -153,40 +157,42 @@ export function Form({
               : t(`buttonText`)
           }
         </PrimaryButton>
-        {isCaptchaVisible && (
+        {isSmartCaptchaVisible && (
           <InvisibleSmartCaptcha
-            key={captchaKey}
+            key={smartCaptchaKey}
             sitekey={process.env.NEXT_PUBLIC_SMARTCAPTCHA_CLIENT_KEY as string}
             language={routerLocale === `ru` ? `ru` : `en`}
             onSuccess={handleCaptchaSuccess}
-            onChallengeHidden={() => setIsCaptchaVisible(false)}
-            visible={isCaptchaVisible}
+            onChallengeHidden={hideSmartCaptcha}
+            visible={isSmartCaptchaVisible}
           />
         )}
       </div>
     </form>
   );
 
-  async function handleCaptchaSuccess(captchaToken: string) {
+  async function handleCaptchaSuccess(smartCaptchaToken: string) {
     try {
       setIsLoading(true);
-      const response = await validateCaptchaToken(captchaToken);
 
-      if (response.status === `ok`) {
-        await handleSubmit();
-      }
+      await handleSubmit({
+        token: smartCaptchaToken,
+      });
 
       if (submitButtonRef.current) {
         submitButtonRef.current.focus();
       }
     } finally {
-      setIsCaptchaVisible(false);
+      resetSmartCaptcha();
       setIsLoading(false);
-      setCaptchaKey((prev) => prev + 1);
     }
   }
 
-  async function handleSubmit() {
+  async function handleSubmit({
+    token = ``,
+  }: {
+    token?: string;
+  } = {}) {
     if (formRef.current) {
       const formData = new FormData(formRef.current);
 
@@ -196,6 +202,7 @@ export function Form({
           name: formData.get(`name`) as string,
           description: formData.get(`message`) as string,
         },
+        token,
       });
     }
   }

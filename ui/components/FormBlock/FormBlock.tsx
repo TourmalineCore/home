@@ -70,14 +70,19 @@ export function FormBlock({
 
   async function onFormSubmit({
     formData,
+    token,
   }: {
     formData: {
       email: string;
       name: string;
       description: string;
     };
+    token: string;
   }) {
-    await sendEmail(formData);
+    await sendEmail({
+      formData,
+      token,
+    });
 
     setEmail(formData.email);
     setIsSubmit(true);

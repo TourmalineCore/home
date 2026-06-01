@@ -15,6 +15,9 @@ import { useScrollTop } from '../../common/hooks/useScrollTop';
 import { LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
+import { TechnologyPageAnchorLink } from '../../common/enums';
+import { useIsRussianCountry } from '../../common/hooks';
+import { FormBlock } from '../../components/FormBlock/FormBlock';
 
 export default function EmbeddedPage({
   layoutData,
@@ -27,7 +30,7 @@ export default function EmbeddedPage({
     t,
   } = useTranslation(`common`);
 
-  // const isCountryRus = useIsRussianCountry();
+  const isCountryRus = useIsRussianCountry();
 
   useScrollTop({
     dependencies: [],
@@ -62,12 +65,12 @@ export default function EmbeddedPage({
         <Payment />
         <Cooperation />
         <ServicesTechnology />
-        {/* {isCountryRus && (
+        {isCountryRus && (
           <FormBlock
             id={TechnologyPageAnchorLink.Contact}
             buttonClassName="embedded__form-button"
           />
-        )} */}
+        )}
       </Layout>
     </>
   );

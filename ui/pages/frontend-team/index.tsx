@@ -13,6 +13,9 @@ import { useScrollTop } from '../../common/hooks/useScrollTop';
 import { LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
+import { useIsRussianCountry } from '../../common/hooks';
+import { FormBlock } from '../../components/FormBlock/FormBlock';
+import { TechnologyPageAnchorLink } from '../../common/enums';
 
 export default function FrontendTeamPage({
   layoutData,
@@ -25,7 +28,7 @@ export default function FrontendTeamPage({
     t,
   } = useTranslation(`common`);
 
-  // const isCountryRus = useIsRussianCountry();
+  const isCountryRus = useIsRussianCountry();
 
   useScrollTop({
     dependencies: [],
@@ -62,12 +65,12 @@ export default function FrontendTeamPage({
         <Stages />
         <Stack />
         <ServicesTechnology />
-        {/* {isCountryRus && (
+        {isCountryRus && (
           <FormBlock
             id={TechnologyPageAnchorLink.Contact}
             buttonClassName="frontend-team__form-button"
           />
-        )} */}
+        )}
       </Layout>
     </>
   );

@@ -96,14 +96,20 @@ export function FormBlockRedesign({
 
   async function onFormSubmit({
     formData,
+    token,
   }: {
     formData: {
       email: string;
       name: string;
       description: string;
-    }; }) {
+    };
+    token: string;
+  }) {
     if (!isComponentPage) {
-      await sendEmail(formData);
+      await sendEmail({
+        formData,
+        token,
+      });
       setIsSubmit(true);
     }
   }

@@ -16,6 +16,9 @@ import { useScrollTop } from '../../common/hooks/useScrollTop';
 import { LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
+import { FormBlock } from '../../components/FormBlock/FormBlock';
+import { TechnologyPageAnchorLink } from '../../common/enums';
+import { useIsRussianCountry } from '../../common/hooks';
 
 export default function DesignPage({
   layoutData,
@@ -32,7 +35,7 @@ export default function DesignPage({
     dependencies: [],
   });
 
-  // const isCountryRus = useIsRussianCountry();
+  const isCountryRus = useIsRussianCountry();
 
   return (
     <>
@@ -64,12 +67,12 @@ export default function DesignPage({
         <Payment />
         <Cooperation />
         <ServicesTechnology />
-        {/* {isCountryRus && (
+        {isCountryRus && (
           <FormBlock
             id={TechnologyPageAnchorLink.Contact}
             buttonClassName="design__form-button"
           />
-        )} */}
+        )}
       </Layout>
     </>
   );
