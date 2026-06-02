@@ -18,17 +18,28 @@ Pros:
 - Transparency and compliance with legal requirements
 - Clear proof of obtained consent 
 
-### Protection Against Automated Attacks (Yandex SmartCaptcha)
-Architectural solution:
+### Architectural solution
+```mermaid
+graph TD
+    A[User clicks Send button] --> B[Yandex SmartCaptcha Check]
+    B -->|Success| C[Generate one-time token]
+    B -->|Fail| D[It's a robot]
+    C -->|Token| E[Next.js API: /api/send-email]
+    E -->|Token| F[Yandex API: /api/validate-captcha-token]
+    F -->|Valid| G[Mail.ru SMTP server: send message ]
+    F -->|Invalid| H[Invalid captcha token]
+    H --> K[Error response]
+    D --> K
+```
 
-![alt text](./images/captcha-schema.png)
+#### Protection Against Automated Attacks (Yandex SmartCaptcha)
 
-1. After successful captcha completion, the client calls `/api/validateCaptcha` with the `token` parameter, which is generated automatically after the captcha is completed.
-2. Inside `/api/validateCaptcha`, an endpoint on the Yandex side https://smartcaptcha.yandexcloud.net/validate is called with the `token` and `secret` parameters (secret can be obtained from the personal account and must be added to `.env` as it is a secret) to validate the submitted `token`.
-3. After validation, if the `token` is valid, `{ status: 'ok' }` is returned; otherwise, `{ "status": "failed" }` is returned.
+To protect against automated threats (including DDoS, bot attacks, mass fake consents, and request forgery), SmartCaptcha with two-level protection has been added:
 
-Specific features:
-1. The token is one-time use, so if you try to submit multiple forms with the same token, you will receive an error indicating that the token has already been used.
+- **On the client side** — an invisible captcha that analyzes suspicious activity and, if something looks suspicious, gives a task to prove the user is human. It usually does not affect normal users.
+- **On the server side** — token validation through the Yandex API.
+
+This architecture completely stops fake requests sent through `curl`, `Postman`, or any other tools for automating HTTP requests. Even if an attacker intercepts the token, it is one-time only and cannot be used again.
 
 Yandex SmartCaptcha provides a comprehensive guide on creating and adding captcha to a website, which can be found [here](https://yandex.cloud/ru/docs/smartcaptcha/quickstart#node_1)
 
@@ -36,20 +47,10 @@ Yandex SmartCaptcha provides a comprehensive guide on creating and adding captch
 
 ![alt text](./images/location-of-the-connect-button.png)
 
-Pros:
-- Reduces automated bot attacks
-
-Cons:
-- Requires users to perform additional actions to submit the form
-
-## Sending Emails
+#### Sending Emails
 We use mail.ru SMTP, more detailed setup instructions can be found [here](https://help.mail.ru/mail/login/mailer/#setup).
 
-Architectural solution:
-
-![alt text](./images/send-email.png)
-
-1. After filling out the form and completing the captcha, the client calls `/api/sendEmail`, which accepts the following parameters:
+1. After filling out the form the endpoint "/api/SendEmail" is called, which accepts the following parameters:
 
 ```js
  {
@@ -57,10 +58,11 @@ Architectural solution:
     subject: `yourSubject`,
     message: `yourMessage`,
     html: 'html',
+    token: 'dD0xNzgwMzAyNTY0O2k...'
  }
 ```
 
-2. Inside this endpoint, the [Nodemailer](https://nodemailer.com/) library is used, which provides methods for creating a `transporter` with the following parameters:
+2. After successfully verifying the captcha, the [Nodemailer](https://nodemailer.com/) library is used inside this endpoint, which provides methods for creating a `transporter` with the following parameters:
 
 ```js
  {
@@ -76,7 +78,7 @@ Architectural solution:
 
 3. `The transporter.sendEmail()` method is called, which sends the message to the specified email address (the `to` parameter).
 
-Pros:
+Advantages:
 - Free
 - Easy to configure
 

@@ -3,11 +3,45 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 
 export default async function sendEmail(req: NextApiRequest, res: NextApiResponse) {
-  try {
-    const {
-      to, subject, message, html,
-    } = req.body;
+  if (req.method !== `POST`) {
+    return res.status(405)
+      .json({
+        error: `Method not allowed`,
+      });
+  }
 
+  const {
+    to,
+    subject,
+    message,
+    html,
+    token,
+  } = req.body;
+
+  if (process.env.NEXT_PUBLIC_ENABLE_SMARTCAPTCHA === `true`) {
+    const formData = new URLSearchParams();
+    formData.append(`secret`, process.env.SMARTCAPTCHA_SERVER_KEY as string);
+    formData.append(`token`, token);
+
+    const response = await fetch(`https://smartcaptcha.yandexcloud.net/validate`, {
+      method: `POST`,
+      headers: {
+        'Content-Type': `application/x-www-form-urlencoded`,
+      },
+      body: formData,
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.status !== `ok`) {
+      return res.status(400)
+        .json({
+          error: `Invalid captcha token`,
+        });
+    }
+  }
+
+  try {
     // Create Mail.ru transporter
     const transporter = nodemailer.createTransport({
       host: `smtp.mail.ru`,

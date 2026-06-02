@@ -16,7 +16,8 @@
 
     @include tablet {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
+      flex-direction: column;
     }
 
     @include desktop {
@@ -67,6 +68,15 @@
     @include desktop {
       margin-right: 32px;
     }
+  }
+
+  &__error {
+    @include body-s;
+
+    display: block;
+    margin-bottom: 10px;
+    text-align: center;
+    color: $color-red;
   }
 
   &--zh {

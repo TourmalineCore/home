@@ -38,6 +38,8 @@ import { ChelzooLinks } from "../../components/chelzoo/ChelzooLinks/ChelzooLinks
 import { ChelzooReview } from "../../components/chelzoo/ChelzooReview/ChelzooReview";
 import { useNonBreakingSpaces } from "../../common/hooks";
 import { CookieSettingsModal } from "../../components/CookieSettingsModal/CookieSettingsModal";
+import { FormModal } from "../../components/FormModal/FormModal";
+import { FormBlockRedesign } from "../../components/redesign/FormBlockRedesign/FormBlockRedesign";
 
 export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JSX.Element> = {
   [ComponentName.THREE_COLUMN_GRID]: ({
@@ -100,7 +102,7 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
       emailCaption={headerRedesign.emailCaption}
       emailAddress={headerRedesign.emailAddress}
       socialLinks={headerRedesign.socialLinks}
-      // onOpenModal={() => {}}
+      onOpenModal={() => {}}
       isMobileMenuOpen
     />
   ),
@@ -155,19 +157,19 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   }) => (
     <SingleImage imageWithBlurDataURL={singleImage.imageWithBlurDataURL} />
   ),
-  // [ComponentName.FORM_BLOCK]: () => (
-  //   <FormBlockRedesign
-  //     testId="form-block"
-  //     isComponentPage
-  //   />
-  // ),
-  // [ComponentName.SUBMITTED_FORM_BLOCK]: () => (
-  //   <FormBlockRedesign
-  //     initializeIsSubmit
-  //     testId="submitted-form-block"
-  //     isComponentPage
-  //   />
-  // ),
+  [ComponentName.FORM_BLOCK]: () => (
+    <FormBlockRedesign
+      testId="form-block"
+      isComponentPage
+    />
+  ),
+  [ComponentName.SUBMITTED_FORM_BLOCK]: () => (
+    <FormBlockRedesign
+      initializeIsSubmit
+      testId="submitted-form-block"
+      isComponentPage
+    />
+  ),
   [ComponentName.COOKIE]: ({
     cookie,
   }) => (
@@ -199,23 +201,23 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
       message={pageNotFound.message}
     />
   ),
-  // [ComponentName.FORM_MODAL]: () => (
-  //   <FormModal
-  //     onCloseModal={() => {}}
-  //     isModalOpen
-  //     testId="form-modal"
-  //     isComponentPage
-  //   />
-  // ),
-  // [ComponentName.SUBMITTED_FORM_MODAL]: () => (
-  //   <FormModal
-  //     onCloseModal={() => {}}
-  //     isModalOpen
-  //     testId="submitted-form-modal"
-  //     initializeIsSubmit
-  //     isComponentPage
-  //   />
-  // ),
+  [ComponentName.FORM_MODAL]: () => (
+    <FormModal
+      onCloseModal={() => {}}
+      isModalOpen
+      testId="form-modal"
+      isComponentPage
+    />
+  ),
+  [ComponentName.SUBMITTED_FORM_MODAL]: () => (
+    <FormModal
+      onCloseModal={() => {}}
+      isModalOpen
+      testId="submitted-form-modal"
+      initializeIsSubmit
+      isComponentPage
+    />
+  ),
   [ComponentName.CHELZOO_HERO]: () => <ChelzooHero isComponentPage />,
   [ComponentName.CHELZOO_ABOUT]: () => <ChelzooAbout />,
   [ComponentName.CHELZOO_STACK]: () => <ChelzooStack />,
@@ -313,7 +315,7 @@ export async function getStaticProps({
     props: {
       pageData: translationsPageData,
       ...(await serverSideTranslations(locale, [
-        // `formBlockRedesign`,
+        `formBlockRedesign`,
         `chelzooHero`,
         `chelzooAbout`,
         `chelzooStack`,

@@ -1,13 +1,20 @@
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { usePath, useTranslationNamespace } from '../../common/hooks';
+import { useState } from 'react';
+import {
+  useBodyScrollHidden,
+  useIsRussianCountry,
+  usePath,
+  useTranslationNamespace,
+} from '../../common/hooks';
 import { isChineseLanguage } from '../../common/utils';
+import { FormModal } from '../FormModal/FormModal';
 
 export function HeroBlockTechnology() {
   const {
     slicePathname,
   } = usePath();
-  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     locale,
   } = useRouter();
@@ -15,9 +22,9 @@ export function HeroBlockTechnology() {
     t,
   } = useTranslationNamespace(`hero`);
 
-  // useBodyScrollHidden(isModalOpen);
+  useBodyScrollHidden(isModalOpen);
 
-  // const isCountryRus = useIsRussianCountry();
+  const isCountryRus = useIsRussianCountry();
 
   return (
     <section className={clsx(`hero-block-technology`, {
@@ -28,14 +35,7 @@ export function HeroBlockTechnology() {
         <div className="hero-block-technology__inner">
           <h1 className="hero-block-technology__title">{t(`title`)}</h1>
           <h2 className="hero-block-technology__description">{t(`description`)}</h2>
-          <a
-            href="mailto:contact@tourmalinecore.com"
-            role="button"
-            className={`hero-block-technology__button hero-block-technology__button--${slicePathname}`}
-          >
-            <span className="hero-block-technology__button-text">{t(`buttonText`)}</span>
-          </a>
-          {/* {isCountryRus ? (
+          {isCountryRus ? (
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
@@ -51,7 +51,7 @@ export function HeroBlockTechnology() {
             >
               <span className="hero-block-technology__button-text">{t(`buttonText`)}</span>
             </a>
-          )} */}
+          )}
         </div>
         <picture className="hero-block-technology__image">
           <source
@@ -68,10 +68,10 @@ export function HeroBlockTechnology() {
           />
         </picture>
       </div>
-      {/* <FormModal
+      <FormModal
         onCloseModal={() => setIsModalOpen(false)}
         isModalOpen={isModalOpen}
-      /> */}
+      />
     </section>
   );
 }
