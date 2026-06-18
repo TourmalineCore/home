@@ -29,7 +29,7 @@
     "coordinate_to_country": "^1.1.0",
     "dotenv": "^17.2.1",
     "moment": "^2.29.4",
-    "next": "^15.3.8",
+    "next": "^15.5.19",
     "next-i18next": "^8.6.0",
     "next-sitemap": "^3.1.11",
     "nodemailer": "^7.0.6",
