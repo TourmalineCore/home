@@ -1,0 +1,61 @@
+.magazine-hero {
+  padding-top: 40px;
+  padding-bottom: 16px;
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+
+  &__title {
+    @include h1;
+
+    margin-bottom: 40px;
+    max-width: 351px;
+    text-align: center;
+
+    @include tablet-xl {
+      max-width: 664px;
+    }
+
+    @include desktop {
+      max-width: 886px;
+    }
+
+    @include desktop-xl {
+      max-width: 1280px;
+    }
+  }
+
+  &__image-container {
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+    border-radius: 2px;
+    width: 351px;
+    height: 440px;
+
+    img {
+      object-fit: cover;
+    }
+
+    @include tablet {
+      width: 100%;
+      height: 240px;
+    }
+
+    @include tablet-xl {
+      height: 320px;
+    }
+
+    @include desktop {
+      height: 400px;
+    }
+
+    @include desktop-xl {
+      height: 600px;
+    }
+  }
+}

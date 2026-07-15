@@ -41,6 +41,7 @@ import { CookieSettingsModal } from "../../components/CookieSettingsModal/Cookie
 import { FormModal } from "../../components/FormModal/FormModal";
 import { FormBlockRedesign } from "../../components/redesign/FormBlockRedesign/FormBlockRedesign";
 import { MagazinesHero } from "../../components/magazines/MagazinesHero/MagazinesHero";
+import { MagazineHero } from "../../components/magazines/MagazineHero/MagazineHero";
 
 export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JSX.Element> = {
   [ComponentName.THREE_COLUMN_GRID]: ({
@@ -240,6 +241,7 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   [ComponentName.CHELZOO_INFRASTRUCTURE]: () => <ChelzooInfrastructure />,
   [ComponentName.CHELZOO_LINKS]: () => <ChelzooLinks />,
   [ComponentName.MAGAZINES_HERO]: () => <MagazinesHero />,
+  [ComponentName.MAGAZINE_HERO]: () => <MagazineHero />,
 };
 
 export default function ComponentsPage({
