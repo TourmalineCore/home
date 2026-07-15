@@ -1,0 +1,62 @@
+.magazine-pdf-view {
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 12px;
+    width: 351px;
+    height: 470px;
+    max-width: 1920px;
+    background-color: $color-grey-800-redesign;
+
+    @include tablet {
+      width: 744px;
+    }
+
+    @include tablet-xl {
+      width: 866px;
+      height: 547px;
+    }
+
+    @include desktop {
+      width: 1046px;
+      height: 736px;
+    }
+  }
+
+  &__slider {
+    width: 305px;
+    height: 430px;
+    touch-action: manipulation !important;
+
+    @include tablet {
+      width: 610px;
+    }
+
+    @include tablet-xl {
+      width: 720px;
+      height: 510px;
+    }
+
+    @include desktop {
+      width: 965px;
+      height: 680px;
+    }
+  }
+}
+
+.react-pdf__Page__canvas {
+  width: 307px !important;
+  height: 434px !important;
+
+  @include tablet-xl {
+    width: 363px !important;
+    height: 514px !important;
+  }
+
+  @include desktop {
+    width: 485px !important;
+    height: 685px !important;
+  }
+}

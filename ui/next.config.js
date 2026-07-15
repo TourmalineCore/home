@@ -126,6 +126,7 @@ module.exports = withReactSvg({
   
   webpack(webpackConfig) {
     webpackConfig.resolve.fallback = { fs: false };
+    webpackConfig.resolve.alias.canvas = false;
 
     return webpackConfig;
   },
