@@ -14,6 +14,7 @@
     @include h1;
 
     margin-bottom: 24px;
+    color: $color-white;
 
     @include desktop-xl {
       margin-bottom: 32px;
@@ -64,6 +65,7 @@
 
   &__link {
     position: relative;
+    text-decoration: none;
   }
 
   &__new-label {
@@ -103,6 +105,7 @@
     @include h6;
 
     max-width: 360px;
+    color: $color-white;
 
     @include desktop {
       max-width: 437px;
