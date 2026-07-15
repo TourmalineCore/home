@@ -15,6 +15,7 @@
     margin-bottom: 40px;
     max-width: 351px;
     text-align: center;
+    color: $color-white;
 
     @include tablet-xl {
       max-width: 664px;

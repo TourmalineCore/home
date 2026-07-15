@@ -1,0 +1,107 @@
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+import { useRouter } from 'next/router';
+import { PageHead } from '../../components/PageHead/PageHead';
+import { useScrollTop } from '../../common/hooks/useScrollTop';
+import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
+import { loadTranslations } from '../../common/utils';
+import { LayoutData } from '../../common/types';
+import { LayoutRedesign } from '../../components/redesign/LayoutRedesign/LayoutRedesign';
+import { MagazinesHero } from '../../components/magazines/MagazinesHero/MagazinesHero';
+import { useNonBreakingSpaces } from '../../common/hooks';
+
+export default function MagazinesPage({
+  layoutData,
+  isPreview,
+}: {
+  layoutData: LayoutData;
+  isPreview: boolean;
+}) {
+  const {
+    locale,
+  } = useRouter();
+
+  useNonBreakingSpaces({
+    locale: locale!,
+  });
+
+  useScrollTop();
+
+  return (
+    <>
+      <PageHead
+        seoData={{
+          seo: {
+            title: ``,
+            description: ``,
+          },
+          keywords: ``,
+          metaTags: [],
+          structuredData: ``,
+          additionalCode: ``,
+        }}
+      />
+      <LayoutRedesign
+        headerContent={layoutData.headerContent}
+        footerContent={layoutData.footerContent}
+        isPreview={isPreview}
+      >
+        <MagazinesHero />
+      </LayoutRedesign>
+    </>
+  );
+}
+
+export async function getServerSideProps({
+  locale,
+  preview = false,
+}: {
+  locale: string;
+  preview: boolean;
+}) {
+  if (process.env.IS_STATIC_MODE === `true`) {
+    const translationsPageData = await loadTranslations(locale, [`headerRedesign`, `footerRedesign`]);
+
+    return {
+      props: {
+        layoutData: {
+          headerContent: translationsPageData.headerRedesign,
+          footerContent: translationsPageData.footerRedesign,
+        },
+        ...(await getStaticTranslation({
+          locale,
+        })),
+      },
+    };
+  }
+
+  const status = preview ? `draft` : `published`;
+
+  const layoutData = await getLayoutData({
+    locale,
+    status,
+  });
+
+  return {
+    props: {
+      layoutData,
+      isPreview: preview,
+      ...(await getStaticTranslation({
+        locale,
+      })),
+    },
+  };
+}
+
+async function getStaticTranslation({
+  locale,
+}: {
+  locale: string;
+}) {
+  return serverSideTranslations(locale, [
+    `formBlockRedesign`,
+    `footer`,
+    `cookie`,
+    `cookieSettings`,
+  ]);
+}
