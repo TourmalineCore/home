@@ -1,0 +1,30 @@
+.magazine-description {
+  padding: 40px 0;
+
+  &__wrapper {
+    margin: 0 auto;
+    max-width: 351px;
+
+    @include tablet {
+      max-width: 440px;
+    }
+
+    @include tablet-xl {
+      max-width: 664px;
+    }
+
+    @include desktop {
+      max-width: 886px;
+    }
+
+    @include desktop-xl {
+      max-width: 1280px;
+    }
+  }
+
+  &__text {
+    @include body-l;
+
+    color: $color-grey-100-redesign;
+  }
+}
