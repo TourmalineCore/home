@@ -9,6 +9,7 @@ import { loadTranslations } from "../../common/utils";
 import { useNonBreakingSpaces } from "../../common/hooks";
 import { MagazineHero } from "../../components/magazines/MagazineHero/MagazineHero";
 import { MagazineDescription } from "../../components/magazines/MagazineDescription/MagazineDescription";
+import { useScrollTop } from "../../common/hooks/useScrollTop";
 
 const MagazinePdfView = dynamic(
   () => import(`../../components/magazines/MagazinePdfView/MagazinePdfView`).then((component) => component.MagazinePdfView),
