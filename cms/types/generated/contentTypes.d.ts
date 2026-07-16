@@ -565,6 +565,36 @@ export interface ApiLayoutLayout extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiMagazineSubscriptionMagazineSubscription
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'magazine_subscriptions';
+  info: {
+    displayName: 'Magazine subscription';
+    pluralName: 'magazine-subscriptions';
+    singularName: 'magazine-subscription';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::magazine-subscription.magazine-subscription'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    telegram: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiNavigationNavigation extends Struct.CollectionTypeSchema {
   collectionName: 'navigations';
   info: {
@@ -1327,6 +1357,7 @@ declare module '@strapi/strapi' {
       'api::cookie.cookie': ApiCookieCookie;
       'api::homepage.homepage': ApiHomepageHomepage;
       'api::layout.layout': ApiLayoutLayout;
+      'api::magazine-subscription.magazine-subscription': ApiMagazineSubscriptionMagazineSubscription;
       'api::navigation.navigation': ApiNavigationNavigation;
       'api::social-network.social-network': ApiSocialNetworkSocialNetwork;
       'plugin::content-releases.release': PluginContentReleasesRelease;

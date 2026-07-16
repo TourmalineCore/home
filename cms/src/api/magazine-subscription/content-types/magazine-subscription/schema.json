@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "magazine_subscriptions",
+  "info": {
+    "singularName": "magazine-subscription",
+    "pluralName": "magazine-subscriptions",
+    "displayName": "Magazine subscription"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "telegram": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    }
+  }
+}
