@@ -1,24 +1,20 @@
-import { Trans, useTranslation } from 'next-i18next';
-import {
-  KeyboardEvent,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { ReactNode, useRef, useState } from 'react';
 import clsx from 'clsx';
-import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { InvisibleSmartCaptcha } from '@yandex/smart-captcha';
-import { InputRedesign } from './components/InputRedesign/InputRedesign';
-import { TextareaRedesign } from './components/TextareaRedesign/TextareaRedesign';
 import { Spinner } from '../../Spinner/Spinner';
-import { DEFAULT_LOCALE } from '../../../common/constants';
 import { CheckBox } from '../../Checkbox/Checkbox';
 import { useSmartCaptcha } from '../../../common/hooks/useSmartCaptcha';
 
 export function FormRedesign({
+  title,
+  description,
+  buttonSubmitLabel,
+  buttonSubmittedLabel,
+  imageUrl,
+  children,
   onSubmit,
   isSubmit,
   setIsSubmit,
@@ -26,38 +22,37 @@ export function FormRedesign({
   onCloseModal,
   error,
   isComponentPage,
+  testId,
 } : {
+  title: string;
+  description: ReactNode;
+  buttonSubmitLabel: string;
+  buttonSubmittedLabel: string;
+  imageUrl: string;
+  children: ReactNode;
   onSubmit: ({
     formData,
     token,
   }:{
-    formData: {
-      email: string;
-      name: string;
-      description: string;
-    };
+    formData: FormData;
     token: string;
   }) => unknown;
   isSubmit: boolean;
   setIsSubmit: (value: boolean) => void;
-  isModal?: boolean;
-  onCloseModal?: () => void;
+  isModal: boolean;
+  onCloseModal: () => void;
   error: string;
   isComponentPage?: boolean;
+  testId?: string;
 }) {
-  const {
-    t,
-  } = useTranslation(`formBlockRedesign`);
-
-  const {
-    locale,
-  } = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const submitButtonRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState(``);
+  const {
+    locale,
+  } = useRouter();
 
   const {
     isSmartCaptchaEnabled,
@@ -69,25 +64,6 @@ export function FormRedesign({
   } = useSmartCaptcha();
 
   const [isConsentAccepted, setIsConsentAccepted] = useState(false);
-
-  const routerLocale = useMemo(() => {
-    if (!locale) {
-      return DEFAULT_LOCALE;
-    }
-
-    return locale;
-  }, [locale]);
-
-  const {
-    nameLabel,
-    emailLabel,
-    description,
-    textareaLabel,
-    buttonSubmitLabel,
-    buttonSubmittedLabel,
-    buttonSubmittedLabelModal,
-    titleSubmitted,
-  } = getTranslations();
 
   return (
     <form
@@ -104,12 +80,13 @@ export function FormRedesign({
           await handleSubmit();
         }
       }}
+      data-testId={testId}
     >
       {
         isSubmit && (
           <div className="form-redesign__img-container">
             <Image
-              src={t(`imageUrl`)}
+              src={imageUrl}
               fill
               alt=""
             />
@@ -117,58 +94,18 @@ export function FormRedesign({
         )
       }
       <h2 className="form-redesign__title">
-        {isSubmit ? `${titleSubmitted}` : t(`title`)}
+        {title}
       </h2>
-      {
-        isSubmit ? (
-          <p
-            className="form-redesign__description ym-hide-content"
-            data-testid="form-redesign-description"
-          >
-            {description}
-            <Link
-              className="form-redesign__contact-link"
-              href={t(`contactLink`)}
-              target="_blank"
-            >
-              {t(`contactLinkText`)}
-            </Link>
-          </p>
-        ) : (
-          <p className="form-redesign__description">
-            {t(`description`)}
-          </p>
-        )
-      }
+      <p
+        className="form-redesign__description ym-hide-content"
+        data-testid="form-redesign-description"
+      >
+        {description}
+      </p>
       {
         !isSubmit && (
           <>
-            <InputRedesign
-              name="name"
-              className="form-redesign__input"
-              label={nameLabel}
-              onKeyDown={handleOnKeyDown}
-              data-testid="form-redesign-name-input"
-              required
-            />
-            <InputRedesign
-              name="email"
-              className="form-redesign__input"
-              label={emailLabel}
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              onKeyDown={handleOnKeyDown}
-              data-testid="form-redesign-email-input"
-              required
-            />
-            <TextareaRedesign
-              name="message"
-              label={textareaLabel}
-              className="form-redesign__input"
-              description={t(`message.description`)}
-              data-testid="form-redesign-message-textarea"
-            />
+            {children}
             <div className="form-redesign__consent">
               <CheckBox
                 className="form-redesign__consent-checkbox"
@@ -178,38 +115,12 @@ export function FormRedesign({
                     ? `согласие на обработку персональных данных`
                     : `processing of personal data`
                 }
-                data-testid="form-block-consent-checkbox"
+                data-testid="form-redesign-consent-checkbox"
                 checked={isConsentAccepted}
                 onChange={() => setIsConsentAccepted(!isConsentAccepted)}
               />
               <div className="form-redesign__consent-text">
-                <Trans
-                  i18nKey="formBlockRedesign:consentText"
-                  components={{
-                    personalData: <a
-                      className="form-redesign__consent-link"
-                      href={`/documents/policy/policy-${routerLocale}.pdf#page=3}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={
-                        locale === `ru`
-                          ? `согласие на обработку персональных данных`
-                          : `processing of personal data`
-                      }
-                    />,
-                    privacyPolicy: <a
-                      className="form-redesign__consent-link"
-                      href={`/documents/policy/policy-${locale}.pdf`}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={
-                        locale === `ru`
-                          ? `политика конфиденциальности`
-                          : `privacy policy`
-                      }
-                    />,
-                  }}
-                />
+                {getConsentText()}
               </div>
             </div>
           </>
@@ -224,20 +135,20 @@ export function FormRedesign({
               type="button"
               onClick={() => {
                 if (isModal) {
-                  onCloseModal?.();
+                  onCloseModal();
                 }
 
                 setIsSubmit(false);
               }}
             >
-              {isModal ? buttonSubmittedLabelModal : buttonSubmittedLabel}
+              {buttonSubmittedLabel}
             </button>
           ) : (
             <button
               ref={submitButtonRef}
               className="form-redesign__featured-button"
               type="submit"
-              data-testid="form-block-submit-button"
+              data-testid="form-redesign-submit-button"
               disabled={!isConsentAccepted}
             >
               {isLoading ? <Spinner /> : buttonSubmitLabel}
@@ -249,7 +160,7 @@ export function FormRedesign({
           <InvisibleSmartCaptcha
             key={smartCaptchaKey}
             sitekey={process.env.NEXT_PUBLIC_SMARTCAPTCHA_CLIENT_KEY as string}
-            language={routerLocale === `ru` ? `ru` : `en`}
+            language={locale === `ru` ? `ru` : `en`}
             onSuccess={handleCaptchaSuccess}
             onChallengeHidden={hideSmartCaptcha}
             visible={isSmartCaptchaVisible}
@@ -258,32 +169,6 @@ export function FormRedesign({
       </div>
     </form>
   );
-
-  function getTranslations() {
-    if (locale === `ru`) {
-      return {
-        nameLabel: `Имя`,
-        emailLabel: `Почта`,
-        description: `Мы ответим на вашу почту ${email} в течение одного рабочего дня. Если вопрос срочный, смело пишите в`,
-        textareaLabel: `Расскажите о вашей задаче`,
-        buttonSubmitLabel: `Отправить заявку`,
-        buttonSubmittedLabel: `Заполнить еще раз`,
-        buttonSubmittedLabelModal: `Вернуться к сайту`,
-        titleSubmitted: `Спасибо за заявку!`,
-      };
-    }
-
-    return {
-      nameLabel: `Name`,
-      emailLabel: `Email`,
-      description: `We will send a message to your email ${email} within 1 working day. If urgent, please contact us on`,
-      textareaLabel: `Describe your project`,
-      buttonSubmitLabel: `Send`,
-      buttonSubmittedLabel: `Write more`,
-      buttonSubmittedLabelModal: `Back to the website`,
-      titleSubmitted: `Thank you!`,
-    };
-  }
 
   async function handleCaptchaSuccess(smartCaptchaToken: string) {
     try {
@@ -309,20 +194,66 @@ export function FormRedesign({
   } = {}) {
     if (formRef.current) {
       const formData = new FormData(formRef.current);
+
       await onSubmit({
-        formData: {
-          email: formData.get(`email`) as string,
-          name: formData.get(`name`) as string,
-          description: formData.get(`message`) as string,
-        },
+        formData,
         token,
       });
     }
   }
 
-  function handleOnKeyDown(e: KeyboardEvent<HTMLInputElement>) {
-    if (e.key === `Enter`) {
-      e.preventDefault();
+  function getConsentText() {
+    if (locale === `ru`) {
+      return (
+        <>
+          Я даю
+          <a
+            className="form-redesign__consent-link"
+            href="/documents/policy/policy-ru.pdf#page=3"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="согласие на обработку персональных данных"
+          >
+            согласие на обработку персональных данных
+          </a>
+          {` `}
+          и&nbsp;ознакомлен(а)
+          <a
+            className="form-redesign__consent-link"
+            href="/documents/policy/policy-ru.pdf"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="политика конфиденциальности"
+          >
+            с политикой конфиденциальности
+          </a>
+        </>
+      );
     }
+    return (
+      <>
+        I consent to the processing of
+        <a
+          className="form-redesign__consent-link"
+          href="/documents/policy/policy-en.pdf#page=3"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="processing of personal data"
+        >
+          personal data
+        </a>
+        {` `}
+        and have read the
+        <a
+          className="form-redesign__consent-link"
+          href="/documents/policy/policy-en.pdf"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="privacy policy"
+        >
+          privacy policy
+        </a>
+      </>
+    );
   }
 }

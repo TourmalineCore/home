@@ -1,11 +1,9 @@
-import { Browser, Page } from '@playwright/test';
-import { expect, test } from '../../../playwright-tests/custom-test';
-import { BREAKPOINTS } from '../../../playwright-tests/constants/breakpoints';
-import { AppRoute, ComponentName } from '../../../common/enums';
+import { Browser, expect, Page } from '@playwright/test';
+import { BREAKPOINTS } from '../../playwright-tests/constants/breakpoints';
+import { AppRoute, ComponentName } from '../../common/enums';
+import { test } from '../../playwright-tests/custom-test';
 
-const TEST_ID = `form-block`;
-
-test.describe(`FormBlockScreenshotTests`, () => {
+test.describe(`ContactFormBlockScreenshotTests`, () => {
   for (const {
     name,
     breakpoint,
@@ -15,10 +13,10 @@ test.describe(`FormBlockScreenshotTests`, () => {
       testScreenshotAtBreakpoint,
       goToComponentsPage,
     }) => {
-      await goToComponentsPage(ComponentName.FORM_BLOCK);
+      await goToComponentsPage(ComponentName.CONTACT_FORM);
 
       await testScreenshotAtBreakpoint({
-        testId: TEST_ID,
+        testId: ComponentName.CONTACT_FORM,
         breakpoint,
         breakpointName,
       });
@@ -26,17 +24,17 @@ test.describe(`FormBlockScreenshotTests`, () => {
   }
 });
 
-test.describe(`FormDisplayDependingOnGeolocationTests`, () => {
-  test(`FormIsDisplayedInRussiaCountryTest`, formIsDisplayedInRussiaTest);
+test.describe(`ContactFormDisplayDependingOnGeolocationTests`, () => {
+  test(`ContactFormIsDisplayedInRussiaCountryTest`, contactFormIsDisplayedInRussiaTest);
 
-  test(`FormIsNotDisplayedOutsideOfRussia`, formIsNotDisplayedOutsideOfRussia);
+  test(`ContactFormIsNotDisplayedOutsideOfRussia`, contactFormIsNotDisplayedOutsideOfRussia);
 });
 
 test.describe(`SubmitButtonStateBasedOnPrivacyPolicyConsentTests`, () => {
   test.beforeEach(async ({
     goToComponentsPage,
   }) => {
-    await goToComponentsPage(ComponentName.FORM_BLOCK);
+    await goToComponentsPage(ComponentName.CONTACT_FORM);
   });
 
   test(`SubmitButtonIsDisabledWithoutConsentTest`, submitButtonIsDisabledWithoutConsentTest);
@@ -48,7 +46,7 @@ test.describe(`FormInputsShouldHaveYmDisableKeysClassNameToDisguiseFromWebvisor`
   test.beforeEach(async ({
     goToComponentsPage,
   }) => {
-    await goToComponentsPage(ComponentName.FORM_BLOCK);
+    await goToComponentsPage(ComponentName.CONTACT_FORM);
   });
 
   test(`CheckClassNameTest`, checkClassName);
@@ -60,12 +58,12 @@ async function errorTests() {
   test.beforeEach(async ({
     goToComponentsPage,
   }) => {
-    await goToComponentsPage(ComponentName.FORM_BLOCK);
+    await goToComponentsPage(ComponentName.CONTACT_FORM);
   });
 
   test(
     `
-    GIVEN form is displayed
+    GIVEN contact form is displayed
     WHEN user submits the form and email sending fails
     THEN error message is displayed
     AND user can try submitting the form again and email sending succeeds
@@ -86,19 +84,19 @@ async function errorMessageDisplayTests({
     status: 500,
   }));
 
-  await page.getByTestId(`form-redesign-name-input`)
+  await page.getByTestId(`contact-form-name-input`)
     .fill(`Test Name`);
 
-  await page.getByTestId(`form-redesign-email-input`)
+  await page.getByTestId(`contact-form-email-input`)
     .fill(`test@test.ru`);
 
-  await page.getByTestId(`form-redesign-message-textarea`)
+  await page.getByTestId(`contact-form-message-textarea`)
     .fill(`Test Message`);
 
-  await page.getByTestId(`form-block-consent-checkbox`)
+  await page.getByTestId(`form-redesign-consent-checkbox`)
     .check();
 
-  await page.getByTestId(`form-block-submit-button`)
+  await page.getByTestId(`form-redesign-submit-button`)
     .click();
 
   await expect(
@@ -110,7 +108,7 @@ async function errorMessageDisplayTests({
     status: 200,
   }));
 
-  await page.getByTestId(`form-block-submit-button`)
+  await page.getByTestId(`form-redesign-submit-button`)
     .click();
 
   await expect(
@@ -125,17 +123,17 @@ async function checkClassName({
 }: {
   page: Page;
 }) {
-  expect(page.getByTestId(`form-redesign-name-input`))
+  expect(page.getByTestId(`contact-form-name-input`))
     .toContainClass(`ym-disable-keys`);
 
-  expect(page.getByTestId(`form-redesign-email-input`))
+  expect(page.getByTestId(`contact-form-email-input`))
     .toContainClass(`ym-disable-keys`);
 
-  expect(page.getByTestId(`form-redesign-message-textarea`))
+  expect(page.getByTestId(`contact-form-message-textarea`))
     .toContainClass(`ym-disable-keys`);
 }
 
-async function formIsNotDisplayedOutsideOfRussia({
+async function contactFormIsNotDisplayedOutsideOfRussia({
   browser,
 }: {
   browser: Browser;
@@ -153,14 +151,14 @@ async function formIsNotDisplayedOutsideOfRussia({
 
   await page.goto(AppRoute.Main);
 
-  await expect(page.getByTestId(TEST_ID))
+  await expect(page.getByTestId(ComponentName.CONTACT_FORM))
     .not
     .toBeVisible();
 
   await browser.close();
 }
 
-async function formIsDisplayedInRussiaTest({
+async function contactFormIsDisplayedInRussiaTest({
   browser,
 }: {
   browser: Browser;
@@ -178,7 +176,10 @@ async function formIsDisplayedInRussiaTest({
 
   await page.goto(AppRoute.Main);
 
-  await expect(page.getByTestId(TEST_ID))
+  await expect(page.getByTestId(ComponentName.CONTACT_FORM)
+    .filter({
+      visible: true,
+    }))
     .toBeVisible();
 
   await browser.close();
@@ -189,11 +190,11 @@ async function submitButtonIsDisabledWithoutConsentTest({
 }: {
   page: Page;
 }) {
-  await expect(page.getByTestId(`form-block-consent-checkbox`))
+  await expect(page.getByTestId(`form-redesign-consent-checkbox`))
     .not
     .toBeChecked();
 
-  await expect(page.getByTestId(`form-block-submit-button`))
+  await expect(page.getByTestId(`form-redesign-submit-button`))
     .toBeDisabled();
 }
 
@@ -202,14 +203,14 @@ async function submitButtonIsEnabledWithConsentTest({
 }: {
   page: Page;
 }) {
-  await expect(page.getByTestId(`form-block-consent-checkbox`))
+  await expect(page.getByTestId(`form-redesign-consent-checkbox`))
     .not
     .toBeChecked();
 
-  await page.getByTestId(`form-block-consent-checkbox`)
+  await page.getByTestId(`form-redesign-consent-checkbox`)
     .check();
 
-  await expect(page.getByTestId(`form-block-submit-button`))
+  await expect(page.getByTestId(`form-redesign-submit-button`))
     .not
     .toBeDisabled();
 }

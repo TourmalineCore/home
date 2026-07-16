@@ -8,7 +8,7 @@ import {
   useTranslationNamespace,
 } from '../../common/hooks';
 import { isChineseLanguage } from '../../common/utils';
-import { FormModal } from '../FormModal/FormModal';
+import { ContactFormModal } from '../ContactFormModal/ContactFormModal';
 
 export function HeroBlockTechnology() {
   const {
@@ -68,7 +68,7 @@ export function HeroBlockTechnology() {
           />
         </picture>
       </div>
-      <FormModal
+      <ContactFormModal
         onCloseModal={() => setIsModalOpen(false)}
         isModalOpen={isModalOpen}
       />

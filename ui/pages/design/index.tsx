@@ -140,6 +140,6 @@ async function getStaticTranslation({
     `stagesDesign`,
     `stackDesign`,
     `servicesTechnologyDesign`,
-    `formBlockRedesign`,
+    `contactForm`,
   ]);
 }

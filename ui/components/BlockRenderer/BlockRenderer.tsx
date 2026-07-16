@@ -3,13 +3,12 @@ import { Block } from '../../common/types';
 import { ThreeColumnGrid } from '../ThreeColumnGrid/ThreeColumnGrid';
 import { FeaturedCardsList } from '../FeaturedCardsList/FeaturedCardsList';
 import { CollageWithTitle } from '../CollageWithTitle/CollageWithTitle';
-// import { FormBlockRedesign } from '../redesign/FormBlockRedesign/FormBlockRedesign';
 import { Hero } from '../Hero/Hero';
 import { ShowcaseGrid } from '../ShowcaseGrid/ShowcaseGrid';
 import { SignpostMultiple } from '../SignpostMultiple/SignpostMultiple';
 import { SingleImage } from '../SingleImage/SingleImage';
 import { CollageWithLink } from '../CollageWithLink/CollageWithLink';
-import { FormBlockRedesign } from '../redesign/FormBlockRedesign/FormBlockRedesign';
+import { ContactForm } from '../ContactForm/ContactForm';
 
 export const BlockRenderer = ({
   block,
@@ -95,7 +94,7 @@ export const BlockRenderer = ({
 
   if (block.__component === BlockType.SHARED_FORM_BLOCK) {
     return (
-      <FormBlockRedesign />
+      <ContactForm />
     );
   }
 

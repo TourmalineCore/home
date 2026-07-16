@@ -100,6 +100,6 @@ async function getStaticTranslation({
     `footer`,
     `cookie`,
     `cookieSettings`,
-    `formBlockRedesign`,
+    `contactForm`,
   ]);
 }

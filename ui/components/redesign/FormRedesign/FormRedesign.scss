@@ -73,28 +73,6 @@
     }
   }
 
-  &__contact-link {
-    margin-left: 4px;
-    color: inherit;
-    text-underline-offset: 2px;
-  }
-
-  &__input {
-    width: 100%;
-
-    & + & {
-      margin-top: 12px;
-
-      @include desktop {
-        margin-top: 8px;
-      }
-
-      @include desktop-xl {
-        margin-top: 12px;
-      }
-    }
-  }
-
   &__featured-button {
     @include link-text;
 

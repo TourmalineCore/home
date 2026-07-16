@@ -101,7 +101,7 @@ export async function getServerSideProps({
       `conferenceSignposts`,
       `articleSignposts`,
       `singleImage`,
-      `formBlockRedesign`,
+      `contactForm`,
       `headerRedesign`,
       `footerRedesign`,
     ]);
@@ -237,6 +237,6 @@ async function getStaticTranslation({
     `common`,
     `cookie`,
     `cookieSettings`,
-    `formBlockRedesign`,
+    `contactForm`,
   ]);
 }

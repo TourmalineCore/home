@@ -11,7 +11,7 @@ import { HeaderRedesignProps } from "../../../common/types";
 import { useOnScrollDirections } from "../../../common/hooks";
 import { HeaderNavigationList } from "./components/HeaderNavigationList/HeaderNavigationList";
 import { AppRoute } from "../../../common/enums";
-import { FormModal } from "../../FormModal/FormModal";
+import { ContactFormModal } from "../../ContactFormModal/ContactFormModal";
 
 export function HeaderRedesign({
   navigationLists,
@@ -105,7 +105,7 @@ export function HeaderRedesign({
             </HeaderButton>
           )}
         </div>
-        <FormModal
+        <ContactFormModal
           onCloseModal={() => setIsModalOpen(false)}
           isModalOpen={isModalOpen}
         />

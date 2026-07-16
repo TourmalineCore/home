@@ -2,7 +2,7 @@ import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { useBodyScrollHidden, useIsRussianCountry, usePath } from '../../common/hooks';
 import { TechnologyPageAnchorLink } from '../../common/enums';
-import { FormModal } from '../FormModal/FormModal';
+import { ContactFormModal } from '../ContactFormModal/ContactFormModal';
 import { PrimaryButton } from '../PrimaryButton/PrimaryButton';
 
 export function Cta() {
@@ -46,7 +46,7 @@ export function Cta() {
           <div className="cta__image" />
         </div>
       </div>
-      <FormModal
+      <ContactFormModal
         onCloseModal={() => setIsModalOpen(false)}
         isModalOpen={isModalOpen}
       />

@@ -1,14 +1,14 @@
-import { expect, Page, test } from '../../../playwright-tests/custom-test';
-import { BREAKPOINTS } from '../../../playwright-tests/constants/breakpoints';
-import { ComponentName } from '../../../common/enums';
+import { ComponentName } from '../../common/enums';
+import { BREAKPOINTS } from '../../playwright-tests/constants/breakpoints';
+import { expect, Page, test } from '../../playwright-tests/custom-test';
 
-const TEST_ID = `submitted-form-block`;
+const TEST_ID = `contact-form`;
 
-test.describe(`SubmittedFormBlockTests`, () => {
+test.describe(`SubmittedContactFormTests`, () => {
   test.beforeEach(async ({
     goToComponentsPage,
   }) => {
-    await goToComponentsPage(ComponentName.SUBMITTED_FORM_BLOCK);
+    await goToComponentsPage(ComponentName.SUBMITTED_CONTACT_FORM);
   });
 
   for (const {
@@ -32,7 +32,7 @@ test.describe(`DescriptionTextShouldHaveYmHideContentClassNameToDisguiseFromWebv
   test.beforeEach(async ({
     goToComponentsPage,
   }) => {
-    await goToComponentsPage(ComponentName.SUBMITTED_FORM_BLOCK);
+    await goToComponentsPage(ComponentName.SUBMITTED_CONTACT_FORM);
   });
 
   test(`CheckClassNameTest`, checkClassName);

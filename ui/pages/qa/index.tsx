@@ -134,6 +134,6 @@ async function getStaticTranslation({
     `stackQa`,
     `cooperation`,
     `servicesTechnologyQa`,
-    `formBlockRedesign`,
+    `contactForm`,
   ]);
 }

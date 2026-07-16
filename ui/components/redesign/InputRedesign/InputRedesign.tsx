@@ -31,7 +31,6 @@ export function InputRedesign({
           {label}
         </label>
       </div>
-
     </div>
   );
 }

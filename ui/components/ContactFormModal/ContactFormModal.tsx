@@ -1,33 +1,31 @@
 import clsx from 'clsx';
 import { Modal } from '../Modal/Modal';
-import { FormBlockRedesign } from '../redesign/FormBlockRedesign/FormBlockRedesign';
+import { ContactForm } from '../ContactForm/ContactForm';
 
-export function FormModal({
+export function ContactFormModal({
   onCloseModal,
-  initializeIsSubmit,
-  testId,
+  initializeIsSubmit = false,
   isComponentPage,
   isModalOpen,
-}:{
+}: {
   onCloseModal: () => void;
   initializeIsSubmit?: boolean;
-  testId?: string;
   isComponentPage?: boolean;
   isModalOpen: boolean;
 }) {
   return (
     <Modal
-      className={clsx(`form-modal`, {
-        'form-modal--open': isModalOpen,
+      className={clsx(`contact-form-modal`, {
+        'contact-form-modal--open': isModalOpen,
       })}
-      testId={testId}
+      testId="contact-form-modal"
       onClose={onCloseModal}
     >
-      <FormBlockRedesign
+      <ContactForm
         isModal
-        initializeIsSubmit={initializeIsSubmit}
         onCloseModal={onCloseModal}
         isComponentPage={isComponentPage}
+        initializeIsSubmit={initializeIsSubmit}
       />
     </Modal>
   );

@@ -137,6 +137,6 @@ async function getStaticTranslation({
     `cooperation`,
     `servicesTechnologyEmbedded`,
     `casesEmbedded`,
-    `formBlockRedesign`,
+    `contactForm`,
   ]);
 }

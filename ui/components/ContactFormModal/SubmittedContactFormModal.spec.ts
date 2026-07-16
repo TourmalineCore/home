@@ -2,7 +2,7 @@ import { test } from '../../playwright-tests/custom-test';
 import { BreakpointName, ComponentName } from '../../common/enums';
 import { BREAKPOINTS } from '../../playwright-tests/constants/breakpoints';
 
-const TEST_ID = `submitted-form-modal`;
+const TEST_ID = `contact-form-modal`;
 
 const heightMap: Record<BreakpointName, number> = {
   mobile: 665,
@@ -12,12 +12,12 @@ const heightMap: Record<BreakpointName, number> = {
   'desktop-xl': 1080,
 };
 
-test.describe(`SubmittedFormModal`, () => {
+test.describe(`SubmittedContactFormModal`, () => {
   test.beforeEach(async ({
     page,
     goToComponentsPage,
   }) => {
-    await goToComponentsPage(ComponentName.SUBMITTED_FORM_MODAL);
+    await goToComponentsPage(ComponentName.SUBMITTED_CONTACT_FORM_MODAL);
 
     await page.addStyleTag({
       content: `

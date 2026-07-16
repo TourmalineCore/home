@@ -99,7 +99,7 @@ async function getStaticTranslation({
   locale: string;
 }) {
   return serverSideTranslations(locale, [
-    `formBlockRedesign`,
+    `contactForm`,
     `footer`,
     `cookie`,
     `cookieSettings`,

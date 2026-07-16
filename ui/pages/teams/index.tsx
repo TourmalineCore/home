@@ -129,6 +129,6 @@ async function getStaticTranslation({
     `casesTeams`,
     `stagesTeams`,
     `servicesTechnologyTeams`,
-    `formBlockRedesign`,
+    `contactForm`,
   ]);
 }

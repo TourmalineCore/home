@@ -38,10 +38,10 @@ import { ChelzooLinks } from "../../components/chelzoo/ChelzooLinks/ChelzooLinks
 import { ChelzooReview } from "../../components/chelzoo/ChelzooReview/ChelzooReview";
 import { useNonBreakingSpaces } from "../../common/hooks";
 import { CookieSettingsModal } from "../../components/CookieSettingsModal/CookieSettingsModal";
-import { FormModal } from "../../components/FormModal/FormModal";
-import { FormBlockRedesign } from "../../components/redesign/FormBlockRedesign/FormBlockRedesign";
+import { ContactFormModal } from "../../components/ContactFormModal/ContactFormModal";
 import { MagazinesHero } from "../../components/magazines/MagazinesHero/MagazinesHero";
 import { MagazineHero } from "../../components/magazines/MagazineHero/MagazineHero";
+import { ContactForm } from "../../components/ContactForm/ContactForm";
 
 export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JSX.Element> = {
   [ComponentName.THREE_COLUMN_GRID]: ({
@@ -159,16 +159,12 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   }) => (
     <SingleImage imageWithBlurDataURL={singleImage.imageWithBlurDataURL} />
   ),
-  [ComponentName.FORM_BLOCK]: () => (
-    <FormBlockRedesign
-      testId="form-block"
-      isComponentPage
-    />
+  [ComponentName.CONTACT_FORM]: () => (
+    <ContactForm isComponentPage />
   ),
-  [ComponentName.SUBMITTED_FORM_BLOCK]: () => (
-    <FormBlockRedesign
+  [ComponentName.SUBMITTED_CONTACT_FORM]: () => (
+    <ContactForm
       initializeIsSubmit
-      testId="submitted-form-block"
       isComponentPage
     />
   ),
@@ -203,19 +199,17 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
       message={pageNotFound.message}
     />
   ),
-  [ComponentName.FORM_MODAL]: () => (
-    <FormModal
+  [ComponentName.CONTACT_FORM_MODAL]: () => (
+    <ContactFormModal
       onCloseModal={() => {}}
       isModalOpen
-      testId="form-modal"
       isComponentPage
     />
   ),
-  [ComponentName.SUBMITTED_FORM_MODAL]: () => (
-    <FormModal
+  [ComponentName.SUBMITTED_CONTACT_FORM_MODAL]: () => (
+    <ContactFormModal
       onCloseModal={() => {}}
       isModalOpen
-      testId="submitted-form-modal"
       initializeIsSubmit
       isComponentPage
     />
@@ -319,7 +313,7 @@ export async function getStaticProps({
     props: {
       pageData: translationsPageData,
       ...(await serverSideTranslations(locale, [
-        `formBlockRedesign`,
+        `contactForm`,
         `chelzooHero`,
         `chelzooAbout`,
         `chelzooStack`,

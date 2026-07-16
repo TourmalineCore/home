@@ -136,6 +136,6 @@ async function getStaticTranslation({
     `stackFrontend-team`,
     `casesFrontend-team`,
     `stagesFrontend-team`,
-    `formBlockRedesign`,
+    `contactForm`,
   ]);
 }
