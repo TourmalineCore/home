@@ -1,6 +1,6 @@
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
-import { useState } from "react";
+import { KeyboardEvent, useState } from 'react';
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { FormBlockRedesign } from "../redesign/FormBlockRedesign/FormBlockRedesign";
