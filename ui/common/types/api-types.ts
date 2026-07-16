@@ -45,7 +45,7 @@ export interface CookieListResponse {
 }
 
 export interface Cookie {
-  id?: number;
+  id?: string | number;
   documentId?: string;
   bannerText: string;
   analyticsText: string;
@@ -58,7 +58,7 @@ export interface Cookie {
   /** @format date-time */
   publishedAt?: string;
   createdBy?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     firstname?: string;
     lastname?: string;
@@ -69,17 +69,17 @@ export interface Cookie {
     registrationToken?: string;
     isActive?: boolean;
     roles?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
       name?: string;
       code?: string;
       description?: string;
       users?: {
-        id?: number;
+        id?: string | number;
         documentId?: string;
       }[];
       permissions?: {
-        id?: number;
+        id?: string | number;
         documentId?: string;
         action?: string;
         actionParameters?: any;
@@ -87,7 +87,7 @@ export interface Cookie {
         properties?: any;
         conditions?: any;
         role?: {
-          id?: number;
+          id?: string | number;
           documentId?: string;
         };
         /** @format date-time */
@@ -97,16 +97,16 @@ export interface Cookie {
         /** @format date-time */
         publishedAt?: string;
         createdBy?: {
-          id?: number;
+          id?: string | number;
           documentId?: string;
         };
         updatedBy?: {
-          id?: number;
+          id?: string | number;
           documentId?: string;
         };
         locale?: string;
         localizations?: {
-          id?: number;
+          id?: string | number;
           documentId?: string;
         }[];
       }[];
@@ -117,16 +117,16 @@ export interface Cookie {
       /** @format date-time */
       publishedAt?: string;
       createdBy?: {
-        id?: number;
+        id?: string | number;
         documentId?: string;
       };
       updatedBy?: {
-        id?: number;
+        id?: string | number;
         documentId?: string;
       };
       locale?: string;
       localizations?: {
-        id?: number;
+        id?: string | number;
         documentId?: string;
       }[];
     }[];
@@ -139,26 +139,26 @@ export interface Cookie {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   };
   updatedBy?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
   };
   locale?: string;
   localizations?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     bannerText?: string;
     analyticsText?: string;
@@ -171,16 +171,16 @@ export interface Cookie {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   }[];
@@ -188,6 +188,175 @@ export interface Cookie {
 
 export interface CookieResponse {
   data?: Cookie;
+  meta?: object;
+}
+
+export interface CookieConsentRequest {
+  data: {
+    consentId: string;
+    consentVersion: string;
+    categories: any;
+    locale?: string;
+    localizations?: (number | string)[];
+  };
+}
+
+export interface CookieConsentListResponse {
+  data?: CookieConsent[];
+  meta?: {
+    pagination?: {
+      page?: number;
+      /** @min 25 */
+      pageSize?: number;
+      /** @max 1 */
+      pageCount?: number;
+      total?: number;
+    };
+  };
+}
+
+export interface CookieConsent {
+  id?: string | number;
+  documentId?: string;
+  consentId: string;
+  consentVersion: string;
+  categories: any;
+  /** @format date-time */
+  createdAt?: string;
+  /** @format date-time */
+  updatedAt?: string;
+  /** @format date-time */
+  publishedAt?: string;
+  createdBy?: {
+    id?: string | number;
+    documentId?: string;
+    firstname?: string;
+    lastname?: string;
+    username?: string;
+    /** @format email */
+    email?: string;
+    resetPasswordToken?: string;
+    registrationToken?: string;
+    isActive?: boolean;
+    roles?: {
+      id?: string | number;
+      documentId?: string;
+      name?: string;
+      code?: string;
+      description?: string;
+      users?: {
+        id?: string | number;
+        documentId?: string;
+      }[];
+      permissions?: {
+        id?: string | number;
+        documentId?: string;
+        action?: string;
+        actionParameters?: any;
+        subject?: string;
+        properties?: any;
+        conditions?: any;
+        role?: {
+          id?: string | number;
+          documentId?: string;
+        };
+        /** @format date-time */
+        createdAt?: string;
+        /** @format date-time */
+        updatedAt?: string;
+        /** @format date-time */
+        publishedAt?: string;
+        createdBy?: {
+          id?: string | number;
+          documentId?: string;
+        };
+        updatedBy?: {
+          id?: string | number;
+          documentId?: string;
+        };
+        locale?: string;
+        localizations?: {
+          id?: string | number;
+          documentId?: string;
+        }[];
+      }[];
+      /** @format date-time */
+      createdAt?: string;
+      /** @format date-time */
+      updatedAt?: string;
+      /** @format date-time */
+      publishedAt?: string;
+      createdBy?: {
+        id?: string | number;
+        documentId?: string;
+      };
+      updatedBy?: {
+        id?: string | number;
+        documentId?: string;
+      };
+      locale?: string;
+      localizations?: {
+        id?: string | number;
+        documentId?: string;
+      }[];
+    }[];
+    blocked?: boolean;
+    preferedLanguage?: string;
+    /** @format date-time */
+    createdAt?: string;
+    /** @format date-time */
+    updatedAt?: string;
+    /** @format date-time */
+    publishedAt?: string;
+    createdBy?: {
+      id?: string | number;
+      documentId?: string;
+    };
+    updatedBy?: {
+      id?: string | number;
+      documentId?: string;
+    };
+    locale?: string;
+    localizations?: {
+      id?: string | number;
+      documentId?: string;
+    }[];
+  };
+  updatedBy?: {
+    id?: string | number;
+    documentId?: string;
+  };
+  locale?: string;
+  localizations?: {
+    id?: string | number;
+    documentId?: string;
+    consentId?: string;
+    consentVersion?: string;
+    categories?: any;
+    /** @format date-time */
+    createdAt?: string;
+    /** @format date-time */
+    updatedAt?: string;
+    /** @format date-time */
+    publishedAt?: string;
+    createdBy?: {
+      id?: string | number;
+      documentId?: string;
+    };
+    updatedBy?: {
+      id?: string | number;
+      documentId?: string;
+    };
+    locale?: string;
+    localizations?: {
+      id?: string | number;
+      documentId?: string;
+    }[];
+  }[];
+}
+
+export interface CookieConsentResponse {
+  data?: CookieConsent;
   meta?: object;
 }
 
@@ -226,7 +395,7 @@ export interface HomepageListResponse {
 }
 
 export interface Homepage {
-  id?: number;
+  id?: string | number;
   documentId?: string;
   blocks: AbstractNull &
     (
@@ -248,16 +417,16 @@ export interface Homepage {
   /** @format date-time */
   publishedAt?: string;
   createdBy?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
   };
   updatedBy?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
   };
   locale?: string;
   localizations?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     blocks?: DiscriminatorNull &
       (
@@ -279,16 +448,16 @@ export interface Homepage {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   }[];
@@ -300,12 +469,12 @@ export interface HomepageResponse {
 }
 
 export interface SharedHeroComponent {
-  id?: number;
+  id?: string | number;
   __component?: "shared.hero";
   title?: string;
   description?: string;
   media?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     name?: string;
     alternativeText?: string;
@@ -323,11 +492,11 @@ export interface SharedHeroComponent {
     provider?: string;
     provider_metadata?: any;
     related?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
     folder?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     folderPath?: string;
@@ -339,25 +508,25 @@ export interface SharedHeroComponent {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   }[];
 }
 
 export interface FeaturedCardCardWithImageComponent {
-  id?: number;
+  id?: string | number;
   image?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     name?: string;
     alternativeText?: string;
@@ -375,11 +544,11 @@ export interface FeaturedCardCardWithImageComponent {
     provider?: string;
     provider_metadata?: any;
     related?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
     folder?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     folderPath?: string;
@@ -391,16 +560,16 @@ export interface FeaturedCardCardWithImageComponent {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   };
@@ -408,18 +577,18 @@ export interface FeaturedCardCardWithImageComponent {
 }
 
 export interface SharedTextComponent {
-  id?: number;
+  id?: string | number;
   text?: string;
 }
 
 export interface SharedLinkComponent {
-  id?: number;
+  id?: string | number;
   text?: string;
   url?: string;
 }
 
 export interface FeaturedCardCardWithPointsComponent {
-  id?: number;
+  id?: string | number;
   title?: string;
   points?: SharedTextComponent[];
   link?: SharedLinkComponent;
@@ -427,10 +596,10 @@ export interface FeaturedCardCardWithPointsComponent {
 }
 
 export interface FeaturedCardWideCardItemsComponent {
-  id?: number;
+  id?: string | number;
   name?: string;
   icon?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     name?: string;
     alternativeText?: string;
@@ -448,11 +617,11 @@ export interface FeaturedCardWideCardItemsComponent {
     provider?: string;
     provider_metadata?: any;
     related?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
     folder?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     folderPath?: string;
@@ -464,16 +633,16 @@ export interface FeaturedCardWideCardItemsComponent {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   };
@@ -481,7 +650,7 @@ export interface FeaturedCardWideCardItemsComponent {
 }
 
 export interface FeaturedCardWideCardComponent {
-  id?: number;
+  id?: string | number;
   title?: string;
   description?: string;
   wideCardItems?: FeaturedCardWideCardItemsComponent[];
@@ -489,7 +658,7 @@ export interface FeaturedCardWideCardComponent {
 }
 
 export interface SharedFeaturedCardComponent {
-  id?: number;
+  id?: string | number;
   type?: "points" | "image" | "blank" | "wide";
   cardWithImage?: FeaturedCardCardWithImageComponent;
   cardWithPoints?: FeaturedCardCardWithPointsComponent;
@@ -497,7 +666,7 @@ export interface SharedFeaturedCardComponent {
 }
 
 export interface SharedFeaturedCardsListComponent {
-  id?: number;
+  id?: string | number;
   __component?: "shared.featured-cards-list";
   title?: string;
   featuredCards?: SharedFeaturedCardComponent[];
@@ -505,11 +674,11 @@ export interface SharedFeaturedCardsListComponent {
 }
 
 export interface SharedCollageWithTitleComponent {
-  id?: number;
+  id?: string | number;
   __component?: "shared.collage-with-title";
   title?: string;
   images?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     name?: string;
     alternativeText?: string;
@@ -527,11 +696,11 @@ export interface SharedCollageWithTitleComponent {
     provider?: string;
     provider_metadata?: any;
     related?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
     folder?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     folderPath?: string;
@@ -543,25 +712,25 @@ export interface SharedCollageWithTitleComponent {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   }[];
 }
 
 export interface SharedSignpostComponent {
-  id?: number;
+  id?: string | number;
   image?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     name?: string;
     alternativeText?: string;
@@ -579,11 +748,11 @@ export interface SharedSignpostComponent {
     provider?: string;
     provider_metadata?: any;
     related?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
     folder?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     folderPath?: string;
@@ -595,16 +764,16 @@ export interface SharedSignpostComponent {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   };
@@ -614,7 +783,7 @@ export interface SharedSignpostComponent {
 }
 
 export interface SharedSignpostMultipleComponent {
-  id?: number;
+  id?: string | number;
   __component?: "shared.signpost-multiple";
   title?: string;
   link?: SharedLinkComponent;
@@ -622,10 +791,10 @@ export interface SharedSignpostMultipleComponent {
 }
 
 export interface SharedSingleImageComponent {
-  id?: number;
+  id?: string | number;
   __component?: "shared.single-image";
   image?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     name?: string;
     alternativeText?: string;
@@ -643,11 +812,11 @@ export interface SharedSingleImageComponent {
     provider?: string;
     provider_metadata?: any;
     related?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
     folder?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     folderPath?: string;
@@ -659,26 +828,26 @@ export interface SharedSingleImageComponent {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   };
 }
 
 export interface ColumnWithContentColumnWithImageComponent {
-  id?: number;
+  id?: string | number;
   title?: string;
   image?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     name?: string;
     alternativeText?: string;
@@ -696,11 +865,11 @@ export interface ColumnWithContentColumnWithImageComponent {
     provider?: string;
     provider_metadata?: any;
     related?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
     folder?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     folderPath?: string;
@@ -712,16 +881,16 @@ export interface ColumnWithContentColumnWithImageComponent {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   };
@@ -729,7 +898,7 @@ export interface ColumnWithContentColumnWithImageComponent {
 }
 
 export interface ColumnWithContentRepositoryCardComponent {
-  id?: number;
+  id?: string | number;
   name?: string;
   description?: string;
   link?: string;
@@ -737,14 +906,14 @@ export interface ColumnWithContentRepositoryCardComponent {
 }
 
 export interface ColumnWithContentColumnWithRepositoriesComponent {
-  id?: number;
+  id?: string | number;
   title?: string;
   repositories?: ColumnWithContentRepositoryCardComponent[];
   markdownText?: string;
 }
 
 export interface ColumnWithContentColumnWithTextAndDateComponent {
-  id?: number;
+  id?: string | number;
   title?: string;
   text?: string;
   /** @format date */
@@ -752,7 +921,7 @@ export interface ColumnWithContentColumnWithTextAndDateComponent {
 }
 
 export interface SharedColumnWithContentComponent {
-  id?: number;
+  id?: string | number;
   type?: "image" | "repositories" | "text-and-date";
   columnWithImage?: ColumnWithContentColumnWithImageComponent;
   columnWithRepositories?: ColumnWithContentColumnWithRepositoriesComponent;
@@ -760,23 +929,23 @@ export interface SharedColumnWithContentComponent {
 }
 
 export interface SharedThreeColumnGridComponent {
-  id?: number;
+  id?: string | number;
   __component?: "shared.three-column-grid";
   columnsWithContent?: SharedColumnWithContentComponent[];
 }
 
 export interface ShowcaseColumnShowcaseColumnWithMarkdownComponent {
-  id?: number;
+  id?: string | number;
   subtitle?: string;
   markdown?: string;
 }
 
 export interface ShowcaseColumnShowcaseColumnWithMediaComponent {
-  id?: number;
+  id?: string | number;
   title?: string;
   description?: string;
   media?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     name?: string;
     alternativeText?: string;
@@ -794,11 +963,11 @@ export interface ShowcaseColumnShowcaseColumnWithMediaComponent {
     provider?: string;
     provider_metadata?: any;
     related?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
     folder?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     folderPath?: string;
@@ -810,16 +979,16 @@ export interface ShowcaseColumnShowcaseColumnWithMediaComponent {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   };
@@ -829,14 +998,14 @@ export interface ShowcaseColumnShowcaseColumnWithMediaComponent {
 }
 
 export interface ShowcaseColumnShowcaseColumnsComponent {
-  id?: number;
+  id?: string | number;
   type?: "media" | "markdown";
   showcaseColumnWithMarkdown?: ShowcaseColumnShowcaseColumnWithMarkdownComponent;
   showcaseColumnWithMedia?: ShowcaseColumnShowcaseColumnWithMediaComponent;
 }
 
 export interface SharedShowcaseGridComponent {
-  id?: number;
+  id?: string | number;
   __component?: "shared.showcase-grid";
   title?: string;
   showcaseColumns?: ShowcaseColumnShowcaseColumnsComponent[];
@@ -845,11 +1014,11 @@ export interface SharedShowcaseGridComponent {
 }
 
 export interface SharedCollageWithLinkComponent {
-  id?: number;
+  id?: string | number;
   __component?: "shared.collage-with-link";
   link?: SharedLinkComponent;
   images?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     name?: string;
     alternativeText?: string;
@@ -867,11 +1036,11 @@ export interface SharedCollageWithLinkComponent {
     provider?: string;
     provider_metadata?: any;
     related?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
     folder?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     folderPath?: string;
@@ -883,32 +1052,32 @@ export interface SharedCollageWithLinkComponent {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   }[];
 }
 
 export interface SharedFormComponent {
-  id?: number;
+  id?: string | number;
   __component?: "shared.form";
 }
 
 export interface SharedSeoComponent {
-  id?: number;
+  id?: string | number;
   metaTitle?: string;
   metaDescription?: string;
   metaImage?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     name?: string;
     alternativeText?: string;
@@ -926,11 +1095,11 @@ export interface SharedSeoComponent {
     provider?: string;
     provider_metadata?: any;
     related?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
     folder?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     folderPath?: string;
@@ -942,16 +1111,16 @@ export interface SharedSeoComponent {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   };
@@ -987,7 +1156,7 @@ export interface LayoutListResponse {
 }
 
 export interface Layout {
-  id?: number;
+  id?: string | number;
   documentId?: string;
   emailAddress: string;
   header: SharedHeaderComponent;
@@ -999,16 +1168,16 @@ export interface Layout {
   /** @format date-time */
   publishedAt?: string;
   createdBy?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
   };
   updatedBy?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
   };
   locale?: string;
   localizations?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     emailAddress?: string;
     header?: SharedHeaderComponent;
@@ -1020,16 +1189,16 @@ export interface Layout {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   }[];
@@ -1041,37 +1210,206 @@ export interface LayoutResponse {
 }
 
 export interface SharedHeaderComponent {
-  id?: number;
+  id?: string | number;
   buttonLabel?: string;
   emailCaption?: string;
   socialLinks?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
   }[];
   navigationLists?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
   }[];
 }
 
 export interface FooterFooterNavigationListComponent {
-  id?: number;
+  id?: string | number;
   caption?: string;
   isSocialNetworks?: boolean;
   links?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
   }[];
   socialLinks?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
   }[];
 }
 
 export interface SharedFooterComponent {
-  id?: number;
+  id?: string | number;
   emailCaption?: string;
   navigationLists?: FooterFooterNavigationListComponent[];
+}
+
+export interface MagazineSubscriptionRequest {
+  data: {
+    telegram?: string;
+    /** @format email */
+    email?: string;
+    locale?: string;
+    localizations?: (number | string)[];
+  };
+}
+
+export interface MagazineSubscriptionListResponse {
+  data?: MagazineSubscription[];
+  meta?: {
+    pagination?: {
+      page?: number;
+      /** @min 25 */
+      pageSize?: number;
+      /** @max 1 */
+      pageCount?: number;
+      total?: number;
+    };
+  };
+}
+
+export interface MagazineSubscription {
+  id?: string | number;
+  documentId?: string;
+  telegram?: string;
+  /** @format email */
+  email?: string;
+  /** @format date-time */
+  createdAt?: string;
+  /** @format date-time */
+  updatedAt?: string;
+  /** @format date-time */
+  publishedAt?: string;
+  createdBy?: {
+    id?: string | number;
+    documentId?: string;
+    firstname?: string;
+    lastname?: string;
+    username?: string;
+    /** @format email */
+    email?: string;
+    resetPasswordToken?: string;
+    registrationToken?: string;
+    isActive?: boolean;
+    roles?: {
+      id?: string | number;
+      documentId?: string;
+      name?: string;
+      code?: string;
+      description?: string;
+      users?: {
+        id?: string | number;
+        documentId?: string;
+      }[];
+      permissions?: {
+        id?: string | number;
+        documentId?: string;
+        action?: string;
+        actionParameters?: any;
+        subject?: string;
+        properties?: any;
+        conditions?: any;
+        role?: {
+          id?: string | number;
+          documentId?: string;
+        };
+        /** @format date-time */
+        createdAt?: string;
+        /** @format date-time */
+        updatedAt?: string;
+        /** @format date-time */
+        publishedAt?: string;
+        createdBy?: {
+          id?: string | number;
+          documentId?: string;
+        };
+        updatedBy?: {
+          id?: string | number;
+          documentId?: string;
+        };
+        locale?: string;
+        localizations?: {
+          id?: string | number;
+          documentId?: string;
+        }[];
+      }[];
+      /** @format date-time */
+      createdAt?: string;
+      /** @format date-time */
+      updatedAt?: string;
+      /** @format date-time */
+      publishedAt?: string;
+      createdBy?: {
+        id?: string | number;
+        documentId?: string;
+      };
+      updatedBy?: {
+        id?: string | number;
+        documentId?: string;
+      };
+      locale?: string;
+      localizations?: {
+        id?: string | number;
+        documentId?: string;
+      }[];
+    }[];
+    blocked?: boolean;
+    preferedLanguage?: string;
+    /** @format date-time */
+    createdAt?: string;
+    /** @format date-time */
+    updatedAt?: string;
+    /** @format date-time */
+    publishedAt?: string;
+    createdBy?: {
+      id?: string | number;
+      documentId?: string;
+    };
+    updatedBy?: {
+      id?: string | number;
+      documentId?: string;
+    };
+    locale?: string;
+    localizations?: {
+      id?: string | number;
+      documentId?: string;
+    }[];
+  };
+  updatedBy?: {
+    id?: string | number;
+    documentId?: string;
+  };
+  locale?: string;
+  localizations?: {
+    id?: string | number;
+    documentId?: string;
+    telegram?: string;
+    /** @format email */
+    email?: string;
+    /** @format date-time */
+    createdAt?: string;
+    /** @format date-time */
+    updatedAt?: string;
+    /** @format date-time */
+    publishedAt?: string;
+    createdBy?: {
+      id?: string | number;
+      documentId?: string;
+    };
+    updatedBy?: {
+      id?: string | number;
+      documentId?: string;
+    };
+    locale?: string;
+    localizations?: {
+      id?: string | number;
+      documentId?: string;
+    }[];
+  }[];
+}
+
+export interface MagazineSubscriptionResponse {
+  data?: MagazineSubscription;
+  meta?: object;
 }
 
 export interface NavigationRequest {
@@ -1112,17 +1450,17 @@ export interface NavigationListResponse {
 }
 
 export interface Navigation {
-  id?: number;
+  id?: string | number;
   documentId?: string;
   name: string;
   link: string;
   navItems?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     name?: string;
     link?: string;
     navItems?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
     isMultiLevelNavigation?: boolean;
@@ -1145,16 +1483,16 @@ export interface Navigation {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   }[];
@@ -1178,16 +1516,16 @@ export interface Navigation {
   /** @format date-time */
   publishedAt?: string;
   createdBy?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
   };
   updatedBy?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
   };
   locale?: string;
   localizations?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
   }[];
 }
@@ -1221,7 +1559,7 @@ export interface SocialNetworkListResponse {
 }
 
 export interface SocialNetwork {
-  id?: number;
+  id?: string | number;
   documentId?: string;
   name: string;
   link: string;
@@ -1232,7 +1570,7 @@ export interface SocialNetwork {
   /** @format date-time */
   publishedAt?: string;
   createdBy?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     firstname?: string;
     lastname?: string;
@@ -1243,17 +1581,17 @@ export interface SocialNetwork {
     registrationToken?: string;
     isActive?: boolean;
     roles?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
       name?: string;
       code?: string;
       description?: string;
       users?: {
-        id?: number;
+        id?: string | number;
         documentId?: string;
       }[];
       permissions?: {
-        id?: number;
+        id?: string | number;
         documentId?: string;
         action?: string;
         actionParameters?: any;
@@ -1261,7 +1599,7 @@ export interface SocialNetwork {
         properties?: any;
         conditions?: any;
         role?: {
-          id?: number;
+          id?: string | number;
           documentId?: string;
         };
         /** @format date-time */
@@ -1271,16 +1609,16 @@ export interface SocialNetwork {
         /** @format date-time */
         publishedAt?: string;
         createdBy?: {
-          id?: number;
+          id?: string | number;
           documentId?: string;
         };
         updatedBy?: {
-          id?: number;
+          id?: string | number;
           documentId?: string;
         };
         locale?: string;
         localizations?: {
-          id?: number;
+          id?: string | number;
           documentId?: string;
         }[];
       }[];
@@ -1291,16 +1629,16 @@ export interface SocialNetwork {
       /** @format date-time */
       publishedAt?: string;
       createdBy?: {
-        id?: number;
+        id?: string | number;
         documentId?: string;
       };
       updatedBy?: {
-        id?: number;
+        id?: string | number;
         documentId?: string;
       };
       locale?: string;
       localizations?: {
-        id?: number;
+        id?: string | number;
         documentId?: string;
       }[];
     }[];
@@ -1313,26 +1651,26 @@ export interface SocialNetwork {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   };
   updatedBy?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
   };
   locale?: string;
   localizations?: {
-    id?: number;
+    id?: string | number;
     documentId?: string;
     name?: string;
     link?: string;
@@ -1343,16 +1681,16 @@ export interface SocialNetwork {
     /** @format date-time */
     publishedAt?: string;
     createdBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     updatedBy?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     };
     locale?: string;
     localizations?: {
-      id?: number;
+      id?: string | number;
       documentId?: string;
     }[];
   }[];

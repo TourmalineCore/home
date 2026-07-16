@@ -28,7 +28,7 @@ export function FormRedesign({
   description: ReactNode;
   buttonSubmitLabel: string;
   buttonSubmittedLabel: string;
-  imageUrl: string;
+  imageUrl?: string;
   children: ReactNode;
   onSubmit: ({
     formData,
@@ -80,10 +80,10 @@ export function FormRedesign({
           await handleSubmit();
         }
       }}
-      data-testId={testId}
+      data-testid={testId}
     >
       {
-        isSubmit && (
+        isSubmit && imageUrl && (
           <div className="form-redesign__img-container">
             <Image
               src={imageUrl}
@@ -133,7 +133,9 @@ export function FormRedesign({
             <button
               className="form-redesign__featured-button"
               type="button"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
+
                 if (isModal) {
                   onCloseModal();
                 }
@@ -149,7 +151,7 @@ export function FormRedesign({
               className="form-redesign__featured-button"
               type="submit"
               data-testid="form-redesign-submit-button"
-              disabled={!isConsentAccepted}
+              disabled={!isConsentAccepted || isLoading}
             >
               {isLoading ? <Spinner /> : buttonSubmitLabel}
             </button>
@@ -172,8 +174,6 @@ export function FormRedesign({
 
   async function handleCaptchaSuccess(smartCaptchaToken: string) {
     try {
-      setIsLoading(true);
-
       await handleSubmit({
         token: smartCaptchaToken,
       });
@@ -183,7 +183,6 @@ export function FormRedesign({
       }
     } finally {
       resetSmartCaptcha();
-      setIsLoading(false);
     }
   }
 
@@ -195,10 +194,16 @@ export function FormRedesign({
     if (formRef.current) {
       const formData = new FormData(formRef.current);
 
-      await onSubmit({
-        formData,
-        token,
-      });
+      try {
+        setIsLoading(true);
+
+        await onSubmit({
+          formData,
+          token,
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   }
 

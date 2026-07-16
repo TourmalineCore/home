@@ -1,0 +1,24 @@
+.magazine-subscription-form {
+  padding-bottom: 80px;
+
+  &__form-wrapper {
+    border-radius: 2px;
+    background-color: $color-black;
+  }
+
+  &__input {
+    width: 100%;
+
+    & + & {
+      margin-top: 12px;
+
+      @include desktop {
+        margin-top: 8px;
+      }
+
+      @include desktop-xl {
+        margin-top: 12px;
+      }
+    }
+  }
+}

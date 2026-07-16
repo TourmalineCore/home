@@ -10,6 +10,7 @@ import { useNonBreakingSpaces } from "../../common/hooks";
 import { MagazineHero } from "../../components/magazines/MagazineHero/MagazineHero";
 import { MagazineDescription } from "../../components/magazines/MagazineDescription/MagazineDescription";
 import { useScrollTop } from "../../common/hooks/useScrollTop";
+import { MagazineSubscriptionForm } from "../../components/magazines/MagazineSubscriptionForm/MagazineSubscriptionForm";
 
 const MagazinePdfView = dynamic(
   () => import(`../../components/magazines/MagazinePdfView/MagazinePdfView`).then((component) => component.MagazinePdfView),
@@ -57,6 +58,7 @@ export default function MagazinePage({
         <MagazineHero />
         <MagazineDescription />
         <MagazinePdfView />
+        <MagazineSubscriptionForm />
       </LayoutRedesign>
     </>
   );
