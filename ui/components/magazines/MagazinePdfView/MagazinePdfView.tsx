@@ -11,8 +11,9 @@ import { useDeviceSize } from '../../../common/hooks';
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 export function MagazinePdfView() {
-  const [totalPages, setTotalPages] = useState<number>();
+  const [totalPages, setTotalPages] = useState<number>(0);
   const [slidesToShow, setSlidesToShow] = useState<number>(2);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   function onDocumentLoadSuccess({
     numPages,
@@ -20,6 +21,14 @@ export function MagazinePdfView() {
     numPages: number;
   }) {
     setTotalPages(numPages);
+  }
+
+  function getSlidesToScroll(current: number) {
+    if (current === 0) {
+      return 1;
+    }
+
+    return slidesToShow;
   }
 
   const {
@@ -50,7 +59,8 @@ export function MagazinePdfView() {
             dots={false}
             infinite={false}
             slidesToShow={slidesToShow}
-            slidesToScroll={slidesToShow}
+            slidesToScroll={getSlidesToScroll(currentSlide)}
+            beforeChange={(_, nextSlider) => setCurrentSlide(nextSlider)}
           >
             {Array.from(
               new Array(totalPages),
