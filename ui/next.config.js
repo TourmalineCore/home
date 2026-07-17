@@ -126,6 +126,8 @@ module.exports = withReactSvg({
   
   webpack(webpackConfig) {
     webpackConfig.resolve.fallback = { fs: false };
+
+    // This setting is necessary for the correct operation of the react-pdf package.
     webpackConfig.resolve.alias.canvas = false;
 
     return webpackConfig;
