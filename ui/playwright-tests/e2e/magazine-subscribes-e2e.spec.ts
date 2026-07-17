@@ -31,7 +31,7 @@ async function sendMagazineSubscriptionForm() {
   }: {
     browser: Browser;
   }) => {
-    // Set Russian coordinates
+    // In order for the form to be displayed, you need to set the Russian coordinates.
     const context = await browser.newContext({
       permissions: [`geolocation`],
       geolocation: {
