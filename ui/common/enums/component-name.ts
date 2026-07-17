@@ -41,6 +41,7 @@ export enum ComponentName {
   COOKIE_SETTINGS_MODAL = `cookie-settings-modal`,
   MAGAZINES_HERO = `magazines-hero`,
   MAGAZINE_HERO = `magazine-hero`,
+  MAGAZINE_SUBSCRIPTION_FORM = `magazine-subscription-form`,
 }
 
 export const COMPONENT_LINKS = Object.values(ComponentName)

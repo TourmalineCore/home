@@ -42,6 +42,7 @@ import { ContactFormModal } from "../../components/ContactFormModal/ContactFormM
 import { MagazinesHero } from "../../components/magazines/MagazinesHero/MagazinesHero";
 import { MagazineHero } from "../../components/magazines/MagazineHero/MagazineHero";
 import { ContactForm } from "../../components/ContactForm/ContactForm";
+import { MagazineSubscriptionForm } from "../../components/magazines/MagazineSubscriptionForm/MagazineSubscriptionForm";
 
 export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JSX.Element> = {
   [ComponentName.THREE_COLUMN_GRID]: ({
@@ -236,6 +237,7 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   [ComponentName.CHELZOO_LINKS]: () => <ChelzooLinks />,
   [ComponentName.MAGAZINES_HERO]: () => <MagazinesHero />,
   [ComponentName.MAGAZINE_HERO]: () => <MagazineHero />,
+  [ComponentName.MAGAZINE_SUBSCRIPTION_FORM]: () => <MagazineSubscriptionForm isComponentPage />,
 };
 
 export default function ComponentsPage({
