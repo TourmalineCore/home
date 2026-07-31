@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import dynamic from "next/dynamic";
 import { loadTranslations } from "../../common/utils/loadTranslations";
 import { COMPONENT_LINKS, ComponentName } from "../../common/enums";
 import { ChelzooCMS } from "../../components/chelzoo/ChelzooCMS/ChelzooCMS";
@@ -21,7 +22,6 @@ import { ChelzooTasks } from "../../components/chelzoo/ChelzooTasks/ChelzooTasks
 import { ChelzooTestingStrategy } from "../../components/chelzoo/ChelzooTestingStrategy/ChelzooTestingStrategy";
 import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLink";
 import { CollageWithTitle } from "../../components/CollageWithTitle/CollageWithTitle";
-import { Cookie } from "../../components/Cookie/Cookie";
 import { CustomError } from "../../components/CustomError/CustomError";
 import { FeaturedCardsList } from "../../components/FeaturedCardsList/FeaturedCardsList";
 import { Hero } from "../../components/Hero/Hero";
@@ -37,9 +37,22 @@ import { ChelzooInfrastructure } from "../../components/chelzoo/ChelzooInfrastru
 import { ChelzooLinks } from "../../components/chelzoo/ChelzooLinks/ChelzooLinks";
 import { ChelzooReview } from "../../components/chelzoo/ChelzooReview/ChelzooReview";
 import { useNonBreakingSpaces } from "../../common/hooks";
-import { CookieSettingsModal } from "../../components/CookieSettingsModal/CookieSettingsModal";
 import { FormModal } from "../../components/FormModal/FormModal";
 import { FormBlockRedesign } from "../../components/redesign/FormBlockRedesign/FormBlockRedesign";
+
+const Cookie = dynamic(
+  () => import(`../../components/Cookie/Cookie`).then((component) => component.Cookie),
+  {
+    ssr: false,
+  },
+);
+
+const CookieSettingsModal = dynamic(
+  () => import(`../../components/CookieSettingsModal/CookieSettingsModal`).then((component) => component.CookieSettingsModal),
+  {
+    ssr: false,
+  },
+);
 
 export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JSX.Element> = {
   [ComponentName.THREE_COLUMN_GRID]: ({
@@ -336,8 +349,6 @@ export async function getStaticProps({
         `chelzooCMS`,
         `chelzooPromo`,
         `chelzooLinks`,
-        `cookie`,
-        `cookieSettings`,
       ])),
     },
   };
