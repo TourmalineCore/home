@@ -336,6 +336,8 @@ export async function getStaticProps({
         `chelzooCMS`,
         `chelzooPromo`,
         `chelzooLinks`,
+        `cookie`,
+        `cookieSettings`,
       ])),
     },
   };
