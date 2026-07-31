@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import Image from "next/image";
 import Link from "next/link";
 import CoverOfTddMagazine from "../../../public/images/cover-of-tdd-magazine.jpg";
@@ -12,7 +13,7 @@ export function MagazinesHero() {
       <div className="container-redesign magazines-hero__wrapper">
         <h1 className="magazines-hero__title">Журналы</h1>
         <p className="magazines-hero__description">
-          Рассказываем истории про то, как принимались решения, что из этого получалось и какие выводы помогли делать следующие проекты лучше
+          Разбираем технологии, подходы и процессы, из которых собираются цифровые продукты. Одна большая тема на номер: что решение меняет в деньгах и сроках, и как оно устроено внутри.
         </p>
         <Link
           href="/magazines/tourmaline-code-tdd-uwdc"
@@ -28,7 +29,7 @@ export function MagazinesHero() {
             />
           </div>
           <h2 className="magazines-hero__magazine-title">
-            Первый номер нашего журнала про Test-Driven Development
+            №1: про Test-Driven Development. Когда стоит писать тесты до кода?
           </h2>
         </Link>
       </div>

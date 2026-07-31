@@ -9,7 +9,6 @@ import { LayoutData } from '../../common/types';
 import { LayoutRedesign } from '../../components/redesign/LayoutRedesign/LayoutRedesign';
 import { MagazinesHero } from '../../components/magazines/MagazinesHero/MagazinesHero';
 import { useNonBreakingSpaces } from '../../common/hooks';
-import { MagazineSubscriptionForm } from '../../components/magazines/MagazineSubscriptionForm/MagazineSubscriptionForm';
 
 export default function MagazinesPage({
   layoutData,
@@ -48,7 +47,6 @@ export default function MagazinesPage({
         isPreview={isPreview}
       >
         <MagazinesHero />
-        <MagazineSubscriptionForm />
       </LayoutRedesign>
     </>
   );
@@ -101,7 +99,7 @@ async function getStaticTranslation({
   locale: string;
 }) {
   return serverSideTranslations(locale, [
-    `contactForm`,
+    `formBlockRedesign`,
     `footer`,
     `cookie`,
     `cookieSettings`,
