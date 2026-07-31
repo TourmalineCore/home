@@ -9,6 +9,8 @@ import { LayoutData } from '../../common/types';
 import { LayoutRedesign } from '../../components/redesign/LayoutRedesign/LayoutRedesign';
 import { MagazinesHero } from '../../components/magazines/MagazinesHero/MagazinesHero';
 import { useNonBreakingSpaces } from '../../common/hooks';
+import { FeaturedCardsList } from '../../components/FeaturedCardsList/FeaturedCardsList';
+import { AppRoute } from '../../common/enums';
 
 export default function MagazinesPage({
   layoutData,
@@ -47,6 +49,45 @@ export default function MagazinesPage({
         isPreview={isPreview}
       >
         <MagazinesHero />
+        <FeaturedCardsList cards={[
+          {
+            id: 1,
+            imageWithBlurDataURL: {
+              url: `/images/next-magazine.png`,
+              blurDataURL: ``,
+            },
+            theme: `blue`,
+            type: `image`,
+          },
+          {
+            id: 2,
+            type: `wide`,
+            title: `Следующий номер — про Content Credentials`,
+            description: `Анонсы выпусков, разборры по темам номеров и точки, где можно забрать бумажный журнал — в блогах компании`,
+            wideCardItems: [
+              {
+                id: 1,
+                name: `Telegram`,
+                link: `https://t.me/+f4cIrOcFi_EyYjcy`,
+              },
+              {
+                id: 2,
+                name: `Вконтакте`,
+                link: `https://vk.com/tourmalinecore`,
+              },
+              {
+                id: 3,
+                name: `Youtube`,
+                link: `https://www.youtube.com/@tourmalinecore`,
+              },
+            ],
+            link: {
+              text: `Узнать больше о компании`,
+              url: AppRoute.Main,
+            },
+          },
+        ]}
+        />
       </LayoutRedesign>
     </>
   );

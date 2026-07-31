@@ -20,10 +20,10 @@ export function WideCard({
             {description}
           </p>
         )}
-        {wideCardItems.length > 0 && (
+        {wideCardItems!.length > 0 && (
           <ul className="wide-card__list">
             {
-              wideCardItems.map(({
+              wideCardItems!.map(({
                 id,
                 icon,
                 link: itemLink,

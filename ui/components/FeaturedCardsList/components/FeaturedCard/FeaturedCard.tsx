@@ -18,7 +18,7 @@ export function FeaturedCard({
   if (type === `points` || type === `image`) {
     return (
       <li
-        className={clsx(`featured-card featured-card--${theme.toLowerCase()} col-tablet-6 col-tablet-xl-4 col-desktop-3`, {
+        className={clsx(`featured-card featured-card--${theme!.toLowerCase()} col-tablet-6 col-tablet-xl-4 col-desktop-3`, {
           'featured-card--image': type === `image`,
         })}
       >
