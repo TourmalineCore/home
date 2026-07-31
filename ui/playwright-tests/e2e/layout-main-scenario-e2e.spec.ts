@@ -66,8 +66,6 @@ async function layoutMainScenarioTest() {
       async function setupCmsContent() {
         await cms.navigateToContentManager();
 
-        await cms.skipTutorial();
-
         await test.step(`Creating nested navigation`, createAndPublishNestedNavigationCmsUi);
 
         await test.step(`Filling layout content`, fillAndPublishLayoutCmsUi);

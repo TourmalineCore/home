@@ -2,6 +2,19 @@ import { Page } from "./custom-test";
 
 export const createCmsActions = (page: Page) => ({
   authorize: async () => {
+    // This is necessary to hide the guide tour banner, which blocks all clicks in the test.
+    await page.evaluate(() => {
+      localStorage.setItem(`STRAPI_GUIDED_TOUR`, JSON.stringify({
+        completedActions: [],
+        tours: {
+          contentManager: {
+            currentStep: 0,
+            isCompleted: true,
+          },
+        },
+      }));
+    });
+
     await page.locator(`input[name=email]`)
       .fill(process.env.CMS_EMAIL as string);
 
@@ -85,12 +98,5 @@ export const createCmsActions = (page: Page) => ({
 
     // Wait until record is saved in db
     await page.waitForTimeout(1500);
-  },
-
-  skipTutorial: async () => {
-    await page.getByRole(`button`, {
-      name: `Skip`,
-    })
-      .click();
   },
 });

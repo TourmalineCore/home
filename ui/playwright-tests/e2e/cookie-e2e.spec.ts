@@ -53,8 +53,6 @@ async function integrationWithCMSTest() {
     async function fillAndPublishCookie() {
       await cms.navigateToContentManager();
 
-      await cms.skipTutorial();
-
       await cms.navigateToContentTypeByName(`Cookie`);
 
       const richTextEditor = page.locator(`.CodeMirror`)
@@ -156,12 +154,9 @@ async function acceptCookieTest() {
       `Check cookie consentId in CMS`,
       () => page.goto(process.env.CMS_URL as string),
     );
-
     await cms.authorize();
 
     await cms.navigateToContentManager();
-
-    await cms.skipTutorial();
 
     await cms.navigateToContentTypeByName(`Cookie consent`);
 
@@ -276,8 +271,6 @@ async function rejectAfterAcceptTest() {
     await cms.authorize();
 
     await cms.navigateToContentManager();
-
-    await cms.skipTutorial();
 
     await cms.navigateToContentTypeByName(`Cookie consent`);
 
