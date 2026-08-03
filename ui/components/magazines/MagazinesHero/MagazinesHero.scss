@@ -114,9 +114,9 @@
     @include h6;
 
     max-width: 360px;
-    color: $color-white;
     text-decoration: underline;
     text-decoration-color: transparent;
+    color: $color-white;
     transition: text-decoration-color 0.3s;
 
     @include desktop {

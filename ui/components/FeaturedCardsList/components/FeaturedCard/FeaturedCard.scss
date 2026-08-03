@@ -93,12 +93,12 @@
     position: absolute;
     left: 50%;
     top: 50%;
+    overflow: hidden;
     border: 10px solid $color-black;
     width: 212px;
     height: 276px;
     background-color: $color-grey-100-redesign;
     transform: translate(-50%, -50%);
-    overflow: hidden; 
 
     img {
       background-color: $color-black;
