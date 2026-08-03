@@ -26,6 +26,7 @@ export interface Points {
 export interface ImageCard {
   theme?: Theme;
   imageWithBlurDataURL?: ImagesWithBlurDataURL;
+  isImageZoomed?: boolean;
 }
 
 export interface WideCardProps {

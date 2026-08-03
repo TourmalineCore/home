@@ -67,6 +67,7 @@ export default function MagazinePage({
             },
             theme: `blue`,
             type: `image`,
+            isImageZoomed: true,
           },
           {
             id: 2,

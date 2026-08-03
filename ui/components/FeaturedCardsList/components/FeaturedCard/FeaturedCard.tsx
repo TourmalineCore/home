@@ -13,6 +13,7 @@ export function FeaturedCard({
   wideCardItems,
   theme,
   imageWithBlurDataURL,
+  isImageZoomed,
   type,
 }: Omit<FeaturedCardProps, 'id'>) {
   if (type === `points` || type === `image`) {
@@ -90,7 +91,11 @@ export function FeaturedCard({
         )}
         {
           imageWithBlurDataURL?.url && (
-            <div className="featured-card__image-container">
+            <div
+              className={clsx(`featured-card__image-container`, {
+                'featured-card__image-container--zoomed': isImageZoomed,
+              })}
+            >
               <ImageWithBlur
                 src={imageWithBlurDataURL.url}
                 blurDataURL={imageWithBlurDataURL.blurDataURL}
