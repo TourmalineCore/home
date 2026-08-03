@@ -98,10 +98,12 @@
     height: 276px;
     background-color: $color-grey-100-redesign;
     transform: translate(-50%, -50%);
+    overflow: hidden; 
 
     img {
       background-color: $color-black;
       object-fit: cover;
+      transform: scale(1.3);
     }
 
     @include desktop-xl {
