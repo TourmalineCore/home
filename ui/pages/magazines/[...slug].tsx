@@ -10,7 +10,6 @@ import { useNonBreakingSpaces } from "../../common/hooks";
 import { MagazineHero } from "../../components/magazines/MagazineHero/MagazineHero";
 import { MagazineDescription } from "../../components/magazines/MagazineDescription/MagazineDescription";
 import { useScrollTop } from "../../common/hooks/useScrollTop";
-import { AppRoute } from "../../common/enums";
 import { FeaturedCardsList } from "../../components/FeaturedCardsList/FeaturedCardsList";
 
 const MagazinePdfView = dynamic(
@@ -73,7 +72,7 @@ export default function MagazinePage({
             id: 2,
             type: `wide`,
             title: `Следующий номер — про Content Credentials`,
-            description: `Анонсы выпусков, разборры по темам номеров и точки, где можно забрать бумажный журнал — в блогах компании`,
+            description: `Анонсы выпусков, разборы по темам номеров и точки, где можно забрать бумажный журнал — в блогах компании`,
             wideCardItems: [
               {
                 id: 1,
@@ -91,10 +90,6 @@ export default function MagazinePage({
                 link: `https://www.youtube.com/@tourmalinecore`,
               },
             ],
-            link: {
-              text: `Узнать больше о компании`,
-              url: AppRoute.Main,
-            },
           },
         ]}
         />

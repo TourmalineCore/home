@@ -10,7 +10,6 @@ import { LayoutRedesign } from '../../components/redesign/LayoutRedesign/LayoutR
 import { MagazinesHero } from '../../components/magazines/MagazinesHero/MagazinesHero';
 import { useNonBreakingSpaces } from '../../common/hooks';
 import { FeaturedCardsList } from '../../components/FeaturedCardsList/FeaturedCardsList';
-import { AppRoute } from '../../common/enums';
 
 export default function MagazinesPage({
   layoutData,
@@ -63,7 +62,7 @@ export default function MagazinesPage({
             id: 2,
             type: `wide`,
             title: `Следующий номер — про Content Credentials`,
-            description: `Анонсы выпусков, разборры по темам номеров и точки, где можно забрать бумажный журнал — в блогах компании`,
+            description: `Анонсы выпусков, разборы по темам номеров и точки, где можно забрать бумажный журнал — в блогах компании`,
             wideCardItems: [
               {
                 id: 1,
@@ -81,10 +80,6 @@ export default function MagazinesPage({
                 link: `https://www.youtube.com/@tourmalinecore`,
               },
             ],
-            link: {
-              text: `Узнать больше о компании`,
-              url: AppRoute.Main,
-            },
           },
         ]}
         />
