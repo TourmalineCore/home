@@ -3,6 +3,7 @@ import os
 import logging
 
 def run(cmd):
+    # Popen is used to read command output line by line
     process = subprocess.Popen(
         cmd,
         stdout=subprocess.PIPE,
