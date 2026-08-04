@@ -9,5 +9,6 @@ export enum AppRoute {
   Teams = `/teams`,
   FrontendTeam = `/frontend-team`,
   ChelzooCase = `/chelzoo`,
+  Magazines = `/magazines`,
   Main = `/`,
 }

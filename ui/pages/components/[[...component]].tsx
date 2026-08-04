@@ -39,6 +39,8 @@ import { ChelzooReview } from "../../components/chelzoo/ChelzooReview/ChelzooRev
 import { useNonBreakingSpaces } from "../../common/hooks";
 import { FormModal } from "../../components/FormModal/FormModal";
 import { FormBlockRedesign } from "../../components/redesign/FormBlockRedesign/FormBlockRedesign";
+import { MagazineHero } from "../../components/magazines/MagazineHero/MagazineHero";
+import { MagazinesHero } from "../../components/magazines/MagazinesHero/MagazinesHero";
 
 const Cookie = dynamic(
   () => import(`../../components/Cookie/Cookie`).then((component) => component.Cookie),
@@ -251,6 +253,8 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   [ComponentName.CHELZOO_REVIEW]: () => <ChelzooReview />,
   [ComponentName.CHELZOO_INFRASTRUCTURE]: () => <ChelzooInfrastructure />,
   [ComponentName.CHELZOO_LINKS]: () => <ChelzooLinks />,
+  [ComponentName.MAGAZINES_HERO]: () => <MagazinesHero />,
+  [ComponentName.MAGAZINE_HERO]: () => <MagazineHero />,
 };
 
 export default function ComponentsPage({

@@ -33,6 +33,7 @@ export function FeaturedCardsList({
           theme,
           wideCardItems,
           imageWithBlurDataURL,
+          isImageZoomed,
           type,
         }) => (
           <FeaturedCard
@@ -43,6 +44,7 @@ export function FeaturedCardsList({
             link={link}
             theme={theme}
             imageWithBlurDataURL={imageWithBlurDataURL}
+            isImageZoomed={isImageZoomed}
             type={type}
             wideCardItems={wideCardItems}
           />

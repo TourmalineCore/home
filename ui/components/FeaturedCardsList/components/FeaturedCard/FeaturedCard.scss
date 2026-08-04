@@ -93,6 +93,7 @@
     position: absolute;
     left: 50%;
     top: 50%;
+    overflow: hidden;
     border: 10px solid $color-black;
     width: 212px;
     height: 276px;
@@ -108,6 +109,10 @@
       border: 11px solid $color-black;
       width: 298px;
       height: 388px;
+    }
+
+    &--zoomed img {
+      transform: scale(1.3);
     }
   }
 
