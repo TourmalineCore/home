@@ -1,62 +1,35 @@
 .magazine-pdf-view {
+  --header-height: 80px;
+
   &__wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto;
-    padding: 12px;
-    width: 351px;
-    height: 470px;
-    max-width: 1920px;
+    padding-top: var(--header-height);
+    padding-bottom: var(--header-height);
     background-color: $color-grey-800-redesign;
-
-    @include tablet {
-      width: 744px;
-    }
-
-    @include tablet-xl {
-      width: 866px;
-      height: 547px;
-    }
-
-    @include desktop {
-      width: 1046px;
-      height: 736px;
-    }
   }
 
   &__slider {
-    width: 305px;
-    height: 430px;
     touch-action: manipulation !important;
+  }
 
-    @include tablet {
-      width: 610px;
-    }
-
-    @include tablet-xl {
-      width: 720px;
-      height: 510px;
-    }
-
-    @include desktop {
-      width: 966px;
-      height: 680px;
-    }
+  @include desktop-xl {
+    --header-height: 104px;
   }
 }
 
+// react-pdf's own page container defaults to a white background. Sub-pixel
+// rounding between it and the canvas can leave a 1px gap that exposes it as
+// a white line, so it's overridden to match the wrapper's background.
+.react-pdf__Page {
+  background-color: $color-grey-800-redesign !important;
+}
+
+// Stretch the canvas to fill the whole page instead of relying on centering,
+// so it can't develop a rounding gap against the container
 .react-pdf__Page__canvas {
-  width: 307px !important;
-  height: 434px !important;
-
-  @include tablet-xl {
-    width: 363px !important;
-    height: 514px !important;
-  }
-
-  @include desktop {
-    width: 488px !important;
-    height: 685px !important;
-  }
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
 }

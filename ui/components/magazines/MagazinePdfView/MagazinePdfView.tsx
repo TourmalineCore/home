@@ -3,45 +3,41 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import Slider from "react-slick";
+import { Breakpoint } from '../../../common/enums';
 import { useDeviceSize } from '../../../common/hooks';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
+// A4 page aspect ratio (width / height), used to size the spread
+const PAGE_ASPECT_RATIO = 0.7071;
+
 export function MagazinePdfView() {
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const [slidesToShow, setSlidesToShow] = useState<number>(2);
+  const [totalPages, setTotalPages] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  function onDocumentLoadSuccess({
-    numPages,
-  }: {
-    numPages: number;
-  }) {
-    setTotalPages(numPages);
-  }
-
-  function getSlidesToScroll(current: number) {
-    if (current === 0) {
-      return 1;
-    }
-
-    return slidesToShow;
-  }
-
   const {
+    width,
+    height,
     isMobile,
   } = useDeviceSize();
 
-  useEffect(() => {
-    if (isMobile) {
-      setSlidesToShow(1);
-    } else {
-      setSlidesToShow(2);
-    }
-  }, [isMobile]);
+  const slidesToShow = isMobile ? 1 : 2;
+
+  // sticky header height, reserved at the top so the header can't covers the spread
+  const headerHeight = width >= Breakpoint.DESKTOP_XL ? 104 : 80;
+  // side strips reserved for the slider's navigation arrows
+  const arrowSpace = width >= Breakpoint.TABLET_XL ? 44 : 34;
+
+  const maxPageWidth = (width - arrowSpace * 2) / slidesToShow;
+  const availableHeight = height - headerHeight;
+  // width/height are still 0 before useDeviceSize's first resize, skip sizing off an empty viewport
+  const pageHeight = width && height
+    ? Math.min(availableHeight, maxPageWidth / PAGE_ASPECT_RATIO)
+    : 0;
+  const sliderWidth = pageHeight * PAGE_ASPECT_RATIO * slidesToShow;
 
   return (
     <div
@@ -52,31 +48,38 @@ export function MagazinePdfView() {
         <Document
           file="/documents/magazines/tourmaline-code-tdd-uwdc.pdf"
           // eslint-disable-next-line react/jsx-no-bind
-          onLoadSuccess={onDocumentLoadSuccess}
+          onLoadSuccess={({
+            numPages,
+          }) => setTotalPages(numPages)}
         >
-          <Slider
-            className="magazine-pdf-view__slider"
-            dots={false}
-            infinite={false}
-            slidesToShow={slidesToShow}
-            slidesToScroll={getSlidesToScroll(currentSlide)}
-            beforeChange={(_, nextSlider) => setCurrentSlide(nextSlider)}
+          <div
+            className="magazine-pdf-view__slider-wrapper"
+            style={{
+              width: sliderWidth || undefined,
+            }}
           >
-            {Array.from(
-              new Array(totalPages),
-              (_, index) => (
-                <div
-                  key={index}
-                >
+            <Slider
+              className="magazine-pdf-view__slider"
+              dots={false}
+              infinite={false}
+              slidesToShow={slidesToShow}
+              slidesToScroll={currentSlide === 0 ? 1 : slidesToShow}
+              beforeChange={(_, nextSlide) => setCurrentSlide(nextSlide)}
+            >
+              {Array.from({
+                length: totalPages,
+              }, (_, index) => (
+                <div key={index}>
                   <Page
                     pageNumber={index + 1}
+                    height={pageHeight || undefined}
                     renderTextLayer={false}
                     renderAnnotationLayer={false}
                   />
                 </div>
-              ),
-            )}
-          </Slider>
+              ))}
+            </Slider>
+          </div>
         </Document>
       </div>
     </div>
