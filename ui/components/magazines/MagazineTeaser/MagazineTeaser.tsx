@@ -22,16 +22,19 @@ export function MagazineTeaser() {
           {
             id: 1,
             name: `Telegram`,
+            icon: `/images/icon-qa.svg`,
             link: `https://t.me/+f4cIrOcFi_EyYjcy`,
           },
           {
             id: 2,
             name: `Вконтакте`,
+            icon: `/images/icon-design.svg`,
             link: `https://vk.com/tourmalinecore`,
           },
           {
             id: 3,
             name: `Youtube`,
+            icon: `/images/icon-devops.svg`,
             link: `https://www.youtube.com/@tourmalinecore`,
           },
         ],
