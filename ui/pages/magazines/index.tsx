@@ -5,17 +5,20 @@ import { PageHead } from '../../components/PageHead/PageHead';
 import { useScrollTop } from '../../common/hooks/useScrollTop';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
-import { LayoutData } from '../../common/types';
+import { CollageWithLinkBlock, LayoutData } from '../../common/types';
 import { LayoutRedesign } from '../../components/redesign/LayoutRedesign/LayoutRedesign';
 import { MagazinesHero } from '../../components/magazines/MagazinesHero/MagazinesHero';
 import { useNonBreakingSpaces } from '../../common/hooks';
 import { MagazineTeaser } from '../../components/magazines/MagazineTeaser/MagazineTeaser';
+import { CollageWithLink } from '../../components/CollageWithLink/CollageWithLink';
 
 export default function MagazinesPage({
   layoutData,
+  collageWithLinkData,
   isPreview,
 }: {
   layoutData: LayoutData;
+  collageWithLinkData: CollageWithLinkBlock;
   isPreview: boolean;
 }) {
   const {
@@ -49,6 +52,11 @@ export default function MagazinesPage({
       >
         <MagazinesHero />
         <MagazineTeaser />
+        <CollageWithLink
+          text={collageWithLinkData.text}
+          link="/"
+          imagesWithBlurDataURL={collageWithLinkData.imagesWithBlurDataURL}
+        />
       </LayoutRedesign>
     </>
   );
@@ -62,7 +70,11 @@ export async function getServerSideProps({
   preview: boolean;
 }) {
   if (process.env.IS_STATIC_MODE === `true`) {
-    const translationsPageData = await loadTranslations(locale, [`headerRedesign`, `footerRedesign`]);
+    const translationsPageData = await loadTranslations(locale, [
+      `headerRedesign`,
+      `footerRedesign`,
+      `collageWithLink`,
+    ]);
 
     return {
       props: {
@@ -70,6 +82,7 @@ export async function getServerSideProps({
           headerContent: translationsPageData.headerRedesign,
           footerContent: translationsPageData.footerRedesign,
         },
+        collageWithLinkData: translationsPageData.collageWithLink,
         ...(await getStaticTranslation({
           locale,
         })),
@@ -84,9 +97,12 @@ export async function getServerSideProps({
     status,
   });
 
+  const translationsPageData = await loadTranslations(locale, [`collageWithLink`]);
+
   return {
     props: {
       layoutData,
+      collageWithLinkData: translationsPageData.collageWithLink,
       isPreview: preview,
       ...(await getStaticTranslation({
         locale,

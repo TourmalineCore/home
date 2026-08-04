@@ -1,7 +1,7 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { LayoutData } from "../../common/types";
+import { CollageWithLinkBlock, LayoutData } from "../../common/types";
 import { PageHead } from "../../components/PageHead/PageHead";
 import { LayoutRedesign } from "../../components/redesign/LayoutRedesign/LayoutRedesign";
 import { getLayoutData } from "../../services/cms/api/layout-api/layout-api";
@@ -11,6 +11,7 @@ import { MagazineHero } from "../../components/magazines/MagazineHero/MagazineHe
 import { MagazineDescription } from "../../components/magazines/MagazineDescription/MagazineDescription";
 import { useScrollTop } from "../../common/hooks/useScrollTop";
 import { MagazineTeaser } from "../../components/magazines/MagazineTeaser/MagazineTeaser";
+import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLink";
 
 const MagazinePdfView = dynamic(
   () => import(`../../components/magazines/MagazinePdfView/MagazinePdfView`).then((component) => component.MagazinePdfView),
@@ -21,9 +22,11 @@ const MagazinePdfView = dynamic(
 
 export default function MagazinePage({
   layoutData,
+  collageWithLinkData,
   isPreview,
 }: {
   layoutData: LayoutData;
+  collageWithLinkData: CollageWithLinkBlock;
   isPreview: boolean;
 }) {
   const {
@@ -59,6 +62,11 @@ export default function MagazinePage({
         <MagazineDescription />
         <MagazinePdfView />
         <MagazineTeaser />
+        <CollageWithLink
+          text={collageWithLinkData.text}
+          link="/"
+          imagesWithBlurDataURL={collageWithLinkData.imagesWithBlurDataURL}
+        />
       </LayoutRedesign>
     </>
   );
@@ -72,7 +80,11 @@ export async function getServerSideProps({
   preview: boolean;
 }) {
   if (process.env.IS_STATIC_MODE === `true`) {
-    const translationsPageData = await loadTranslations(locale, [`headerRedesign`, `footerRedesign`]);
+    const translationsPageData = await loadTranslations(locale, [
+      `headerRedesign`,
+      `footerRedesign`,
+      `collageWithLink`,
+    ]);
 
     return {
       props: {
@@ -80,6 +92,7 @@ export async function getServerSideProps({
           headerContent: translationsPageData.headerRedesign,
           footerContent: translationsPageData.footerRedesign,
         },
+        collageWithLinkData: translationsPageData.collageWithLink,
         ...(await getStaticTranslation({
           locale,
         })),
@@ -94,9 +107,12 @@ export async function getServerSideProps({
     status,
   });
 
+  const translationsPageData = await loadTranslations(locale, [`collageWithLink`]);
+
   return {
     props: {
       layoutData,
+      collageWithLinkData: translationsPageData.collageWithLink,
       isPreview: preview,
       ...(await getStaticTranslation({
         locale,
