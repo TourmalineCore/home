@@ -3,10 +3,9 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import Slider from "react-slick";
-import { Breakpoint } from '../../../common/enums';
 import { useDeviceSize } from '../../../common/hooks';
 
 // pdfjs-dist relies on Promise.withResolvers, missing in older browsers (e.g. Safari < 17.4 )
@@ -29,8 +28,6 @@ if (typeof Promise.withResolvers !== `function`) {
 
 // The worker has its own global scope, so the polyfill above doesn't apply there,
 // this "legacy" build bundles its own shims for older browsers instead.
-// Keep this version in sync with the "pdfjs-dist" version react-pdf depends on
-// pdfjs throws if the versions don't match.
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@4.8.69/legacy/build/pdf.worker.min.mjs`;
 
 // A4 page aspect ratio (width / height), used to size the spread
@@ -39,25 +36,48 @@ const PAGE_ASPECT_RATIO = 0.7071;
 export function MagazinePdfView() {
   const [totalPages, setTotalPages] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [wrapperWidth, setWrapperWidth] = useState(0);
+  const [maxPageHeight, setMaxPageHeight] = useState(0);
+
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const {
-    width,
-    height,
     isMobile,
   } = useDeviceSize();
 
   const slidesToShow = isMobile ? 1 : 2;
 
-  // sticky header height, reserved at the top so the header can't covers the spread
-  const headerHeight = width >= Breakpoint.DESKTOP_XL ? 104 : 80;
-  // side strips reserved for the slider's navigation arrows
-  const arrowSpace = width >= Breakpoint.TABLET_XL ? 44 : 34;
+  useEffect(() => {
+    const wrapperElement = wrapperRef.current;
+    const sentinelElement = sentinelRef.current;
 
-  const maxPageWidth = (width - arrowSpace * 2) / slidesToShow;
-  const availableHeight = height - headerHeight;
-  // width/height are still 0 before useDeviceSize's first resize, skip sizing off an empty viewport
-  const pageHeight = width && height
-    ? Math.min(availableHeight, maxPageWidth / PAGE_ASPECT_RATIO)
+    if (!wrapperElement || !sentinelElement) {
+      return undefined;
+    }
+
+    // ResizeObserver reports layout size and ignores pinch-zoom. Two observers: the wrapper's width is stable, but its height depends on
+    // the page size being computed here, so the height ceiling comes from the sentinel - a
+    // fixed-size element that doesn't depend on the wrapper's own content.
+    const wrapperObserver = new ResizeObserver(([entry]) => {
+      setWrapperWidth(entry.contentRect.width);
+    });
+    const sentinelObserver = new ResizeObserver(([entry]) => {
+      setMaxPageHeight(entry.contentRect.height);
+    });
+
+    wrapperObserver.observe(wrapperElement);
+    sentinelObserver.observe(sentinelElement);
+
+    return () => {
+      wrapperObserver.disconnect();
+      sentinelObserver.disconnect();
+    };
+  }, []);
+
+  // wrapperWidth/maxPageHeight are still 0 before the observers' first callback, skip sizing off an empty box
+  const pageHeight = wrapperWidth && maxPageHeight
+    ? Math.min(maxPageHeight, wrapperWidth / slidesToShow / PAGE_ASPECT_RATIO)
     : 0;
   const sliderWidth = pageHeight * PAGE_ASPECT_RATIO * slidesToShow;
 
@@ -66,7 +86,15 @@ export function MagazinePdfView() {
       className="magazine-pdf-view"
       data-testid="magazine-pdf-view"
     >
-      <div className="magazine-pdf-view__wrapper">
+      <div
+        className="magazine-pdf-view__viewport-sentinel"
+        aria-hidden
+        ref={sentinelRef}
+      />
+      <div
+        className="magazine-pdf-view__wrapper"
+        ref={wrapperRef}
+      >
         <Document
           file="/documents/magazines/tourmaline-code-tdd-uwdc.pdf"
           // eslint-disable-next-line react/jsx-no-bind
