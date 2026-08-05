@@ -18,7 +18,7 @@ if (typeof Promise.withResolvers !== `function`) {
       resolve = res;
       reject = rej;
     });
-    
+
     return {
       promise,
       resolve,
