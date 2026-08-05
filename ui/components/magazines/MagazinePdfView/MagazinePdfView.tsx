@@ -9,7 +9,29 @@ import Slider from "react-slick";
 import { Breakpoint } from '../../../common/enums';
 import { useDeviceSize } from '../../../common/hooks';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+// pdfjs-dist relies on Promise.withResolvers, missing in older browsers (e.g. Safari < 17.4 )
+if (typeof Promise.withResolvers !== `function`) {
+  Promise.withResolvers = function withResolvers<T>() {
+    let resolve!: (value: T | PromiseLike<T>) => void;
+    let reject!: (reason?: unknown) => void;
+    const promise = new Promise<T>((res, rej) => {
+      resolve = res;
+      reject = rej;
+    });
+
+    return {
+      promise,
+      resolve,
+      reject,
+    };
+  };
+}
+
+// The worker has its own global scope, so the polyfill above doesn't apply there,
+// this "legacy" build bundles its own shims for older browsers instead.
+// Keep this version in sync with the "pdfjs-dist" version react-pdf depends on
+// pdfjs throws if the versions don't match.
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@4.8.69/legacy/build/pdf.worker.min.mjs`;
 
 // A4 page aspect ratio (width / height), used to size the spread
 const PAGE_ASPECT_RATIO = 0.7071;
