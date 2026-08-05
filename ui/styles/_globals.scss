@@ -23,6 +23,7 @@ body {
   background-color: $color-black;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: contain;
   scroll-behavior: smooth;
 
   .layout--zh {
