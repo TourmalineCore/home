@@ -14,6 +14,7 @@ export function PageHead({
     // additionalCode,
     keywords,
     metaTags,
+    image,
   } = seoData;
 
   return (
@@ -34,8 +35,16 @@ export function PageHead({
         content={keywords}
       />
       <meta
+        property="og:title"
+        content={title}
+      />
+      <meta
+        property="og:description"
+        content={description}
+      />
+      <meta
         property="og:image"
-        content="/images/browser-preview.webp"
+        content={image?.src || `/images/browser-preview.webp`}
       />
       <meta
         property="og:image:width"

@@ -1,4 +1,5 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { CollageWithLinkBlock, LayoutData } from "../../common/types";
@@ -33,6 +34,10 @@ export default function MagazinePage({
     locale,
   } = useRouter();
 
+  const {
+    t,
+  } = useTranslation(`magazineTddMeta`);
+
   useNonBreakingSpaces({
     locale: locale!,
   });
@@ -44,13 +49,16 @@ export default function MagazinePage({
       <PageHead
         seoData={{
           seo: {
-            title: ``,
-            description: ``,
+            title: t(`metaTitle`),
+            description: t(`metaDescription`),
           },
-          keywords: ``,
+          keywords: t(`metaKeywords`),
           metaTags: [],
           structuredData: ``,
           additionalCode: ``,
+          image: {
+            src: `https://tourmalinecore.com/images/cover-of-tdd-magazine.jpg`,
+          },
         }}
       />
       <LayoutRedesign
@@ -127,6 +135,7 @@ async function getStaticTranslation({
   locale: string;
 }) {
   return serverSideTranslations(locale, [
+    `magazineTddMeta`,
     `formBlockRedesign`,
     `footer`,
     `cookie`,
