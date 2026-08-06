@@ -14,7 +14,18 @@ export function PageHead({
     // additionalCode,
     keywords,
     metaTags,
+    image,
   } = seoData;
+
+  const {
+    src: imageSrc,
+    width: imageWidth,
+    height: imageHeight,
+  } = image || {
+    src: `/images/browser-preview.webp`,
+    width: `300`,
+    height: `300`,
+  };
 
   return (
     <Head>
@@ -34,17 +45,29 @@ export function PageHead({
         content={keywords}
       />
       <meta
+        property="og:title"
+        content={title}
+      />
+      <meta
+        property="og:description"
+        content={description}
+      />
+      <meta
         property="og:image"
-        content="/images/browser-preview.webp"
+        content={imageSrc}
       />
-      <meta
-        property="og:image:width"
-        content="300"
-      />
-      <meta
-        property="og:image:height"
-        content="300"
-      />
+      {imageWidth && (
+        <meta
+          property="og:image:width"
+          content={imageWidth}
+        />
+      )}
+      {imageHeight && (
+        <meta
+          property="og:image:height"
+          content={imageHeight}
+        />
+      )}
 
       <script
         type="application/ld+json"
