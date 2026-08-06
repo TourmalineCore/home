@@ -17,16 +17,6 @@ export function PageHead({
     image,
   } = seoData;
 
-  const {
-    src: imageSrc,
-    width: imageWidth,
-    height: imageHeight,
-  } = image || {
-    src: `/images/browser-preview.webp`,
-    width: `300`,
-    height: `300`,
-  };
-
   return (
     <Head>
       <meta charSet="utf-8" />
@@ -54,20 +44,16 @@ export function PageHead({
       />
       <meta
         property="og:image"
-        content={imageSrc}
+        content={image?.src || `/images/browser-preview.webp`}
       />
-      {imageWidth && (
-        <meta
-          property="og:image:width"
-          content={imageWidth}
-        />
-      )}
-      {imageHeight && (
-        <meta
-          property="og:image:height"
-          content={imageHeight}
-        />
-      )}
+      <meta
+        property="og:image:width"
+        content="300"
+      />
+      <meta
+        property="og:image:height"
+        content="300"
+      />
 
       <script
         type="application/ld+json"
