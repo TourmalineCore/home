@@ -130,17 +130,17 @@ export function MagazinePdfView() {
               }, (_, index) => (
                 <div key={index}>
                   {(Math.abs(index - currentSlide) <= PAGE_RENDER_BUFFER
-                    || (transitionFromSlide !== null 
-                    && Math.abs(index - transitionFromSlide) <= PAGE_RENDER_BUFFER)) 
+                    || (transitionFromSlide !== null
+                    && Math.abs(index - transitionFromSlide) <= PAGE_RENDER_BUFFER))
                     && (
-                    <Page
-                      pageNumber={index + 1}
-                      height={pageHeight || undefined}
-                      devicePixelRatio={Math.min(window.devicePixelRatio, 3)}
-                      renderTextLayer={false}
-                      renderAnnotationLayer={false}
-                    />
-                  )}
+                      <Page
+                        pageNumber={index + 1}
+                        height={pageHeight || undefined}
+                        devicePixelRatio={Math.min(window.devicePixelRatio, 3)}
+                        renderTextLayer={false}
+                        renderAnnotationLayer={false}
+                      />
+                    )}
                 </div>
               ))}
             </Slider>
