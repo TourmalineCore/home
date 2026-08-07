@@ -128,7 +128,7 @@ export function MagazinePdfView() {
                     <Page
                       pageNumber={index + 1}
                       height={pageHeight || undefined}
-                      devicePixelRatio={Math.min(window.devicePixelRatio, 2)}
+                      devicePixelRatio={Math.min(window.devicePixelRatio, 3)}
                       renderTextLayer={false}
                       renderAnnotationLayer={false}
                     />
