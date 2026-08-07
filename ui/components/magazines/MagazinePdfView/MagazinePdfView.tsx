@@ -37,11 +37,12 @@ const PDF_FILE_PATH = `/documents/magazines/tourmaline-code-tdd-uwdc.pdf`;
 // A4 page aspect ratio (width / height), used to size the spread
 const PAGE_ASPECT_RATIO = 0.7071;
 
-const PAGE_RENDER_BUFFER = 2;
+const PAGE_RENDER_BUFFER = 1;
 
 export function MagazinePdfView() {
   const [totalPages, setTotalPages] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [transitionFromSlide, setTransitionFromSlide] = useState<number | null>(null);
   const [wrapperWidth, setWrapperWidth] = useState(0);
   const [maxPageHeight, setMaxPageHeight] = useState(0);
 
@@ -118,21 +119,28 @@ export function MagazinePdfView() {
               infinite={false}
               slidesToShow={slidesToShow}
               slidesToScroll={currentSlide === 0 ? 1 : slidesToShow}
-              beforeChange={(_, nextSlide) => setCurrentSlide(nextSlide)}
+              beforeChange={(prevSlide, nextSlide) => {
+                setTransitionFromSlide(prevSlide);
+                setCurrentSlide(nextSlide);
+              }}
+              afterChange={() => setTransitionFromSlide(null)}
             >
               {Array.from({
                 length: totalPages,
               }, (_, index) => (
                 <div key={index}>
-                  {Math.abs(index - currentSlide) <= PAGE_RENDER_BUFFER && (
-                    <Page
-                      pageNumber={index + 1}
-                      height={pageHeight || undefined}
-                      devicePixelRatio={Math.min(window.devicePixelRatio, 3)}
-                      renderTextLayer={false}
-                      renderAnnotationLayer={false}
-                    />
-                  )}
+                  {(Math.abs(index - currentSlide) <= PAGE_RENDER_BUFFER
+                    || (transitionFromSlide !== null
+                    && Math.abs(index - transitionFromSlide) <= PAGE_RENDER_BUFFER))
+                    && (
+                      <Page
+                        pageNumber={index + 1}
+                        height={pageHeight || undefined}
+                        devicePixelRatio={Math.min(window.devicePixelRatio, 3)}
+                        renderTextLayer={false}
+                        renderAnnotationLayer={false}
+                      />
+                    )}
                 </div>
               ))}
             </Slider>
