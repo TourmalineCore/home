@@ -253,6 +253,7 @@ export function FormRedesign({
             onSuccess={handleCaptchaSuccess}
             onChallengeHidden={hideSmartCaptcha}
             visible={isSmartCaptchaVisible}
+            hideShield
           />
         )}
       </div>

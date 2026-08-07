@@ -175,6 +175,7 @@ export function CookieSettingsModal({
           }}
           onChallengeHidden={hideSmartCaptcha}
           visible={isSmartCaptchaVisible}
+          hideShield
         />
       )}
     </>
