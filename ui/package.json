@@ -3,10 +3,11 @@
   "version": "3.1.4",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm run copy:pdf-worker && next dev",
     "dev:static": "cross-env IS_STATIC_MODE=true npm run dev",
-    "build": "next build",
+    "build": "npm run copy:pdf-worker && next build",
     "postbuild": "npx next-sitemap",
+    "copy:pdf-worker": "node scripts/copy-pdf-worker.mjs",
     "start": "next start",
     "lint": "run-s -c lint:ts lint:css",
     "lint:fix": "run-s -c lint:ts:fix lint:css:fix",
