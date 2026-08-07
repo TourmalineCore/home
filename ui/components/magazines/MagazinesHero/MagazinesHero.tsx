@@ -16,7 +16,7 @@ export function MagazinesHero() {
           Разбираем технологии, подходы и процессы, из которых собираются цифровые продукты. Одна большая тема на номер: что решение меняет в деньгах и сроках, и как оно устроено внутри.
         </p>
         <Link
-          href="/magazines/tourmaline-code-tdd-uwdc"
+          href="/magazines/tourmaline-code-about-tdd"
           className="magazines-hero__link"
         >
           <NewLabel className="magazines-hero__new-label" />
