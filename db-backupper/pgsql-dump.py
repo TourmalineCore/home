@@ -33,7 +33,7 @@ def upload_to_s3(backup_filename):
         s3.upload_fileobj(data, bucket_name, backup_filename)
 
 def create_db_backup(database_host, database_username, database_password, database_name, backup_filename_prefix):
-    backup_filename = f'{backup_filename_prefix}' + '-' + datetime.strftime(datetime.now(datetime.timezone.utc), "%Y-%m-%dT%H-%M-%S") + '.backup'
+    backup_filename = f'{backup_filename_prefix}' + '-' + datetime.strftime(datetime.utcnow(), "%Y-%m-%dT%H-%M-%S") + '.backup'
 
     os.system(f'PGPASSWORD={database_password} pg_dump -h {database_host} -U {database_username} --encoding UTF8 --format plain {database_name} > {backup_filename}')
 
