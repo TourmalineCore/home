@@ -26,7 +26,7 @@ def main():
                      os.getenv('HOME_URL_SHORTENER_DATABASE_PASSWORD'),
                      os.getenv('HOME_URL_SHORTENER_DATABASE_NAME'),
                      os.getenv('HOME_URL_SHORTENER_DB_BACKUPS_FILENAME_PREFIX'))
-    logging.info('url-shortener backups created succesfully')
+    logging.info('url-shortener backup created succesfully')
 
 
 def upload_to_s3(backup_filename):
