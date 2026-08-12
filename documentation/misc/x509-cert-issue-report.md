@@ -73,7 +73,7 @@ devcontainer exec --workspace-folder . kubectl get pods -A
 
 Check certs expiration
 ```bash
-docker exec home-control-plane kubeadm certs check-expiration
+docker exec <project>-control-plane kubeadm certs check-expiration
 ```
 
 ## Home site test
