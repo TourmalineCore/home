@@ -22,14 +22,13 @@ Go to the project repo folder
 cd <project>-env
 ```
 
-Get the cluster container name. We need the control-plane container.
-```bash
-docker ps
-```
-
-Check current certs state
+Check communication with the cluster using current certificate
 ```bash
 devcontainer exec --workspace-folder . kubectl get pods -A
+```
+
+Check certs expiration
+```bash
 docker exec <project>-control-plane kubeadm certs check-expiration
 ```
 
@@ -65,10 +64,16 @@ SERVER_ADDRESS="$(devcontainer exec --workspace-folder . kubectl config view -o 
 devcontainer exec --workspace-folder . yq -i ".clusters[].cluster.server = \"$SERVER_ADDRESS\"" ".<project>-cluster-kubeconfig.tmp"
 
 mv ".<project>-cluster-kubeconfig.tmp" ".<project>-cluster-kubeconfig"
-```
 
+```
+Check communication with the cluster using new certificate
 ```bash
 devcontainer exec --workspace-folder . kubectl get pods -A
+```
+
+Check certs expiration
+```bash
+docker exec home-control-plane kubeadm certs check-expiration
 ```
 
 ## Home site test
@@ -85,7 +90,7 @@ Go to the project repo folder
 cd home-env
 ```
 
-Check that current cert works
+Check communication with the cluster using current certificate
 ```bash
 devcontainer exec --workspace-folder . kubectl get pods -A
 ```
@@ -116,6 +121,9 @@ prod                 ingress-nginx-controller-58f4c5584-dzgk5     1/1     Runnin
 prod                 metrics-server-5dd7b49d79-9b7pv              1/1     Running     7 (84d ago)      256d
 prod                 postgresql-0                                 1/1     Running     2 (84d ago)      256d
 ```
+> If cert is expired then you'll got an error  
+> E0811 11:03:01.804552 3557084 memcache.go:265] "Unhandled Error" err="couldn't get current server API group list: Get \"https://127.0.0.1:35178/api?timeout=32s\": tls: failed to verify certificate: x509: certificate has expired or is not yet valid: current time 2026-08-11T11:03:01Z is after 2026-07-16T10:18:37Z"  
+>Unable to connect to the server: tls: failed to verify certificate: x509: certificate has expired or is not yet valid: current time 2026-08-11T11:03:01Z is after 2026-07-16T10:18:37Z  
 
 Check certs expiration
 ```bash
@@ -183,7 +191,7 @@ kubeadm kubeconfig user --config InitConfiguration.yaml --client-name system:nod
 exit
 ```
 
-Copy new cert to be able to interact with cluster
+Copy new cert from cluster to the host to be able to interact with cluster
 
 ```bash
 docker cp "home-control-plane:/etc/kubernetes/admin.conf" ".home-cluster-kubeconfig.tmp"
@@ -195,7 +203,7 @@ devcontainer exec --workspace-folder . yq -i ".clusters[].cluster.server = \"$SE
 mv ".home-cluster-kubeconfig.tmp" ".home-cluster-kubeconfig"
 ```
 
-Check current certs state
+Check communication with the cluster using new certificate
 ```bash
 devcontainer exec --workspace-folder . kubectl get pods -A
 ```
@@ -226,7 +234,7 @@ prod                 ingress-nginx-controller-58f4c5584-dzgk5     1/1     Runnin
 prod                 metrics-server-5dd7b49d79-9b7pv              1/1     Running     7 (84d ago)      256d
 prod                 postgresql-0                                 1/1     Running     2 (84d ago)      256d
 ```
-
+Check certs expiration
 ```bash
 docker exec home-control-plane kubeadm certs check-expiration
 ```
