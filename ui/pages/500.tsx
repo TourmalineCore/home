@@ -13,7 +13,7 @@ export default function Custom500() {
       message={
         locale === `ru`
           ? `Извините, произошла внутренняя ошибка сервера. Попробуйте зайти позже.`
-          : `Sorry, there was an internal server error. Try to come back later.`
+          : `Sorry, there was an internal server error. Please try again later.`
       }
     />
   );
