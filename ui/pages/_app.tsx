@@ -9,8 +9,6 @@ import dynamic from 'next/dynamic';
 import { loadYandexMetrika } from '../common/loadYandexMetrika/loadYandexMetrika';
 import { COOKIE_ACCEPT, COOKIE_SETTINGS } from '../common/constants/cookie';
 import { CookieProvider } from '../common/providers/CookieProvider';
-import { getCookieData } from '../services/cms/api/cookie-api/cookie-api';
-import { loadTranslations } from '../common/utils';
 
 const Cookie = dynamic(
   () => import(`../components/Cookie/Cookie`).then((component) => component.Cookie),
@@ -30,7 +28,7 @@ const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
 const yandexId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
 // const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 
-type MyAppProps = AppProps & {
+type CustomPageProps = {
   cookieData: {
     acceptButtonText: string;
     rejectButtonText: string;
@@ -52,11 +50,11 @@ type MyAppProps = AppProps & {
   };
 };
 
+type MyAppProps = AppProps<CustomPageProps>;
+
 function MyApp({
   Component,
   pageProps,
-  cookieData,
-  cookieSettingsData,
   router,
 }: MyAppProps) {
   useEffect(() => {
@@ -90,6 +88,11 @@ function MyApp({
     };
   }, [router.events]);
 
+  const {
+    cookieData,
+    cookieSettingsData,
+  } = pageProps;
+
   return (
     <CookieProvider>
       <Head>
@@ -117,61 +120,4 @@ function MyApp({
   );
 }
 
-MyApp.getInitialProps = async ({
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  router,
-}: {
-  router: {
-    locale: string;
-    isPreview: boolean;
-  };
-}) => {
-  const translationsData = await loadTranslations(router.locale, [`cookie`, `cookieSettings`]);
-
-  if (process.env.IS_STATIC_MODE === `true`) {
-    return {
-      cookieData: {
-        acceptButtonText: translationsData.cookie.accept,
-        rejectButtonText: translationsData.cookie.reject,
-        bannerText: translationsData.cookie.text,
-        settingsButtonText: translationsData.cookie.settings,
-      },
-      cookieSettingsData: translationsData.cookieSettings,
-    };
-  }
-
-  try {
-    const cookieResponse = await getCookieData({
-      status: router.isPreview ? `draft` : `published`,
-      locale: router.locale,
-    });
-
-    return {
-      cookieData: {
-        acceptButtonText: translationsData.cookie.accept,
-        rejectButtonText: translationsData.cookie.reject,
-        settingsButtonText: translationsData.cookie.settings,
-        bannerText: cookieResponse.bannerText,
-      },
-      cookieSettingsData: {
-        ...translationsData.cookieSettings,
-        analytics: {
-          title: translationsData.cookieSettings.analytics.title,
-          text: cookieResponse.analyticsText,
-        },
-        webvisor: {
-          title: translationsData.cookieSettings.webvisor.title,
-          text: cookieResponse.webvisorText,
-        },
-        note: cookieResponse.privacyText,
-      },
-    };
-  } catch {
-    return {
-      cookieData: {},
-      cookieSettingsData: {},
-    };
-  }
-};
-
-export default appWithTranslation(MyApp as unknown as React.ComponentType<AppProps>);
+export default appWithTranslation(MyApp) as React.ComponentType<AppProps<CustomPageProps>>;

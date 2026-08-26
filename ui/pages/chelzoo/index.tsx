@@ -29,6 +29,7 @@ import { ChelzooLinks } from '../../components/chelzoo/ChelzooLinks/ChelzooLinks
 import { ChelzooReview } from '../../components/chelzoo/ChelzooReview/ChelzooReview';
 import { CollageWithLink } from '../../components/CollageWithLink/CollageWithLink';
 import { useNonBreakingSpaces } from '../../common/hooks';
+import { getCookiePageProps } from '../../common/utils/getCookiePageProps';
 
 export default function ChelzooPage({
   layoutData,
@@ -114,6 +115,13 @@ export async function getServerSideProps({
   locale: string;
   preview: boolean;
 }) {
+  const {
+    cookieData,
+    cookieSettingsData,
+  } = await getCookiePageProps({
+    locale,
+    preview,
+  });
   if (process.env.IS_STATIC_MODE === `true`) {
     const translationsPageData = await loadTranslations(locale, [
       `headerRedesign`,
@@ -123,6 +131,8 @@ export async function getServerSideProps({
 
     return {
       props: {
+        cookieData,
+        cookieSettingsData,
         layoutData: {
           headerContent: translationsPageData.headerRedesign,
           footerContent: translationsPageData.footerRedesign,
@@ -150,6 +160,8 @@ export async function getServerSideProps({
 
   return {
     props: {
+      cookieData,
+      cookieSettingsData,
       layoutData,
       collageWithLinkData: {
         text: translationsPageData.collageWithLink.text,
@@ -171,8 +183,6 @@ async function getStaticTranslation({
 }) {
   return serverSideTranslations(locale, [
     `chelzooMeta`,
-    `cookie`,
-    `cookieSettings`,
     `formBlockRedesign`,
     `chelzooHero`,
     `chelzooAbout`,

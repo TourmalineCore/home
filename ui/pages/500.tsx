@@ -1,18 +1,22 @@
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
 
+import { useRouter } from 'next/router';
 import { CustomError } from '../components/CustomError/CustomError';
 import { getCookiePageProps } from '../common/utils/getCookiePageProps';
 
-export default function Custom404() {
+export default function Custom500() {
   const {
-    t,
-  } = useTranslation(`pageNotFound`);
+    locale,
+  } = useRouter();
 
   return (
     <CustomError
-      statusCode={404}
-      message={t(`message`)}
+      statusCode={500}
+      message={
+        locale === `ru`
+          ? `Извините, произошла внутренняя ошибка сервера. Попробуйте зайти позже.`
+          : `Sorry, there was an internal server error. Try to come back later.`
+      }
     />
   );
 }
