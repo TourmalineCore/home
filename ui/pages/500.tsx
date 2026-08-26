@@ -1,5 +1,3 @@
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-
 import { useRouter } from 'next/router';
 import { CustomError } from '../components/CustomError/CustomError';
 import { getCookiePageProps } from '../common/utils/getCookiePageProps';
@@ -40,7 +38,6 @@ export async function getStaticProps({
     props: {
       cookieData,
       cookieSettingsData,
-      ...(await serverSideTranslations(locale as string, [`pageNotFound`])),
     },
   };
 }
