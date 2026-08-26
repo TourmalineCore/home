@@ -12,6 +12,7 @@ import { MagazinesHero } from '../../components/magazines/MagazinesHero/Magazine
 import { useNonBreakingSpaces } from '../../common/hooks';
 import { MagazineTeaser } from '../../components/magazines/MagazineTeaser/MagazineTeaser';
 import { CollageWithLink } from '../../components/CollageWithLink/CollageWithLink';
+import { getCookiePageProps } from '../../common/utils/getCookiePageProps';
 
 export default function MagazinesPage({
   layoutData,
@@ -77,6 +78,14 @@ export async function getServerSideProps({
   locale: string;
   preview: boolean;
 }) {
+  const {
+    cookieData,
+    cookieSettingsData,
+  } = await getCookiePageProps({
+    locale,
+    preview,
+  });
+
   if (process.env.IS_STATIC_MODE === `true`) {
     const translationsPageData = await loadTranslations(locale, [
       `headerRedesign`,
@@ -86,6 +95,8 @@ export async function getServerSideProps({
 
     return {
       props: {
+        cookieData,
+        cookieSettingsData,
         layoutData: {
           headerContent: translationsPageData.headerRedesign,
           footerContent: translationsPageData.footerRedesign,
@@ -109,6 +120,8 @@ export async function getServerSideProps({
 
   return {
     props: {
+      cookieData,
+      cookieSettingsData,
       layoutData,
       collageWithLinkData: translationsPageData.collageWithLink,
       isPreview: preview,
@@ -128,7 +141,5 @@ async function getStaticTranslation({
     `magazinesMeta`,
     `formBlockRedesign`,
     `footer`,
-    `cookie`,
-    `cookieSettings`,
   ]);
 }
