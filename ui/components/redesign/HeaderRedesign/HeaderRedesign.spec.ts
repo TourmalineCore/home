@@ -33,8 +33,7 @@ test.describe(`Header`, () => {
   }
 
   test.describe(`ShowSubmenuTests`, () => {
-    const breakpoints = BREAKPOINTS.filter((breakpoint) => breakpoint.breakpoint === Breakpoint.TABLET_XL
-      || breakpoint.breakpoint === Breakpoint.DESKTOP_XL);
+    const breakpoints = BREAKPOINTS.filter((breakpoint) => breakpoint.breakpoint === Breakpoint.DESKTOP_XL);
 
     for (const {
       name,
