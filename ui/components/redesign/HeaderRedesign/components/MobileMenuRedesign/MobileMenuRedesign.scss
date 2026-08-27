@@ -75,7 +75,7 @@
     }
   }
 
-  @include tablet-xl {
+  @include desktop {
     display: none;
   }
 
@@ -85,5 +85,9 @@
 
   &--open {
     display: block;
+
+    @include desktop {
+      display: none;
+    }
   }
 }

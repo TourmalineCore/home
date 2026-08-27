@@ -148,6 +148,10 @@ async function layoutMainScenarioTest() {
       async function checkLayoutOnUi() {
         await goto();
 
+        await setViewportSize({
+          width: Breakpoint.DESKTOP,
+        });
+
         await test.step(`Check desktop`, checkDesktop);
 
         await test.step(`Check mobile menu`, checkMobileMenu);
