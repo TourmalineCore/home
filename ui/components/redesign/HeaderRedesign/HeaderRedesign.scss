@@ -22,7 +22,7 @@
     max-width: 135px;
     aspect-ratio: 135 / 40;
 
-    @include tablet-xl {
+    @include desktop {
       z-index: 1;
     }
 
@@ -35,7 +35,7 @@
   &__nav {
     display: none;
 
-    @include tablet-xl {
+    @include desktop {
       display: block;
     }
   }
@@ -57,7 +57,7 @@
     cursor: pointer;
     gap: 8px;
 
-    @include tablet-xl {
+    @include desktop {
       display: none;
     }
 
@@ -75,7 +75,7 @@
   &__button {
     display: none;
 
-    @include tablet-xl {
+    @include desktop {
       display: inline-block;
     }
   }
