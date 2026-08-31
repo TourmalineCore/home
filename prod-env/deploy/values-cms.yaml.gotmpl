@@ -1,0 +1,78 @@
+# —— START —— #
+# —— DO NOT CHANGE MANUALLY —— #
+# —— UPDATED IN WORKFLOWS —— #
+image:
+  tag: "sha-4343291daaceb33174fb5e2ffa596c7caa1ca560"
+# —— END —— #
+
+ingress:
+  hostname: {{ .Values.HOME_CMS_HOSTNAME }}
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt
+    # allow access only from our office public static IP-address
+    nginx.ingress.kubernetes.io/whitelist-source-range: "{{ .Values.HOME_CMS_ALLOWED_IP_ADDRESSES_WHITELIST }}"
+
+replicaCount: 2
+
+updateStrategy:
+  rollingUpdate:
+    maxUnavailable: 1
+    maxSurge: 1
+
+readinessProbe:
+  enabled: true
+  path: /cms
+  initialDelaySeconds: 15
+  periodSeconds: 30
+
+livenessProbe:
+  enabled: true
+  path: /cms
+  initialDelaySeconds: 45
+  periodSeconds: 60
+
+extraConfigMapEnvVars:
+  HOST: "0.0.0.0"
+  PORT: "1337"
+  APP_KEYS: "{{ .Values.HOME_APP_KEYS }}"
+  API_TOKEN_SALT: "{{ .Values.HOME_API_TOKEN_SALT }}"
+  ADMIN_JWT_SECRET: "{{ .Values.HOME_ADMIN_JWT_SECRET }}"
+  TRANSFER_TOKEN_SALT: "{{ .Values.HOME_TRANSFER_TOKEN_SALT }}"
+  DATABASE_HOST: "{{ .Values.HOME_DATABASE_HOST }}"
+  DATABASE_PORT: "{{ .Values.HOME_DATABASE_PORT }}"
+  DATABASE_NAME: "{{ .Values.HOME_DATABASE_NAME }}"
+  DATABASE_USERNAME: "{{ .Values.HOME_DATABASE_USERNAME }}"
+  DATABASE_PASSWORD: "{{ .Values.HOME_DATABASE_PASSWORD }}"
+  JWT_SECRET: "{{ .Values.HOME_JWT_SECRET }}"
+  PREVIEW_SECRET: "{{ .Values.HOME_PREVIEW_SECRET }}"
+
+  # this perfectly explains why this is needed https://github.com/strapi/strapi/issues/13889#issuecomment-1516194973
+  # is this even needed?
+  SERVER_URL: "{{ .Values.HOME_CMS_BASE_EXTERNAL_URL }}/cms"
+  FRONTEND_URL: "{{ .Values.HOME_UI_BASE_EXTERNAL_URL }}"
+
+  AWS_ACCESS_KEY_ID: "{{ .Values.HOME_AWS_ACCESS_KEY_ID }}"
+  AWS_ACCESS_SECRET_KEY: "{{ .Values.HOME_AWS_ACCESS_SECRET_KEY }}"
+  AWS_REGION: "{{ .Values.HOME_AWS_REGION}}"
+
+  # if else condition is needed to handle the situation when a subfolder exists
+  {{- if .Values.HOME_AWS_SUBFOLDER_NAME }}
+  AWS_ENDPOINT: "{{ .Values.HOME_AWS_ENDPOINT }}/{{ .Values.HOME_AWS_BUCKET }}"
+  AWS_PUBLIC_ENDPOINT: "{{ .Values.HOME_AWS_ENDPOINT }}/{{ .Values.HOME_AWS_BUCKET }}/{{ .Values.HOME_AWS_SUBFOLDER_NAME}}"
+  AWS_BUCKET: "{{ .Values.HOME_AWS_SUBFOLDER_NAME }}"
+  {{- else }}
+  AWS_ENDPOINT: "{{ .Values.HOME_AWS_ENDPOINT }}"
+  AWS_PUBLIC_ENDPOINT: "{{ .Values.HOME_AWS_ENDPOINT }}/{{ .Values.HOME_AWS_BUCKET }}"
+  AWS_BUCKET: "{{ .Values.HOME_AWS_BUCKET }}"
+  {{- end }}
+
+  NODE_ENV: "production"
+  INIT_ADMIN: "true"
+  INIT_ADMIN_USERNAME: "{{ .Values.HOME_INIT_ADMIN_USERNAME }}"
+  INIT_ADMIN_PASSWORD: "{{ .Values.HOME_INIT_ADMIN_PASSWORD }}"
+  INIT_ADMIN_FIRSTNAME: "{{ .Values.HOME_INIT_ADMIN_FIRSTNAME }}"
+  INIT_ADMIN_LASTNAME: "{{ .Values.HOME_INIT_ADMIN_LASTNAME }}"
+  INIT_ADMIN_EMAIL: "{{ .Values.HOME_INIT_ADMIN_EMAIL }}"
