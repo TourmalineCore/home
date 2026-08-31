@@ -56,7 +56,7 @@ jobs:
           # For example:
           # The URL was: git::https://github.com/TourmalineCore/home.git@/env-synchronizer/ci/values.yaml?ref=2b1b79806fc9291782aa5865d440045e1a155335
           # Became: git::https://github.com/TourmalineCore/home.git@/env-synchronizer/ci/values.yaml?ref=fb67abade2db5390fe40bc601d9dbf45cfb59f77
-          sed -i "0,/${{ inputs.service-name }}\/ci\/values.yaml?ref=.*/s//${{ inputs.service-name }}\/ci\/values.yaml?ref=${{ github.sha }}/" $PATH_TO_HELMFILE
+          sed -i "0,/${{ inputs.service-name }}\/ci\/values.yaml?ref=.*/s//${{ inputs.service-name }}\/ci\/values.yaml?ref=${{ github.sha }}/" prod-env/deploy/helmfile.yaml
 
       - name: Commit and Push Changes
         run: |
