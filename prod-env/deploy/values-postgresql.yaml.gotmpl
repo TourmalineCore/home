@@ -1,0 +1,10 @@
+global:
+  postgresql:
+    auth:
+      postgresPassword: "{{ .Values.HOME_DATABASE_PASSWORD }}"
+      username: "{{ .Values.HOME_DATABASE_USERNAME }}"
+      password: "{{ .Values.HOME_DATABASE_PASSWORD }}"
+      database: "{{ .Values.HOME_DATABASE_NAME }}"
+
+image:
+    repository: bitnamilegacy/postgresql
