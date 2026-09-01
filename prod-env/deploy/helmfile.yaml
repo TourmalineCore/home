@@ -10,7 +10,7 @@ repositories:
   - name: home-s3-backupper
     url: git+https://github.com/TourmalineCore/home.git@s3-backupper?ref=bfd82ce573b21f58908af2d907ff192300602b36
   - name: home-db-backupper
-    url: git+https://github.com/TourmalineCore/home.git@db-backupper?ref=bfd82ce573b21f58908af2d907ff192300602b36
+    url: git+https://github.com/TourmalineCore/home.git@db-backupper?ref=9689ff2edff41da62c3fdf232bb71935000d9404
   - name: home-env-synchronizer
     url: git+https://github.com/TourmalineCore/home.git@env-synchronizer?ref=24c17fb0d381ae0f0b5ddc2933c16a2883e45ce9
     
@@ -151,7 +151,7 @@ releases:
       - postgresql
     values:
       # https://helmfile.readthedocs.io/en/latest/#loading-remote-environment-values-files
-      - git::https://github.com/TourmalineCore/home.git@db-backupper/ci/values.yaml?ref=bfd82ce573b21f58908af2d907ff192300602b36
+      - git::https://github.com/TourmalineCore/home.git@db-backupper/ci/values.yaml?ref=9689ff2edff41da62c3fdf232bb71935000d9404
       - values.yaml.gotmpl
       - values-db-backupper.yaml.gotmpl
 
