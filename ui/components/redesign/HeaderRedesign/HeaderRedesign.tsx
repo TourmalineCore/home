@@ -8,7 +8,7 @@ import { HeaderButton } from "./components/HeaderButton/HeaderButton";
 import { MobileMenu } from "./components/MobileMenuRedesign/MobileMenuRedesign";
 import { useBodyScrollHidden } from "../../../common/hooks/useBodyScrollHidden";
 import { HeaderRedesignProps } from "../../../common/types";
-import { useOnScrollDirections } from "../../../common/hooks";
+import { useDeviceSize, useOnScrollDirections } from "../../../common/hooks";
 import { HeaderNavigationList } from "./components/HeaderNavigationList/HeaderNavigationList";
 import { AppRoute } from "../../../common/enums";
 import { FormModal } from "../../FormModal/FormModal";
@@ -34,7 +34,11 @@ export function HeaderRedesign({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [asPath]);
 
-  useBodyScrollHidden(isMobileMenuOpen);
+  const {
+    isDesktop,
+  } = useDeviceSize();
+
+  useBodyScrollHidden(isMobileMenuOpen && !isDesktop);
 
   const {
     isScrollUp,

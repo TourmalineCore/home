@@ -16,6 +16,7 @@ import { loadTranslations } from '../../common/utils';
 import { useIsRussianCountry } from '../../common/hooks';
 import { FormBlock } from '../../components/FormBlock/FormBlock';
 import { TechnologyPageAnchorLink } from '../../common/enums';
+import { getCookiePageProps } from '../../common/utils/getCookiePageProps';
 
 export default function FrontendTeamPage({
   layoutData,
@@ -83,11 +84,21 @@ export async function getServerSideProps({
   locale: string;
   preview: boolean;
 }) {
+  const {
+    cookieData,
+    cookieSettingsData,
+  } = await getCookiePageProps({
+    locale,
+    preview,
+  });
+
   if (process.env.IS_STATIC_MODE === `true`) {
     const translationsPageData = await loadTranslations(locale, [`headerRedesign`]);
 
     return {
       props: {
+        cookieData,
+        cookieSettingsData,
         layoutData: {
           headerContent: translationsPageData.headerRedesign,
         },
@@ -107,6 +118,8 @@ export async function getServerSideProps({
 
   return {
     props: {
+      cookieData,
+      cookieSettingsData,
       layoutData,
       isPreview: preview,
       ...(await getStaticTranslation({
@@ -124,8 +137,6 @@ async function getStaticTranslation({
   return serverSideTranslations(locale, [
     `common`,
     `footer`,
-    `cookie`,
-    `cookieSettings`,
     `form`,
     `formBlock`,
     `heroFrontend-team`,

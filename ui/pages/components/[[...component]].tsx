@@ -41,6 +41,7 @@ import { FormModal } from "../../components/FormModal/FormModal";
 import { FormBlockRedesign } from "../../components/redesign/FormBlockRedesign/FormBlockRedesign";
 import { MagazineHero } from "../../components/magazines/MagazineHero/MagazineHero";
 import { MagazinesHero } from "../../components/magazines/MagazinesHero/MagazinesHero";
+import { getCookiePageProps } from "../../common/utils/getCookiePageProps";
 
 const Cookie = dynamic(
   () => import(`../../components/Cookie/Cookie`).then((component) => component.Cookie),
@@ -307,8 +308,10 @@ export default function ComponentsPage({
 
 export async function getStaticProps({
   locale,
+  preview = false,
 }: {
   locale: string;
+  preview: boolean;
 }) {
   const translationsPageData = await loadTranslations(locale, [
     `threeColumnGrid`,
@@ -328,8 +331,18 @@ export async function getStaticProps({
     `cookieSettings`,
   ]);
 
+  const {
+    cookieData,
+    cookieSettingsData,
+  } = await getCookiePageProps({
+    locale,
+    preview,
+  });
+
   return {
     props: {
+      cookieData,
+      cookieSettingsData,
       pageData: translationsPageData,
       ...(await serverSideTranslations(locale, [
         `formBlockRedesign`,

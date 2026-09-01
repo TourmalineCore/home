@@ -14,7 +14,7 @@
     cursor: pointer;
     transition: opacity 0.3s ease-in-out;
 
-    @include tablet-xl {
+    @include desktop {
       position: relative;
     }
   }
@@ -24,7 +24,7 @@
 
     color: $color-white;
 
-    @include tablet-xl {
+    @include desktop {
       @include body-m;
     }
   }
@@ -35,7 +35,7 @@
     height: 20px;
     transition: transform 0.3s ease-in-out;
 
-    @include tablet-xl {
+    @include desktop {
       margin-left: 4px;
       width: 16px;
       height: 16px;
@@ -49,7 +49,7 @@
     width: 100%;
     animation: showSmoothАppearance 0.15s ease-out forwards;
 
-    @include tablet-xl {
+    @include desktop {
       position: absolute;
       left: 0;
       display: none;
@@ -100,7 +100,7 @@
     flex-direction: column;
     gap: 4px;
 
-    @include tablet-xl {
+    @include desktop {
       z-index: $top-panel;
       gap: 16px;
     }
@@ -115,7 +115,7 @@
     padding-bottom: 6px;
     width: max-content;
 
-    @include tablet-xl {
+    @include desktop {
       padding-top: 0;
       padding-bottom: 0;
       max-width: 224px;
@@ -138,7 +138,7 @@
       text-decoration: underline;
     }
 
-    @include tablet-xl {
+    @include desktop {
       color: $color-white;
     }
   }

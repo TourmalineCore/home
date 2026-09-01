@@ -1,0 +1,42 @@
+# —— START —— #
+# —— DO NOT CHANGE MANUALLY —— #
+# —— UPDATED IN WORKFLOWS —— #
+image:
+  tag: "sha-c252724967eb57f79afcc2bfe17447a5b39675f5"
+# —— END —— #
+  
+ingress:
+  hostname: "{{ .Values.HOME_UI_HOSTNAME }}"
+  extraHosts:
+    - name: "www.{{ .Values.HOME_UI_HOSTNAME }}"
+  tlsWwwPrefix: true
+  annotations: 
+    nginx.ingress.kubernetes.io/configuration-snippet: "if ($host = www.{{ .Values.HOME_UI_HOSTNAME }}) { return 301 {{ .Values.HOME_UI_BASE_EXTERNAL_URL }}$request_uri; }"
+
+replicaCount: 2
+
+updateStrategy:
+  rollingUpdate:
+    maxUnavailable: 1
+    maxSurge: 1
+
+# Here you can read more about container probes https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+readinessProbe:
+  enabled: true
+  path: /
+  initialDelaySeconds: 15
+  periodSeconds: 30
+
+livenessProbe:
+  enabled: true
+  path: /
+  initialDelaySeconds: 45
+  periodSeconds: 60
+
+extraConfigMapEnvVars:
+  CMS_URL: "http://home-cms-nginx"
+  PREVIEW_SECRET: "{{ .Values.HOME_PREVIEW_SECRET }}"
+
+  MAILRU_EMAIL: "{{ .Values.HOME_MAILRU_EMAIL }}"
+  MAILRU_PASSWORD: "{{ .Values.HOME_MAILRU_PASSWORD }}"
+  SMARTCAPTCHA_SERVER_KEY: "{{ .Values.HOME_SMARTCAPTCHA_SERVER_KEY }}"

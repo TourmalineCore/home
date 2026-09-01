@@ -1,0 +1,172 @@
+repositories:
+  - name: bitnami
+    url: https://mirror.yandex.ru/helm/charts.bitnami.com
+  - name: metrics-server
+    url: https://kubernetes-sigs.github.io/metrics-server
+  - name: ingress-nginx
+    url: https://kubernetes.github.io/ingress-nginx
+  - name: jetstack
+    url: https://charts.jetstack.io
+  - name: home-s3-backupper
+    url: git+https://github.com/TourmalineCore/home.git@s3-backupper?ref=bfd82ce573b21f58908af2d907ff192300602b36
+  - name: home-db-backupper
+    url: git+https://github.com/TourmalineCore/home.git@db-backupper?ref=bfd82ce573b21f58908af2d907ff192300602b36
+  - name: home-env-synchronizer
+    url: git+https://github.com/TourmalineCore/home.git@env-synchronizer?ref=24c17fb0d381ae0f0b5ddc2933c16a2883e45ce9
+    
+environments:
+  prod:
+    values:
+      - environments/{{ .Environment.Name }}/values.yaml.gotmpl
+
+releases:
+  - name: metrics-server
+    labels:
+      app: metrics-server
+    wait: true
+    chart: metrics-server/metrics-server
+    version: 3.13.0
+    values:
+      - values-metrics-server.yaml.gotmpl
+
+  - name: ingress-nginx
+    labels:
+      app: ingress-nginx
+    wait: true
+    chart: ingress-nginx/ingress-nginx
+    # update ingress-nginx version to 1.12.1 for fix CVE-2025-1098
+    # https://www.opennet.ru/opennews/art.shtml?num=62946
+    version: 4.12.1
+    values:
+      - values-ingress-nginx.yaml.gotmpl
+
+  - name: cert-manager
+    wait: true
+    chart: jetstack/cert-manager
+    version: 1.14.5
+    needs: 
+      - ingress-nginx
+    values:
+      - values-cert-manager.yaml.gotmpl
+    # deploy custom resource using hooks feature of helmfile since there is nothing like extraDeploy for this chart
+    hooks:
+      - events: ["postsync"]
+        showlogs: true
+        command: "sh"
+        # envsubst tool is used to replace env variables in file with their values
+        args: ["-c", "envsubst < ./cert-manager-cluster-issuer.yaml | kubectl apply -f -"]
+
+  - name: postgresql
+    labels:
+      app: postgresql
+    wait: true
+    chart: bitnami/postgresql
+    version: 12.2.7
+    values:
+      - values-postgresql.yaml.gotmpl
+
+  - name: home-cms
+    labels:
+      app: home-cms
+    wait: true
+    chart: bitnami/nginx
+    # after 15.3.5 our docker file or setup can no longer start, need to investigate what is wrong for the newer versions
+    version: 15.3.5
+    # it won't work anyway until ingress controller is created
+    # thus we wait for it to be ready first
+    needs: 
+      - ingress-nginx
+      - postgresql
+    values:
+      # https://helmfile.readthedocs.io/en/latest/#loading-remote-environment-values-files
+      - git::https://github.com/TourmalineCore/home.git@/cms/ci/values.yaml?ref=4343291daaceb33174fb5e2ffa596c7caa1ca560
+      - values.yaml.gotmpl
+      - values-cms.yaml.gotmpl
+
+  - name: home-ui
+    labels:
+      app: home-ui
+    wait: true
+    chart: bitnami/nginx
+    # chart was updated to 15.12.1 to add support of ingress.tlsWwwPrefix to simply add cert for www subdomain
+    # changelog ref: https://github.com/bitnami/charts/blob/main/bitnami/nginx/CHANGELOG.md#15120-2024-02-20
+    # version 15.12.1 is used instead of 15.12.0 because Yandex Mirror doesn't contain 15.12.0 for some reason
+    version: 15.12.1
+    # it won't work anyway until ingress controller is created
+    # thus we wait for it to be ready first
+    needs: 
+      - ingress-nginx
+    values:
+      # https://helmfile.readthedocs.io/en/latest/#loading-remote-environment-values-files
+      - git::https://github.com/TourmalineCore/home.git@/ui/ci/values.yaml?ref=c252724967eb57f79afcc2bfe17447a5b39675f5
+      - values.yaml.gotmpl
+      - values-ui.yaml.gotmpl    
+
+  - name: home-env-synchronizer
+    labels:
+      app: home-env-synchronizer
+    wait: true
+    chart: home-env-synchronizer/home-env-synchronizer
+    values:
+      # https://helmfile.readthedocs.io/en/latest/#loading-remote-environment-values-files
+      - git::https://github.com/TourmalineCore/home.git@/env-synchronizer/ci/values.yaml?ref=24c17fb0d381ae0f0b5ddc2933c16a2883e45ce9
+      - values.yaml.gotmpl
+      - values-env-synchronizer.yaml.gotmpl
+    hooks:
+      # Create namespace if doesn't exists. It's needed in reason that configmap for env-synchronizer can't be created before namespace
+      - events: ["prepare"]
+        showlogs: true
+        command: "sh"
+        args: ["-c", "if ! kubectl get namespace {{ .Environment.Name }}; then kubectl create namespace {{ .Environment.Name }}; fi"]
+      # Delete configmap if already exists
+      - events: ["prepare"]
+        showlogs: true
+        command: "sh"
+        args: ["-c", "if kubectl get configmap {{ .Values.HOME_SYNCHRONIZER_CONFIGMAP_NAME }} --namespace {{ .Environment.Name }} && [ -f ../.devcontainer/devcontainer.env ]; then kubectl delete configmap {{ .Values.HOME_SYNCHRONIZER_CONFIGMAP_NAME }} --namespace {{ .Environment.Name }}; fi"]
+      # Create configmap with env values
+      - events: ["preapply"]
+        showlogs: true
+        command: "sh"
+        args: ["-c", "if [ -f ../.devcontainer/devcontainer.env ]; then kubectl create configmap {{ .Values.HOME_SYNCHRONIZER_CONFIGMAP_NAME }} --from-env-file ../.devcontainer/devcontainer.env --namespace {{ .Environment.Name }}; fi"]
+
+  - name: home-s3-backupper
+    labels:
+      app: home-s3-backupper
+    wait: true
+    chart: home-s3-backupper/home-s3-backupper
+    needs: 
+      - home-cms
+    values:
+      # https://helmfile.readthedocs.io/en/latest/#loading-remote-environment-values-files
+      - git::https://github.com/TourmalineCore/home.git@s3-backupper/ci/values.yaml?ref=bfd82ce573b21f58908af2d907ff192300602b36
+      - values.yaml.gotmpl
+      - values-s3-backupper.yaml.gotmpl
+
+  - name: home-db-backupper
+    labels:
+      app: home-db-backupper
+    wait: true
+    chart: home-db-backupper/home-db-backupper
+    needs: 
+      - postgresql
+    values:
+      # https://helmfile.readthedocs.io/en/latest/#loading-remote-environment-values-files
+      - git::https://github.com/TourmalineCore/home.git@db-backupper/ci/values.yaml?ref=bfd82ce573b21f58908af2d907ff192300602b36
+      - values.yaml.gotmpl
+      - values-db-backupper.yaml.gotmpl
+
+  - name: home-url-shortener
+    labels:
+      app: home-url-shortener
+    wait: true
+    chart: bitnami/nginx
+    # after 15.3.5 our docker file or setup can no longer start, need to investigate what is wrong for the newer versions
+    version: 15.3.5
+    # it won't work anyway until ingress controller is created
+    # thus we wait for it to be ready first
+    needs: 
+      - ingress-nginx
+      - postgresql
+    values:
+      - values.yaml.gotmpl
+      - values-url-shortener.yaml.gotmpl

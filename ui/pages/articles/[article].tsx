@@ -11,6 +11,7 @@ import { getArticleUrl } from '../../features/Articles/utils/getArticleUrl';
 import { LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
+import { getCookiePageProps } from '../../common/utils/getCookiePageProps';
 
 export default function ArticlesPage({
   articleContent,
@@ -76,11 +77,21 @@ export async function getServerSideProps({
     locale,
   });
 
+  const {
+    cookieData,
+    cookieSettingsData,
+  } = await getCookiePageProps({
+    locale,
+    preview,
+  });
+
   if (process.env.IS_STATIC_MODE === `true`) {
     const translationsPageData = await loadTranslations(locale, [`headerRedesign`]);
 
     return {
       props: {
+        cookieData,
+        cookieSettingsData,
         layoutData: {
           headerContent: translationsPageData.headerRedesign,
         },
@@ -103,6 +114,8 @@ export async function getServerSideProps({
 
   return {
     props: {
+      cookieData,
+      cookieSettingsData,
       layoutData,
       articleContent,
       metadata,
@@ -124,8 +137,6 @@ async function getStaticTranslation({
     `common`,
     `footer`,
     `articles`,
-    `cookie`,
-    `cookieSettings`,
   ]);
 }
 

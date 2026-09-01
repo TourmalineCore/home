@@ -9,6 +9,7 @@ import { fetchArticlesListWithMeta } from '../../features/Articles/fetchHelpers/
 import { LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
+import { getCookiePageProps } from '../../common/utils/getCookiePageProps';
 
 export default function ArticlesPage({
   layoutData,
@@ -52,6 +53,13 @@ export async function getServerSideProps({
   locale: string;
   preview: boolean;
 }) {
+  const {
+    cookieData,
+    cookieSettingsData,
+  } = await getCookiePageProps({
+    locale,
+    preview,
+  });
   const articlesWithMeta = await fetchArticlesListWithMeta();
 
   if (process.env.IS_STATIC_MODE === `true`) {
@@ -59,6 +67,8 @@ export async function getServerSideProps({
 
     return {
       props: {
+        cookieData,
+        cookieSettingsData,
         layoutData: {
           headerContent: translationsPageData.headerRedesign,
         },
@@ -79,6 +89,8 @@ export async function getServerSideProps({
 
   return {
     props: {
+      cookieData,
+      cookieSettingsData,
       layoutData,
       articles: articlesWithMeta,
       isPreview: preview,
@@ -98,8 +110,6 @@ async function getStaticTranslation({
     `common`,
     `articles`,
     `footer`,
-    `cookie`,
-    `cookieSettings`,
     `formBlockRedesign`,
   ]);
 }
