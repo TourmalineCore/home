@@ -32,16 +32,28 @@ spec:
                   cpu: {{ .Values.resources.requests.cpu }}
                   memory: {{ .Values.resources.requests.memory }}
               env:
-                - name: DB_BACKUPS_FILENAME_PREFIX
-                  value: {{ .Values.extraConfigMapEnvVars.DB_BACKUPS_FILENAME_PREFIX }}
-                - name: DATABASE_HOST
-                  value: {{ .Values.extraConfigMapEnvVars.DATABASE_HOST }}
-                - name: PGPASSWORD
-                  value: {{ .Values.extraConfigMapEnvVars.DATABASE_PASSWORD }}
-                - name: DATABASE_USERNAME
-                  value: {{ .Values.extraConfigMapEnvVars.DATABASE_USERNAME }}
-                - name: DATABASE_NAME
-                  value: {{ .Values.extraConfigMapEnvVars.DATABASE_NAME }}
+                - name: HOME_CMS_DB_BACKUPS_FILENAME_PREFIX
+                  value: {{ .Values.extraConfigMapEnvVars.HOME_CMS_DB_BACKUPS_FILENAME_PREFIX }}
+                - name: HOME_CMS_DATABASE_HOST
+                  value: {{ .Values.extraConfigMapEnvVars.HOME_CMS_DATABASE_HOST }}
+                - name: HOME_CMS_DATABASE_PASSWORD
+                  value: {{ .Values.extraConfigMapEnvVars.HOME_CMS_DATABASE_PASSWORD }}
+                - name: HOME_CMS_DATABASE_USERNAME
+                  value: {{ .Values.extraConfigMapEnvVars.HOME_CMS_DATABASE_USERNAME }}
+                - name: HOME_CMS_DATABASE_NAME
+                  value: {{ .Values.extraConfigMapEnvVars.HOME_CMS_DATABASE_NAME }}
+
+                - name: HOME_URL_SHORTENER_DB_BACKUPS_FILENAME_PREFIX
+                  value: {{ .Values.extraConfigMapEnvVars.HOME_URL_SHORTENER_DB_BACKUPS_FILENAME_PREFIX }}
+                - name: HOME_URL_SHORTENER_DATABASE_HOST
+                  value: {{ .Values.extraConfigMapEnvVars.HOME_URL_SHORTENER_DATABASE_HOST }}
+                - name: HOME_URL_SHORTENER_DATABASE_PASSWORD
+                  value: {{ .Values.extraConfigMapEnvVars.HOME_URL_SHORTENER_DATABASE_PASSWORD }}
+                - name: HOME_URL_SHORTENER_DATABASE_USERNAME
+                  value: {{ .Values.extraConfigMapEnvVars.HOME_URL_SHORTENER_DATABASE_USERNAME }}
+                - name: HOME_URL_SHORTENER_DATABASE_NAME
+                  value: {{ .Values.extraConfigMapEnvVars.HOME_URL_SHORTENER_DATABASE_NAME }}
+
                 - name: DESTINATION_DB_AWS_ACCESS_KEY_ID
                   value: {{ .Values.extraConfigMapEnvVars.DESTINATION_DB_AWS_ACCESS_KEY_ID }}
                 - name: DESTINATION_DB_AWS_SECRET_ACCESS_KEY

@@ -1,20 +1,32 @@
 import os
 import boto3
 from datetime import datetime
+import logging
 
+# Example of log: [2026-07-31T06-21-44]: Started creating CMS backup
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s]: %(message)s",
+    datefmt="%Y-%m-%dT%H-%M-%S",
+)
 
 def main():
+    logging.info('Started creating CMS backup')
 
-    backup_filename = os.getenv('DB_BACKUPS_FILENAME_PREFIX') + '-' + datetime.strftime(datetime.utcnow(), "%Y-%m-%dT%H-%M-%S") + '.backup'
+    create_db_backup(os.getenv('HOME_CMS_DATABASE_HOST'),
+                     os.getenv('HOME_CMS_DATABASE_USERNAME'),
+                     os.getenv('HOME_CMS_DATABASE_PASSWORD'),
+                     os.getenv('HOME_CMS_DATABASE_NAME'),
+                     os.getenv('HOME_CMS_DB_BACKUPS_FILENAME_PREFIX'))
+    logging.info('CMS backup created successfully')
 
-    os.system('pg_dump -h $DATABASE_HOST -U $DATABASE_USERNAME --encoding UTF8 --format plain $DATABASE_NAME > %s' %(backup_filename))
-
-    if os.path.exists(backup_filename):
-        upload_to_s3(backup_filename)
-        os.remove(backup_filename)
-
-    else:
-        raise Exception("No such file: '%s'" %(backup_filename))
+    logging.info('Started creating url-shortener backup')
+    create_db_backup(os.getenv('HOME_URL_SHORTENER_DATABASE_HOST'),
+                     os.getenv('HOME_URL_SHORTENER_DATABASE_USERNAME'),
+                     os.getenv('HOME_URL_SHORTENER_DATABASE_PASSWORD'),
+                     os.getenv('HOME_URL_SHORTENER_DATABASE_NAME'),
+                     os.getenv('HOME_URL_SHORTENER_DB_BACKUPS_FILENAME_PREFIX'))
+    logging.info('url-shortener backup created succesfully')
 
 
 def upload_to_s3(backup_filename):
@@ -31,6 +43,20 @@ def upload_to_s3(backup_filename):
 
     with open(backup_filename, "rb") as data:
         s3.upload_fileobj(data, bucket_name, backup_filename)
+
+def create_db_backup(database_host, database_username, database_password, database_name, backup_filename_prefix):
+    backup_filename = f'{backup_filename_prefix}' + '-' + datetime.strftime(datetime.utcnow(), "%Y-%m-%dT%H-%M-%S") + '.backup'
+
+    os.system(f'PGPASSWORD={database_password} pg_dump -h {database_host} -U {database_username} --encoding UTF8 --format plain {database_name} > {backup_filename}')
+
+    if os.path.exists(backup_filename):
+        logging.info('Uploading backup to S3')
+        upload_to_s3(backup_filename)
+        logging.info('Backup successfully uploaded to S3')
+        os.remove(backup_filename)
+
+    else:
+        raise Exception("No such file: '%s'" %(backup_filename))
 
 if __name__ == '__main__':
 
