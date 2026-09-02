@@ -3,7 +3,6 @@ import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import clsx from 'clsx';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { SocialLinks } from '../SocialLinks/SocialLinks';
 import { AppRoute } from '../../common/enums';
@@ -13,16 +12,11 @@ export function Footer() {
   const {
     t,
   } = useTranslation(`footer`);
+
   const {
     locale,
     pathname,
   } = useRouter();
-  const [date, setDate] = useState<number>();
-
-  useEffect(() => {
-    setDate(new Date()
-      .getFullYear());
-  }, []);
 
   return (
     <footer
@@ -60,7 +54,7 @@ export function Footer() {
 
         <div className="footer__copyright">
           <span>
-            {`© 2019-${date} Tourmaline Core`}
+            {`© ${locale === `ru` ? `С 2019 года Tourmaline Core` : `Since 2019 Tourmaline Core`}`}
           </span>
           {/* <span className="footer__location">
             {t('location')}
