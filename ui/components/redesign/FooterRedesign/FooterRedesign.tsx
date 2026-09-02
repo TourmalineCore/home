@@ -36,7 +36,7 @@ export function FooterRedesign({
         </div>
         <div className="footer-redesign__copyright">
           <span>
-            {`© ${locale === `ru` ? `С 2019 года Tourmaline Core` : `Since 2019 Tourmaline Core`}`}
+            {`© ${locale === `ru` ? `С 2019 года` : `Since 2019`} Tourmaline Core`}
           </span>
           <a
             href={`/documents/policy/policy-${locale}.pdf`}

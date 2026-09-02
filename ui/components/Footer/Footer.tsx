@@ -54,7 +54,7 @@ export function Footer() {
 
         <div className="footer__copyright">
           <span>
-            {`© ${locale === `ru` ? `С 2019 года Tourmaline Core` : `Since 2019 Tourmaline Core`}`}
+            {`© ${locale === `ru` ? `С 2019 года` : `Since 2019`} Tourmaline Core`}
           </span>
           {/* <span className="footer__location">
             {t('location')}
