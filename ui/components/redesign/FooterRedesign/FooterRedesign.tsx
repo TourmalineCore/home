@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { FooterNavigationListRedesign } from './components/FooterNavigationListRedesign/FooterNavigationListRedesign';
 import { FooterRedesignProps } from '../../../common/types';
 import { useCookieContext } from '../../../common/hooks/useCookieContext';
@@ -9,8 +8,6 @@ export function FooterRedesign({
   emailAddress,
   navigationLists,
 }: FooterRedesignProps) {
-  const [currentYear, setCurrentYear] = useState<number | null>(null);
-
   const {
     locale,
   } = useRouter();
@@ -20,11 +17,6 @@ export function FooterRedesign({
   } = useCookieContext();
 
   const colCount = Math.min(navigationLists.length, 4);
-
-  useEffect(() => {
-    setCurrentYear(new Date()
-      .getFullYear());
-  }, []);
 
   return (
     <footer
@@ -44,7 +36,7 @@ export function FooterRedesign({
         </div>
         <div className="footer-redesign__copyright">
           <span>
-            {`© 2019-${currentYear} Tourmaline Core`}
+            {`© ${locale === `ru` ? `С 2019 года` : `Since 2019`} Tourmaline Core`}
           </span>
           <a
             href={`/documents/policy/policy-${locale}.pdf`}
