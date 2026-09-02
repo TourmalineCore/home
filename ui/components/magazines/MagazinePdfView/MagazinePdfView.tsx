@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import Slider from "react-slick";
 import { Breakpoint } from '../../../common/enums';
+import { MagazinePdfLoader } from "./components/MagazinePdfLoader/MagazinePdfLoader";
 
 // pdfjs-dist relies on Promise.withResolvers, missing in older browsers (e.g. Safari < 17.4 )
 if (typeof Promise.withResolvers !== `function`) {
@@ -45,6 +46,15 @@ export function MagazinePdfView() {
   const [transitionFromSlide, setTransitionFromSlide] = useState<number | null>(null);
   const [wrapperWidth, setWrapperWidth] = useState(0);
   const [maxPageHeight, setMaxPageHeight] = useState(0);
+
+  const [isPdfReady, setIsPdfReady] = useState(false);
+  const [loadProgress, setLoadProgress] = useState<{
+    loaded: number;
+    total: number;
+  }>({
+    loaded: 0,
+    total: 0,
+  });
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -86,50 +96,73 @@ export function MagazinePdfView() {
     : 0;
   const sliderWidth = pageHeight * PAGE_ASPECT_RATIO * slidesToShow;
 
+  const progressText = loadProgress && loadProgress.total > 0
+    ? `Загрузка журнала: ${Math.round((loadProgress.loaded / loadProgress.total) * 100)}%`
+    : `Загрузка журнала...`;
+
   return (
-    <div
-      className="magazine-pdf-view"
-      data-testid="magazine-pdf-view"
-    >
+    <>
+      {!isPdfReady && (
+        <MagazinePdfLoader progressText={progressText} />
+      )}
+
       <div
-        className="magazine-pdf-view__viewport-sentinel"
-        aria-hidden
-        ref={sentinelRef}
-      />
-      <div
-        className="magazine-pdf-view__wrapper"
-        ref={wrapperRef}
+        className="magazine-pdf-view"
+        style={{
+          display: isPdfReady ? `block` : `none`,
+        }}
+        data-testid="magazine-pdf-view"
       >
-        <Document
-          file={PDF_FILE_PATH}
-          // eslint-disable-next-line react/jsx-no-bind
-          onLoadSuccess={({
-            numPages,
-          }) => setTotalPages(numPages)}
+        <div
+          className="magazine-pdf-view__viewport-sentinel"
+          aria-hidden
+          ref={sentinelRef}
+        />
+        <div
+          className="magazine-pdf-view__wrapper"
+          ref={wrapperRef}
         >
-          <div
-            className="magazine-pdf-view__slider-wrapper"
-            style={{
-              width: sliderWidth || undefined,
+          <Document
+            file={PDF_FILE_PATH}
+            // eslint-disable-next-line react/jsx-no-bind
+            onLoadSuccess={({
+              numPages,
+            }) => {
+              setTotalPages(numPages);
+              setIsPdfReady(true);
             }}
+            loading={null}
+            onLoadProgress={({
+              loaded,
+              total,
+            }) => setLoadProgress({
+              loaded,
+              total,
+            })}
           >
-            <Slider
-              className="magazine-pdf-view__slider"
-              dots={false}
-              infinite={false}
-              slidesToShow={slidesToShow}
-              slidesToScroll={currentSlide === 0 ? 1 : slidesToShow}
-              beforeChange={(prevSlide, nextSlide) => {
-                setTransitionFromSlide(prevSlide);
-                setCurrentSlide(nextSlide);
+            <div
+              className="magazine-pdf-view__slider-wrapper"
+              style={{
+                width: sliderWidth || undefined,
               }}
-              afterChange={() => setTransitionFromSlide(null)}
             >
-              {Array.from({
-                length: totalPages,
-              }, (_, index) => (
-                <div key={index}>
-                  {(Math.abs(index - currentSlide) <= PAGE_RENDER_BUFFER
+              <Slider
+                className="magazine-pdf-view__slider"
+                dots={false}
+                infinite={false}
+                slidesToShow={slidesToShow}
+                slidesToScroll={currentSlide === 0 ? 1 : slidesToShow}
+                beforeChange={(prevSlide, nextSlide) => {
+                  setTransitionFromSlide(prevSlide);
+                  setCurrentSlide(nextSlide);
+                }}
+                afterChange={() => setTransitionFromSlide(null)}
+              >
+                {Array.from({
+                  length: totalPages,
+                }, (_, index) => (
+                  <div key={index}>
+                    {(Math.abs(index - currentSlide) <= PAGE_RENDER_BUFFER
                     || (transitionFromSlide !== null
                     && Math.abs(index - transitionFromSlide) <= PAGE_RENDER_BUFFER))
                     && (
@@ -141,12 +174,13 @@ export function MagazinePdfView() {
                         renderAnnotationLayer={false}
                       />
                     )}
-                </div>
-              ))}
-            </Slider>
-          </div>
-        </Document>
+                  </div>
+                ))}
+              </Slider>
+            </div>
+          </Document>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

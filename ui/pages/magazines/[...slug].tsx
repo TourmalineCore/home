@@ -14,11 +14,13 @@ import { useScrollTop } from "../../common/hooks/useScrollTop";
 import { MagazineTeaser } from "../../components/magazines/MagazineTeaser/MagazineTeaser";
 import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLink";
 import { getCookiePageProps } from "../../common/utils/getCookiePageProps";
+import { MagazinePdfLoader } from "../../components/magazines/MagazinePdfView/components/MagazinePdfLoader/MagazinePdfLoader";
 
 const MagazinePdfView = dynamic(
   () => import(`../../components/magazines/MagazinePdfView/MagazinePdfView`).then((component) => component.MagazinePdfView),
   {
     ssr: false,
+    loading: () => <MagazinePdfLoader />,
   },
 );
 
