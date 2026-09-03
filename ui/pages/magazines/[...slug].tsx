@@ -2,7 +2,6 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { CollageWithLinkBlock, LayoutData } from "../../common/types";
 import { PageHead } from "../../components/PageHead/PageHead";
 import { LayoutRedesign } from "../../components/redesign/LayoutRedesign/LayoutRedesign";
