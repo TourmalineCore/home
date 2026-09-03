@@ -9,9 +9,15 @@
   scrollbar-gutter: stable;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 html,
 body {
-  overflow-x: hidden;
+  // never add the overflow-x: hidden; property for html and body at the same time
+  // this will break the scrolling behavior when switching between pages
+  // https://stackoverflow.com/a/66316619
   margin: 0;
   height: 100%;
   box-sizing: border-box;

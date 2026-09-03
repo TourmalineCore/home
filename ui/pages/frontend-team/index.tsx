@@ -9,7 +9,6 @@ import { Tasks } from '../../components/Tasks/Tasks';
 import { Stack } from '../../components/Stack/Stack';
 import { Cases } from '../../components/Cases/Cases';
 import { Stages } from '../../components/Stages/Stages';
-import { useScrollTop } from '../../common/hooks/useScrollTop';
 import { LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
@@ -30,10 +29,6 @@ export default function FrontendTeamPage({
   } = useTranslation(`common`);
 
   const isCountryRus = useIsRussianCountry();
-
-  useScrollTop({
-    dependencies: [],
-  });
 
   return (
     <>

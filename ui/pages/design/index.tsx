@@ -12,7 +12,6 @@ import { Stack } from '../../components/Stack/Stack';
 import { Payment } from '../../components/Payment/Payment';
 import { Cooperation } from '../../components/Cooperation/Cooperation';
 import { ServicesTechnology } from '../../components/ServicesTechnology/ServicesTechnology';
-import { useScrollTop } from '../../common/hooks/useScrollTop';
 import { LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
@@ -31,10 +30,6 @@ export default function DesignPage({
   const {
     t,
   } = useTranslation(`common`);
-
-  useScrollTop({
-    dependencies: [],
-  });
 
   const isCountryRus = useIsRussianCountry();
 

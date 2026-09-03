@@ -8,7 +8,6 @@ import { Tasks } from '../../components/Tasks/Tasks';
 import { Stack } from '../../components/Stack/Stack';
 import { Cases } from '../../components/Cases/Cases';
 import { Stages } from '../../components/Stages/Stages';
-import { useScrollTop } from '../../common/hooks/useScrollTop';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
 import { LayoutData } from '../../common/types';
@@ -29,10 +28,6 @@ export default function TeamsPage({
   } = useTranslation(`common`);
 
   const isCountryRus = useIsRussianCountry();
-
-  useScrollTop({
-    dependencies: [],
-  });
 
   return (
     <>

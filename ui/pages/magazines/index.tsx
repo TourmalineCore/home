@@ -3,7 +3,6 @@ import { useTranslation } from 'next-i18next';
 
 import { useRouter } from 'next/router';
 import { PageHead } from '../../components/PageHead/PageHead';
-import { useScrollTop } from '../../common/hooks/useScrollTop';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
 import { CollageWithLinkBlock, LayoutData } from '../../common/types';
@@ -34,8 +33,6 @@ export default function MagazinesPage({
   useNonBreakingSpaces({
     locale: locale!,
   });
-
-  useScrollTop();
 
   return (
     <>

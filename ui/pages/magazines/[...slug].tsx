@@ -2,6 +2,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import { CollageWithLinkBlock, LayoutData } from "../../common/types";
 import { PageHead } from "../../components/PageHead/PageHead";
 import { LayoutRedesign } from "../../components/redesign/LayoutRedesign/LayoutRedesign";
@@ -14,7 +15,6 @@ import { MagazineTeaser } from "../../components/magazines/MagazineTeaser/Magazi
 import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLink";
 import { getCookiePageProps } from "../../common/utils/getCookiePageProps";
 import { MagazinePdfLoader } from "../../components/magazines/MagazinePdfView/components/MagazinePdfLoader/MagazinePdfLoader";
-import { useScrollTop } from "../../common/hooks/useScrollTop";
 
 const MagazinePdfView = dynamic(
   () => import(`../../components/magazines/MagazinePdfView/MagazinePdfView`).then((component) => component.MagazinePdfView),
@@ -35,7 +35,6 @@ export default function MagazinePage({
 }) {
   const {
     locale,
-    asPath,
   } = useRouter();
 
   const {
@@ -44,10 +43,6 @@ export default function MagazinePage({
 
   useNonBreakingSpaces({
     locale: locale!,
-  });
-
-  useScrollTop({
-    dependencies: [asPath],
   });
 
   return (
