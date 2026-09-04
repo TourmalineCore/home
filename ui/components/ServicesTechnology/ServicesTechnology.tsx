@@ -47,6 +47,7 @@ export function ServicesTechnology({
               <li
                 key={description}
                 className="services-technology__item"
+                data-testid="services-technology-item"
               >
                 <ServicesTechnologyCard
                   title={title}
