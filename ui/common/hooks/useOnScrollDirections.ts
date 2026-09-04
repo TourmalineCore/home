@@ -5,9 +5,8 @@ export function useOnScrollDirections() {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
-    const bodyElement = document.querySelector(`body`);
     const handleScroll = () => {
-      const currentScrollY = bodyElement?.scrollTop || 0;
+      const currentScrollY = window.scrollY || 0;
 
       if (currentScrollY > lastScrollY && currentScrollY > 50) {
         setIsScrollUp(false);
@@ -18,7 +17,7 @@ export function useOnScrollDirections() {
       setLastScrollY(currentScrollY);
     };
 
-    bodyElement?.addEventListener(`scroll`, handleScroll, {
+    window.addEventListener(`scroll`, handleScroll, {
       passive: true,
     });
 

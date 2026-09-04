@@ -38,7 +38,7 @@ export function HeaderRedesign({
     isDesktop,
   } = useDeviceSize();
 
-  useBodyScrollHidden(isMobileMenuOpen && !isDesktop);
+  useBodyScrollHidden((isMobileMenuOpen && !isDesktop) || isModalOpen);
 
   const {
     isScrollUp,

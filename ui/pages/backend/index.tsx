@@ -9,7 +9,6 @@ import { Cta } from '../../components/Cta/Cta';
 import { Payment } from '../../components/Payment/Payment';
 import { Cooperation } from '../../components/Cooperation/Cooperation';
 import { ServicesTechnology } from '../../components/ServicesTechnology/ServicesTechnology';
-import { useScrollTop } from '../../common/hooks/useScrollTop';
 import { LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
@@ -30,10 +29,6 @@ export default function BackendPage({
   } = useTranslation(`common`);
 
   const isCountryRus = useIsRussianCountry();
-
-  useScrollTop({
-    dependencies: [],
-  });
 
   return (
     <>

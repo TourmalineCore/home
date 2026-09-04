@@ -14,7 +14,6 @@ import { MagazineTeaser } from "../../components/magazines/MagazineTeaser/Magazi
 import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLink";
 import { getCookiePageProps } from "../../common/utils/getCookiePageProps";
 import { MagazinePdfLoader } from "../../components/magazines/MagazinePdfView/components/MagazinePdfLoader/MagazinePdfLoader";
-import { useScrollTop } from "../../common/hooks/useScrollTop";
 
 const MagazinePdfView = dynamic(
   () => import(`../../components/magazines/MagazinePdfView/MagazinePdfView`).then((component) => component.MagazinePdfView),
@@ -35,7 +34,6 @@ export default function MagazinePage({
 }) {
   const {
     locale,
-    asPath,
   } = useRouter();
 
   const {
@@ -44,10 +42,6 @@ export default function MagazinePage({
 
   useNonBreakingSpaces({
     locale: locale!,
-  });
-
-  useScrollTop({
-    dependencies: [asPath],
   });
 
   return (
