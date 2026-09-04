@@ -43,10 +43,13 @@ async function scrollBehaviorTop() {
     await firstServicesTechnologyItem.click();
 
     await page.waitForURL((url) => url.toString() !== currentUrl, {
-      waitUntil: `domcontentloaded`,
+      waitUntil: `networkidle`,
     });
 
-    await page.waitForLoadState(`networkidle`);
+    await page.getByText(`UX/UI design`)
+      .waitFor({
+        state: `visible`,
+      });
 
     await expect(await getScrollY({
       page,
