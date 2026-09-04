@@ -146,11 +146,19 @@ jobs:
     - name: Install WenQuanYi Micro Hei
       run: sudo apt-get install -y fonts-wqy-microhei
 
+    - name: Build
+      run: npm run build
+      env:
+        CMS_URL: 'http://localhost:1337'
+        CORS_ORIGIN: 'http://localhost:3000'
+
     - name: Run Playwright Tests
       run: |
-        npm run dev:static &
+        cross-env IS_STATIC_MODE=true npm run start &
         npx --yes wait-on http://localhost:3000 & 
         npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+      env:
+        IS_STATIC_MODE: true
 
     - uses: actions/upload-artifact@v4
       # we don't really need successful runs reports
