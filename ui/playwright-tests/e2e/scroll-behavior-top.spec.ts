@@ -5,13 +5,13 @@ import {
   test,
 } from "../custom-test";
 
-test.describe(`Scroll behavior top after switching between pages`, scrollBehaviorTop);
+test.describe(`Scroll to top after switching between pages`, scrollToTop);
 
-async function scrollBehaviorTop() {
+async function scrollToTop() {
   test(`
     GIVEN frontend page
     WHEN user scrolls and clicks on a link to go to another page
-    SHOULD scroll should return to the top after redirect to another page
+    SHOULD return scroll to the top after redirect to another page
   `, async ({
     goto,
     page,
