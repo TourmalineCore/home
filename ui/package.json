@@ -19,6 +19,8 @@
     "playwright:open": "npx playwright test --ui",
     "playwright:run:e2e": "npx playwright test --config=playwright.e2e.config.ts",
     "playwright:open:e2e": "npx playwright test --ui --config=playwright.e2e.config.ts",
+    "playwright:run:ct": "npx playwright test --config=playwright-ct.config.ts",
+    "playwright:open:ct": "npx playwright test --ui --config=playwright-ct.config.ts",
     "update-snapshots": "npx playwright test --update-snapshots",
     "jest:run": "jest",
     "generate-api-types": "docker-compose -f ./api-types/docker-compose.yml up --build ts_generator"
@@ -29,6 +31,8 @@
     "cookies-next": "^6.1.1",
     "coordinate_to_country": "^1.1.0",
     "dotenv": "^17.2.1",
+    "mobx": "^6.16.1",
+    "mobx-react-lite": "^4.1.1",
     "moment": "^2.29.4",
     "next": "^15.5.19",
     "next-i18next": "^8.6.0",
@@ -50,6 +54,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
+    "@playwright/experimental-ct-react": "^1.55.1",
     "@playwright/test": "1.55.1",
     "@stylistic/eslint-plugin": "^1.6.3",
     "@stylistic/stylelint-config": "^1.0.1",

@@ -38,6 +38,7 @@ yarn-error.log*
 # Playwright
 /playwright-test-results/
 /playwright-report/
+/playwright/.cache
 
 # Sitemap and robots
 robots.txt
