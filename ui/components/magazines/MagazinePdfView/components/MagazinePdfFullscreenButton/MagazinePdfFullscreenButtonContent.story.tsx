@@ -21,9 +21,7 @@ export function MagazinePdfFullscreenButtonContentStory({
     });
 
     return state;
-  }, [
-    initialIsFullscreen,
-  ]);
+  }, [initialIsFullscreen]);
 
   return (
     <MagazinePdfFullscreenButtonStateContext.Provider value={fullscreenButtonState}>

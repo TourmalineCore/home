@@ -1,0 +1,29 @@
+.magazine-pdf-fullscreen-button {
+  display: flex;
+  align-items: center;
+  outline-offset: 4px;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-family: $ff-inter;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  color: $color-white;
+  background-color: $color-grey-500-redesign;
+  cursor: pointer;
+  transition: background-color 0.25s;
+  gap: 8px;
+
+  &__icon {
+    display: block;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover,
+  &:focus-visible {
+    background-color: $color-grey-800-redesign;
+  }
+}

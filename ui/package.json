@@ -67,6 +67,7 @@
     "@types/react-slick": "^0.23.13",
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
+    "@vitejs/plugin-react": "^4.7.0",
     "cross-env": "^10.0.0",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
@@ -86,7 +87,8 @@
     "stylelint-order": "^6.0.4",
     "ts-jest": "^29.4.11",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vite-plugin-svgr": "^5.2.0"
   },
   "browserslist": {
     "production": [

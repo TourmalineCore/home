@@ -3,11 +3,26 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import { useEffect, useRef, useState } from 'react';
+import {
+  CSSProperties,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import Slider from "react-slick";
+import clsx from 'clsx';
+import IconChevronLeft from '../../../icons/icon-chevron-left.svg';
+import IconChevronRight from '../../../icons/icon-chevron-right.svg';
 import { Breakpoint } from '../../../common/enums';
 import { MagazinePdfLoader } from "./components/MagazinePdfLoader/MagazinePdfLoader";
+import { MagazinePdfCounter } from "./components/MagazinePdfCounter/MagazinePdfCounter";
+import { MagazinePdfCounterState } from "./components/MagazinePdfCounter/MagazinePdfCounterState";
+import { MagazinePdfCounterStateContext } from "./components/MagazinePdfCounter/MagazinePdfCounterStateContext";
+import { MagazinePdfFullscreenButton } from "./components/MagazinePdfFullscreenButton/MagazinePdfFullscreenButton";
+import { MagazinePdfFullscreenButtonState } from "./components/MagazinePdfFullscreenButton/MagazinePdfFullscreenButtonState";
+import { MagazinePdfFullscreenButtonStateContext } from "./components/MagazinePdfFullscreenButton/MagazinePdfFullscreenButtonStateContext";
 
 // pdfjs-dist relies on Promise.withResolvers, missing in older browsers (e.g. Safari < 17.4 )
 if (typeof Promise.withResolvers !== `function`) {
@@ -40,6 +55,38 @@ const PAGE_ASPECT_RATIO = 0.7071;
 
 const PAGE_RENDER_BUFFER = 1;
 
+// react-slick clones this element and merges in className/style/onClick (plus a disabled
+// variant of className when there's nowhere left to go), so those props - not our own JSX -
+// drive the actual rendered attributes; see react-slick's PrevArrow/NextArrow for the merge.
+function MagazinePdfViewArrow({
+  direction,
+  className,
+  style,
+  onClick,
+}: {
+  direction: 'prev' | 'next';
+  className?: string;
+  style?: CSSProperties;
+  onClick?: () => void;
+}) {
+  const Icon = direction === `prev` ? IconChevronLeft : IconChevronRight;
+
+  return (
+    <button
+      type="button"
+      className={clsx(`magazine-pdf-view__arrow-button`, className)}
+      style={style}
+      onClick={onClick}
+      aria-label={direction === `prev` ? `Предыдущий разворот` : `Следующий разворот`}
+    >
+      <Icon
+        className="magazine-pdf-view__arrow-icon"
+        aria-hidden="true"
+      />
+    </button>
+  );
+}
+
 export function MagazinePdfView() {
   const [totalPages, setTotalPages] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -56,8 +103,12 @@ export function MagazinePdfView() {
     total: 0,
   });
 
+  const viewRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
+
+  const counterState = useMemo(() => new MagazinePdfCounterState(), []);
+  const fullscreenButtonState = useMemo(() => new MagazinePdfFullscreenButtonState(), []);
 
   const slidesToShow = wrapperWidth >= Breakpoint.TABLET ? 2 : 1;
 
@@ -112,12 +163,14 @@ export function MagazinePdfView() {
           display: isPdfReady ? `block` : `none`,
         }}
         data-testid="magazine-pdf-view"
+        ref={viewRef}
       >
         <div
           className="magazine-pdf-view__viewport-sentinel"
           aria-hidden
           ref={sentinelRef}
         />
+
         <div
           className="magazine-pdf-view__wrapper"
           ref={wrapperRef}
@@ -152,6 +205,8 @@ export function MagazinePdfView() {
                 infinite={false}
                 slidesToShow={slidesToShow}
                 slidesToScroll={currentSlide === 0 ? 1 : slidesToShow}
+                prevArrow={<MagazinePdfViewArrow direction="prev" />}
+                nextArrow={<MagazinePdfViewArrow direction="next" />}
                 beforeChange={(prevSlide, nextSlide) => {
                   setTransitionFromSlide(prevSlide);
                   setCurrentSlide(nextSlide);
@@ -179,6 +234,20 @@ export function MagazinePdfView() {
               </Slider>
             </div>
           </Document>
+
+          <MagazinePdfCounterStateContext.Provider value={counterState}>
+            <MagazinePdfFullscreenButtonStateContext.Provider value={fullscreenButtonState}>
+              <div className="magazine-pdf-view__toolbar">
+                <MagazinePdfCounter
+                  currentSlide={currentSlide}
+                  totalPages={totalPages}
+                  slidesToShow={slidesToShow}
+                />
+
+                <MagazinePdfFullscreenButton targetRef={viewRef} />
+              </div>
+            </MagazinePdfFullscreenButtonStateContext.Provider>
+          </MagazinePdfCounterStateContext.Provider>
         </div>
       </div>
     </>

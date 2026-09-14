@@ -1,4 +1,5 @@
-import { test, expect, Page } from '@playwright/experimental-ct-react';
+import { test, expect } from '@playwright/experimental-ct-react';
+import { Page } from '@playwright/test';
 import { MagazinePdfFullscreenButtonStory } from './MagazinePdfFullscreenButton.story';
 
 test.describe(`MagazinePdfFullscreenButton`, () => {
@@ -38,7 +39,7 @@ test.describe(`MagazinePdfFullscreenButton`, () => {
     await stubFullscreenApi(page);
 
     await page.evaluate(() => {
-      document.fullscreenElement = document.querySelector(`[data-testid="fullscreen-target"]`);
+      (document as unknown as { fullscreenElement: Element | null; }).fullscreenElement = document.querySelector(`[data-testid="fullscreen-target"]`);
     });
 
     await component.getByTestId(`magazine-pdf-fullscreen-button`)
@@ -65,7 +66,7 @@ test.describe(`MagazinePdfFullscreenButton`, () => {
     await stubFullscreenApi(page);
 
     await page.evaluate(() => {
-      document.fullscreenElement = document.querySelector(`[data-testid="fullscreen-target"]`);
+      (document as unknown as { fullscreenElement: Element | null; }).fullscreenElement = document.querySelector(`[data-testid="fullscreen-target"]`);
       document.dispatchEvent(new Event(`fullscreenchange`));
     });
 
@@ -86,7 +87,7 @@ test.describe(`MagazinePdfFullscreenButton`, () => {
     await stubFullscreenApi(page);
 
     await page.evaluate(() => {
-      document.fullscreenElement = document.querySelector(`[data-testid="fullscreen-target"]`);
+      (document as unknown as { fullscreenElement: Element | null; }).fullscreenElement = document.querySelector(`[data-testid="fullscreen-target"]`);
       document.dispatchEvent(new Event(`fullscreenchange`));
     });
 
@@ -94,7 +95,7 @@ test.describe(`MagazinePdfFullscreenButton`, () => {
       .toHaveAttribute(`aria-pressed`, `true`);
 
     await page.evaluate(() => {
-      document.fullscreenElement = null;
+      (document as unknown as { fullscreenElement: Element | null; }).fullscreenElement = null;
       document.dispatchEvent(new Event(`fullscreenchange`));
     });
 
