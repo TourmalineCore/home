@@ -4,7 +4,6 @@ import Link from 'next/link';
 import IconDownArrow from '../../../../../icons/icon-arrow-down-redesign.svg';
 import GlobalIcon from '../../../../../icons/global-icon.svg';
 import { DEFAULT_LOCALE } from '../../../../../common/constants';
-import { useOnScrollDirections } from '../../../../../common/hooks';
 
 type Languages = {
   [key: string]: {
@@ -30,10 +29,6 @@ export function LangSwitchRedesign({
   className?: string;
 }) {
   const router = useRouter();
-
-  const {
-    isScrollUp,
-  } = useOnScrollDirections();
 
   return (
     <div
@@ -68,7 +63,7 @@ export function LangSwitchRedesign({
         />
       </button>
 
-      {isScrollUp && router.locales && (
+      {router.locales && (
         <ul className="lang-switch-redesign__list">
           {router.locales
             .filter((locale) => locale !== router.locale)
