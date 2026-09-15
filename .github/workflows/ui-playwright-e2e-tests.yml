@@ -33,7 +33,11 @@ jobs:
       - name: Checkout home-local-env
         uses: actions/checkout@v4
         with:
-          repository: TourmalineCore/home-local-env
+          # sparse-checkout is needed to clone service folder only
+          # Cone mode is disabled to not clone other files in root folder
+          # It's important to clone only this folder to keep the root folder clean
+          sparse-checkout: 'local-env'
+          sparse-checkout-cone-mode: false
 
       - name: Deploy Local Env to Kind k8s
         uses: devcontainers/ci@v0.3
