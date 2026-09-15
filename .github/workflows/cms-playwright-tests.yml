@@ -38,6 +38,10 @@ jobs:
       - name: Deploy Local Env to Kind k8s
         uses: devcontainers/ci@v0.3
         with:
+          subFolder: local-env
+          # In the current configuration we store services as subfolders 
+          # and it's necessary to define path to the devcontainer config in the folder of needed service
+          configFile: ./local-env/.devcontainer/devcontainer.json
           runCmd: |
             # we need to override "latest" image tag of service inside home-local-env to run tests against the current commit service version and not against latest from master
             # We tried to use yq to change the image tag, but in the values files for helmfile we have non-yaml code that yq can`t parse or ignore
