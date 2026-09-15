@@ -14,7 +14,7 @@ export function CheckBox({
       onKeyDown={(e) => {
         if (e.key === `Enter`) {
           e.preventDefault();
-          e.target.checked = !e.target.checked;
+          e.currentTarget.checked = !e.currentTarget.checked;
         }
       }}
       {...props}
