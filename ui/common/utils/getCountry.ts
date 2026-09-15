@@ -1,4 +1,4 @@
-import lookup from "coordinate_to_country";
+import whichCountry from "which-country";
 
 export async function getCountry(): Promise<string | null> {
   if (navigator.geolocation) {
@@ -7,8 +7,9 @@ export async function getCountry(): Promise<string | null> {
         navigator.geolocation.getCurrentPosition(resolve, reject);
       });
 
-      const country = await lookup(position.coords.latitude, position.coords.longitude);
-      return country[0];
+      const country = whichCountry([position.coords.longitude, position.coords.latitude]);
+
+      return country;
     } catch {
       return null;
     }
