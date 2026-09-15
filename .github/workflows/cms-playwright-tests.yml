@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - feature/*
-    paths:
-      - 'cms/**'
+    # paths:
+    #   - 'cms/**'
 
 jobs:
   # this is needed to wait for the new docker image to be build and published to the registry
@@ -51,7 +51,9 @@ jobs:
             
             export KUBECONFIG=$(pwd)/.home-cluster-kubeconfig
 
-            helmfile --environment local --namespace local -f deploy/helmfile.yaml apply
+            helmfile --environment local --namespace local -f deploy/helmfile.yaml apply || true
+
+            kubectl describe pod -l app.kubernetes.io/instance=home-cms -n local
           push: never
 
       - name: Checkout repository
