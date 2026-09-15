@@ -24,12 +24,12 @@ export default defineConfig({
     ctViteConfig: {
       plugins: [
         // Playwright adds its own @vitejs/plugin-react (the automatic JSX runtime) only when
-        // `ctViteConfig.plugins` is empty, so listing svgr() below means listing this too.
+        // `ctViteConfig.plugins` is empty, so listing svgr() below means listing this too
         react(),
 
         // Vite equivalent of next-react-svg, which the app uses to import `.svg` as components.
         // `include` is widened from the plugin's default `**/*.svg?react`, since next-react-svg
-        // needs no such suffix.
+        // needs no such suffix
         svgr({
           include: `**/*.svg`,
         }),

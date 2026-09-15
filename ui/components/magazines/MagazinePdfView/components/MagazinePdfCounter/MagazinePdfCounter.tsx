@@ -8,7 +8,7 @@ export function MagazinePdfCounter({
   slidesToShow: number;
 }) {
   // A wide viewport shows a two-page spread. Both ends clamp to the total, since an odd page
-  // count leaves the last spread half empty.
+  // count leaves the last spread half empty
   const currentPage = Math.min(currentSlide + 1, totalPages);
   const currentPageEnd = Math.min(currentSlide + slidesToShow, totalPages);
 

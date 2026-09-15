@@ -14,8 +14,7 @@ export type CustomTestFixtures = {
       breakpoint: Breakpoint;
       breakpointName: BreakpointName;
       height?: number;
-      // Blanks out content that isn't stable across runs (e.g. content sourced from a file that
-      // can be swapped, like the magazine PDF) so the assertion covers our UI, not that content.
+      // Blanks out content that isn't stable across runs, so the assertion covers our own UI
       mask?: Locator[];
     }) => void;
   goToComponentsPage: (path: string) => void;
@@ -126,10 +125,8 @@ export const test = base.extend<CustomTestFixtures>({
         height,
       });
 
-      // Layouts driven by ResizeObserver (e.g. via JS, not just CSS media queries) redraw a frame
-      // or two after the resize itself, once their observer callback and the resulting re-render
-      // have run. Without waiting for that, a screenshot (or a mask, positioned once up front) can
-      // land on that in-between frame instead of the settled layout.
+      // ResizeObserver-driven layouts redraw a frame or two after the resize itself, so without
+      // this wait a screenshot can land on an in-between frame instead of the settled layout
       await page.evaluate(() => new Promise<void>((resolve) => {
         requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
       }));

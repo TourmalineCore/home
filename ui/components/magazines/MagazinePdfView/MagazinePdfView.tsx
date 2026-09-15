@@ -30,15 +30,12 @@ if (typeof Promise.withResolvers !== `function`) {
   };
 }
 
-// Self-hosted (copied into /public by scripts/copy-pdf-worker.mjs) instead of pulled from a
-// CDN, so a third-party outage or rate limit can't block rendering. The worker runs in its own
-// global scope, so the polyfill above doesn't reach it; the "legacy" build ships its own shims
-// for older browsers.
+// Self-hosted (see scripts/copy-pdf-worker.mjs) so a CDN outage can't block rendering. It runs
+// in its own global scope, out of reach of the polyfill above, and ships its own shims
 pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.mjs`;
 
 const PDF_FILE_PATH = `/documents/magazines/tourmaline-code-tdd-uwdc.pdf`;
 
-// The element that goes fullscreen, and the fullscreen button's aria-controls target.
 const VIEW_ELEMENT_ID = `magazine-pdf-view`;
 
 // A4 page aspect ratio (width / height), used to size the spread
@@ -75,11 +72,9 @@ export function MagazinePdfView() {
       return undefined;
     }
 
-    // ResizeObserver reports layout size and ignores pinch-zoom. Two observers: the wrapper's
-    // width is stable, but its height depends on the page size being computed here, so the
-    // height ceiling comes from the sentinel - a fixed-size element that doesn't depend on the
-    // wrapper's own content. Rounded so sub-pixel jitter between callbacks doesn't re-trigger a
-    // re-render of every mounted page.
+    // Two observers because the wrapper's height depends on the page size computed from it, so
+    // the height ceiling comes from the sentinel instead, whose size is fixed. Rounded so
+    // sub-pixel jitter doesn't re-render every mounted page
     const wrapperObserver = new ResizeObserver(([entry]) => {
       setWrapperWidth(Math.round(entry.contentRect.width));
     });

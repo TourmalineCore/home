@@ -9,7 +9,7 @@ test.describe(`MagazinePdfViewTests`, () => {
   }) => {
     await goToComponentsPage(ComponentName.MAGAZINE_PDF_VIEW);
 
-    // the PDF loads asynchronously; wait for its first page to mount before sizing/screenshotting
+    // The pdf loads asynchronously, so wait for its first page before screenshotting
     await page.waitForSelector(`[data-testid="${ComponentName.MAGAZINE_PDF_VIEW}"] canvas`);
   });
 
@@ -26,12 +26,9 @@ test.describe(`MagazinePdfViewTests`, () => {
         testId: ComponentName.MAGAZINE_PDF_VIEW,
         breakpoint,
         breakpointName,
-        // The PDF file itself can be swapped for a new issue independently of this component's
-        // code, so its rendered pages are masked out - only the surrounding viewer UI (toolbar,
-        // page counter, fullscreen button, arrows) is asserted. Masking the slider wrapper rather
-        // than the page canvases themselves: react-pdf keeps the next page's canvas mounted (for
-        // smooth paging) past the visible edge, and Playwright merges masks that sit flush against
-        // each other into one, which stretched the mask past the actual page.
+        // The pdf can be swapped for a new issue, so only the viewer UI around it is asserted.
+        // The wrapper is masked rather than the canvases: react-pdf keeps the next page mounted
+        // past the visible edge, and Playwright merges flush masks into one that overshoots
         mask: [page.locator(`.magazine-pdf-view__slider-wrapper`)],
       });
     });

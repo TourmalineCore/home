@@ -2,11 +2,8 @@
   --header-height: 58px;
   --wrapper-padding-vertical: 34px;
 
-  // Reserved strip on either side of the page(s) for the arrow buttons, so they always sit
-  // beside the pdf instead of on top of it. Must stay >= the arrows' own footprint (12px offset
-  // from the wrapper edge + 44px width, see &__arrow-button/.slick-prev/.slick-next below),
-  // otherwise the button overlaps the page whenever the spread is width- rather than
-  // height-constrained (i.e. it fills the wrapper's full content width, with no natural gap).
+  // Strip reserved for the arrows so they sit beside the pdf, not on top of it. Must stay >=
+  // their footprint (12px offset + 44px width), or they overlap a width-constrained spread
   --arrow-space: 34px;
 
   &__wrapper {
@@ -32,10 +29,8 @@
   }
 
   &__slider {
-    // Overrides slick.css's own `position: relative` so the arrows below (its direct children)
-    // position against `&__wrapper` - which spans the full viewer - instead of against the
-    // slider itself, which is only as wide as the centered page(s) and would pull the arrows
-    // in against the pages instead of out to the viewer's edges.
+    // Overrides slick.css's `position: relative` so the arrows position against `&__wrapper`
+    // (the full viewer) instead of against the slider, which is only as wide as the pages
     position: static !important;
     touch-action: manipulation !important;
   }
@@ -52,23 +47,16 @@
     }
   }
 
-  // slick-theme.css's own `.slick-prev, .slick-next` rule (loaded as a plain imported stylesheet
-  // in MagazinePdfView.tsx, ahead of this component-scoped SCSS) sets conflicting width/height/
-  // display/color/background/top at equal (single-class) specificity, and dev-server rebuilds
-  // have shown its cascade position relative to this file isn't stable - so every property that
-  // must win over it is marked !important here instead of relying on selector order.
+  // slick-theme.css sets conflicting properties on these same classes at equal specificity, and
+  // its cascade position isn't stable across rebuilds, so !important rather than order
   &__arrow-button {
     position: absolute !important;
 
-    // The toolbar sits in-flow below the page (see &__toolbar above), which shifts the naive
-    // 50% vertical center slick uses down into the extra toolbar space. This offsets it back up
-    // by half that extra height, re-centering the button on the page itself.
+    // Offsets slick's naive 50% back up by half the toolbar's height, to centre on the page
     top: calc(50% - 23px) !important;
     z-index: 1;
 
-    // Hidden below the tablet breakpoint: there isn't enough room beside a mobile single-page
-    // spread to fit them without overlapping it, so mobile relies on the slider's built-in touch
-    // swipe/scroll instead. Re-enabled in the @include tablet block below.
+    // No room beside a mobile single page, so it swipes instead. Re-enabled in @include tablet
     display: none !important;
     border: none;
     width: 44px !important;
@@ -80,10 +68,7 @@
     transition: opacity 0.15s, background 0.15s;
     place-items: center;
 
-    // slick-theme.css also draws its own arrow glyph ("←"/"→") via ::before on any element
-    // carrying the slick-prev/slick-next classes - which our button still does, for the
-    // position rules below - so without this it renders behind our own icon as a second,
-    // smaller arrow.
+    // Hides slick-theme.css's own "←"/"→" glyph, which would sit behind our icon
     &::before {
       content: none !important;
     }
@@ -92,8 +77,7 @@
     &:focus-visible {
       border-radius: 6px;
 
-      // !important to win over this same rule's own `background: none !important` above -
-      // shorthand-vs-longhand doesn't matter once !important is involved, only !important itself does.
+      // Longhand alone wouldn't win over `background: none !important` above
       background-color: rgb(255 255 255 / 8%) !important;
       opacity: 1;
     }
@@ -111,8 +95,7 @@
     height: 22px;
   }
 
-  // !important for the same reason as &__arrow-button above: slick-theme.css sets its own
-  // left: -25px / right: -25px on these same classes at equal specificity.
+  // !important for the same reason as &__arrow-button: slick-theme.css sets its own offsets
   .slick-prev {
     left: 12px !important;
   }
@@ -122,7 +105,7 @@
   }
 
   @include tablet {
-    // 12px offset + 44px button width, plus a bit of breathing room before the page edge.
+    // 12px offset + 44px button width, plus a bit of breathing room before the page edge
     --arrow-space: 64px;
 
     &__arrow-button {

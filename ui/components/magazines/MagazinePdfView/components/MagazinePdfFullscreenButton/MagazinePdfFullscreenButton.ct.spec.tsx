@@ -213,7 +213,7 @@ test.describe(`MagazinePdfFullscreenButton`, () => {
 });
 
 // The real Fullscreen API isn't deterministic headless, so it's stubbed and driven manually.
-// After mount() rather than addInitScript(), since the methods are only looked up on click.
+// After mount() rather than addInitScript(), since the methods are only looked up on click
 function stubFullscreenApi(page: Page) {
   return page.evaluate(() => {
     Object.defineProperty(document, `fullscreenElement`, {
@@ -254,7 +254,6 @@ function stubFullscreenApi(page: Page) {
   });
 }
 
-// Reports the target as fullscreen the way a browser does once a request resolves.
 function enterFullscreen(page: Page, targetId = TARGET_ID) {
   return page.evaluate((id) => {
     (document as unknown as { fullscreenElement: Element | null; }).fullscreenElement = document.getElementById(id);
