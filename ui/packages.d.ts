@@ -1,2 +1,2 @@
 declare module 'nodemailer'
-declare module 'coordinate_to_country'
+declare module 'which-country'
