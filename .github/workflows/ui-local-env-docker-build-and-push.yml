@@ -1,6 +1,12 @@
 name: Publish UI Docker Image For Local Env
 
 on:
+  # to build local-env-latest tag
+  push:
+    branches:
+      - master
+    paths:
+      - 'ui/**'
   # to allow to wait for a docker image to be published to proceed in another workflow
   workflow_call:
 
