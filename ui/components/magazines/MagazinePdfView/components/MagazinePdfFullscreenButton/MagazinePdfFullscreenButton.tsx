@@ -1,51 +1,37 @@
-import { RefObject, useContext, useEffect } from 'react';
-import { observer } from 'mobx-react-lite';
-import { MagazinePdfFullscreenButtonStateContext } from './MagazinePdfFullscreenButtonStateContext';
-import { MagazinePdfFullscreenButtonContent } from './MagazinePdfFullscreenButtonContent';
+import IconMaximize from '../../../../../icons/icon-maximize.svg';
+import IconMinimize from '../../../../../icons/icon-minimize.svg';
+import { useFullscreen } from '../../../../../common/hooks';
 
-export const MagazinePdfFullscreenButton = observer(({
-  targetRef,
+export function MagazinePdfFullscreenButton({
+  targetId,
 }: {
-  targetRef: RefObject<HTMLElement>;
-}) => {
-  const fullscreenButtonState = useContext(MagazinePdfFullscreenButtonStateContext);
+  targetId: string;
+}) {
+  const {
+    isFullscreen,
+    toggleFullscreen,
+  } = useFullscreen(targetId);
 
-  useEffect(() => {
-    document.addEventListener(`fullscreenchange`, handleFullscreenChange);
-
-    return () => {
-      document.removeEventListener(`fullscreenchange`, handleFullscreenChange);
-    };
-
-    function handleFullscreenChange() {
-      fullscreenButtonState.setIsFullscreen({
-        isFullscreen: document.fullscreenElement === targetRef.current,
-      });
-    }
-  }, [targetRef, fullscreenButtonState]);
+  const Icon = isFullscreen ? IconMinimize : IconMaximize;
 
   return (
-    <MagazinePdfFullscreenButtonContent
-      onToggleClick={toggleFullscreen}
-    />
+    <button
+      type="button"
+      className="magazine-pdf-fullscreen-button"
+      data-testid="magazine-pdf-fullscreen-button"
+      aria-controls={targetId}
+      aria-pressed={isFullscreen}
+      aria-label={isFullscreen ? `Свернуть журнал` : `Развернуть журнал на весь экран`}
+      onClick={toggleFullscreen}
+    >
+      <Icon
+        className="magazine-pdf-fullscreen-button__icon"
+        aria-hidden="true"
+      />
+
+      <span>
+        {isFullscreen ? `Свернуть` : `На весь экран`}
+      </span>
+    </button>
   );
-
-  function toggleFullscreen() {
-    if (!targetRef.current) {
-      return;
-    }
-
-    if (document.fullscreenElement === targetRef.current) {
-      // Rejects if fullscreen was already exited by other means (e.g. the browser's own Esc
-      // handling racing this click), which isn't an error worth surfacing to the user.
-      document.exitFullscreen()
-        .catch(() => {});
-    } else {
-      // Rejects e.g. when the Fullscreen API is disallowed by permissions policy, or on browsers
-      // (notably iOS Safari) that don't support it on arbitrary elements - left uncaught, this
-      // becomes an unhandled promise rejection instead of just leaving the viewer non-fullscreen.
-      targetRef.current.requestFullscreen()
-        .catch(() => {});
-    }
-  }
-});
+}

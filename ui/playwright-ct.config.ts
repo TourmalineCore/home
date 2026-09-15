@@ -1,19 +1,16 @@
 import { defineConfig, devices } from '@playwright/experimental-ct-react';
-import path from 'path';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 
 /**
- * Config for Playwright Component Testing (state/content/container layers).
- * Separate from playwright.config.ts (screenshot/E2E-on-a-real-page tests), since component
- * tests mount an isolated component via Vite instead of navigating a running Next.js page.
+ * Config for Playwright Component Testing. Separate from playwright.config.ts (screenshot/E2E
+ * tests), since component tests mount a component via Vite instead of navigating a running page.
  * See https://playwright.dev/docs/test-components.
  */
 export default defineConfig({
   testDir: `./`,
-  testMatch: `**/*.ct.spec.tsx`,
   outputDir: `./playwright-test-results/ct`,
-  snapshotDir: `./playwright-tests/screenshots`,
+  testMatch: `**/*.ct.spec.tsx`,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: 2,
@@ -21,26 +18,18 @@ export default defineConfig({
   reporter: process.env.CI ? `blob` : `html`,
   use: {
     trace: `on-first-retry`,
+
+    ctTemplateDir: `./playwright-tests/ct`,
     ctPort: 3101,
     ctViteConfig: {
-      resolve: {
-        alias: {
-          '@': path.resolve(__dirname),
-        },
-      },
       plugins: [
-        // Playwright only wires up its own default @vitejs/plugin-react (the automatic JSX
-        // runtime, without which every component crashes with "React is not defined") when
-        // `ctViteConfig.plugins` is empty - see @playwright/experimental-ct-core's createConfig.
-        // Since svgr() below is non-empty, it has to be listed here explicitly ourselves.
+        // Playwright adds its own @vitejs/plugin-react (the automatic JSX runtime) only when
+        // `ctViteConfig.plugins` is empty, so listing svgr() below means listing this too.
         react(),
 
-        // Mirrors next-react-svg, the webpack loader the app itself uses to import `.svg` files
-        // as React components (e.g. `import IconCross from '../icons/cross.svg'`) - component
-        // tests build via Vite instead of webpack, so without this plugin those same imports
-        // fail to resolve as components here even though they work fine in the real Next.js app.
-        // `include` is widened from this plugin's default of `**/*.svg?react` to plain `**/*.svg`,
-        // since next-react-svg treats every `.svg` import as a component with no opt-in suffix.
+        // Vite equivalent of next-react-svg, which the app uses to import `.svg` as components.
+        // `include` is widened from the plugin's default `**/*.svg?react`, since next-react-svg
+        // needs no such suffix.
         svgr({
           include: `**/*.svg`,
         }),
