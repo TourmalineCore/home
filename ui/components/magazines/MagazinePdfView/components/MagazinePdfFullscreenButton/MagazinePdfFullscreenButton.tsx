@@ -10,7 +10,10 @@ export function MagazinePdfFullscreenButton({
   const {
     isFullscreen,
     toggleFullscreen,
-  } = useFullscreen(targetId);
+  } = useFullscreen({
+    targetId,
+    fallbackClassName: `magazine-pdf-view--fullscreen`,
+  });
 
   const Icon = isFullscreen ? IconMinimize : IconMaximize;
 

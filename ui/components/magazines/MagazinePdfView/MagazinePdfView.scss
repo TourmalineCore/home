@@ -118,6 +118,31 @@
     --wrapper-padding-vertical: 44px;
     --arrow-space: 72px;
   }
+
+  // Stands in for the Fullscreen API where it isn't available, see useFullscreen
+  &--fullscreen {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: $fullscreen;
+    overflow: auto;
+    width: 100%;
+
+    // dvh accounts for the collapsing mobile address bar, vh is the fallback where it's missing
+    height: 100vh;
+    height: 100dvh;
+
+    // Keeps the page centred in the screen rather than pinned to the top
+    .magazine-pdf-view__wrapper {
+      min-height: 100%;
+    }
+  }
+}
+
+// While the css fullscreen fallback is on, whatever the fixed layer doesn't reach is painted in
+// the same tone rather than showing the black body through
+body:has(.magazine-pdf-view--fullscreen) {
+  background-color: $color-grey-800-redesign;
 }
 
 .slick-slide {
