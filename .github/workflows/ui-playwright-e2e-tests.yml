@@ -6,8 +6,8 @@ on:
   push:
     branches:
       - feature/*
-    # paths:
-    #   - 'ui/**'
+    paths:
+      - 'ui/**'
   # to allow to wait for a e2e tests to be passed to proceed in another workflow
   workflow_call:
   
