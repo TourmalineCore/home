@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - feature/*
-    paths:
-      - 'cms/**'
+    # paths:
+    #   - 'cms/**'
 
 jobs:
   # this is needed to wait for the new docker image to be build and published to the registry
