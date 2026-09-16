@@ -65,10 +65,8 @@ test.describe(`MagazinePdfViewTests`, () => {
   test(
     `
     GIVEN rendering MagazinePdfView
-    WHEN user clicks by fullscreen button
-    THEN viewer is requested to go fullscreen and the button offers to leave it
-    AND user clicks by the same button again
-    THEN fullscreen is exited and the button offers to enter it again
+    WHEN user clicks by fullscreen button and then by the same button again
+    THEN viewer is changed to fullscreen and then back to the normal view
     `,
     fullScreenTests,
   );
