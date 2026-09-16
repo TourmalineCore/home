@@ -2,15 +2,17 @@ import { expect, Page, test } from '../../../playwright-tests/custom-test';
 import { BREAKPOINTS } from '../../../playwright-tests/constants/breakpoints';
 import { ComponentName } from '../../../common/enums';
 
-test.describe(`MagazinePdfViewTests`, () => {
+const TEST_ID = ComponentName.MAGAZINE_PDF_VIEW;
+
+test.describe(`MagazinePdfViewScreenshotTests`, () => {
   test.beforeEach(async ({
     page,
     goToComponentsPage,
   }) => {
-    await goToComponentsPage(ComponentName.MAGAZINE_PDF_VIEW);
+    await goToComponentsPage(TEST_ID);
 
     // The pdf loads asynchronously, so wait for its first page before screenshotting
-    await page.waitForSelector(`[data-testid="${ComponentName.MAGAZINE_PDF_VIEW}"] canvas`);
+    await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
   });
 
   for (const {
@@ -23,7 +25,7 @@ test.describe(`MagazinePdfViewTests`, () => {
       testScreenshotAtBreakpoint,
     }) => {
       await testScreenshotAtBreakpoint({
-        testId: ComponentName.MAGAZINE_PDF_VIEW,
+        testId: TEST_ID,
         breakpoint,
         breakpointName,
         // The pdf can be swapped for a new issue, so only the viewer UI around it is asserted.
@@ -33,33 +35,45 @@ test.describe(`MagazinePdfViewTests`, () => {
       });
     });
   }
+});
+
+test.describe(`MagazinePdfViewTests`, () => {
+  test.beforeEach(async ({
+    page,
+    goToComponentsPage,
+  }) => {
+    await goToComponentsPage(TEST_ID);
+
+    // The pdf loads asynchronously, so wait for its first page before asserting anything
+    await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
+  });
 
   test(
     `
-      GIVEN MagazinePdfView 
-      WHEN MagazinePdfView arrows are rendered
-      THEN they have correct aria-labels
-      `,
+    GIVEN rendering MagazinePdfView
+    WHEN its arrows are rendered
+    THEN they have correct aria-labels
+    `,
     magazinePdfViewArrowAriaLabelTests,
   );
 
   test(
     `
-      GIVEN rendering MagazinePdfView 
-      WHEN user click by next page button and then click by previous page button
-      THEN counter is changed to next page number and then back to previous page number
-      `,
+    GIVEN rendering MagazinePdfView
+    WHEN user clicks by next page button and then by previous page button
+    THEN counter is changed to the next page number and then back to the previous one
+    `,
     counterOfPagesTests,
   );
 
   test(
     `
-      GIVEN rendering MagazinePdfView
-      WHEN user clicks by fullscreen button
-      THEN viewer is requested to go fullscreen and the button offers to leave it
-      AND user clicks by the same button again
-      THEN fullscreen is exited and the button offers to enter it again
-      `,
+    GIVEN rendering MagazinePdfView
+    WHEN user clicks by fullscreen button
+    THEN viewer is requested to go fullscreen and the button offers to leave it
+    AND user clicks by the same button again
+    THEN fullscreen is exited and the button offers to enter it again
+    `,
     fullScreenTests,
   );
 });
