@@ -52,11 +52,14 @@
     left: 0;
     top: 100%;
     z-index: $modal;
-    display: none;
+    display: flex;
     flex-direction: column;
     padding: 16px 0 24px;
     min-width: max-content;
-    animation: showSmoothАppearance 0.15s ease-out forwards;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.15s ease-out, transform 0.15s ease-out, visibility 0.15s;
     gap: 16px;
 
     &::before {
@@ -91,14 +94,15 @@
     }
   }
 
-  &:focus-within,
-  &:hover {
+  &--is-open {
     #{$this}__arrow {
       transform: rotate(-0.5turn);
     }
 
     #{$this}__list {
-      display: flex;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
     }
   }
 }
