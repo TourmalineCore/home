@@ -58,7 +58,7 @@
     min-width: max-content;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
+    transform: translate3d(0, -10px, 0);
     transition: opacity 0.15s ease-out, transform 0.15s ease-out, visibility 0.15s;
     gap: 16px;
 
@@ -102,7 +102,9 @@
     #{$this}__list {
       opacity: 1;
       visibility: visible;
-      transform: none;
+
+      // Not none: translate3d keeps the list on its own layer, which renders the text differently
+      transform: translate3d(0, 0, 0);
     }
   }
 }
