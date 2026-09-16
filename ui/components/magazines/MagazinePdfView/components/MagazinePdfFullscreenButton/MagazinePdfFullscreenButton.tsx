@@ -23,7 +23,6 @@ export function MagazinePdfFullscreenButton({
       className="magazine-pdf-fullscreen-button"
       data-testid="magazine-pdf-fullscreen-button"
       aria-controls={targetId}
-      aria-pressed={isFullscreen}
       aria-label={isFullscreen ? `Свернуть журнал` : `Развернуть журнал на весь экран`}
       onClick={toggleFullscreen}
     >
