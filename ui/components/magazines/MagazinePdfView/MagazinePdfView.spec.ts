@@ -39,7 +39,6 @@ test.describe(`MagazinePdfViewScreenshotTests`, () => {
 
 test.describe(`MagazinePdfViewTests`, () => {
   test.beforeEach(async ({
-    page,
     goToComponentsPage,
   }) => {
     await goToComponentsPage(TEST_ID);
@@ -165,14 +164,12 @@ async function fullScreenTests({
     .toHaveText(`На весь экран`);
 }
 
-type FullscreenCalls = {
-  request: number;
-  exit: number;
-};
-
 function getFullscreenCalls(page: Page) {
   return page.evaluate(() => (window as unknown as {
-    __fullscreenCalls: FullscreenCalls;
+    __fullscreenCalls: {
+      request: number;
+      exit: number;
+    };
   }).__fullscreenCalls);
 }
 
@@ -185,7 +182,10 @@ function stubFullscreenApi(page: Page) {
     });
 
     (window as unknown as {
-      __fullscreenCalls: FullscreenCalls;
+      __fullscreenCalls: {
+        request: number;
+        exit: number;
+      };
     }).__fullscreenCalls = {
       request: 0,
       exit: 0,
@@ -193,7 +193,10 @@ function stubFullscreenApi(page: Page) {
 
     Element.prototype.requestFullscreen = function requestFullscreen() {
       (window as unknown as {
-        __fullscreenCalls: FullscreenCalls;
+        __fullscreenCalls: {
+          request: number;
+          exit: number;
+        };
       }).__fullscreenCalls.request += 1;
 
       return Promise.resolve();
@@ -201,7 +204,10 @@ function stubFullscreenApi(page: Page) {
 
     document.exitFullscreen = function exitFullscreen() {
       (window as unknown as {
-        __fullscreenCalls: FullscreenCalls;
+        __fullscreenCalls: {
+          request: number;
+          exit: number;
+        };
       }).__fullscreenCalls.exit += 1;
 
       return Promise.resolve();
