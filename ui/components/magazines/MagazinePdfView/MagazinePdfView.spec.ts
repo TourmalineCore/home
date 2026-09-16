@@ -43,9 +43,6 @@ test.describe(`MagazinePdfViewTests`, () => {
     goToComponentsPage,
   }) => {
     await goToComponentsPage(TEST_ID);
-
-    // The pdf loads asynchronously, so wait for its first page before asserting anything
-    await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
   });
 
   test(
