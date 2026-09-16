@@ -66,7 +66,7 @@ export function LangSwitchRedesign({
       <button
         type="button"
         className="lang-switch-redesign__button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setIsOpen((prev) => !prev)}
         aria-label={router.locale === `ru`
           ? `Выбрать язык`
           : `Select language`}
