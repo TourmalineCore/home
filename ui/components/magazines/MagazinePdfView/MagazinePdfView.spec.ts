@@ -127,7 +127,7 @@ async function fullScreenTests({
       exit: 0,
     });
 
-  await reportFullscreenEntered(page);
+  await setFullscreenElement(page, ComponentName.MAGAZINE_PDF_VIEW);
 
   await expect(fullscreenButton)
     .toHaveAttribute(`aria-label`, `Свернуть журнал`);
@@ -145,7 +145,7 @@ async function fullScreenTests({
       exit: 1,
     });
 
-  await reportFullscreenExited(page);
+  await setFullscreenElement(page, null);
 
   await expect(fullscreenButton)
     .toHaveAttribute(`aria-label`, `Развернуть журнал на весь экран`);
@@ -196,14 +196,6 @@ function stubFullscreenApi(page: Page) {
       return Promise.resolve();
     };
   });
-}
-
-function reportFullscreenEntered(page: Page) {
-  return setFullscreenElement(page, ComponentName.MAGAZINE_PDF_VIEW);
-}
-
-function reportFullscreenExited(page: Page) {
-  return setFullscreenElement(page, null);
 }
 
 function setFullscreenElement(page: Page, targetId: string | null) {
