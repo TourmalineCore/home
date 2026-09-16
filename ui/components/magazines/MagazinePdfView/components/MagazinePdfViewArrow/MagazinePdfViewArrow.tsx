@@ -20,6 +20,7 @@ export function MagazinePdfViewArrow({
     <button
       type="button"
       className={clsx(`magazine-pdf-view__arrow-button`, className)}
+      data-testid={`magazine-pdf-view-${direction}-arrow`}
       style={style}
       onClick={onClick}
       aria-label={direction === `prev` ? `Предыдущий разворот` : `Следующий разворот`}
