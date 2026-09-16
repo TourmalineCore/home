@@ -43,6 +43,6 @@ async function checkClassName({
 }: {
   page: Page;
 }) {
-  expect(page.getByTestId(`form-redesign-description`))
+  await expect(page.getByTestId(`form-redesign-description`))
     .toContainClass(`ym-hide-content`);
 }

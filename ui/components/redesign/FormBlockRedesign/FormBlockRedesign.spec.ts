@@ -125,13 +125,13 @@ async function checkClassName({
 }: {
   page: Page;
 }) {
-  expect(page.getByTestId(`form-redesign-name-input`))
+  await expect(page.getByTestId(`form-redesign-name-input`))
     .toContainClass(`ym-disable-keys`);
 
-  expect(page.getByTestId(`form-redesign-email-input`))
+  await expect(page.getByTestId(`form-redesign-email-input`))
     .toContainClass(`ym-disable-keys`);
 
-  expect(page.getByTestId(`form-redesign-message-textarea`))
+  await expect(page.getByTestId(`form-redesign-message-textarea`))
     .toContainClass(`ym-disable-keys`);
 }
 
