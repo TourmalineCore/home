@@ -1,6 +1,11 @@
-import { expect, Page, test } from '../../../playwright-tests/custom-test';
+import {
+  CustomTestFixtures,
+  expect,
+  Page,
+  test,
+} from '../../../playwright-tests/custom-test';
 import { BREAKPOINTS } from '../../../playwright-tests/constants/breakpoints';
-import { ComponentName } from '../../../common/enums';
+import { Breakpoint, ComponentName } from '../../../common/enums';
 
 const TEST_ID = ComponentName.MAGAZINE_PDF_VIEW;
 
@@ -35,6 +40,44 @@ test.describe(`MagazinePdfViewScreenshotTests`, () => {
       });
     });
   }
+
+  test.describe(`ShowVersionSwitcherOpenTests`, () => {
+    const breakpoints = BREAKPOINTS.filter((breakpoint) => breakpoint.breakpoint === Breakpoint.MOBILE
+      || breakpoint.breakpoint === Breakpoint.DESKTOP_XL);
+
+    for (const {
+      name,
+      breakpoint,
+      breakpointName,
+    } of breakpoints) {
+      test(name, async ({
+        page,
+        setViewportSize,
+      }) => {
+        await setViewportSize({
+          width: breakpoint,
+        });
+
+        await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
+          .click();
+
+        // `mask` won't do here: it paints an overlay with a forced top-most z-index regardless
+        // of real stacking order, so it would blank out the open dropdown too, since that visually
+        // sits on top of the pdf area it's meant to mask. Hiding the pdf at the source instead of
+        // overlaying it sidesteps that - the dropdown, a separate element, stays visible on top
+        // of whatever's left behind (the wrapper's own background)
+        await page.addStyleTag({
+          content: `.magazine-pdf-view__slider-wrapper { visibility: hidden !important; }`,
+        });
+
+        await expect(page.getByTestId(TEST_ID)
+          .filter({
+            visible: true,
+          }))
+          .toHaveScreenshot(`${TEST_ID}-switcher-open-${breakpointName}.png`);
+      });
+    }
+  });
 });
 
 test.describe(`MagazinePdfViewTests`, () => {
@@ -72,6 +115,99 @@ test.describe(`MagazinePdfViewTests`, () => {
   );
 });
 
+test.describe(`MagazinePdfVersionSwitcherTests`, () => {
+  test(
+    `
+    GIVEN the magazine page is opened with no ?version= query param
+    WHEN MagazinePdfView renders
+    THEN the version switcher trigger shows the full version as selected
+    `,
+    showsFullVersionByDefaultTests,
+  );
+
+  test(
+    `
+    GIVEN the magazine page is opened with ?version=teaser
+    WHEN MagazinePdfView renders
+    THEN the version switcher trigger shows the teaser as selected
+    `,
+    showsTeaserFromQueryParamTests,
+  );
+
+  test(
+    `
+    GIVEN the magazine page is opened with an invalid ?version= value
+    WHEN MagazinePdfView renders
+    THEN the full version is shown and the invalid query param is stripped from the URL
+    `,
+    redirectsInvalidVersionParamTests,
+  );
+
+  test(
+    `
+    GIVEN the version switcher is closed
+    WHEN the user clicks the trigger
+    THEN the dropdown list opens showing both versions, with the current one marked selected
+    `,
+    opensDropdownTests,
+  );
+
+  test(
+    `
+    GIVEN the version switcher dropdown is open
+    WHEN the user clicks outside of it
+    THEN the dropdown closes
+    `,
+    closesDropdownOnOutsideClickTests,
+  );
+
+  test(
+    `
+    GIVEN the full version is selected (the default, no ?version= in the URL)
+    WHEN the user opens the switcher and picks the teaser
+    THEN the trigger updates, the dropdown closes and ?version=teaser is added to the URL
+    `,
+    switchesToTeaserTests,
+  );
+
+  test(
+    `
+    GIVEN the teaser is selected (?version=teaser in the URL)
+    WHEN the user opens the switcher and picks the full version (the default)
+    THEN ?version is removed from the URL entirely
+    `,
+    switchesBackToFullTests,
+  );
+
+  test(
+    `
+    GIVEN the viewer is on a viewport where the pdf, header and toolbar together are taller
+      than the screen
+    WHEN the user enters fullscreen
+    THEN the whole block still fits the screen (no overflow) with an equal margin top and bottom
+    `,
+    fitsFullscreenWithoutOverflowTests,
+  );
+
+  test(
+    `
+    GIVEN the user has moved off the first page of the current version
+    WHEN they switch to the other version
+    THEN the actual pdf file is swapped and the counter resets to that file's own first page
+    `,
+    resetsToFirstPageOnVersionSwitchTests,
+  );
+
+  test(
+    `
+    GIVEN the user has not moved off the first page of the current version
+    WHEN they switch to the other version
+    THEN the counter shows a valid first-page reading for the new file, not a negative one
+    `,
+    switchingFromFirstPageKeepsCounterValidTests,
+  );
+});
+
 async function magazinePdfViewArrowAriaLabelTests({
   page,
 }: {
@@ -89,15 +225,16 @@ async function counterOfPagesTests({
 }: {
   page: Page;
 }) {
+  // The default version is the full one (21 real pages), see magazinePdfVersions.ts
   const magazinePdfCounter = page.getByTestId(`magazine-pdf-counter`);
   await expect(magazinePdfCounter)
-    .toHaveText(/1.2 \/ 20/);
+    .toHaveText(/1.2 \/ 21/);
 
   await page.getByTestId(`magazine-pdf-view-next-arrow`)
     .click();
 
   await expect(magazinePdfCounter)
-    .toHaveText(/2.3 \/ 20/);
+    .toHaveText(/2.3 \/ 21/);
 
   const prevArrowButton = page.getByTestId(`magazine-pdf-view-prev-arrow`);
 
@@ -107,7 +244,7 @@ async function counterOfPagesTests({
     .click();
 
   await expect(magazinePdfCounter)
-    .toHaveText(/1.2 \/ 20/);
+    .toHaveText(/1.2 \/ 21/);
 }
 
 async function fullScreenTests({
@@ -223,4 +360,253 @@ function setFullscreenElement(page: Page, targetId: string | null) {
 
     document.dispatchEvent(new Event(`fullscreenchange`));
   }, targetId);
+}
+
+async function showsFullVersionByDefaultTests({
+  page,
+  goToComponentsPage,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+}) {
+  await goToComponentsPage(TEST_ID);
+
+  await expect(page.getByTestId(`magazine-pdf-version-switcher-trigger`))
+    .toHaveText(`Полная версия · 40 стр.`);
+}
+
+async function showsTeaserFromQueryParamTests({
+  page,
+  goToComponentsPage,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+}) {
+  await goToComponentsPage(`${TEST_ID}?version=teaser`);
+
+  await expect(page.getByTestId(`magazine-pdf-version-switcher-trigger`))
+    .toHaveText(`Тизер · 20 стр.`);
+}
+
+async function redirectsInvalidVersionParamTests({
+  page,
+  goToComponentsPage,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+}) {
+  await goToComponentsPage(`${TEST_ID}?version=какая-то-ерунда`);
+
+  await expect(page.getByTestId(`magazine-pdf-version-switcher-trigger`))
+    .toHaveText(`Полная версия · 40 стр.`);
+
+  await expect(page)
+    .toHaveURL(/\/components\/magazine-pdf-view$/);
+}
+
+async function opensDropdownTests({
+  page,
+  goToComponentsPage,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+}) {
+  await goToComponentsPage(TEST_ID);
+
+  await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
+    .click();
+
+  await expect(page.getByTestId(`magazine-pdf-version-switcher-option-teaser`))
+    .toBeVisible();
+
+  await expect(page.getByTestId(`magazine-pdf-version-switcher-option-full`))
+    .toHaveAttribute(`aria-selected`, `true`);
+}
+
+async function closesDropdownOnOutsideClickTests({
+  page,
+  goToComponentsPage,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+}) {
+  await goToComponentsPage(TEST_ID);
+
+  const trigger = page.getByTestId(`magazine-pdf-version-switcher-trigger`);
+
+  await trigger.click();
+
+  await expect(page.getByTestId(`magazine-pdf-version-switcher-option-teaser`))
+    .toBeVisible();
+
+  await page.mouse.click(10, 10);
+
+  await expect(trigger)
+    .toHaveAttribute(`aria-expanded`, `false`);
+}
+
+async function switchesToTeaserTests({
+  page,
+  goToComponentsPage,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+}) {
+  await goToComponentsPage(TEST_ID);
+
+  await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
+    .click();
+
+  await page.getByTestId(`magazine-pdf-version-switcher-option-teaser`)
+    .click();
+
+  await expect(page.getByTestId(`magazine-pdf-version-switcher-trigger`))
+    .toHaveText(`Тизер · 20 стр.`);
+
+  await expect(page.getByTestId(`magazine-pdf-version-switcher-trigger`))
+    .toHaveAttribute(`aria-expanded`, `false`);
+
+  await expect(page)
+    .toHaveURL(/[?&]version=teaser(&|$)/);
+}
+
+async function switchesBackToFullTests({
+  page,
+  goToComponentsPage,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+}) {
+  await goToComponentsPage(`${TEST_ID}?version=teaser`);
+
+  await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
+    .click();
+
+  await page.getByTestId(`magazine-pdf-version-switcher-option-full`)
+    .click();
+
+  await expect(page.getByTestId(`magazine-pdf-version-switcher-trigger`))
+    .toHaveText(`Полная версия · 40 стр.`);
+
+  await expect(page)
+    .toHaveURL(/\/components\/magazine-pdf-view$/);
+}
+
+async function fitsFullscreenWithoutOverflowTests({
+  page,
+  goToComponentsPage,
+  setViewportSize,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
+}) {
+  // Set before navigating, not after: the wrapper's ResizeObserver then only ever has one
+  // size to settle on (the page's very first layout), instead of an old-to-new transition
+  // whose end we'd otherwise have to wait for with no element/attribute to assert on
+  await setViewportSize({
+    width: 1440,
+    height: 900,
+  });
+
+  await goToComponentsPage(TEST_ID);
+  await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
+
+  await page.getByTestId(`magazine-pdf-fullscreen-button`)
+    .click();
+
+  await expect
+    .poll(() => page.evaluate(() => document.fullscreenElement?.id))
+    .toBe(TEST_ID);
+
+  // Polls (Playwright's own retry mechanism, not a fixed sleep) until both the fullscreen
+  // request and the ResizeObserver-driven relayout it triggers have actually landed
+  await expect
+    .poll(async () => {
+      const {
+        viewHeight,
+        topMargin,
+        bottomMargin,
+      } = await readFullscreenGeometry(page, TEST_ID);
+
+      return viewHeight > 0
+        && bottomMargin >= 0
+        && Math.abs(topMargin - bottomMargin) <= 2;
+    })
+    .toBe(true);
+
+  const {
+    topMargin,
+  } = await readFullscreenGeometry(page, TEST_ID);
+
+  // The margin should be roughly the wrapper's own padding (44px at this breakpoint), not a
+  // leftover reservation for the sticky site header (68.2px) that doesn't exist in fullscreen
+  expect(topMargin)
+    .toBeLessThanOrEqual(50);
+}
+
+function readFullscreenGeometry(page: Page, testId: string) {
+  return page.evaluate((id) => {
+    const view = document.getElementById(id)!;
+    const header = view.querySelector(`.magazine-pdf-view__header`)!;
+    const toolbar = view.querySelector(`.magazine-pdf-view__toolbar`)!;
+
+    return {
+      viewHeight: view.getBoundingClientRect().height,
+      topMargin: header.getBoundingClientRect().top,
+      bottomMargin: view.getBoundingClientRect().height - toolbar.getBoundingClientRect().bottom,
+    };
+  }, testId);
+}
+
+async function resetsToFirstPageOnVersionSwitchTests({
+  page,
+  goToComponentsPage,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+}) {
+  await goToComponentsPage(TEST_ID);
+  await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
+
+  const counter = page.getByTestId(`magazine-pdf-counter`);
+
+  // Real page counts differ (teaser: 20, full: 21), so this also proves the file is actually swapped
+  await expect(counter)
+    .toHaveText(/\/ 21$/);
+
+  await page.getByTestId(`magazine-pdf-view-next-arrow`)
+    .click();
+
+  await expect(counter)
+    .toHaveText(/^2/);
+
+  await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
+    .click();
+
+  await page.getByTestId(`magazine-pdf-version-switcher-option-teaser`)
+    .click();
+
+  await expect(counter)
+    .toHaveText(/^1.2 \/ 20/);
+}
+
+async function switchingFromFirstPageKeepsCounterValidTests({
+  page,
+  goToComponentsPage,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+}) {
+  await goToComponentsPage(TEST_ID);
+  await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
+
+  await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
+    .click();
+
+  await page.getByTestId(`magazine-pdf-version-switcher-option-teaser`)
+    .click();
+
+  await expect(page.getByTestId(`magazine-pdf-counter`))
+    .toHaveText(`1–2 / 20`);
 }
