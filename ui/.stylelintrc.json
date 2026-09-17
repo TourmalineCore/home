@@ -9,7 +9,8 @@
     "**/public/**/*",
     "**/dist/**/*",
     "**/node_modules/**/*",
-		"**/playwright-report/**"
+		"**/playwright-report/**",
+		"**/coverage/**"
   ],
 	"rules": {
 		"keyframes-name-pattern": null,

@@ -1,10 +1,11 @@
 import clsx from 'clsx';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import IconDownArrow from '../../../../../icons/icon-arrow-down-redesign.svg';
 import GlobalIcon from '../../../../../icons/global-icon.svg';
 import { DEFAULT_LOCALE } from '../../../../../common/constants';
-import { useOnScrollDirections } from '../../../../../common/hooks';
+import { useAutoClose, useOnScrollDirections } from '../../../../../common/hooks';
 
 type Languages = {
   [key: string]: {
@@ -31,21 +32,41 @@ export function LangSwitchRedesign({
 }) {
   const router = useRouter();
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const langSwitchRef = useRef<HTMLDivElement>(null);
+
+  useAutoClose(langSwitchRef, setIsOpen);
+
   const {
     isScrollUp,
   } = useOnScrollDirections();
 
+  // The header hides on scroll down, so the list closes with it instead of sticking out below
+  useEffect(() => {
+    if (!isScrollUp) {
+      setIsOpen(false);
+    }
+  }, [isScrollUp]);
+
   return (
     <div
+      ref={langSwitchRef}
       className={clsx(
         `lang-switch-redesign`,
         className,
+        {
+          'lang-switch-redesign--is-open': isOpen,
+        },
       )}
       data-testid="lang-switch"
+      onPointerEnter={(e) => e.pointerType === `mouse` && setIsOpen(true)}
+      onPointerLeave={(e) => e.pointerType === `mouse` && setIsOpen(false)}
     >
       <button
         type="button"
         className="lang-switch-redesign__button"
+        onClick={() => setIsOpen((prev) => !prev)}
         aria-label={router.locale === `ru`
           ? `Выбрать язык`
           : `Select language`}
@@ -68,7 +89,7 @@ export function LangSwitchRedesign({
         />
       </button>
 
-      {isScrollUp && router.locales && (
+      {router.locales && (
         <ul className="lang-switch-redesign__list">
           {router.locales
             .filter((locale) => locale !== router.locale)

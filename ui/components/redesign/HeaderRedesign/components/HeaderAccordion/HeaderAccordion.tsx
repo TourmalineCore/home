@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import IconDownArrow from '../../../../../icons/icon-arrow-down-redesign.svg';
 import { HeaderNavigationItem } from '../../../../../common/types';
-import { useDeviceSize, useOnScrollDirections } from '../../../../../common/hooks';
+import { useDeviceSize } from '../../../../../common/hooks';
 import { SmartLink } from '../../../../SmartLink/SmartLink';
 
 export function HeaderAccordion({
@@ -19,10 +19,6 @@ export function HeaderAccordion({
   const {
     isTabletXl,
   } = useDeviceSize();
-
-  const {
-    isScrollUp,
-  } = useOnScrollDirections();
 
   const chunks = isTabletXl ? getChunks(navItems) : [navItems];
 
@@ -51,38 +47,36 @@ export function HeaderAccordion({
         />
       </button>
 
-      {isScrollUp && (
-        <div
-          className={clsx(
-            `header-accordion__list-wrapper`,
-            {
-              'container-redesign': chunks.length > 2,
-            },
-          )}
-        >
-          {chunks.map((group, index) => (
-            <ul
-              className="header-accordion__list"
-              // eslint-disable-next-line react/no-array-index-key
-              key={index}
-            >
-              {group.map((el) => (
-                <li
-                  className="header-accordion__list-item"
-                  key={el.id}
+      <div
+        className={clsx(
+          `header-accordion__list-wrapper`,
+          {
+            'container-redesign': chunks.length > 2,
+          },
+        )}
+      >
+        {chunks.map((group, index) => (
+          <ul
+            className="header-accordion__list"
+            // eslint-disable-next-line react/no-array-index-key
+            key={index}
+          >
+            {group.map((el) => (
+              <li
+                className="header-accordion__list-item"
+                key={el.id}
+              >
+                <SmartLink
+                  className="header-accordion__link"
+                  href={el.link || ``}
                 >
-                  <SmartLink
-                    className="header-accordion__link"
-                    href={el.link || ``}
-                  >
-                    {el.name}
-                  </SmartLink>
-                </li>
-              ))}
-            </ul>
-          ))}
-        </div>
-      )}
+                  {el.name}
+                </SmartLink>
+              </li>
+            ))}
+          </ul>
+        ))}
+      </div>
     </div>
   );
 }

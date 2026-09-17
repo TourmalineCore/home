@@ -66,7 +66,7 @@ module.exports = withReactSvg({
           // Block access to browser features and APIs
           {
             key: 'Permissions-Policy',
-            value: "interest-cohort=(), camera=(), microphone=(), fullscreen=(), payment=(), usb=(), accelerometer=(), display-capture=(), gyroscope=(), magnetometer=(), midi=(), picture-in-picture=(self), xr-spatial-tracking=()",
+            value: "interest-cohort=(), camera=(), microphone=(), fullscreen=(self), payment=(), usb=(), accelerometer=(), display-capture=(), gyroscope=(), magnetometer=(), midi=(), picture-in-picture=(self), xr-spatial-tracking=()",
           }
         ]
       }

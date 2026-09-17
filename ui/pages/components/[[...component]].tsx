@@ -43,6 +43,15 @@ import { MagazineHero } from "../../components/magazines/MagazineHero/MagazineHe
 import { MagazinesHero } from "../../components/magazines/MagazinesHero/MagazinesHero";
 import { getCookiePageProps } from "../../common/utils/getCookiePageProps";
 
+// react-pdf/pdfjs reach for browser-only APIs (window, ResizeObserver) during render, so this
+// can't be server-rendered - same as its usage on the actual magazine page.
+const MagazinePdfView = dynamic(
+  () => import(`../../components/magazines/MagazinePdfView/MagazinePdfView`).then((component) => component.MagazinePdfView),
+  {
+    ssr: false,
+  },
+);
+
 const Cookie = dynamic(
   () => import(`../../components/Cookie/Cookie`).then((component) => component.Cookie),
   {
@@ -256,6 +265,7 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   [ComponentName.CHELZOO_LINKS]: () => <ChelzooLinks />,
   [ComponentName.MAGAZINES_HERO]: () => <MagazinesHero />,
   [ComponentName.MAGAZINE_HERO]: () => <MagazineHero />,
+  [ComponentName.MAGAZINE_PDF_VIEW]: () => <MagazinePdfView />,
 };
 
 export default function ComponentsPage({

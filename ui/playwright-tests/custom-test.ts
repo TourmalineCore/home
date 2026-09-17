@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { test as base, expect } from '@playwright/test';
+import { test as base, expect, type Locator } from '@playwright/test';
 import { AxeBuilder } from '@axe-core/playwright';
 import fs, { mkdirSync, writeFileSync } from 'fs';
 import { dirname } from "path";
@@ -14,6 +14,8 @@ export type CustomTestFixtures = {
       breakpoint: Breakpoint;
       breakpointName: BreakpointName;
       height?: number;
+      // Blanks out content that isn't stable across runs, so the assertion covers our own UI
+      mask?: Locator[];
     }) => void;
   goToComponentsPage: (path: string) => void;
   goto: (path?: string) => void;
@@ -105,11 +107,13 @@ export const test = base.extend<CustomTestFixtures>({
       breakpoint,
       breakpointName,
       height,
+      mask,
     }: {
       testId: string;
       breakpoint: Breakpoint;
       breakpointName: BreakpointName;
       height?: number;
+      mask?: Locator[];
     }) => {
       // This is necessary so that the tests do not crop the screenshots.
       await page.addStyleTag({
@@ -121,11 +125,19 @@ export const test = base.extend<CustomTestFixtures>({
         height,
       });
 
+      // ResizeObserver-driven layouts redraw a frame or two after the resize itself, so without
+      // this wait a screenshot can land on an in-between frame instead of the settled layout
+      await page.evaluate(() => new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      }));
+
       await expect(page.getByTestId(testId)
         .filter({
           visible: true,
         }))
-        .toHaveScreenshot(`${testId}-${breakpointName}.png`);
+        .toHaveScreenshot(`${testId}-${breakpointName}.png`, {
+          mask,
+        });
     };
 
     await use(testScreenshotAtBreakpoint);

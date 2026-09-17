@@ -1,13 +1,24 @@
 .magazine-pdf-view {
-  --header-height: 80px;
+  --header-height: 58px;
+  --wrapper-padding-vertical: 34px;
+
+  // Strip reserved for the arrows so they sit beside the pdf, not on top of it. Must stay >=
+  // their footprint (12px offset + 44px width), or they overlap a width-constrained spread
   --arrow-space: 34px;
 
   &__wrapper {
+    position: relative;
     display: flex;
     align-items: center;
+    flex-direction: column;
     justify-content: center;
-    padding: var(--header-height) var(--arrow-space);
+    padding: var(--wrapper-padding-vertical) var(--arrow-space);
     background-color: $color-grey-800-redesign;
+
+    .magazine-pdf-view--fullscreen &,
+    .magazine-pdf-view:fullscreen & {
+      min-height: 100%;
+    }
   }
 
   &__viewport-sentinel {
@@ -23,16 +34,115 @@
   }
 
   &__slider {
+    // Overrides slick.css's `position: relative` so the arrows position against `&__wrapper`
+    // (the full viewer) instead of against the slider, which is only as wide as the pages
+    position: static !important;
     touch-action: manipulation !important;
   }
 
-  @include tablet-xl {
-    --arrow-space: 44px;
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+    justify-content: space-between;
+    margin-top: 16px;
+
+    @include tablet-xl {
+      margin-top: 16.6px;
+    }
   }
 
-  @include desktop-xl {
-    --header-height: 104px;
+  // slick-theme.css sets conflicting properties on these same classes at equal specificity, and
+  // its cascade position isn't stable across rebuilds, so !important rather than order
+  &__arrow-button {
+    position: absolute !important;
+
+    // Offsets slick's naive 50% back up by half the toolbar's height, to centre on the page
+    top: calc(50% - 23px) !important;
+    z-index: 1;
+
+    // No room beside a mobile single page, so it swipes instead. Re-enabled in @include tablet
+    display: none !important;
+    border: none;
+    width: 44px !important;
+    height: 44px !important;
+    color: inherit !important;
+    background: none !important;
+    opacity: 0.6;
+    cursor: pointer;
+    transition: opacity 0.15s, background 0.15s;
+    place-items: center;
+
+    // Hides slick-theme.css's own "←"/"→" glyph, which would sit behind our icon
+    &::before {
+      content: none !important;
+    }
+
+    &:hover,
+    &:focus-visible {
+      border-radius: 6px;
+
+      // Longhand alone wouldn't win over `background: none !important` above
+      background-color: rgb(255 255 255 / 8%) !important;
+      opacity: 1;
+    }
+
+    &.slick-disabled {
+      opacity: 0.2;
+      cursor: default;
+      pointer-events: none;
+    }
   }
+
+  &__arrow-icon {
+    display: block;
+    width: 22px;
+    height: 22px;
+  }
+
+  // !important for the same reason as &__arrow-button: slick-theme.css sets its own offsets
+  .slick-prev {
+    left: 12px !important;
+  }
+
+  .slick-next {
+    right: 12px !important;
+  }
+
+  @include tablet {
+    // 12px offset + 44px button width, plus a bit of breathing room before the page edge
+    --arrow-space: 64px;
+
+    &__arrow-button {
+      display: grid !important;
+    }
+  }
+
+  @include tablet-xl {
+    --header-height: 68.2px;
+    --wrapper-padding-vertical: 44px;
+    --arrow-space: 72px;
+  }
+
+  // Stands in for the Fullscreen API where it isn't available, see useFullscreen
+  &--fullscreen {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: $fullscreen;
+    overflow: auto;
+    width: 100%;
+
+    // dvh accounts for the collapsing mobile address bar, vh is the fallback where it's missing
+    height: 100vh;
+    height: 100dvh;
+  }
+}
+
+// While the css fullscreen fallback is on, whatever the fixed layer doesn't reach is painted in
+// the same tone rather than showing the black body through
+body:has(.magazine-pdf-view--fullscreen) {
+  background-color: $color-grey-800-redesign;
 }
 
 .slick-slide {
