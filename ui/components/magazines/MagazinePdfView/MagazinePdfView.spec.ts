@@ -118,7 +118,7 @@ test.describe(`MagazinePdfViewTests`, () => {
 test.describe(`MagazinePdfVersionSwitcherTests`, () => {
   test(
     `
-    GIVEN the magazine page is opened with no ?version= query param
+    GIVEN the magazine page is opened with no ?version=query param
     WHEN MagazinePdfView renders
     THEN the version switcher trigger shows the full version as selected
     `,
@@ -136,7 +136,7 @@ test.describe(`MagazinePdfVersionSwitcherTests`, () => {
 
   test(
     `
-    GIVEN the magazine page is opened with an invalid ?version= value
+    GIVEN the magazine page is opened with an invalid ?version=value
     WHEN MagazinePdfView renders
     THEN the full version is shown and the invalid query param is stripped from the URL
     `,
@@ -181,8 +181,7 @@ test.describe(`MagazinePdfVersionSwitcherTests`, () => {
 
   test(
     `
-    GIVEN the viewer is on a viewport where the pdf, header and toolbar together are taller
-      than the screen
+    GIVEN the viewer is on a viewport where the pdf, header and toolbar together are taller than the screen
     WHEN the user enters fullscreen
     THEN the whole block still fits the screen (no overflow) with an equal margin top and bottom
     `,
