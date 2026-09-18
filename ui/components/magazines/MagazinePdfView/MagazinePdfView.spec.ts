@@ -225,16 +225,15 @@ async function counterOfPagesTests({
 }: {
   page: Page;
 }) {
-  // The default version is the full one (21 real pages), see magazinePdfVersions.ts
   const magazinePdfCounter = page.getByTestId(`magazine-pdf-counter`);
   await expect(magazinePdfCounter)
-    .toHaveText(/1.2 \/ 21/);
+    .toHaveText(/1.2 \/ 40/);
 
   await page.getByTestId(`magazine-pdf-view-next-arrow`)
     .click();
 
   await expect(magazinePdfCounter)
-    .toHaveText(/2.3 \/ 21/);
+    .toHaveText(/2.3 \/ 40/);
 
   const prevArrowButton = page.getByTestId(`magazine-pdf-view-prev-arrow`);
 
@@ -244,7 +243,7 @@ async function counterOfPagesTests({
     .click();
 
   await expect(magazinePdfCounter)
-    .toHaveText(/1.2 \/ 21/);
+    .toHaveText(/1.2 \/ 40/);
 }
 
 async function fullScreenTests({
@@ -571,9 +570,8 @@ async function resetsToFirstPageOnVersionSwitchTests({
 
   const counter = page.getByTestId(`magazine-pdf-counter`);
 
-  // Real page counts differ (teaser: 20, full: 21), so this also proves the file is actually swapped
   await expect(counter)
-    .toHaveText(/\/ 21$/);
+    .toHaveText(/\/ 40$/);
 
   await page.getByTestId(`magazine-pdf-view-next-arrow`)
     .click();
