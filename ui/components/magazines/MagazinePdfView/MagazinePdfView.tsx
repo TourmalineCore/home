@@ -3,6 +3,8 @@
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -224,6 +226,7 @@ export function MagazinePdfView() {
             loaded,
             total,
           })}
+          externalLinkTarget="_blank"
         >
           <div
             className="magazine-pdf-view__slider-wrapper"
@@ -266,7 +269,7 @@ export function MagazinePdfView() {
                         height={pageHeight || undefined}
                         devicePixelRatio={Math.min(window.devicePixelRatio, 3)}
                         renderTextLayer={false}
-                        renderAnnotationLayer={false}
+                        renderAnnotationLayer
                       />
                     )}
                 </div>
