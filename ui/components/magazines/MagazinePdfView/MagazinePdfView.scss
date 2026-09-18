@@ -26,10 +26,6 @@
   // and centred, so matching the box width would drift away from the pdf and the toolbar below
   &__header {
     margin-bottom: 16px;
-
-    @include tablet-xl {
-      margin-bottom: 16.6px;
-    }
   }
 
   &__viewport-sentinel {

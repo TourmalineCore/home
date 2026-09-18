@@ -151,7 +151,7 @@ export function MagazinePdfView() {
   // the only thing to reserve is the header/toolbar rows and the wrapper's own padding, all
   // actually inside this same box - mirrors &__header/&__toolbar's row margin and &__wrapper's
   // --wrapper-padding-vertical in MagazinePdfView.scss
-  const controlsRowMargin = isTabletXl ? 16.6 : 16;
+  const controlsRowMargin = 16;
   const wrapperPaddingVertical = isTabletXl ? 44 : 34;
   const controlsOverhead = 2 * (CONTROLS_ROW_HEIGHT + controlsRowMargin + wrapperPaddingVertical);
   const heightCeiling = isFullscreen
