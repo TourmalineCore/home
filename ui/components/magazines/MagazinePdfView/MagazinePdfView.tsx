@@ -238,6 +238,14 @@ export function MagazinePdfView() {
                 prevArrow={<MagazinePdfViewArrow direction="prev" />}
                 nextArrow={<MagazinePdfViewArrow direction="next" />}
                 beforeChange={(prevSlide, nextSlide) => {
+                  // react-slick can report a stray negative target while totalPages is
+                  // transiently 0 (file swap in progress, see the reset effect above) - it
+                  // never fires afterChange for that transition, so acting on it would leave
+                  // currentSlide stuck at an invalid negative value
+                  if (nextSlide < 0) {
+                    return;
+                  }
+
                   setTransitionFromSlide(prevSlide);
                   setCurrentSlide(nextSlide);
                 }}
