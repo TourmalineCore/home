@@ -17,7 +17,9 @@ export function MagazinePdfVersionSwitcher({
 
   useAutoClose(rootRef, setIsOpen);
 
-  const selectedVersion = getMagazinePdfVersion(selectedVersionId);
+  const selectedVersion = getMagazinePdfVersion({
+    versionId: selectedVersionId,
+  });
 
   return (
     <div

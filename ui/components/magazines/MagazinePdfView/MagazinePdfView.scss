@@ -13,12 +13,23 @@
     flex-direction: column;
     justify-content: center;
     padding: var(--wrapper-padding-vertical) var(--arrow-space);
+    min-height: 500px;
     background-color: $color-grey-800-redesign;
 
     .magazine-pdf-view--fullscreen &,
     .magazine-pdf-view:fullscreen & {
       min-height: 100%;
     }
+  }
+
+  &__loader-container {
+    position: absolute;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $color-grey-800-redesign;
+    inset: 0;
   }
 
   // Sized to sliderWidth (inline style, same value the pdf spread itself uses) rather than

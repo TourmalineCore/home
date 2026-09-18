@@ -7,7 +7,9 @@ describe(`resolveMagazinePdfVersionIdFromQuery`, () => {
     WHEN resolveMagazinePdfVersionIdFromQuery is called with undefined
     THEN it resolves to the full version and reports it as not invalid
     `, () => {
-    expect(resolveMagazinePdfVersionIdFromQuery(undefined))
+    expect(resolveMagazinePdfVersionIdFromQuery({
+      rawValue: undefined,
+    }))
       .toEqual({
         versionId: `full`,
         isInvalid: false,
@@ -19,7 +21,9 @@ describe(`resolveMagazinePdfVersionIdFromQuery`, () => {
     WHEN resolveMagazinePdfVersionIdFromQuery is called with this value
     THEN it resolves to the teaser version and reports it as not invalid
     `, () => {
-    expect(resolveMagazinePdfVersionIdFromQuery(`teaser`))
+    expect(resolveMagazinePdfVersionIdFromQuery({
+      rawValue: `teaser`,
+    }))
       .toEqual({
         versionId: `teaser`,
         isInvalid: false,
@@ -31,7 +35,9 @@ describe(`resolveMagazinePdfVersionIdFromQuery`, () => {
     WHEN resolveMagazinePdfVersionIdFromQuery is called with this value
     THEN it resolves to the full version and reports it as not invalid
     `, () => {
-    expect(resolveMagazinePdfVersionIdFromQuery(`full`))
+    expect(resolveMagazinePdfVersionIdFromQuery({
+      rawValue: `full`,
+    }))
       .toEqual({
         versionId: `full`,
         isInvalid: false,
@@ -43,7 +49,9 @@ describe(`resolveMagazinePdfVersionIdFromQuery`, () => {
     WHEN resolveMagazinePdfVersionIdFromQuery is called with this value
     THEN it resolves to the full (default) version and reports it as invalid
     `, () => {
-    expect(resolveMagazinePdfVersionIdFromQuery(`какая-то-ерунда`))
+    expect(resolveMagazinePdfVersionIdFromQuery({
+      rawValue: `какая-то-ерунда`,
+    }))
       .toEqual({
         versionId: `full`,
         isInvalid: true,
@@ -55,7 +63,9 @@ describe(`resolveMagazinePdfVersionIdFromQuery`, () => {
     WHEN resolveMagazinePdfVersionIdFromQuery is called with this array
     THEN it resolves to the full (default) version and reports it as invalid
     `, () => {
-    expect(resolveMagazinePdfVersionIdFromQuery([`teaser`, `full`]))
+    expect(resolveMagazinePdfVersionIdFromQuery({
+      rawValue: [`teaser`, `full`],
+    }))
       .toEqual({
         versionId: `full`,
         isInvalid: true,

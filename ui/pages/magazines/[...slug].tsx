@@ -19,7 +19,14 @@ const MagazinePdfView = dynamic(
   () => import(`../../components/magazines/MagazinePdfView/MagazinePdfView`).then((component) => component.MagazinePdfView),
   {
     ssr: false,
-    loading: () => <MagazinePdfLoader />,
+    loading: () => (
+      <div style={{
+        height: 500,
+      }}
+      >
+        <MagazinePdfLoader />
+      </div>
+    ),
   },
 );
 

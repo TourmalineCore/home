@@ -60,11 +60,15 @@ export function MagazinePdfView() {
   const {
     versionId: selectedVersionId,
     isInvalid: isVersionQueryInvalid,
-  } = resolveMagazinePdfVersionIdFromQuery(router.query.version);
+  } = resolveMagazinePdfVersionIdFromQuery({
+    rawValue: router.query.version,
+  });
 
   const {
     filePath,
-  } = getMagazinePdfVersion(selectedVersionId);
+  } = getMagazinePdfVersion({
+    versionId: selectedVersionId,
+  });
 
   const [totalPages, setTotalPages] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -169,93 +173,91 @@ export function MagazinePdfView() {
     : `Загрузка журнала...`;
 
   return (
-    <>
-      {!isPdfReady && (
-        <MagazinePdfLoader progressText={progressText} />
-      )}
-
+    <div
+      id={VIEW_ELEMENT_ID}
+      className="magazine-pdf-view"
+      data-testid={VIEW_ELEMENT_ID}
+    >
       <div
-        id={VIEW_ELEMENT_ID}
-        className="magazine-pdf-view"
-        style={{
-          display: isPdfReady ? `block` : `none`,
-        }}
-        data-testid={VIEW_ELEMENT_ID}
+        className="magazine-pdf-view__wrapper"
+        ref={wrapperRef}
       >
+        {!isPdfReady && (
+          <div className="magazine-pdf-view__loader-container">
+            <MagazinePdfLoader progressText={progressText} />
+          </div>
+        )}
+
         <div
-          className="magazine-pdf-view__wrapper"
-          ref={wrapperRef}
+          className="magazine-pdf-view__header"
+          style={{
+            width: sliderWidth || undefined,
+          }}
+        >
+          <MagazinePdfVersionSwitcher
+            selectedVersionId={selectedVersionId}
+            // eslint-disable-next-line react/jsx-no-bind
+            onChange={replaceVersionQuery}
+          />
+        </div>
+
+        <div
+          className="magazine-pdf-view__viewport-sentinel"
+          aria-hidden
+          ref={sentinelRef}
+        />
+
+        <Document
+          file={filePath}
+          // eslint-disable-next-line react/jsx-no-bind
+          onLoadSuccess={({
+            numPages,
+          }) => {
+            setTotalPages(numPages);
+            setIsPdfReady(true);
+          }}
+          loading={null}
+          onLoadProgress={({
+            loaded,
+            total,
+          }) => setLoadProgress({
+            loaded,
+            total,
+          })}
         >
           <div
-            className="magazine-pdf-view__header"
+            className="magazine-pdf-view__slider-wrapper"
             style={{
               width: sliderWidth || undefined,
             }}
           >
-            <MagazinePdfVersionSwitcher
-              selectedVersionId={selectedVersionId}
-              // eslint-disable-next-line react/jsx-no-bind
-              onChange={replaceVersionQuery}
-            />
-          </div>
+            <Slider
+              className="magazine-pdf-view__slider"
+              dots={false}
+              infinite={false}
+              slidesToShow={slidesToShow}
+              slidesToScroll={currentSlide === 0 ? 1 : slidesToShow}
+              prevArrow={<MagazinePdfViewArrow direction="prev" />}
+              nextArrow={<MagazinePdfViewArrow direction="next" />}
+              beforeChange={(prevSlide, nextSlide) => {
+                // react-slick can report a stray negative target while totalPages is
+                // transiently 0 (file swap in progress, see the reset effect above) - it
+                // never fires afterChange for that transition, so acting on it would leave
+                // currentSlide stuck at an invalid negative value
+                if (nextSlide < 0) {
+                  return;
+                }
 
-          <div
-            className="magazine-pdf-view__viewport-sentinel"
-            aria-hidden
-            ref={sentinelRef}
-          />
-
-          <Document
-            file={filePath}
-            // eslint-disable-next-line react/jsx-no-bind
-            onLoadSuccess={({
-              numPages,
-            }) => {
-              setTotalPages(numPages);
-              setIsPdfReady(true);
-            }}
-            loading={null}
-            onLoadProgress={({
-              loaded,
-              total,
-            }) => setLoadProgress({
-              loaded,
-              total,
-            })}
-          >
-            <div
-              className="magazine-pdf-view__slider-wrapper"
-              style={{
-                width: sliderWidth || undefined,
+                setTransitionFromSlide(prevSlide);
+                setCurrentSlide(nextSlide);
               }}
+              afterChange={() => setTransitionFromSlide(null)}
             >
-              <Slider
-                className="magazine-pdf-view__slider"
-                dots={false}
-                infinite={false}
-                slidesToShow={slidesToShow}
-                slidesToScroll={currentSlide === 0 ? 1 : slidesToShow}
-                prevArrow={<MagazinePdfViewArrow direction="prev" />}
-                nextArrow={<MagazinePdfViewArrow direction="next" />}
-                beforeChange={(prevSlide, nextSlide) => {
-                  // react-slick can report a stray negative target while totalPages is
-                  // transiently 0 (file swap in progress, see the reset effect above) - it
-                  // never fires afterChange for that transition, so acting on it would leave
-                  // currentSlide stuck at an invalid negative value
-                  if (nextSlide < 0) {
-                    return;
-                  }
-
-                  setTransitionFromSlide(prevSlide);
-                  setCurrentSlide(nextSlide);
-                }}
-                afterChange={() => setTransitionFromSlide(null)}
-              >
-                {Array.from({
-                  length: totalPages,
-                }, (_, index) => (
-                  <div key={index}>
-                    {(Math.abs(index - currentSlide) <= PAGE_RENDER_BUFFER
+              {Array.from({
+                length: totalPages,
+              }, (_, index) => (
+                <div key={index}>
+                  {(Math.abs(index - currentSlide) <= PAGE_RENDER_BUFFER
                     || (transitionFromSlide !== null
                     && Math.abs(index - transitionFromSlide) <= PAGE_RENDER_BUFFER))
                     && (
@@ -267,29 +269,28 @@ export function MagazinePdfView() {
                         renderAnnotationLayer={false}
                       />
                     )}
-                  </div>
-                ))}
-              </Slider>
-            </div>
-          </Document>
-
-          <div
-            className="magazine-pdf-view__toolbar"
-            style={{
-              width: sliderWidth || undefined,
-            }}
-          >
-            <MagazinePdfCounter
-              currentSlide={currentSlide}
-              totalPages={totalPages}
-              slidesToShow={slidesToShow}
-            />
-
-            <MagazinePdfFullscreenButton targetId={VIEW_ELEMENT_ID} />
+                </div>
+              ))}
+            </Slider>
           </div>
+        </Document>
+
+        <div
+          className="magazine-pdf-view__toolbar"
+          style={{
+            width: sliderWidth || undefined,
+          }}
+        >
+          <MagazinePdfCounter
+            currentSlide={currentSlide}
+            totalPages={totalPages}
+            slidesToShow={slidesToShow}
+          />
+
+          <MagazinePdfFullscreenButton targetId={VIEW_ELEMENT_ID} />
         </div>
       </div>
-    </>
+    </div>
   );
 
   function replaceVersionQuery(versionId: MagazinePdfVersionId) {
@@ -303,11 +304,15 @@ export function MagazinePdfView() {
       nextQuery.version = versionId;
     }
 
-    router.replace({
-      pathname: router.pathname,
-      query: nextQuery,
-    }, undefined, {
-      shallow: true,
-    });
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: nextQuery,
+      },
+      undefined,
+      {
+        shallow: true,
+      },
+    );
   }
 }

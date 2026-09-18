@@ -24,11 +24,19 @@ export const MAGAZINE_PDF_VERSIONS: MagazinePdfVersion[] = [
 
 export const DEFAULT_MAGAZINE_PDF_VERSION_ID: MagazinePdfVersionId = `full`;
 
-export function getMagazinePdfVersion(versionId: MagazinePdfVersionId) {
+export function getMagazinePdfVersion({
+  versionId,
+}: {
+  versionId: MagazinePdfVersionId;
+}) {
   return MAGAZINE_PDF_VERSIONS.find((version) => version.id === versionId)!;
 }
 
-export function resolveMagazinePdfVersionIdFromQuery(rawValue: string | string[] | undefined) {
+export function resolveMagazinePdfVersionIdFromQuery({
+  rawValue,
+}: {
+  rawValue: string | string[] | undefined;
+}) {
   if (rawValue === `teaser`) {
     return {
       versionId: `teaser` as const,
