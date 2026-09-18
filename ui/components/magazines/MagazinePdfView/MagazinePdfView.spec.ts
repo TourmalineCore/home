@@ -393,7 +393,7 @@ async function redirectsInvalidVersionParamTests({
   page: Page;
   goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
 }) {
-  await goToComponentsPage(`${TEST_ID}?version=какая-то-ерунда`);
+  await goToComponentsPage(`${TEST_ID}?version=notValidVersion`);
 
   await expect(page.getByTestId(`magazine-pdf-version-switcher-trigger`))
     .toHaveText(`Полная версия · 40 стр.`);

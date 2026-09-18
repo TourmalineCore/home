@@ -45,12 +45,12 @@ describe(`resolveMagazinePdfVersionIdFromQuery`, () => {
   });
 
   test(`
-    GIVEN version query param = 'какая-то-ерунда'
+    GIVEN version query param = 'notValidValue'
     WHEN resolveMagazinePdfVersionIdFromQuery is called with this value
     THEN it resolves to the full (default) version and reports it as invalid
     `, () => {
     expect(resolveMagazinePdfVersionIdFromQuery({
-      rawValue: `какая-то-ерунда`,
+      rawValue: `notValidValue`,
     }))
       .toEqual({
         versionId: `full`,
