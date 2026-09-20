@@ -2,9 +2,11 @@
   --header-height: 58px;
   --wrapper-padding-vertical: 34px;
 
-  // Strip reserved for the arrows so they sit beside the pdf, not on top of it. Must stay >=
-  // their footprint (12px offset + 44px width), or they overlap a width-constrained spread
-  --arrow-space: 34px;
+  // Strip reserved for the arrows so they sit beside the pdf, not on top of it. Wherever they
+  // are shown (@include tablet below) it must stay >= their footprint (12px offset + 44px
+  // width), or they overlap a width-constrained spread. Below that they are hidden and the pages
+  // take the full width, leaving just enough not to touch the screen edges
+  --arrow-space: 8px;
 
   &__wrapper {
     position: relative;
@@ -16,9 +18,13 @@
     min-height: 500px;
     background-color: $color-grey-800-redesign;
 
+    // Fullscreen has no sticky site header to keep clear of, so the padding shrinks to the gap
+    // the toolbar already uses and the pages grow into what's freed. Set here rather than on
+    // --wrapper-padding-vertical, which the breakpoints further down would override
     .magazine-pdf-view--fullscreen &,
     .magazine-pdf-view:fullscreen & {
       min-height: 100%;
+      padding-block: 16px;
     }
   }
 
@@ -70,6 +76,13 @@
     align-items: center;
     justify-content: space-between;
     margin-top: 16px;
+
+    // Back to a round 16px, so every fullscreen gap is the same FULLSCREEN_GAP the pages are
+    // sized against in MagazinePdfView.tsx
+    .magazine-pdf-view--fullscreen &,
+    .magazine-pdf-view:fullscreen & {
+      margin-top: 16px;
+    }
 
     @include tablet-xl {
       margin-top: 16.6px;

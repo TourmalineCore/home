@@ -57,6 +57,10 @@ const PAGE_RENDER_BUFFER = 1;
 // mirroring &__header/&__toolbar in MagazinePdfView.scss
 const CONTROLS_ROW_HEIGHT = 32;
 
+// The gap above the pages, between them and the toolbar, and below it, mirroring the fullscreen
+// rules of &__wrapper/&__toolbar in MagazinePdfView.scss
+const FULLSCREEN_GAP = 16;
+
 export function MagazinePdfView() {
   const router = useRouter();
 
@@ -93,8 +97,11 @@ export function MagazinePdfView() {
   const sliderRef = useRef<Slider>(null);
   const sliderWrapperRef = useRef<HTMLDivElement>(null);
 
+  // One instance, shared with the button below: where the Fullscreen API is missing, useFullscreen
+  // stands in for it with a css class and reports that through its own state only
   const {
     isFullscreen,
+    toggleFullscreen,
   } = useFullscreen({
     targetId: VIEW_ELEMENT_ID,
     fallbackClassName: `magazine-pdf-view--fullscreen`,
@@ -105,7 +112,6 @@ export function MagazinePdfView() {
   } = useDeviceSize();
 
   const slidesToShow = wrapperWidth >= Breakpoint.TABLET ? 2 : 1;
-  const isTabletXl = wrapperWidth >= Breakpoint.TABLET_XL;
 
   useEffect(() => {
     const wrapperElement = wrapperRef.current;
@@ -156,15 +162,12 @@ export function MagazinePdfView() {
   }, [filePath]);
 
   // Not fullscreen: unchanged, sentinel-derived ceiling (roughly one screenful, leaving room for
-  // the sticky site header). Fullscreen: there's no sticky header competing for space at all, so
-  // the only thing to reserve is the header/toolbar rows and the wrapper's own padding, all
-  // actually inside this same box - mirrors &__header/&__toolbar's row margin and &__wrapper's
-  // --wrapper-padding-vertical in MagazinePdfView.scss
-  const controlsRowMargin = 16;
-  const wrapperPaddingVertical = isTabletXl ? 44 : 34;
-  const controlsOverhead = 2 * (CONTROLS_ROW_HEIGHT + controlsRowMargin + wrapperPaddingVertical);
+  // the sticky site header). Fullscreen: the viewer owns the whole screen, the version switcher
+  // steps aside and no sticky header competes for space either, so the pages take everything the
+  // toolbar and the three equal gaps around it leave over
+  const fullscreenOverhead = CONTROLS_ROW_HEIGHT + 3 * FULLSCREEN_GAP;
   const heightCeiling = isFullscreen
-    ? Math.max(deviceHeight - controlsOverhead, 0)
+    ? Math.max(deviceHeight - fullscreenOverhead, 0)
     : maxPageHeight;
 
   // wrapperWidth/heightCeiling are still 0 before the observers' first callback, skip sizing off an empty box
@@ -207,18 +210,21 @@ export function MagazinePdfView() {
           </div>
         )}
 
-        <div
-          className="magazine-pdf-view__header"
-          style={{
-            width: sliderWidth || undefined,
-          }}
-        >
-          <MagazinePdfVersionSwitcher
-            selectedVersionId={selectedVersionId}
-            // eslint-disable-next-line react/jsx-no-bind
-            onChange={replaceVersionQuery}
-          />
-        </div>
+        {/* Fullscreen is for reading one version, so the switcher gives its room to the pages */}
+        {!isFullscreen && (
+          <div
+            className="magazine-pdf-view__header"
+            style={{
+              width: sliderWidth || undefined,
+            }}
+          >
+            <MagazinePdfVersionSwitcher
+              selectedVersionId={selectedVersionId}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={replaceVersionQuery}
+            />
+          </div>
+        )}
 
         <div
           className="magazine-pdf-view__viewport-sentinel"
@@ -340,7 +346,11 @@ export function MagazinePdfView() {
             slidesToShow={slidesToShow}
           />
 
-          <MagazinePdfFullscreenButton targetId={VIEW_ELEMENT_ID} />
+          <MagazinePdfFullscreenButton
+            targetId={VIEW_ELEMENT_ID}
+            isFullscreen={isFullscreen}
+            onClick={toggleFullscreen}
+          />
         </div>
       </div>
     </FocusLock>
