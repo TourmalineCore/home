@@ -82,9 +82,14 @@ test.describe(`MagazinePdfViewScreenshotTests`, () => {
 
 test.describe(`MagazinePdfViewTests`, () => {
   test.beforeEach(async ({
+    page,
     goToComponentsPage,
   }) => {
     await goToComponentsPage(TEST_ID);
+
+    // The arrows and the slider appear only once the pdf is parsed, long after the page
+    // itself goes quiet
+    await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
   });
 
   test(
