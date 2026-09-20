@@ -51,6 +51,15 @@
     pointer-events: none;
   }
 
+  // The magazine takes focus in fullscreen and for the arrow keys, so it needs a focus ring of
+  // its own. Muted rather than the browser's stark default, which would pull the eye off the
+  // page - it sits on the viewer's own background, against which it still keeps a 4.9:1 contrast
+  &__slider-wrapper:focus-visible {
+    outline: 2px solid $color-white-alpha-200;
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
   &__slider {
     // Overrides slick.css's `position: relative` so the arrows position against `&__wrapper`
     // (the full viewer) instead of against the slider, which is only as wide as the pages

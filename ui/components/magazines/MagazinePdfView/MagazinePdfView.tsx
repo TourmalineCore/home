@@ -7,6 +7,7 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
+import FocusLock from 'react-focus-lock';
 import { Document, Page, pdfjs } from 'react-pdf';
 import Slider from 'react-slick';
 import { Breakpoint } from '../../../common/enums';
@@ -89,6 +90,8 @@ export function MagazinePdfView() {
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const sliderRef = useRef<Slider>(null);
+  const sliderWrapperRef = useRef<HTMLDivElement>(null);
 
   const {
     isFullscreen,
@@ -175,10 +178,24 @@ export function MagazinePdfView() {
     : `Загрузка журнала...`;
 
   return (
-    <div
-      id={VIEW_ELEMENT_ID}
+    // Fullscreen is a reading mode: focus moves onto the magazine, stays inside the viewer while
+    // the rest of the page is hidden behind it, and returns to the button on exit, as in a modal
+    <FocusLock
       className="magazine-pdf-view"
-      data-testid={VIEW_ELEMENT_ID}
+      lockProps={{
+        id: VIEW_ELEMENT_ID,
+        'data-testid': VIEW_ELEMENT_ID,
+      }}
+      disabled={!isFullscreen}
+      onActivation={() => sliderWrapperRef.current?.focus()}
+      // Returns focus to the button that opened fullscreen. Deferred by hand, since a lock
+      // toggled via `disabled` would otherwise return it mid-render and React would undo that -
+      // see "Unmounting and focus management" in react-focus-lock's README
+      returnFocus={(originalElement) => {
+        setTimeout(() => (originalElement as HTMLElement).focus());
+
+        return false;
+      }}
     >
       <div
         className="magazine-pdf-view__wrapper"
@@ -228,14 +245,34 @@ export function MagazinePdfView() {
           })}
           externalLinkTarget="_blank"
         >
+          {/* Focusable, so that the magazine itself can take focus in fullscreen and the arrow
+          keys turn its pages */}
+          {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
           <div
             className="magazine-pdf-view__slider-wrapper"
+            data-testid="magazine-pdf-view-slider-wrapper"
+            ref={sliderWrapperRef}
+            role="region"
+            aria-label="Журнал"
+            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+            tabIndex={0}
             style={{
               width: sliderWidth || undefined,
             }}
+            onKeyDown={(event) => {
+              if (event.key === `ArrowLeft`) {
+                sliderRef.current?.slickPrev();
+              } else if (event.key === `ArrowRight`) {
+                sliderRef.current?.slickNext();
+              }
+            }}
           >
             <Slider
+              ref={sliderRef}
               className="magazine-pdf-view__slider"
+              // Its own arrow keys handler sits on the inner list, which can't take focus, so
+              // onKeyDown above stands in for it
+              accessibility={false}
               dots={false}
               infinite={false}
               slidesToShow={slidesToShow}
@@ -293,7 +330,7 @@ export function MagazinePdfView() {
           <MagazinePdfFullscreenButton targetId={VIEW_ELEMENT_ID} />
         </div>
       </div>
-    </div>
+    </FocusLock>
   );
 
   function replaceVersionQuery(versionId: MagazinePdfVersionId) {

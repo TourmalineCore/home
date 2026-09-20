@@ -113,6 +113,15 @@ test.describe(`MagazinePdfViewTests`, () => {
     `,
     fullScreenTests,
   );
+
+  test(
+    `
+    GIVEN rendering MagazinePdfView
+    WHEN user enters fullscreen, turns a page with the arrow key and then leaves fullscreen
+    THEN the magazine takes focus on entering, the page turns, and focus returns to the fullscreen button on leaving
+    `,
+    fullscreenFocusTests,
+  );
 });
 
 test.describe(`MagazinePdfVersionSwitcherTests`, () => {
@@ -295,6 +304,38 @@ async function fullScreenTests({
 
   await expect(fullscreenButton)
     .toHaveText(`На весь экран`);
+}
+
+async function fullscreenFocusTests({
+  page,
+}: {
+  page: Page;
+}) {
+  await stubFullscreenApi(page);
+
+  const fullscreenButton = page.getByTestId(`magazine-pdf-fullscreen-button`);
+  const magazine = page.getByTestId(`magazine-pdf-view-slider-wrapper`);
+  const counter = page.getByTestId(`magazine-pdf-counter`);
+
+  await fullscreenButton.click();
+  await setFullscreenElement(page, ComponentName.MAGAZINE_PDF_VIEW);
+
+  await expect(magazine)
+    .toBeFocused();
+
+  await expect(counter)
+    .toHaveText(/^1.2 \//);
+
+  await page.keyboard.press(`ArrowRight`);
+
+  await expect(counter)
+    .toHaveText(/^2.3 \//);
+
+  // Stands in for Esc or the browser's own UI, which only report the exit via fullscreenchange
+  await setFullscreenElement(page, null);
+
+  await expect(fullscreenButton)
+    .toBeFocused();
 }
 
 function getFullscreenCalls(page: Page) {
