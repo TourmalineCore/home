@@ -90,10 +90,10 @@ test.describe(`MagazinePdfViewTests`, () => {
   test(
     `
     GIVEN rendering MagazinePdfView
-    WHEN its arrows are rendered
-    THEN they have correct aria-labels
+    WHEN its arrows are rendered on the first spread
+    THEN they have correct aria-labels, and only the prev one is aria-disabled
     `,
-    magazinePdfViewArrowAriaLabelTests,
+    magazinePdfViewArrowAriaTests,
   );
 
   test(
@@ -121,6 +121,15 @@ test.describe(`MagazinePdfViewTests`, () => {
     THEN the magazine takes focus on entering, the page turns, and focus returns to the fullscreen button on leaving
     `,
     fullscreenFocusTests,
+  );
+
+  test(
+    `
+    GIVEN rendering MagazinePdfView
+    WHEN user moves through it with Tab
+    THEN focus follows the on-screen order: switcher, prev arrow, magazine, next arrow, fullscreen button
+    `,
+    tabOrderTests,
   );
 });
 
@@ -216,16 +225,25 @@ test.describe(`MagazinePdfVersionSwitcherTests`, () => {
   );
 });
 
-async function magazinePdfViewArrowAriaLabelTests({
+async function magazinePdfViewArrowAriaTests({
   page,
 }: {
   page: Page;
 }) {
-  await expect(page.getByTestId(`magazine-pdf-view-next-arrow`))
+  const nextArrow = page.getByTestId(`magazine-pdf-view-next-arrow`);
+  const prevArrow = page.getByTestId(`magazine-pdf-view-prev-arrow`);
+
+  await expect(nextArrow)
     .toHaveAttribute(`aria-label`, `Следующий разворот`);
 
-  await expect(page.getByTestId(`magazine-pdf-view-prev-arrow`))
+  await expect(nextArrow)
+    .toHaveAttribute(`aria-disabled`, `false`);
+
+  await expect(prevArrow)
     .toHaveAttribute(`aria-label`, `Предыдущий разворот`);
+
+  await expect(prevArrow)
+    .toHaveAttribute(`aria-disabled`, `true`);
 }
 
 async function counterOfPagesTests({
@@ -335,6 +353,27 @@ async function fullscreenFocusTests({
   await setFullscreenElement(page, null);
 
   await expect(fullscreenButton)
+    .toBeFocused();
+}
+
+async function tabOrderTests({
+  page,
+}: {
+  page: Page;
+}) {
+  await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
+    .focus();
+
+  await expectTabMovesTo(page, `magazine-pdf-view-prev-arrow`);
+  await expectTabMovesTo(page, `magazine-pdf-view-slider-wrapper`);
+  await expectTabMovesTo(page, `magazine-pdf-view-next-arrow`);
+  await expectTabMovesTo(page, `magazine-pdf-fullscreen-button`);
+}
+
+async function expectTabMovesTo(page: Page, testId: string) {
+  await page.keyboard.press(`Tab`);
+
+  await expect(page.getByTestId(testId))
     .toBeFocused();
 }
 

@@ -4,21 +4,26 @@ import IconChevronRight from '../../../../../icons/icon-chevron-right.svg';
 
 export function MagazinePdfViewArrow({
   direction,
-  className,
+  isDisabled,
   onClick,
 }: {
   direction: 'prev' | 'next';
-  className?: string;
-  onClick?: () => void;
+  isDisabled: boolean;
+  onClick: () => void;
 }) {
   const Icon = direction === `prev` ? IconChevronLeft : IconChevronRight;
 
   return (
     <button
       type="button"
-      className={clsx(`magazine-pdf-view__arrow-button`, className)}
+      // Rendered outside the slider, but keeps slick's classes so its existing styles still apply
+      className={clsx(`magazine-pdf-view__arrow-button slick-arrow slick-${direction}`, {
+        'slick-disabled': isDisabled,
+      })}
       data-testid={`magazine-pdf-view-${direction}-arrow`}
       onClick={onClick}
+      // Not `disabled`, which would drop focus once the user pages to the last spread
+      aria-disabled={isDisabled}
       aria-label={direction === `prev` ? `Предыдущий разворот` : `Следующий разворот`}
     >
       <Icon

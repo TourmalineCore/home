@@ -245,6 +245,13 @@ export function MagazinePdfView() {
           })}
           externalLinkTarget="_blank"
         >
+          {/* Outside the slider so the tab order follows the screen */}
+          <MagazinePdfViewArrow
+            direction="prev"
+            isDisabled={currentSlide === 0}
+            onClick={() => sliderRef.current?.slickPrev()}
+          />
+
           {/* Focusable, so that the magazine itself can take focus in fullscreen and the arrow
           keys turn its pages */}
           {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
@@ -270,6 +277,7 @@ export function MagazinePdfView() {
             <Slider
               ref={sliderRef}
               className="magazine-pdf-view__slider"
+              arrows={false}
               // Its own arrow keys handler sits on the inner list, which can't take focus, so
               // onKeyDown above stands in for it
               accessibility={false}
@@ -277,8 +285,6 @@ export function MagazinePdfView() {
               infinite={false}
               slidesToShow={slidesToShow}
               slidesToScroll={currentSlide === 0 ? 1 : slidesToShow}
-              prevArrow={<MagazinePdfViewArrow direction="prev" />}
-              nextArrow={<MagazinePdfViewArrow direction="next" />}
               beforeChange={(prevSlide, nextSlide) => {
                 // react-slick can report a stray negative target while totalPages is
                 // transiently 0 (file swap in progress, see the reset effect above) - it
@@ -313,6 +319,12 @@ export function MagazinePdfView() {
               ))}
             </Slider>
           </div>
+
+          <MagazinePdfViewArrow
+            direction="next"
+            isDisabled={currentSlide >= totalPages - slidesToShow}
+            onClick={() => sliderRef.current?.slickNext()}
+          />
         </Document>
 
         <div
