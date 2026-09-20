@@ -312,7 +312,8 @@ export function MagazinePdfView() {
                         height={pageHeight || undefined}
                         devicePixelRatio={Math.min(window.devicePixelRatio, 3)}
                         renderTextLayer={false}
-                        renderAnnotationLayer
+                        // Neighbouring pages are mounted but hidden, so their links must not be tabbable
+                        renderAnnotationLayer={index >= currentSlide && index < currentSlide + slidesToShow}
                       />
                     )}
                 </div>

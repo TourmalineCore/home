@@ -131,6 +131,15 @@ test.describe(`MagazinePdfViewTests`, () => {
     `,
     tabOrderTests,
   );
+
+  test(
+    `
+    GIVEN a magazine whose first page has a link
+    WHEN user turns past that page and tabs out of the magazine
+    THEN focus skips the link on the hidden page and moves to the next arrow
+    `,
+    hiddenPageLinksAreNotTabbableTests,
+  );
 });
 
 test.describe(`MagazinePdfVersionSwitcherTests`, () => {
@@ -374,6 +383,37 @@ async function expectTabMovesTo(page: Page, testId: string) {
   await page.keyboard.press(`Tab`);
 
   await expect(page.getByTestId(testId))
+    .toBeFocused();
+}
+
+async function hiddenPageLinksAreNotTabbableTests({
+  page,
+  goToComponentsPage,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+}) {
+  // Stub instead of the real issue, whose content changes: only its first page has a link
+  await page.route(`**/*.pdf`, (route) => route.fulfill({
+    path: `./playwright-tests/fixtures/stub.pdf`,
+  }));
+  await goToComponentsPage(TEST_ID);
+
+  const magazine = page.getByTestId(`magazine-pdf-view-slider-wrapper`);
+  const nextArrow = page.getByTestId(`magazine-pdf-view-next-arrow`);
+
+  await expect(magazine.getByRole(`link`))
+    .toBeVisible();
+
+  await nextArrow.click();
+
+  await expect(page.getByTestId(`magazine-pdf-counter`))
+    .toHaveText(/^2.3 \//);
+
+  await magazine.focus();
+  await page.keyboard.press(`Tab`);
+
+  await expect(nextArrow)
     .toBeFocused();
 }
 
