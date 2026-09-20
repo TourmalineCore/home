@@ -17,6 +17,7 @@ import { MagazinePdfViewArrow } from './components/MagazinePdfViewArrow/Magazine
 import { MagazinePdfCounter } from './components/MagazinePdfCounter/MagazinePdfCounter';
 import { MagazinePdfFullscreenButton } from './components/MagazinePdfFullscreenButton/MagazinePdfFullscreenButton';
 import { MagazinePdfVersionSwitcher } from './components/MagazinePdfVersionSwitcher/MagazinePdfVersionSwitcher';
+import { getMagazinePdfSlides } from './magazinePdfSlides';
 import {
   DEFAULT_MAGAZINE_PDF_VERSION_ID,
   getMagazinePdfVersion,
@@ -48,10 +49,10 @@ pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.mjs`;
 
 const VIEW_ELEMENT_ID = `magazine-pdf-view`;
 
-// A4 page aspect ratio (width / height), used to size the spread
+// A4 page aspect ratio (width / height), used to size the pages
 const PAGE_ASPECT_RATIO = 0.7071;
 
-const PAGE_RENDER_BUFFER = 1;
+const SLIDE_RENDER_BUFFER = 1;
 
 // Height of a single control row (the version switcher trigger / counter / fullscreen button),
 // mirroring &__header/&__toolbar in MagazinePdfView.scss
@@ -111,7 +112,12 @@ export function MagazinePdfView() {
     height: deviceHeight,
   } = useDeviceSize();
 
-  const slidesToShow = wrapperWidth >= Breakpoint.TABLET ? 2 : 1;
+  const pagesPerSlide = wrapperWidth >= Breakpoint.TABLET ? 2 : 1;
+
+  const slides = getMagazinePdfSlides({
+    totalPages,
+    pagesPerSlide,
+  });
 
   useEffect(() => {
     const wrapperElement = wrapperRef.current;
@@ -172,9 +178,9 @@ export function MagazinePdfView() {
 
   // wrapperWidth/heightCeiling are still 0 before the observers' first callback, skip sizing off an empty box
   const pageHeight = wrapperWidth && heightCeiling
-    ? Math.min(heightCeiling, wrapperWidth / slidesToShow / PAGE_ASPECT_RATIO)
+    ? Math.min(heightCeiling, wrapperWidth / pagesPerSlide / PAGE_ASPECT_RATIO)
     : 0;
-  const sliderWidth = pageHeight * PAGE_ASPECT_RATIO * slidesToShow;
+  const sliderWidth = pageHeight * PAGE_ASPECT_RATIO * pagesPerSlide;
 
   const progressText = loadProgress && loadProgress.total > 0
     ? `Загрузка журнала: ${Math.round((loadProgress.loaded / loadProgress.total) * 100)}%`
@@ -289,8 +295,6 @@ export function MagazinePdfView() {
               accessibility={false}
               dots={false}
               infinite={false}
-              slidesToShow={slidesToShow}
-              slidesToScroll={currentSlide === 0 ? 1 : slidesToShow}
               beforeChange={(prevSlide, nextSlide) => {
                 // react-slick can report a stray negative target while totalPages is
                 // transiently 0 (file swap in progress, see the reset effect above) - it
@@ -305,23 +309,31 @@ export function MagazinePdfView() {
               }}
               afterChange={() => setTransitionFromSlide(null)}
             >
-              {Array.from({
-                length: totalPages,
-              }, (_, index) => (
-                <div key={index}>
-                  {(Math.abs(index - currentSlide) <= PAGE_RENDER_BUFFER
-                    || (transitionFromSlide !== null
-                    && Math.abs(index - transitionFromSlide) <= PAGE_RENDER_BUFFER))
-                    && (
-                      <Page
-                        pageNumber={index + 1}
-                        height={pageHeight || undefined}
-                        devicePixelRatio={Math.min(window.devicePixelRatio, 3)}
-                        renderTextLayer={false}
-                        // Neighbouring pages are mounted but hidden, so their links must not be tabbable
-                        renderAnnotationLayer={index >= currentSlide && index < currentSlide + slidesToShow}
-                      />
-                    )}
+              {slides.map((slidePages, slideIndex) => (
+                <div key={slidePages[0]}>
+                  <div className="magazine-pdf-view__slide">
+                    {isSlideMounted(slideIndex) && slidePages.map((pageNumber) => (
+                      <div
+                        key={pageNumber}
+                        className="magazine-pdf-view__page"
+                        // Sized here rather than left to the canvas inside it, which react-pdf
+                        // draws in the screen's physical pixels: a page with no neighbour to
+                        // share the slide with would come out devicePixelRatio times too big
+                        style={{
+                          width: `${100 / pagesPerSlide}%`,
+                        }}
+                      >
+                        <Page
+                          pageNumber={pageNumber}
+                          height={pageHeight || undefined}
+                          devicePixelRatio={Math.min(window.devicePixelRatio, 3)}
+                          renderTextLayer={false}
+                          // Neighbouring slides are mounted but hidden, so their links must not be tabbable
+                          renderAnnotationLayer={slideIndex === currentSlide}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ))}
             </Slider>
@@ -329,7 +341,7 @@ export function MagazinePdfView() {
 
           <MagazinePdfViewArrow
             direction="next"
-            isDisabled={currentSlide >= totalPages - slidesToShow}
+            isDisabled={currentSlide >= slides.length - 1}
             onClick={() => sliderRef.current?.slickNext()}
           />
         </Document>
@@ -341,9 +353,8 @@ export function MagazinePdfView() {
           }}
         >
           <MagazinePdfCounter
-            currentSlide={currentSlide}
+            pages={slides[currentSlide] || []}
             totalPages={totalPages}
-            slidesToShow={slidesToShow}
           />
 
           <MagazinePdfFullscreenButton
@@ -355,6 +366,13 @@ export function MagazinePdfView() {
       </div>
     </FocusLock>
   );
+
+  // Mounted alongside the slide on screen: the one being turned to is then already rendered by
+  // the time it arrives, as is the one being turned away from
+  function isSlideMounted(slideIndex: number) {
+    return [currentSlide, transitionFromSlide].some((slide) => slide !== null
+      && Math.abs(slideIndex - slide) <= SLIDE_RENDER_BUFFER);
+  }
 
   function replaceVersionQuery(versionId: MagazinePdfVersionId) {
     const nextQuery = {

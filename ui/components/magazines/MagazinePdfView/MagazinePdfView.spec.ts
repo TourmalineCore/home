@@ -125,7 +125,7 @@ test.describe(`MagazinePdfViewTests`, () => {
   test(
     `
     GIVEN rendering MagazinePdfView
-    WHEN its arrows are rendered on the first spread
+    WHEN its arrows are rendered on the first slide
     THEN they have correct aria-labels, and only the prev one is aria-disabled
     `,
     magazinePdfViewArrowAriaTests,
@@ -174,6 +174,43 @@ test.describe(`MagazinePdfViewTests`, () => {
     THEN focus skips the link on the hidden page and moves to the next arrow
     `,
     hiddenPageLinksAreNotTabbableTests,
+  );
+});
+
+test.describe(`MagazinePdfViewSlideTests`, () => {
+  test(
+    `
+    GIVEN a viewport wide enough to show two pages side by side
+    WHEN the reader opens the magazine and turns its first page
+    THEN that page is shown on its own, like the cover of a real one, and the ones after it in pairs
+    `,
+    showsCoverAloneThenPairsTests,
+  );
+
+  test(
+    `
+    GIVEN a viewport wide enough to show two pages side by side
+    WHEN the reader pages through to the end of the magazine
+    THEN its last page is shown on its own, like the back cover of a real one, with nowhere left to go
+    `,
+    showsLastPageAloneTests,
+  );
+});
+
+test.describe(`MagazinePdfViewSlideOnRetinaTests`, () => {
+  // Pages are drawn at the screen's own pixel density, and a page shown on its own has no
+  // neighbour to size itself against - a combination that has gone wrong before
+  test.use({
+    deviceScaleFactor: 2,
+  });
+
+  test(
+    `
+    GIVEN a screen with a higher pixel density, on a viewport wide enough for two pages
+    WHEN the reader compares the cover with a pair of pages from inside the magazine
+    THEN the page shown on its own is drawn at the very same size as the paired ones
+    `,
+    showsFirstPageAtTheSameSizeAsPairedOnesTests,
   );
 });
 
@@ -288,7 +325,7 @@ async function counterOfPagesTests({
 }) {
   const magazinePdfCounter = page.getByTestId(`magazine-pdf-counter`);
   await expect(magazinePdfCounter)
-    .toHaveText(/1.2 \/ 40/);
+    .toHaveText(/^1 \/ 40/);
 
   await page.getByTestId(`magazine-pdf-view-next-arrow`)
     .click();
@@ -304,7 +341,7 @@ async function counterOfPagesTests({
     .click();
 
   await expect(magazinePdfCounter)
-    .toHaveText(/1.2 \/ 40/);
+    .toHaveText(/^1 \/ 40/);
 }
 
 async function fullScreenTests({
@@ -377,7 +414,7 @@ async function fullscreenFocusTests({
     .toBeFocused();
 
   await expect(counter)
-    .toHaveText(/^1.2 \//);
+    .toHaveText(/^1 \//);
 
   await page.keyboard.press(`ArrowRight`);
 
@@ -664,7 +701,7 @@ async function resetsToFirstPageOnVersionSwitchTests({
     .click();
 
   await expect(counter)
-    .toHaveText(/^1.2 \/ 20/);
+    .toHaveText(/^1 \/ 20/);
 }
 
 async function switchingFromFirstPageKeepsCounterValidTests({
@@ -684,5 +721,225 @@ async function switchingFromFirstPageKeepsCounterValidTests({
     .click();
 
   await expect(page.getByTestId(`magazine-pdf-counter`))
-    .toHaveText(`1–2 / 20`);
+    .toHaveText(`1 / 20`);
+}
+
+async function showsCoverAloneThenPairsTests({
+  page,
+  goToComponentsPage,
+  setViewportSize,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
+}) {
+  await openMagazineAt({
+    page,
+    goToComponentsPage,
+    setViewportSize,
+    width: Breakpoint.DESKTOP,
+  });
+
+  await expectPagesOnScreen(page, {
+    count: 1,
+    areCentred: true,
+  });
+
+  await expect(page.getByTestId(`magazine-pdf-counter`))
+    .toHaveText(`1 / 40`);
+
+  await page.getByTestId(`magazine-pdf-view-next-arrow`)
+    .click();
+
+  await expect(page.getByTestId(`magazine-pdf-counter`))
+    .toHaveText(`2–3 / 40`);
+
+  await expectPagesOnScreen(page, {
+    count: 2,
+    areCentred: true,
+  });
+}
+
+async function showsLastPageAloneTests({
+  page,
+  goToComponentsPage,
+  setViewportSize,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
+}) {
+  // The teaser rather than the full version: same behaviour at the end of the file, half the
+  // pages to walk through to get there
+  await openMagazineAt({
+    page,
+    goToComponentsPage,
+    setViewportSize,
+    width: Breakpoint.DESKTOP,
+    path: `${TEST_ID}?version=teaser`,
+  });
+
+  await pageToTheEnd(page);
+
+  await expectPagesOnScreen(page, {
+    count: 1,
+    areCentred: true,
+  });
+
+  await expect(page.getByTestId(`magazine-pdf-counter`))
+    .toHaveText(`20 / 20`);
+
+  await expect(page.getByTestId(`magazine-pdf-view-next-arrow`))
+    .toHaveAttribute(`aria-disabled`, `true`);
+}
+
+async function showsFirstPageAtTheSameSizeAsPairedOnesTests({
+  page,
+  goToComponentsPage,
+  setViewportSize,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
+}) {
+  await openMagazineAt({
+    page,
+    goToComponentsPage,
+    setViewportSize,
+    width: Breakpoint.DESKTOP,
+  });
+
+  await expectPagesOnScreen(page, {
+    count: 1,
+    areCentred: true,
+  });
+
+  const coverSize = await readPageSizeOnScreen(page);
+
+  await page.getByTestId(`magazine-pdf-view-next-arrow`)
+    .click();
+
+  await expectPagesOnScreen(page, {
+    count: 2,
+    areCentred: true,
+  });
+
+  expect(coverSize)
+    .toEqual(await readPageSizeOnScreen(page));
+}
+
+async function openMagazineAt({
+  page,
+  goToComponentsPage,
+  setViewportSize,
+  width,
+  path = TEST_ID,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
+  width: number;
+  path?: string;
+}) {
+  // Sized before navigating, so the wrapper's ResizeObserver only ever settles on one width and
+  // the pages aren't re-measured underneath the assertions below
+  await setViewportSize({
+    width,
+    height: 900,
+  });
+
+  await goToComponentsPage(path);
+
+  await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
+}
+
+async function pageToTheEnd(page: Page) {
+  const nextArrow = page.getByTestId(`magazine-pdf-view-next-arrow`);
+
+  // Bounded so a viewer that never reaches its last page fails the assertion below instead of
+  // spinning here. The teaser is 20 pages, far fewer turns than that even one page at a time
+  for (let turn = 0; turn < 25; turn += 1) {
+    // eslint-disable-next-line no-await-in-loop
+    const hasNextSlide = await nextArrow.evaluate(
+      // The arrow marks itself once there's nowhere left to go, and the styles make it unclickable
+      (element) => !element.classList.contains(`slick-disabled`),
+    );
+
+    if (!hasNextSlide) {
+      return;
+    }
+
+    // eslint-disable-next-line no-await-in-loop
+    await nextArrow.click();
+
+    // The slider drops a turn asked for while the previous one is still animating
+    // eslint-disable-next-line no-await-in-loop
+    await page.waitForTimeout(600);
+  }
+}
+
+function expectPagesOnScreen(page: Page, expected: {
+  count: number;
+  areCentred: boolean;
+}) {
+  // Polled: the counter updates as soon as the turn starts, while the pages themselves are
+  // still sliding into place
+  return expect
+    .poll(async () => {
+      const pagesOnScreen = await readPagesOnScreen(page);
+
+      return {
+        count: pagesOnScreen.length,
+        areCentred: areCentredInViewer(pagesOnScreen),
+      };
+    })
+    .toEqual(expected);
+}
+
+async function readPageSizeOnScreen(page: Page) {
+  const [firstPage] = await readPagesOnScreen(page);
+
+  return {
+    width: Math.round(firstPage.width),
+    height: Math.round(firstPage.height),
+  };
+}
+
+// The pages on screen, as plain boxes to assert against, each carrying the centre of the
+// viewer they sit in
+function readPagesOnScreen(page: Page) {
+  return page.evaluate(() => {
+    const viewer = document.querySelector<HTMLElement>(`.magazine-pdf-view__slider-wrapper`)!;
+    const viewerRect = viewer.getBoundingClientRect();
+
+    return Array.from(viewer.querySelectorAll(`canvas`))
+      .map((canvas) => {
+        const pageRect = canvas.getBoundingClientRect();
+
+        return {
+          left: pageRect.left,
+          right: pageRect.right,
+          width: pageRect.width,
+          height: pageRect.height,
+          viewerCentre: viewerRect.left + viewerRect.width / 2,
+          // The neighbouring slides stay mounted just past the viewer's edges, so only the
+          // pages actually inside it count as being on screen
+          isOnScreen: pageRect.width > 0
+            && pageRect.left >= viewerRect.left - 1
+            && pageRect.right <= viewerRect.right + 1,
+        };
+      })
+      .filter((pageBox) => pageBox.isOnScreen);
+  });
+}
+
+function areCentredInViewer(pagesOnScreen: Awaited<ReturnType<typeof readPagesOnScreen>>) {
+  if (pagesOnScreen.length === 0) {
+    return false;
+  }
+
+  const left = Math.min(...pagesOnScreen.map((pageBox) => pageBox.left));
+  const right = Math.max(...pagesOnScreen.map((pageBox) => pageBox.right));
+
+  return Math.abs((left + right) / 2 - pagesOnScreen[0].viewerCentre) <= 2;
 }

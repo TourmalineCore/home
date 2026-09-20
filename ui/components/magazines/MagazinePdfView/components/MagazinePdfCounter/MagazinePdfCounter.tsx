@@ -1,20 +1,17 @@
 export function MagazinePdfCounter({
-  currentSlide,
+  pages,
   totalPages,
-  slidesToShow,
 }: {
-  currentSlide: number;
+  pages: number[];
   totalPages: number;
-  slidesToShow: number;
 }) {
-  // A wide viewport shows a two-page spread. Both ends clamp to the total, since an odd page
-  // count leaves the last spread half empty
-  const currentPage = Math.min(currentSlide + 1, totalPages);
-  const currentPageEnd = Math.min(currentSlide + slidesToShow, totalPages);
+  // Whatever is on screen, be it a pair of pages or the cover on its own
+  const firstPage = pages[0] || 0;
+  const lastPage = pages[pages.length - 1] || 0;
 
-  const pageLabel = currentPage === currentPageEnd
-    ? `${currentPage}`
-    : `${currentPage}–${currentPageEnd}`;
+  const pageLabel = firstPage === lastPage
+    ? `${firstPage}`
+    : `${firstPage}–${lastPage}`;
 
   return (
     <span
