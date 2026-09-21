@@ -17,20 +17,14 @@ export function ColumnWithRepositories({
       className={clsx(`column-with-repositories`, className)}
     >
       <ul className="column-with-repositories__list">
-        {repositories.map((
-          {
-            name,
-            description,
-            language,
-            link,
-          },
-          index,
-        ) => (
+        {repositories.map(({
+          name,
+          description,
+          language,
+          link,
+        }) => (
           <li
-            className={clsx(
-              `column-with-repositories__item`,
-              index > 0 && `column-with-repositories__item--hidden-on-mobile`,
-            )}
+            className="column-with-repositories__item"
             key={name}
           >
             {
