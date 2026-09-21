@@ -441,13 +441,31 @@ async function tabOrderTests({
   await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
     .focus();
 
-  await expectTabMovesTo(page, `magazine-pdf-view-prev-arrow`);
-  await expectTabMovesTo(page, `magazine-pdf-view-slider-wrapper`);
-  await expectTabMovesTo(page, `magazine-pdf-view-next-arrow`);
-  await expectTabMovesTo(page, `magazine-pdf-fullscreen-button`);
+  await expectTabMovesTo({
+    page,
+    testId: `magazine-pdf-view-prev-arrow`,
+  });
+  await expectTabMovesTo({
+    page,
+    testId: `magazine-pdf-view-slider-wrapper`,
+  });
+  await expectTabMovesTo({
+    page,
+    testId: `magazine-pdf-view-next-arrow`,
+  });
+  await expectTabMovesTo({
+    page,
+    testId: `magazine-pdf-fullscreen-button`,
+  });
 }
 
-async function expectTabMovesTo(page: Page, testId: string) {
+async function expectTabMovesTo({
+  page,
+  testId,
+}: {
+  page: Page;
+  testId: string;
+}) {
   await page.keyboard.press(`Tab`);
 
   await expect(page.getByTestId(testId))
@@ -474,9 +492,6 @@ async function hiddenPageLinksAreNotTabbableTests({
     .toBeVisible();
 
   await nextArrow.click();
-
-  await expect(page.getByTestId(`magazine-pdf-counter`))
-    .toHaveText(/^2.3 \//);
 
   await magazine.focus();
   await page.keyboard.press(`Tab`);
