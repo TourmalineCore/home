@@ -9,6 +9,17 @@ import { Breakpoint, ComponentName } from '../../../common/enums';
 
 const TEST_ID = ComponentName.MAGAZINE_PDF_VIEW;
 
+// The same tablet held one way and then the other: upright there's room for a single page at a
+// time, landscape for two side by side
+const TABLET_UPRIGHT = {
+  width: Breakpoint.TABLET,
+  height: 1024,
+};
+const TABLET_LANDSCAPE = {
+  width: Breakpoint.TABLET_XL,
+  height: 768,
+};
+
 test.describe(`MagazinePdfViewScreenshotTests`, () => {
   test.beforeEach(async ({
     page,
@@ -199,6 +210,24 @@ test.describe(`MagazinePdfViewSlideTests`, () => {
     THEN its last page is shown on its own, like the back cover of a real one, with nowhere left to go
     `,
     showsLastPageAloneTests,
+  );
+
+  test(
+    `
+    GIVEN a tablet held landscape, with the reader a few pages into the magazine
+    WHEN they turn it upright, leaving no room for two pages side by side
+    THEN the first page of the spread they were reading stays on screen, now on its own
+    `,
+    keepsFirstPageOfSpreadOnRotatingUprightTests,
+  );
+
+  test(
+    `
+    GIVEN a tablet held upright, with the reader past the middle of the magazine
+    WHEN they turn it landscape, where the pages they've read take up fewer slides
+    THEN the page they were reading stays on screen, rather than the end of the magazine
+    `,
+    keepsPagePastTheMiddleOnRotatingLandscapeTests,
   );
 });
 
@@ -848,24 +877,96 @@ async function showsFirstPageAtTheSameSizeAsPairedOnesTests({
     .toEqual(await readPageSizeOnScreen(page));
 }
 
+async function keepsFirstPageOfSpreadOnRotatingUprightTests({
+  page,
+  goToComponentsPage,
+  setViewportSize,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
+}) {
+  await openMagazineAt({
+    page,
+    goToComponentsPage,
+    setViewportSize,
+    ...TABLET_LANDSCAPE,
+  });
+
+  // Past the cover and the pair after it
+  await turnPages(page, 2);
+
+  await expect(page.getByTestId(`magazine-pdf-counter`))
+    .toHaveText(`4–5 / 40`);
+
+  await setViewportSize(TABLET_UPRIGHT);
+
+  await expectPageNumbersOnScreen(page, [4]);
+}
+
+async function keepsPagePastTheMiddleOnRotatingLandscapeTests({
+  page,
+  goToComponentsPage,
+  setViewportSize,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
+}) {
+  // The teaser rather than the full version: same behaviour past the middle, half the pages to
+  // walk through to get there
+  await openMagazineAt({
+    page,
+    goToComponentsPage,
+    setViewportSize,
+    ...TABLET_UPRIGHT,
+    path: `${TEST_ID}?version=teaser`,
+  });
+
+  // Past the middle: one page at a time, that's further along than the last of the paired slides
+  await turnPages(page, 11);
+
+  await expect(page.getByTestId(`magazine-pdf-counter`))
+    .toHaveText(`12 / 20`);
+
+  await setViewportSize(TABLET_LANDSCAPE);
+
+  await expectPageNumbersOnScreen(page, [12, 13]);
+}
+
+async function turnPages(page: Page, turns: number) {
+  const nextArrow = page.getByTestId(`magazine-pdf-view-next-arrow`);
+
+  for (let turn = 0; turn < turns; turn += 1) {
+    // eslint-disable-next-line no-await-in-loop
+    await nextArrow.click();
+
+    // The slider drops a turn asked for while the previous one is still animating
+    // eslint-disable-next-line no-await-in-loop
+    await page.waitForTimeout(600);
+  }
+}
+
 async function openMagazineAt({
   page,
   goToComponentsPage,
   setViewportSize,
   width,
+  height = 900,
   path = TEST_ID,
 }: {
   page: Page;
   goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
   setViewportSize: CustomTestFixtures[`setViewportSize`];
   width: number;
+  height?: number;
   path?: string;
 }) {
   // Sized before navigating, so the wrapper's ResizeObserver only ever settles on one width and
   // the pages aren't re-measured underneath the assertions below
   await setViewportSize({
     width,
-    height: 900,
+    height,
   });
 
   await goToComponentsPage(path);
@@ -925,6 +1026,18 @@ async function readPageSizeOnScreen(page: Page) {
   };
 }
 
+// Which pages of the pdf are the ones on screen, in the order they're laid out in
+function expectPageNumbersOnScreen(page: Page, expected: number[]) {
+  // Polled, as in expectPagesOnScreen above
+  return expect
+    .poll(async () => {
+      const pagesOnScreen = await readPagesOnScreen(page);
+
+      return pagesOnScreen.map((pageBox) => pageBox.pageNumber);
+    })
+    .toEqual(expected);
+}
+
 // The pages on screen, as plain boxes to assert against, each carrying the centre of the
 // viewer they sit in
 function readPagesOnScreen(page: Page) {
@@ -937,6 +1050,8 @@ function readPagesOnScreen(page: Page) {
         const pageRect = canvas.getBoundingClientRect();
 
         return {
+          pageNumber: Number(canvas.closest(`[data-page-number]`)
+            ?.getAttribute(`data-page-number`)),
           left: pageRect.left,
           right: pageRect.right,
           width: pageRect.width,

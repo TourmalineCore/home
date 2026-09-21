@@ -79,7 +79,9 @@ export function MagazinePdfView() {
   });
 
   const [totalPages, setTotalPages] = useState(0);
-  const [currentSlide, setCurrentSlide] = useState(0);
+  // The page being read, rather than the slide showing it: a slide holds one page or two
+  // depending on the viewport, so the same index means another page once that changes
+  const [currentPage, setCurrentPage] = useState(1);
   const [transitionFromSlide, setTransitionFromSlide] = useState<number | null>(null);
   const [wrapperWidth, setWrapperWidth] = useState(0);
   const [maxPageHeight, setMaxPageHeight] = useState(0);
@@ -119,6 +121,12 @@ export function MagazinePdfView() {
     pagesPerSlide,
   });
 
+  // The slide that page ended up on
+  const currentSlide = Math.max(
+    slides.findIndex((slidePages) => slidePages.includes(currentPage)),
+    0,
+  );
+
   useEffect(() => {
     const wrapperElement = wrapperRef.current;
     const sentinelElement = sentinelRef.current;
@@ -154,10 +162,10 @@ export function MagazinePdfView() {
   }, [isVersionQueryInvalid]);
 
   // Document's onLoadSuccess below will set totalPages/isPdfReady for the new file once it's
-  // loaded, but currentSlide is otherwise untouched by a file swap - without this the slider
+  // loaded, but currentPage is otherwise untouched by a file swap - without this the slider
   // would open the new file already scrolled to wherever the previous one was left
   useEffect(() => {
-    setCurrentSlide(0);
+    setCurrentPage(1);
     setTransitionFromSlide(null);
     setTotalPages(0);
     setIsPdfReady(false);
@@ -286,7 +294,12 @@ export function MagazinePdfView() {
               }
             }}
           >
+            {/* Keyed by the layout: a slider kept across a re-deal holds on to a slide index
+            that now points at another page, or past the last slide, which it then clamps to the
+            end of the magazine. A new one starts afresh, on the page being read */}
             <Slider
+              key={pagesPerSlide}
+              initialSlide={currentSlide}
               ref={sliderRef}
               className="magazine-pdf-view__slider"
               arrows={false}
@@ -296,16 +309,18 @@ export function MagazinePdfView() {
               dots={false}
               infinite={false}
               beforeChange={(prevSlide, nextSlide) => {
-                // react-slick can report a stray negative target while totalPages is
-                // transiently 0 (file swap in progress, see the reset effect above) - it
-                // never fires afterChange for that transition, so acting on it would leave
-                // currentSlide stuck at an invalid negative value
-                if (nextSlide < 0) {
+                // The slider can report a target of its own with no slide behind it while
+                // totalPages is transiently 0 (file swap in progress, see the reset effect
+                // above), and never an afterChange to go with it - following it would leave
+                // the reader on no page at all
+                const nextPage = slides[nextSlide]?.[0];
+
+                if (!nextPage) {
                   return;
                 }
 
                 setTransitionFromSlide(prevSlide);
-                setCurrentSlide(nextSlide);
+                setCurrentPage(nextPage);
               }}
               afterChange={() => setTransitionFromSlide(null)}
             >
