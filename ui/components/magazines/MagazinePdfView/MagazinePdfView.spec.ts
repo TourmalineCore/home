@@ -82,18 +82,23 @@ test.describe(`MagazinePdfViewScreenshotTests`, () => {
 
 test.describe(`MagazinePdfViewTests`, () => {
   test.beforeEach(async ({
+    page,
     goToComponentsPage,
   }) => {
     await goToComponentsPage(TEST_ID);
+
+    // The arrows and the slider appear only once the pdf is parsed, long after the page
+    // itself goes quiet
+    await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
   });
 
   test(
     `
     GIVEN rendering MagazinePdfView
-    WHEN its arrows are rendered
-    THEN they have correct aria-labels
+    WHEN its arrows are rendered on the first spread
+    THEN they have correct aria-labels, and only the prev one is aria-disabled
     `,
-    magazinePdfViewArrowAriaLabelTests,
+    magazinePdfViewArrowAriaTests,
   );
 
   test(
@@ -112,6 +117,33 @@ test.describe(`MagazinePdfViewTests`, () => {
     THEN viewer is changed to fullscreen and then back to the normal view
     `,
     fullScreenTests,
+  );
+
+  test(
+    `
+    GIVEN rendering MagazinePdfView
+    WHEN user enters fullscreen, turns a page with the arrow key and then leaves fullscreen
+    THEN the magazine takes focus on entering, the page turns, and focus returns to the fullscreen button on leaving
+    `,
+    fullscreenFocusTests,
+  );
+
+  test(
+    `
+    GIVEN rendering MagazinePdfView
+    WHEN user moves through it with Tab
+    THEN focus follows the on-screen order: switcher, prev arrow, magazine, next arrow, fullscreen button
+    `,
+    tabOrderTests,
+  );
+
+  test(
+    `
+    GIVEN a magazine whose first page has a link
+    WHEN user turns past that page and tabs out of the magazine
+    THEN focus skips the link on the hidden page and moves to the next arrow
+    `,
+    hiddenPageLinksAreNotTabbableTests,
   );
 });
 
@@ -207,16 +239,25 @@ test.describe(`MagazinePdfVersionSwitcherTests`, () => {
   );
 });
 
-async function magazinePdfViewArrowAriaLabelTests({
+async function magazinePdfViewArrowAriaTests({
   page,
 }: {
   page: Page;
 }) {
-  await expect(page.getByTestId(`magazine-pdf-view-next-arrow`))
+  const nextArrow = page.getByTestId(`magazine-pdf-view-next-arrow`);
+  const prevArrow = page.getByTestId(`magazine-pdf-view-prev-arrow`);
+
+  await expect(nextArrow)
     .toHaveAttribute(`aria-label`, `Следующий разворот`);
 
-  await expect(page.getByTestId(`magazine-pdf-view-prev-arrow`))
+  await expect(nextArrow)
+    .toHaveAttribute(`aria-disabled`, `false`);
+
+  await expect(prevArrow)
     .toHaveAttribute(`aria-label`, `Предыдущий разворот`);
+
+  await expect(prevArrow)
+    .toHaveAttribute(`aria-disabled`, `true`);
 }
 
 async function counterOfPagesTests({
@@ -295,6 +336,105 @@ async function fullScreenTests({
 
   await expect(fullscreenButton)
     .toHaveText(`На весь экран`);
+}
+
+async function fullscreenFocusTests({
+  page,
+}: {
+  page: Page;
+}) {
+  await stubFullscreenApi(page);
+
+  const fullscreenButton = page.getByTestId(`magazine-pdf-fullscreen-button`);
+  const magazine = page.getByTestId(`magazine-pdf-view-slider-wrapper`);
+  const counter = page.getByTestId(`magazine-pdf-counter`);
+
+  await fullscreenButton.click();
+  await setFullscreenElement(page, ComponentName.MAGAZINE_PDF_VIEW);
+
+  await expect(magazine)
+    .toBeFocused();
+
+  await expect(counter)
+    .toHaveText(/^1.2 \//);
+
+  await page.keyboard.press(`ArrowRight`);
+
+  await expect(counter)
+    .toHaveText(/^2.3 \//);
+
+  // Stands in for Esc or the browser's own UI, which only report the exit via fullscreenchange
+  await setFullscreenElement(page, null);
+
+  await expect(fullscreenButton)
+    .toBeFocused();
+}
+
+async function tabOrderTests({
+  page,
+}: {
+  page: Page;
+}) {
+  await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
+    .focus();
+
+  await expectTabMovesTo({
+    page,
+    testId: `magazine-pdf-view-prev-arrow`,
+  });
+  await expectTabMovesTo({
+    page,
+    testId: `magazine-pdf-view-slider-wrapper`,
+  });
+  await expectTabMovesTo({
+    page,
+    testId: `magazine-pdf-view-next-arrow`,
+  });
+  await expectTabMovesTo({
+    page,
+    testId: `magazine-pdf-fullscreen-button`,
+  });
+}
+
+async function expectTabMovesTo({
+  page,
+  testId,
+}: {
+  page: Page;
+  testId: string;
+}) {
+  await page.keyboard.press(`Tab`);
+
+  await expect(page.getByTestId(testId))
+    .toBeFocused();
+}
+
+async function hiddenPageLinksAreNotTabbableTests({
+  page,
+  goToComponentsPage,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+}) {
+  // Stub instead of the real issue, whose content changes: only its first page has a link
+  await page.route(`**/*.pdf`, (route) => route.fulfill({
+    path: `./playwright-tests/fixtures/stub.pdf`,
+  }));
+  await goToComponentsPage(TEST_ID);
+
+  const magazine = page.getByTestId(`magazine-pdf-view-slider-wrapper`);
+  const nextArrow = page.getByTestId(`magazine-pdf-view-next-arrow`);
+
+  await expect(magazine.getByRole(`link`))
+    .toBeVisible();
+
+  await nextArrow.click();
+
+  await magazine.focus();
+  await page.keyboard.press(`Tab`);
+
+  await expect(nextArrow)
+    .toBeFocused();
 }
 
 function getFullscreenCalls(page: Page) {
