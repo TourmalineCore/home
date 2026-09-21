@@ -41,6 +41,41 @@ test.describe(`MagazinePdfViewScreenshotTests`, () => {
     });
   }
 
+  test.describe(`FullscreenTests`, () => {
+    for (const {
+      name,
+      breakpoint,
+      breakpointName,
+    } of BREAKPOINTS) {
+      test(name, async ({
+        page,
+        setViewportSize,
+      }) => {
+        await setViewportSize({
+          width: breakpoint,
+        });
+
+        // useFullscreen's css fallback (see its iPhone Safari branch) lays the viewer out exactly
+        // like the real Fullscreen API does, and unlike it leaves no fullscreen browser window
+        // behind for the tests that follow
+        await page.evaluate(() => {
+          Reflect.deleteProperty(Element.prototype, `requestFullscreen`);
+        });
+
+        await page.getByTestId(`magazine-pdf-fullscreen-button`)
+          .click();
+
+        await expect(page.getByTestId(TEST_ID)
+          .filter({
+            visible: true,
+          }))
+          .toHaveScreenshot(`${TEST_ID}-fullscreen-${breakpointName}.png`, {
+            mask: [page.locator(`.magazine-pdf-view__slider-wrapper`)],
+          });
+      });
+    }
+  });
+
   test.describe(`ShowVersionSwitcherOpenTests`, () => {
     const breakpoints = BREAKPOINTS.filter((breakpoint) => breakpoint.breakpoint === Breakpoint.MOBILE
       || breakpoint.breakpoint === Breakpoint.DESKTOP_XL);
@@ -209,15 +244,6 @@ test.describe(`MagazinePdfVersionSwitcherTests`, () => {
     THEN ?version is removed from the URL entirely
     `,
     switchesBackToFullTests,
-  );
-
-  test(
-    `
-    GIVEN the viewer is on a viewport where the pdf, header and toolbar together are taller than the screen
-    WHEN the user enters fullscreen
-    THEN the whole block still fits the screen (no overflow) with an equal margin top and bottom
-    `,
-    fitsFullscreenWithoutOverflowTests,
   );
 
   test(
@@ -628,73 +654,6 @@ async function switchesBackToFullTests({
 
   await expect(page)
     .toHaveURL(/\/components\/magazine-pdf-view$/);
-}
-
-async function fitsFullscreenWithoutOverflowTests({
-  page,
-  goToComponentsPage,
-  setViewportSize,
-}: {
-  page: Page;
-  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
-  setViewportSize: CustomTestFixtures[`setViewportSize`];
-}) {
-  // Set before navigating, not after: the wrapper's ResizeObserver then only ever has one
-  // size to settle on (the page's very first layout), instead of an old-to-new transition
-  // whose end we'd otherwise have to wait for with no element/attribute to assert on
-  await setViewportSize({
-    width: 1440,
-    height: 900,
-  });
-
-  await goToComponentsPage(TEST_ID);
-  await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
-
-  await page.getByTestId(`magazine-pdf-fullscreen-button`)
-    .click();
-
-  await expect
-    .poll(() => page.evaluate(() => document.fullscreenElement?.id))
-    .toBe(TEST_ID);
-
-  // Polls (Playwright's own retry mechanism, not a fixed sleep) until both the fullscreen
-  // request and the ResizeObserver-driven relayout it triggers have actually landed
-  await expect
-    .poll(async () => {
-      const {
-        viewHeight,
-        topMargin,
-        bottomMargin,
-      } = await readFullscreenGeometry(page, TEST_ID);
-
-      return viewHeight > 0
-        && bottomMargin >= 0
-        && Math.abs(topMargin - bottomMargin) <= 2;
-    })
-    .toBe(true);
-
-  const {
-    topMargin,
-  } = await readFullscreenGeometry(page, TEST_ID);
-
-  // The margin should be roughly the wrapper's own padding (44px at this breakpoint), not a
-  // leftover reservation for the sticky site header (68.2px) that doesn't exist in fullscreen
-  expect(topMargin)
-    .toBeLessThanOrEqual(50);
-}
-
-function readFullscreenGeometry(page: Page, testId: string) {
-  return page.evaluate((id) => {
-    const view = document.getElementById(id)!;
-    const header = view.querySelector(`.magazine-pdf-view__header`)!;
-    const toolbar = view.querySelector(`.magazine-pdf-view__toolbar`)!;
-
-    return {
-      viewHeight: view.getBoundingClientRect().height,
-      topMargin: header.getBoundingClientRect().top,
-      bottomMargin: view.getBoundingClientRect().height - toolbar.getBoundingClientRect().bottom,
-    };
-  }, testId);
 }
 
 async function resetsToFirstPageOnVersionSwitchTests({

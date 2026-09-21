@@ -1,20 +1,15 @@
 import IconMaximize from '../../../../../icons/icon-maximize.svg';
 import IconMinimize from '../../../../../icons/icon-minimize.svg';
-import { useFullscreen } from '../../../../../common/hooks';
 
 export function MagazinePdfFullscreenButton({
   targetId,
+  isFullscreen,
+  onClick,
 }: {
   targetId: string;
+  isFullscreen: boolean;
+  onClick: () => void;
 }) {
-  const {
-    isFullscreen,
-    toggleFullscreen,
-  } = useFullscreen({
-    targetId,
-    fallbackClassName: `magazine-pdf-view--fullscreen`,
-  });
-
   const Icon = isFullscreen ? IconMinimize : IconMaximize;
 
   return (
@@ -24,7 +19,7 @@ export function MagazinePdfFullscreenButton({
       data-testid="magazine-pdf-fullscreen-button"
       aria-controls={targetId}
       aria-label={isFullscreen ? `Свернуть журнал` : `Развернуть журнал на весь экран`}
-      onClick={toggleFullscreen}
+      onClick={onClick}
     >
       <Icon
         className="magazine-pdf-fullscreen-button__icon"
