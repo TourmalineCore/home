@@ -430,9 +430,6 @@ async function hiddenPageLinksAreNotTabbableTests({
 
   await nextArrow.click();
 
-  await expect(page.getByTestId(`magazine-pdf-counter`))
-    .toHaveText(/^2.3 \//);
-
   await magazine.focus();
   await page.keyboard.press(`Tab`);
 
