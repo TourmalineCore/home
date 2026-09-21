@@ -7,7 +7,7 @@ export function getMagazinePdfSlides({
 }: {
   totalPages: number;
   pagesPerSlide: number;
-}): number[][] {
+}) {
   const pages = Array.from({
     length: totalPages,
   }, (_, index) => index + 1);
@@ -18,7 +18,7 @@ export function getMagazinePdfSlides({
 
   const [coverPage, ...innerPages] = pages;
 
-  const slides: number[][] = coverPage ? [[coverPage]] : [];
+  const slides = coverPage ? [[coverPage]] : [];
 
   for (let pageIndex = 0; pageIndex < innerPages.length; pageIndex += 2) {
     slides.push(innerPages.slice(pageIndex, pageIndex + 2));
