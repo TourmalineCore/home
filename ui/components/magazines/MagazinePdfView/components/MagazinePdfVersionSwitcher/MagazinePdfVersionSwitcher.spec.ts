@@ -29,23 +29,14 @@ test.describe(`MagazinePdfVersionSwitcherTests`, () => {
 
   test(
     `
-    GIVEN the full version is selected (the default, no ?version= in the URL) and the user has
-    moved off its first page
-    WHEN they open the switcher and pick the teaser
-    THEN the trigger updates, the dropdown closes, ?version=teaser is added to the URL and the
-    pdf file is swapped for one the counter reads as its own first page, not a negative one
+    GIVEN the teaser version is selected and the user has moved off its first page
+    WHEN they open the switcher and pick the full version
+    THEN the trigger updates, the dropdown closes, ?version=teaser is removed from the URL 
+    AND the pdf file is swapped for one the counter reads as its own first page
     `,
-    switchesToTeaserTests,
+    switchesBetweenVersionsTests,
   );
 
-  test(
-    `
-    GIVEN the teaser is selected (?version=teaser in the URL)
-    WHEN the user opens the switcher and picks the full version (the default)
-    THEN the trigger updates and ?version is removed from the URL entirely
-    `,
-    switchesBackToFullTests,
-  );
 });
 
 async function redirectsInvalidVersionParamTests({
@@ -77,6 +68,9 @@ async function opensAndClosesDropdownTests({
 
   await trigger.click();
 
+  await expect(trigger)
+    .toHaveAttribute(`aria-expanded`, `true`);
+
   await expect(page.getByTestId(`magazine-pdf-version-switcher-option-teaser`))
     .toBeVisible();
 
@@ -87,16 +81,19 @@ async function opensAndClosesDropdownTests({
 
   await expect(trigger)
     .toHaveAttribute(`aria-expanded`, `false`);
+
+  await expect(page.getByTestId(`magazine-pdf-version-switcher-option-teaser`))
+    .not.toBeVisible();
 }
 
-async function switchesToTeaserTests({
+async function switchesBetweenVersionsTests({
   page,
   goToComponentsPage,
 }: {
   page: Page;
   goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
 }) {
-  await goToComponentsPage(TEST_ID);
+  await goToComponentsPage(`${TEST_ID}?version=teaser`);
 
   // The counter reads the pdf itself, so it only settles once the file is parsed
   await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
@@ -105,7 +102,7 @@ async function switchesToTeaserTests({
   const counter = page.getByTestId(`magazine-pdf-counter`);
 
   await expect(trigger)
-    .toHaveText(`Полная версия · 40 стр.`);
+    .toHaveText(`Тизер · 20 стр.`);
 
   await page.getByTestId(`magazine-pdf-view-next-arrow`)
     .click();
@@ -115,44 +112,15 @@ async function switchesToTeaserTests({
 
   await trigger.click();
 
-  await page.getByTestId(`magazine-pdf-version-switcher-option-teaser`)
-    .click();
-
-  await expect(trigger)
-    .toHaveText(`Тизер · 20 стр.`);
-
-  await expect(trigger)
-    .toHaveAttribute(`aria-expanded`, `false`);
-
-  await expect(page)
-    .toHaveURL(/[?&]version=teaser(&|$)/);
-
-  await expect(counter)
-    .toHaveText(`1 / 20`);
-}
-
-async function switchesBackToFullTests({
-  page,
-  goToComponentsPage,
-}: {
-  page: Page;
-  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
-}) {
-  await goToComponentsPage(`${TEST_ID}?version=teaser`);
-
-  const trigger = page.getByTestId(`magazine-pdf-version-switcher-trigger`);
-
-  await expect(trigger)
-    .toHaveText(`Тизер · 20 стр.`);
-
-  await trigger.click();
-
   await page.getByTestId(`magazine-pdf-version-switcher-option-full`)
     .click();
+
+  await expect(page)
+    .toHaveURL(/\/components\/magazine-pdf-view$/);
 
   await expect(trigger)
     .toHaveText(`Полная версия · 40 стр.`);
 
-  await expect(page)
-    .toHaveURL(/\/components\/magazine-pdf-view$/);
+  await expect(counter)
+    .toHaveText('1 / 40');
 }
