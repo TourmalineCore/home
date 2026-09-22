@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 // Necessary for the correct working of the click map and links map
 // https://yandex.ru/support/metrica/ru/behavior/click-map#iframe
 // eslint-disable-next-line no-useless-escape
-const ALLOWED_REFERER_REGEX = /^https?:\/\/([^\/]+\.)?(yourdomain\.com|webvisor\.com|metri[ck]a\.yandex\.(com|ru|by|com\.tr))\//;
+const ALLOWED_REFERER_REGEX = /^https?:\/\/([^\/]+\.)?(tourmalinecore\.com|webvisor\.com|metri[ck]a\.yandex\.(com|ru|by|com\.tr))\//;
 
 export function middleware(request: NextRequest) {
   const response = NextResponse.next();
