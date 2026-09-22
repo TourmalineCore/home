@@ -45,12 +45,6 @@ module.exports = withReactSvg({
 
           // 2. Security headers:
 
-          // Prevents the site from being opened in an <iframe> (protection against clickjacking)
-          {
-            key: 'X-Frame-Options',
-            value: "SAMEORIGIN",
-          },
-
           // Prevents MIME-sniffing (e.g., ensuring HTML is not treated as JS)
           {
             key: 'X-Content-Type-Options',
@@ -60,7 +54,7 @@ module.exports = withReactSvg({
           // Controls what data goes into the Referer header
           {
             key: 'Referrer-Policy',
-            value: "no-referrer",
+            value: "strict-origin-when-cross-origin",
           },
 
           // Block access to browser features and APIs
