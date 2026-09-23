@@ -58,7 +58,7 @@ export function initYandexMetrika({
 }
 
 // A function for detecting that a site is open inside a Yandex.Metrica iframe
-export function isYandexMetricaIframe(): boolean {
+export function isYandexMetricaIframe() {
   if (typeof window === `undefined`) return false;
 
   // If the window is not an iframe, it is a regular user
