@@ -119,12 +119,14 @@ function MyApp({
         />
         <title>Tourmaline Core</title>
       </Head>
-      <Cookie
-        acceptButtonText={cookieData.acceptButtonText}
-        rejectButtonText={cookieData.rejectButtonText}
-        bannerText={cookieData.bannerText}
-        settingsButtonText={cookieData.settingsButtonText}
-      />
+      {!isYandexIframe && (
+        <Cookie
+          acceptButtonText={cookieData.acceptButtonText}
+          rejectButtonText={cookieData.rejectButtonText}
+          bannerText={cookieData.bannerText}
+          settingsButtonText={cookieData.settingsButtonText}
+        />
+      )}
       <CookieSettingsModal
         title={cookieSettingsData.title}
         note={cookieSettingsData.note}
