@@ -15,6 +15,7 @@ const OPTION_YANDEX_METRIKA = {
   clickmap: true,
   trackLinks: true,
   accurateTrackBounce: true,
+  defer: true,
 };
 
 describe(`loadYandexMetrika`, () => {
