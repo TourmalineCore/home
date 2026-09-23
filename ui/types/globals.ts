@@ -3,6 +3,7 @@ export type OptionYM = {
   trackLinks: boolean;
   accurateTrackBounce: boolean;
   webvisor: boolean;
+  defer: boolean;
 };
 
 declare global {
