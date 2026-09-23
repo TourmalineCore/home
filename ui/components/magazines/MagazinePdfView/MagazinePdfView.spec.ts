@@ -9,6 +9,17 @@ import { Breakpoint, ComponentName } from '../../../common/enums';
 
 const TEST_ID = ComponentName.MAGAZINE_PDF_VIEW;
 
+// The same tablet held one way and then the other: upright there's room for a single page at a
+// time, landscape for two side by side
+const TABLET_UPRIGHT = {
+  width: Breakpoint.TABLET,
+  height: 1024,
+};
+const TABLET_LANDSCAPE = {
+  width: Breakpoint.TABLET_XL,
+  height: 768,
+};
+
 test.describe(`MagazinePdfViewScreenshotTests`, () => {
   test.beforeEach(async ({
     page,
@@ -75,44 +86,6 @@ test.describe(`MagazinePdfViewScreenshotTests`, () => {
       });
     }
   });
-
-  test.describe(`ShowVersionSwitcherOpenTests`, () => {
-    const breakpoints = BREAKPOINTS.filter((breakpoint) => breakpoint.breakpoint === Breakpoint.MOBILE
-      || breakpoint.breakpoint === Breakpoint.DESKTOP_XL);
-
-    for (const {
-      name,
-      breakpoint,
-      breakpointName,
-    } of breakpoints) {
-      test(name, async ({
-        page,
-        setViewportSize,
-      }) => {
-        await setViewportSize({
-          width: breakpoint,
-        });
-
-        await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
-          .click();
-
-        // `mask` won't do here: it paints an overlay with a forced top-most z-index regardless
-        // of real stacking order, so it would blank out the open dropdown too, since that visually
-        // sits on top of the pdf area it's meant to mask. Hiding the pdf at the source instead of
-        // overlaying it sidesteps that - the dropdown, a separate element, stays visible on top
-        // of whatever's left behind (the wrapper's own background)
-        await page.addStyleTag({
-          content: `.magazine-pdf-view__slider-wrapper { visibility: hidden !important; }`,
-        });
-
-        await expect(page.getByTestId(TEST_ID)
-          .filter({
-            visible: true,
-          }))
-          .toHaveScreenshot(`${TEST_ID}-switcher-open-${breakpointName}.png`);
-      });
-    }
-  });
 });
 
 test.describe(`MagazinePdfViewTests`, () => {
@@ -130,7 +103,7 @@ test.describe(`MagazinePdfViewTests`, () => {
   test(
     `
     GIVEN rendering MagazinePdfView
-    WHEN its arrows are rendered on the first spread
+    WHEN its arrows are rendered on the first slide
     THEN they have correct aria-labels, and only the prev one is aria-disabled
     `,
     magazinePdfViewArrowAriaTests,
@@ -182,86 +155,41 @@ test.describe(`MagazinePdfViewTests`, () => {
   );
 });
 
-test.describe(`MagazinePdfVersionSwitcherTests`, () => {
+test.describe(`MagazinePdfViewSlideTests`, () => {
   test(
     `
-    GIVEN the magazine page is opened with no ?version=query param
-    WHEN MagazinePdfView renders
-    THEN the version switcher trigger shows the full version as selected
+    GIVEN a viewport wide enough to show two pages side by side
+    WHEN the reader opens the magazine and turns its first page
+    THEN that page is shown on its own, like the cover of a real one, and the ones after it in pairs
     `,
-    showsFullVersionByDefaultTests,
+    showsCoverAloneThenPairsTests,
   );
 
   test(
     `
-    GIVEN the magazine page is opened with ?version=teaser
-    WHEN MagazinePdfView renders
-    THEN the version switcher trigger shows the teaser as selected
+    GIVEN a viewport wide enough to show two pages side by side
+    WHEN the reader pages through to the end of the magazine
+    THEN its last page is shown on its own, like the back cover of a real one, with nowhere left to go
     `,
-    showsTeaserFromQueryParamTests,
+    showsLastPageAloneTests,
   );
 
   test(
     `
-    GIVEN the magazine page is opened with an invalid ?version=value
-    WHEN MagazinePdfView renders
-    THEN the full version is shown and the invalid query param is stripped from the URL
+    GIVEN a tablet held landscape, with the reader a few pages into the magazine
+    WHEN they turn it upright, leaving no room for two pages side by side
+    THEN the first page of the spread they were reading stays on screen, now on its own
     `,
-    redirectsInvalidVersionParamTests,
+    keepsFirstPageOfSpreadOnRotatingUprightTests,
   );
 
   test(
     `
-    GIVEN the version switcher is closed
-    WHEN the user clicks the trigger
-    THEN the dropdown list opens showing both versions, with the current one marked selected
+    GIVEN a tablet held upright, with the reader past the middle of the magazine
+    WHEN they turn it landscape, where the pages they've read take up fewer slides
+    THEN the page they were reading stays on screen, rather than the end of the magazine
     `,
-    opensDropdownTests,
-  );
-
-  test(
-    `
-    GIVEN the version switcher dropdown is open
-    WHEN the user clicks outside of it
-    THEN the dropdown closes
-    `,
-    closesDropdownOnOutsideClickTests,
-  );
-
-  test(
-    `
-    GIVEN the full version is selected (the default, no ?version= in the URL)
-    WHEN the user opens the switcher and picks the teaser
-    THEN the trigger updates, the dropdown closes and ?version=teaser is added to the URL
-    `,
-    switchesToTeaserTests,
-  );
-
-  test(
-    `
-    GIVEN the teaser is selected (?version=teaser in the URL)
-    WHEN the user opens the switcher and picks the full version (the default)
-    THEN ?version is removed from the URL entirely
-    `,
-    switchesBackToFullTests,
-  );
-
-  test(
-    `
-    GIVEN the user has moved off the first page of the current version
-    WHEN they switch to the other version
-    THEN the actual pdf file is swapped and the counter resets to that file's own first page
-    `,
-    resetsToFirstPageOnVersionSwitchTests,
-  );
-
-  test(
-    `
-    GIVEN the user has not moved off the first page of the current version
-    WHEN they switch to the other version
-    THEN the counter shows a valid first-page reading for the new file, not a negative one
-    `,
-    switchingFromFirstPageKeepsCounterValidTests,
+    keepsPagePastTheMiddleOnRotatingLandscapeTests,
   );
 });
 
@@ -293,7 +221,7 @@ async function counterOfPagesTests({
 }) {
   const magazinePdfCounter = page.getByTestId(`magazine-pdf-counter`);
   await expect(magazinePdfCounter)
-    .toHaveText(/1.2 \/ 40/);
+    .toHaveText(/^1 \/ 40/);
 
   await page.getByTestId(`magazine-pdf-view-next-arrow`)
     .click();
@@ -309,7 +237,7 @@ async function counterOfPagesTests({
     .click();
 
   await expect(magazinePdfCounter)
-    .toHaveText(/1.2 \/ 40/);
+    .toHaveText(/^1 \/ 40/);
 }
 
 async function fullScreenTests({
@@ -317,7 +245,9 @@ async function fullScreenTests({
 }: {
   page: Page;
 }) {
-  await stubFullscreenApi(page);
+  await stubFullscreenApi({
+    page,
+  });
 
   const fullscreenButton = page.getByTestId(`magazine-pdf-fullscreen-button`);
 
@@ -331,13 +261,18 @@ async function fullScreenTests({
     .click();
 
   await expect
-    .poll(() => getFullscreenCalls(page))
+    .poll(() => getFullscreenCalls({
+      page,
+    }))
     .toEqual({
       request: 1,
       exit: 0,
     });
 
-  await setFullscreenElement(page, ComponentName.MAGAZINE_PDF_VIEW);
+  await setFullscreenElement({
+    page,
+    targetId: ComponentName.MAGAZINE_PDF_VIEW,
+  });
 
   await expect(fullscreenButton)
     .toHaveAttribute(`aria-label`, `Свернуть журнал`);
@@ -349,13 +284,18 @@ async function fullScreenTests({
     .click();
 
   await expect
-    .poll(() => getFullscreenCalls(page))
+    .poll(() => getFullscreenCalls({
+      page,
+    }))
     .toEqual({
       request: 1,
       exit: 1,
     });
 
-  await setFullscreenElement(page, null);
+  await setFullscreenElement({
+    page,
+    targetId: null,
+  });
 
   await expect(fullscreenButton)
     .toHaveAttribute(`aria-label`, `Развернуть журнал на весь экран`);
@@ -369,20 +309,25 @@ async function fullscreenFocusTests({
 }: {
   page: Page;
 }) {
-  await stubFullscreenApi(page);
+  await stubFullscreenApi({
+    page,
+  });
 
   const fullscreenButton = page.getByTestId(`magazine-pdf-fullscreen-button`);
   const magazine = page.getByTestId(`magazine-pdf-view-slider-wrapper`);
   const counter = page.getByTestId(`magazine-pdf-counter`);
 
   await fullscreenButton.click();
-  await setFullscreenElement(page, ComponentName.MAGAZINE_PDF_VIEW);
+  await setFullscreenElement({
+    page,
+    targetId: ComponentName.MAGAZINE_PDF_VIEW,
+  });
 
   await expect(magazine)
     .toBeFocused();
 
   await expect(counter)
-    .toHaveText(/^1.2 \//);
+    .toHaveText(/^1 \//);
 
   await page.keyboard.press(`ArrowRight`);
 
@@ -390,7 +335,10 @@ async function fullscreenFocusTests({
     .toHaveText(/^2.3 \//);
 
   // Stands in for Esc or the browser's own UI, which only report the exit via fullscreenchange
-  await setFullscreenElement(page, null);
+  await setFullscreenElement({
+    page,
+    targetId: null,
+  });
 
   await expect(fullscreenButton)
     .toBeFocused();
@@ -442,14 +390,15 @@ async function hiddenPageLinksAreNotTabbableTests({
   page: Page;
   goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
 }) {
-  // Stub instead of the real issue, whose content changes: only its first page has a link
-  await page.route(`**/*.pdf`, (route) => route.fulfill({
-    path: `./playwright-tests/fixtures/stub.pdf`,
-  }));
   await goToComponentsPage(TEST_ID);
 
   const magazine = page.getByTestId(`magazine-pdf-view-slider-wrapper`);
   const nextArrow = page.getByTestId(`magazine-pdf-view-next-arrow`);
+
+  await turnPages({
+    page,
+    turns: 1,
+  });
 
   await expect(magazine.getByRole(`link`))
     .toBeVisible();
@@ -458,12 +407,17 @@ async function hiddenPageLinksAreNotTabbableTests({
 
   await magazine.focus();
   await page.keyboard.press(`Tab`);
+  await page.waitForTimeout(200);
 
   await expect(nextArrow)
     .toBeFocused();
 }
 
-function getFullscreenCalls(page: Page) {
+function getFullscreenCalls({
+  page,
+}: {
+  page: Page;
+}) {
   return page.evaluate(() => (window as unknown as {
     __fullscreenCalls: {
       request: number;
@@ -472,7 +426,11 @@ function getFullscreenCalls(page: Page) {
   }).__fullscreenCalls);
 }
 
-function stubFullscreenApi(page: Page) {
+function stubFullscreenApi({
+  page,
+}: {
+  page: Page;
+}) {
   return page.evaluate(() => {
     Object.defineProperty(document, `fullscreenElement`, {
       configurable: true,
@@ -514,7 +472,13 @@ function stubFullscreenApi(page: Page) {
   });
 }
 
-function setFullscreenElement(page: Page, targetId: string | null) {
+function setFullscreenElement({
+  page,
+  targetId,
+}: {
+  page: Page;
+  targetId: string | null;
+}) {
   return page.evaluate((id) => {
     (document as unknown as {
       fullscreenElement: Element | null;
@@ -526,183 +490,267 @@ function setFullscreenElement(page: Page, targetId: string | null) {
   }, targetId);
 }
 
-async function showsFullVersionByDefaultTests({
+async function showsCoverAloneThenPairsTests({
   page,
   goToComponentsPage,
+  setViewportSize,
 }: {
   page: Page;
   goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
 }) {
-  await goToComponentsPage(TEST_ID);
+  await openMagazineAt({
+    page,
+    goToComponentsPage,
+    setViewportSize,
+    width: Breakpoint.DESKTOP,
+  });
 
-  await expect(page.getByTestId(`magazine-pdf-version-switcher-trigger`))
-    .toHaveText(`Полная версия · 40 стр.`);
-}
+  await expectPagesOnScreen({
+    page,
+    count: 1,
+  });
 
-async function showsTeaserFromQueryParamTests({
-  page,
-  goToComponentsPage,
-}: {
-  page: Page;
-  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
-}) {
-  await goToComponentsPage(`${TEST_ID}?version=teaser`);
-
-  await expect(page.getByTestId(`magazine-pdf-version-switcher-trigger`))
-    .toHaveText(`Тизер · 20 стр.`);
-}
-
-async function redirectsInvalidVersionParamTests({
-  page,
-  goToComponentsPage,
-}: {
-  page: Page;
-  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
-}) {
-  await goToComponentsPage(`${TEST_ID}?version=notValidVersion`);
-
-  await expect(page.getByTestId(`magazine-pdf-version-switcher-trigger`))
-    .toHaveText(`Полная версия · 40 стр.`);
-
-  await expect(page)
-    .toHaveURL(/\/components\/magazine-pdf-view$/);
-}
-
-async function opensDropdownTests({
-  page,
-  goToComponentsPage,
-}: {
-  page: Page;
-  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
-}) {
-  await goToComponentsPage(TEST_ID);
-
-  await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
-    .click();
-
-  await expect(page.getByTestId(`magazine-pdf-version-switcher-option-teaser`))
-    .toBeVisible();
-
-  await expect(page.getByTestId(`magazine-pdf-version-switcher-option-full`))
-    .toHaveAttribute(`aria-selected`, `true`);
-}
-
-async function closesDropdownOnOutsideClickTests({
-  page,
-  goToComponentsPage,
-}: {
-  page: Page;
-  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
-}) {
-  await goToComponentsPage(TEST_ID);
-
-  const trigger = page.getByTestId(`magazine-pdf-version-switcher-trigger`);
-
-  await trigger.click();
-
-  await expect(page.getByTestId(`magazine-pdf-version-switcher-option-teaser`))
-    .toBeVisible();
-
-  await page.mouse.click(10, 10);
-
-  await expect(trigger)
-    .toHaveAttribute(`aria-expanded`, `false`);
-}
-
-async function switchesToTeaserTests({
-  page,
-  goToComponentsPage,
-}: {
-  page: Page;
-  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
-}) {
-  await goToComponentsPage(TEST_ID);
-
-  await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
-    .click();
-
-  await page.getByTestId(`magazine-pdf-version-switcher-option-teaser`)
-    .click();
-
-  await expect(page.getByTestId(`magazine-pdf-version-switcher-trigger`))
-    .toHaveText(`Тизер · 20 стр.`);
-
-  await expect(page.getByTestId(`magazine-pdf-version-switcher-trigger`))
-    .toHaveAttribute(`aria-expanded`, `false`);
-
-  await expect(page)
-    .toHaveURL(/[?&]version=teaser(&|$)/);
-}
-
-async function switchesBackToFullTests({
-  page,
-  goToComponentsPage,
-}: {
-  page: Page;
-  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
-}) {
-  await goToComponentsPage(`${TEST_ID}?version=teaser`);
-
-  await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
-    .click();
-
-  await page.getByTestId(`magazine-pdf-version-switcher-option-full`)
-    .click();
-
-  await expect(page.getByTestId(`magazine-pdf-version-switcher-trigger`))
-    .toHaveText(`Полная версия · 40 стр.`);
-
-  await expect(page)
-    .toHaveURL(/\/components\/magazine-pdf-view$/);
-}
-
-async function resetsToFirstPageOnVersionSwitchTests({
-  page,
-  goToComponentsPage,
-}: {
-  page: Page;
-  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
-}) {
-  await goToComponentsPage(TEST_ID);
-  await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
-
-  const counter = page.getByTestId(`magazine-pdf-counter`);
-
-  await expect(counter)
-    .toHaveText(/\/ 40$/);
+  await expect(page.getByTestId(`magazine-pdf-counter`))
+    .toHaveText(`1 / 40`);
 
   await page.getByTestId(`magazine-pdf-view-next-arrow`)
     .click();
 
-  await expect(counter)
-    .toHaveText(/^2/);
+  await expect(page.getByTestId(`magazine-pdf-counter`))
+    .toHaveText(`2–3 / 40`);
 
-  await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
-    .click();
-
-  await page.getByTestId(`magazine-pdf-version-switcher-option-teaser`)
-    .click();
-
-  await expect(counter)
-    .toHaveText(/^1.2 \/ 20/);
+  await expectPagesOnScreen({
+    page,
+    count: 2,
+  });
 }
 
-async function switchingFromFirstPageKeepsCounterValidTests({
+async function showsLastPageAloneTests({
   page,
   goToComponentsPage,
+  setViewportSize,
 }: {
   page: Page;
   goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
 }) {
-  await goToComponentsPage(TEST_ID);
-  await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
+  // The teaser rather than the full version: same behaviour at the end of the file, half the
+  // pages to walk through to get there
+  await openMagazineAt({
+    page,
+    goToComponentsPage,
+    setViewportSize,
+    width: Breakpoint.DESKTOP,
+    path: `${TEST_ID}?version=teaser`,
+  });
 
-  await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
-    .click();
+  await turnPages({
+    page,
+    turns: 10,
+  });
 
-  await page.getByTestId(`magazine-pdf-version-switcher-option-teaser`)
-    .click();
+  await expectPagesOnScreen({
+    page,
+    count: 1,
+  });
 
   await expect(page.getByTestId(`magazine-pdf-counter`))
-    .toHaveText(`1–2 / 20`);
+    .toHaveText(`20 / 20`);
+
+  await expect(page.getByTestId(`magazine-pdf-view-next-arrow`))
+    .toHaveAttribute(`aria-disabled`, `true`);
+}
+
+async function keepsFirstPageOfSpreadOnRotatingUprightTests({
+  page,
+  goToComponentsPage,
+  setViewportSize,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
+}) {
+  await openMagazineAt({
+    page,
+    goToComponentsPage,
+    setViewportSize,
+    ...TABLET_LANDSCAPE,
+  });
+
+  // Past the cover and the pair after it
+  await turnPages({
+    page,
+    turns: 2,
+  });
+
+  await expect(page.getByTestId(`magazine-pdf-counter`))
+    .toHaveText(`4–5 / 40`);
+
+  await setViewportSize(TABLET_UPRIGHT);
+
+  await expectPageNumbersOnScreen({
+    page,
+    pageNumbers: [4],
+  });
+}
+
+async function keepsPagePastTheMiddleOnRotatingLandscapeTests({
+  page,
+  goToComponentsPage,
+  setViewportSize,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
+}) {
+  // The teaser rather than the full version: same behaviour past the middle, half the pages to
+  // walk through to get there
+  await openMagazineAt({
+    page,
+    goToComponentsPage,
+    setViewportSize,
+    ...TABLET_UPRIGHT,
+    path: `${TEST_ID}?version=teaser`,
+  });
+
+  // Past the middle: one page at a time, that's further along than the last of the paired slides
+  await turnPages({
+    page,
+    turns: 11,
+  });
+
+  await expect(page.getByTestId(`magazine-pdf-counter`))
+    .toHaveText(`12 / 20`);
+
+  await setViewportSize(TABLET_LANDSCAPE);
+
+  await expectPageNumbersOnScreen({
+    page,
+    pageNumbers: [12, 13],
+  });
+}
+
+async function turnPages({
+  page,
+  turns,
+}: {
+  page: Page;
+  turns: number;
+}) {
+  const nextArrow = page.getByTestId(`magazine-pdf-view-next-arrow`);
+
+  for (let turn = 0; turn < turns; turn += 1) {
+    // eslint-disable-next-line no-await-in-loop
+    await nextArrow.click();
+
+    // The slider drops a turn asked for while the previous one is still animating
+    // eslint-disable-next-line no-await-in-loop
+    await page.waitForTimeout(600);
+  }
+}
+
+async function openMagazineAt({
+  page,
+  goToComponentsPage,
+  setViewportSize,
+  width,
+  height = 900,
+  path = TEST_ID,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
+  width: number;
+  height?: number;
+  path?: string;
+}) {
+  // Sized before navigating, so the wrapper's ResizeObserver only ever settles on one width and
+  // the pages aren't re-measured underneath the assertions below
+  await setViewportSize({
+    width,
+    height,
+  });
+
+  await goToComponentsPage(path);
+
+  await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
+}
+
+function expectPagesOnScreen({
+  page,
+  count,
+}: {
+  page: Page;
+  count: number;
+}) {
+  // Polled: the counter updates as soon as the turn starts, while the pages themselves are
+  // still sliding into place
+  return expect
+    .poll(async () => {
+      const pagesOnScreen = await readPagesOnScreen({
+        page,
+      });
+
+      return {
+        count: pagesOnScreen.length,
+      };
+    })
+    .toEqual({
+      count,
+    });
+}
+
+// Which pages of the pdf are the ones on screen, in the order they're laid out in
+function expectPageNumbersOnScreen({
+  page,
+  pageNumbers,
+}: {
+  page: Page;
+  pageNumbers: number[];
+}) {
+  // Polled, as in expectPagesOnScreen above
+  return expect
+    .poll(async () => {
+      const pagesOnScreen = await readPagesOnScreen({
+        page,
+      });
+
+      return pagesOnScreen.map((pageBox) => pageBox.pageNumber);
+    })
+    .toEqual(pageNumbers);
+}
+
+// The pages on screen, as plain boxes to assert against, each carrying the centre of the
+// viewer they sit in
+function readPagesOnScreen({
+  page,
+}: {
+  page: Page;
+}) {
+  return page.evaluate(() => {
+    const viewer = document.querySelector<HTMLElement>(`.magazine-pdf-view__slider-wrapper`)!;
+    const viewerRect = viewer.getBoundingClientRect();
+
+    return Array.from(viewer.querySelectorAll(`canvas`))
+      .map((canvas) => {
+        const pageRect = canvas.getBoundingClientRect();
+
+        return {
+          pageNumber: Number(canvas.closest(`[data-page-number]`)
+            ?.getAttribute(`data-page-number`)),
+          left: pageRect.left,
+          right: pageRect.right,
+          width: pageRect.width,
+          height: pageRect.height,
+          viewerCentre: viewerRect.left + viewerRect.width / 2,
+          // The neighbouring slides stay mounted just past the viewer's edges, so only the
+          // pages actually inside it count as being on screen
+          isOnScreen: pageRect.width > 0
+            && pageRect.left >= viewerRect.left - 1
+            && pageRect.right <= viewerRect.right + 1,
+        };
+      })
+      .filter((pageBox) => pageBox.isOnScreen);
+  });
 }

@@ -4,7 +4,7 @@
 
   // Strip reserved for the arrows so they sit beside the pdf, not on top of it. Wherever they
   // are shown (@include tablet below) it must stay >= their footprint (12px offset + 44px
-  // width), or they overlap a width-constrained spread. Below that they are hidden and the pages
+  // width), or they overlap a width-constrained slide. Below that they are hidden and the pages
   // take the full width, leaving just enough not to touch the screen edges
   --arrow-space: 8px;
 
@@ -38,8 +38,8 @@
     inset: 0;
   }
 
-  // Sized to sliderWidth (inline style, same value the pdf spread itself uses) rather than
-  // stretched to the box - on a height-constrained viewport the spread is narrower than the box
+  // Sized to sliderWidth (inline style, same value the pages themselves use) rather than
+  // stretched to the box - on a height-constrained viewport the slider is narrower than the box
   // and centred, so matching the box width would drift away from the pdf and the toolbar below
   &__header {
     margin-bottom: 16px;
@@ -68,6 +68,19 @@
 
   &__slider {
     touch-action: manipulation !important;
+  }
+
+  // Lays the pages of a slide side by side and centred, so the cover and the back cover - the
+  // only ones read alone - land in the middle of the viewer rather than against its edge. Its
+  // own element rather than slick's slide, whose display slick keeps to itself
+  &__slide {
+    display: flex;
+    justify-content: center;
+  }
+
+  // Its share of the slide is already set by hand (see MagazinePdfView.tsx), so it mustn't shrink
+  &__page {
+    flex: none;
   }
 
   // Sized to sliderWidth too, for the same reason as &__header above

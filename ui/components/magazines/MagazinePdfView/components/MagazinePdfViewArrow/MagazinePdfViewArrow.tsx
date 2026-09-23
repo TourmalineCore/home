@@ -22,7 +22,7 @@ export function MagazinePdfViewArrow({
       })}
       data-testid={`magazine-pdf-view-${direction}-arrow`}
       onClick={onClick}
-      // Not `disabled`, which would drop focus once the user pages to the last spread
+      // Not `disabled`, which would drop focus once the user reaches the last slide
       aria-disabled={isDisabled}
       aria-label={direction === `prev` ? `Предыдущий разворот` : `Следующий разворот`}
     >
