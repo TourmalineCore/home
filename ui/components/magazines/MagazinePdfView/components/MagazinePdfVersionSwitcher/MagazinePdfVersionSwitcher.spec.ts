@@ -10,6 +10,15 @@ import {
 const TEST_ID = ComponentName.MAGAZINE_PDF_VIEW;
 
 test.describe(`ShowVersionSwitcherOpenTests`, () => {
+  test.beforeEach(async ({
+    page,
+    goToComponentsPage,
+  }) => {
+    await goToComponentsPage(TEST_ID);
+
+    await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
+  });
+
   const breakpoints = BREAKPOINTS.filter((breakpoint) => breakpoint.breakpoint === Breakpoint.MOBILE
       || breakpoint.breakpoint === Breakpoint.DESKTOP_XL);
 
