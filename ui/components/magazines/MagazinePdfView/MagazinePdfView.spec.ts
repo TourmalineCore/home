@@ -245,7 +245,9 @@ async function fullScreenTests({
 }: {
   page: Page;
 }) {
-  await stubFullscreenApi(page);
+  await stubFullscreenApi({
+    page,
+  });
 
   const fullscreenButton = page.getByTestId(`magazine-pdf-fullscreen-button`);
 
@@ -259,13 +261,18 @@ async function fullScreenTests({
     .click();
 
   await expect
-    .poll(() => getFullscreenCalls(page))
+    .poll(() => getFullscreenCalls({
+      page,
+    }))
     .toEqual({
       request: 1,
       exit: 0,
     });
 
-  await setFullscreenElement(page, ComponentName.MAGAZINE_PDF_VIEW);
+  await setFullscreenElement({
+    page,
+    targetId: ComponentName.MAGAZINE_PDF_VIEW,
+  });
 
   await expect(fullscreenButton)
     .toHaveAttribute(`aria-label`, `Свернуть журнал`);
@@ -277,13 +284,18 @@ async function fullScreenTests({
     .click();
 
   await expect
-    .poll(() => getFullscreenCalls(page))
+    .poll(() => getFullscreenCalls({
+      page,
+    }))
     .toEqual({
       request: 1,
       exit: 1,
     });
 
-  await setFullscreenElement(page, null);
+  await setFullscreenElement({
+    page,
+    targetId: null,
+  });
 
   await expect(fullscreenButton)
     .toHaveAttribute(`aria-label`, `Развернуть журнал на весь экран`);
@@ -297,14 +309,19 @@ async function fullscreenFocusTests({
 }: {
   page: Page;
 }) {
-  await stubFullscreenApi(page);
+  await stubFullscreenApi({
+    page,
+  });
 
   const fullscreenButton = page.getByTestId(`magazine-pdf-fullscreen-button`);
   const magazine = page.getByTestId(`magazine-pdf-view-slider-wrapper`);
   const counter = page.getByTestId(`magazine-pdf-counter`);
 
   await fullscreenButton.click();
-  await setFullscreenElement(page, ComponentName.MAGAZINE_PDF_VIEW);
+  await setFullscreenElement({
+    page,
+    targetId: ComponentName.MAGAZINE_PDF_VIEW,
+  });
 
   await expect(magazine)
     .toBeFocused();
@@ -318,7 +335,10 @@ async function fullscreenFocusTests({
     .toHaveText(/^2.3 \//);
 
   // Stands in for Esc or the browser's own UI, which only report the exit via fullscreenchange
-  await setFullscreenElement(page, null);
+  await setFullscreenElement({
+    page,
+    targetId: null,
+  });
 
   await expect(fullscreenButton)
     .toBeFocused();
@@ -375,7 +395,10 @@ async function hiddenPageLinksAreNotTabbableTests({
   const magazine = page.getByTestId(`magazine-pdf-view-slider-wrapper`);
   const nextArrow = page.getByTestId(`magazine-pdf-view-next-arrow`);
 
-  await turnPages(page, 1);
+  await turnPages({
+    page,
+    turns: 1,
+  });
 
   await expect(magazine.getByRole(`link`))
     .toBeVisible();
@@ -390,7 +413,11 @@ async function hiddenPageLinksAreNotTabbableTests({
     .toBeFocused();
 }
 
-function getFullscreenCalls(page: Page) {
+function getFullscreenCalls({
+  page,
+}: {
+  page: Page;
+}) {
   return page.evaluate(() => (window as unknown as {
     __fullscreenCalls: {
       request: number;
@@ -399,7 +426,11 @@ function getFullscreenCalls(page: Page) {
   }).__fullscreenCalls);
 }
 
-function stubFullscreenApi(page: Page) {
+function stubFullscreenApi({
+  page,
+}: {
+  page: Page;
+}) {
   return page.evaluate(() => {
     Object.defineProperty(document, `fullscreenElement`, {
       configurable: true,
@@ -441,7 +472,13 @@ function stubFullscreenApi(page: Page) {
   });
 }
 
-function setFullscreenElement(page: Page, targetId: string | null) {
+function setFullscreenElement({
+  page,
+  targetId,
+}: {
+  page: Page;
+  targetId: string | null;
+}) {
   return page.evaluate((id) => {
     (document as unknown as {
       fullscreenElement: Element | null;
@@ -469,7 +506,8 @@ async function showsCoverAloneThenPairsTests({
     width: Breakpoint.DESKTOP,
   });
 
-  await expectPagesOnScreen(page, {
+  await expectPagesOnScreen({
+    page,
     count: 1,
   });
 
@@ -482,7 +520,8 @@ async function showsCoverAloneThenPairsTests({
   await expect(page.getByTestId(`magazine-pdf-counter`))
     .toHaveText(`2–3 / 40`);
 
-  await expectPagesOnScreen(page, {
+  await expectPagesOnScreen({
+    page,
     count: 2,
   });
 }
@@ -506,9 +545,13 @@ async function showsLastPageAloneTests({
     path: `${TEST_ID}?version=teaser`,
   });
 
-  await turnPages(page, 10);
+  await turnPages({
+    page,
+    turns: 10,
+  });
 
-  await expectPagesOnScreen(page, {
+  await expectPagesOnScreen({
+    page,
     count: 1,
   });
 
@@ -536,14 +579,20 @@ async function keepsFirstPageOfSpreadOnRotatingUprightTests({
   });
 
   // Past the cover and the pair after it
-  await turnPages(page, 2);
+  await turnPages({
+    page,
+    turns: 2,
+  });
 
   await expect(page.getByTestId(`magazine-pdf-counter`))
     .toHaveText(`4–5 / 40`);
 
   await setViewportSize(TABLET_UPRIGHT);
 
-  await expectPageNumbersOnScreen(page, [4]);
+  await expectPageNumbersOnScreen({
+    page,
+    pageNumbers: [4],
+  });
 }
 
 async function keepsPagePastTheMiddleOnRotatingLandscapeTests({
@@ -566,17 +615,29 @@ async function keepsPagePastTheMiddleOnRotatingLandscapeTests({
   });
 
   // Past the middle: one page at a time, that's further along than the last of the paired slides
-  await turnPages(page, 11);
+  await turnPages({
+    page,
+    turns: 11,
+  });
 
   await expect(page.getByTestId(`magazine-pdf-counter`))
     .toHaveText(`12 / 20`);
 
   await setViewportSize(TABLET_LANDSCAPE);
 
-  await expectPageNumbersOnScreen(page, [12, 13]);
+  await expectPageNumbersOnScreen({
+    page,
+    pageNumbers: [12, 13],
+  });
 }
 
-async function turnPages(page: Page, turns: number) {
+async function turnPages({
+  page,
+  turns,
+}: {
+  page: Page;
+  turns: number;
+}) {
   const nextArrow = page.getByTestId(`magazine-pdf-view-next-arrow`);
 
   for (let turn = 0; turn < turns; turn += 1) {
@@ -616,37 +677,57 @@ async function openMagazineAt({
   await page.waitForSelector(`[data-testid="${TEST_ID}"] canvas`);
 }
 
-function expectPagesOnScreen(page: Page, expected: {
+function expectPagesOnScreen({
+  page,
+  count,
+}: {
+  page: Page;
   count: number;
 }) {
   // Polled: the counter updates as soon as the turn starts, while the pages themselves are
   // still sliding into place
   return expect
     .poll(async () => {
-      const pagesOnScreen = await readPagesOnScreen(page);
+      const pagesOnScreen = await readPagesOnScreen({
+        page,
+      });
 
       return {
         count: pagesOnScreen.length,
       };
     })
-    .toEqual(expected);
+    .toEqual({
+      count,
+    });
 }
 
 // Which pages of the pdf are the ones on screen, in the order they're laid out in
-function expectPageNumbersOnScreen(page: Page, expected: number[]) {
+function expectPageNumbersOnScreen({
+  page,
+  pageNumbers,
+}: {
+  page: Page;
+  pageNumbers: number[];
+}) {
   // Polled, as in expectPagesOnScreen above
   return expect
     .poll(async () => {
-      const pagesOnScreen = await readPagesOnScreen(page);
+      const pagesOnScreen = await readPagesOnScreen({
+        page,
+      });
 
       return pagesOnScreen.map((pageBox) => pageBox.pageNumber);
     })
-    .toEqual(expected);
+    .toEqual(pageNumbers);
 }
 
 // The pages on screen, as plain boxes to assert against, each carrying the centre of the
 // viewer they sit in
-function readPagesOnScreen(page: Page) {
+function readPagesOnScreen({
+  page,
+}: {
+  page: Page;
+}) {
   return page.evaluate(() => {
     const viewer = document.querySelector<HTMLElement>(`.magazine-pdf-view__slider-wrapper`)!;
     const viewerRect = viewer.getBoundingClientRect();

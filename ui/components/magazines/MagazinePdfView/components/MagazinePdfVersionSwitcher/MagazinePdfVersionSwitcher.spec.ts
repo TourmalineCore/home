@@ -10,42 +10,42 @@ import {
 const TEST_ID = ComponentName.MAGAZINE_PDF_VIEW;
 
 test.describe(`ShowVersionSwitcherOpenTests`, () => {
-    const breakpoints = BREAKPOINTS.filter((breakpoint) => breakpoint.breakpoint === Breakpoint.MOBILE
+  const breakpoints = BREAKPOINTS.filter((breakpoint) => breakpoint.breakpoint === Breakpoint.MOBILE
       || breakpoint.breakpoint === Breakpoint.DESKTOP_XL);
 
-    for (const {
-      name,
-      breakpoint,
-      breakpointName,
-    } of breakpoints) {
-      test(name, async ({
-        page,
-        setViewportSize,
-      }) => {
-        await setViewportSize({
-          width: breakpoint,
-        });
-
-        await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
-          .click();
-
-        // `mask` won't do here: it paints an overlay with a forced top-most z-index regardless
-        // of real stacking order, so it would blank out the open dropdown too, since that visually
-        // sits on top of the pdf area it's meant to mask. Hiding the pdf at the source instead of
-        // overlaying it sidesteps that - the dropdown, a separate element, stays visible on top
-        // of whatever's left behind (the wrapper's own background)
-        await page.addStyleTag({
-          content: `.magazine-pdf-view__slider-wrapper { visibility: hidden !important; }`,
-        });
-
-        await expect(page.getByTestId(TEST_ID)
-          .filter({
-            visible: true,
-          }))
-          .toHaveScreenshot(`${TEST_ID}-switcher-open-${breakpointName}.png`);
+  for (const {
+    name,
+    breakpoint,
+    breakpointName,
+  } of breakpoints) {
+    test(name, async ({
+      page,
+      setViewportSize,
+    }) => {
+      await setViewportSize({
+        width: breakpoint,
       });
-    }
-  });
+
+      await page.getByTestId(`magazine-pdf-version-switcher-trigger`)
+        .click();
+
+      // `mask` won't do here: it paints an overlay with a forced top-most z-index regardless
+      // of real stacking order, so it would blank out the open dropdown too, since that visually
+      // sits on top of the pdf area it's meant to mask. Hiding the pdf at the source instead of
+      // overlaying it sidesteps that - the dropdown, a separate element, stays visible on top
+      // of whatever's left behind (the wrapper's own background)
+      await page.addStyleTag({
+        content: `.magazine-pdf-view__slider-wrapper { visibility: hidden !important; }`,
+      });
+
+      await expect(page.getByTestId(TEST_ID)
+        .filter({
+          visible: true,
+        }))
+        .toHaveScreenshot(`${TEST_ID}-switcher-open-${breakpointName}.png`);
+    });
+  }
+});
 
 test.describe(`MagazinePdfVersionSwitcherTests`, () => {
   test(
@@ -75,7 +75,6 @@ test.describe(`MagazinePdfVersionSwitcherTests`, () => {
     `,
     switchesBetweenVersionsTests,
   );
-
 });
 
 async function redirectsInvalidVersionParamTests({
@@ -161,5 +160,5 @@ async function switchesBetweenVersionsTests({
     .toHaveText(`Полная версия · 40 стр.`);
 
   await expect(counter)
-    .toHaveText('1 / 40');
+    .toHaveText(`1 / 40`);
 }
