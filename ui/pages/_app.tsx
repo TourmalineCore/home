@@ -127,7 +127,7 @@ function MyApp({
     return () => {
       router.events.off(`routeChangeComplete`, handleRouteChange);
     };
-  }, [router.events, isYandexIframe]);
+  }, [router.events]);
 
   const {
     cookieData,
