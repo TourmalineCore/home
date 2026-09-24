@@ -1,4 +1,6 @@
 import {
+  afterEach,
+  beforeEach,
   describe,
   expect,
   it,
@@ -19,19 +21,29 @@ const OPTION_YANDEX_METRIKA = {
 };
 
 describe(`loadYandexMetrika`, () => {
+  const yandexId = `99999999`;
+  let appendChildSpy: any;
+
+  beforeEach(() => {
+    process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID = yandexId;
+    appendChildSpy = jest.spyOn(document.head, `appendChild`);
+    (getCookie as jest.Mock).mockReset();
+  });
+
+  afterEach(() => {
+    appendChildSpy.mockRestore();
+    delete process.env.NEXT_PUBLIC_METRICS_ENABLED;
+    delete process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
+  });
+
   it(`
     GIVEN env METRICS_ENABLED = true, cookie accepted and webvisor disabled
     WHEN loadYandexMetrika is called
     SHOULD initialize yandex metrics with correct options
     `, () => {
-    const yandexId = `99999999`;
-
     process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID = yandexId;
     process.env.NEXT_PUBLIC_METRICS_ENABLED = `true`;
     (getCookie as jest.Mock).mockReturnValue(`true`);
-
-    // Create mock for document.head.appendChild
-    const appendChildSpy = jest.spyOn(document.head, `appendChild`);
 
     loadYandexMetrika({
       webvisor: false,
@@ -49,11 +61,6 @@ describe(`loadYandexMetrika`, () => {
         ...OPTION_YANDEX_METRIKA,
         webvisor: false,
       })}`);
-
-    // Cleanup
-    appendChildSpy.mockRestore();
-    delete process.env.NEXT_PUBLIC_METRICS_ENABLED;
-    delete process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
   });
 
   it(`
@@ -64,9 +71,6 @@ describe(`loadYandexMetrika`, () => {
     process.env.NEXT_PUBLIC_METRICS_ENABLED = `false`;
     (getCookie as jest.Mock).mockReturnValue(`true`);
 
-    // Create mock for document.head.appendChild
-    const appendChildSpy = jest.spyOn(document.head, `appendChild`);
-
     loadYandexMetrika({
       webvisor: true,
     });
@@ -74,10 +78,6 @@ describe(`loadYandexMetrika`, () => {
     // Check that two scripts are not added to the document head
     expect(appendChildSpy)
       .toHaveBeenCalledTimes(0);
-
-    // Cleanup
-    appendChildSpy.mockRestore();
-    delete process.env.NEXT_PUBLIC_METRICS_ENABLED;
   });
 
   it(`
@@ -88,9 +88,6 @@ describe(`loadYandexMetrika`, () => {
     process.env.NEXT_PUBLIC_METRICS_ENABLED = `true`;
     (getCookie as jest.Mock).mockReturnValue(`false`);
 
-    // Create mock for document.head.appendChild
-    const appendChildSpy = jest.spyOn(document.head, `appendChild`);
-
     loadYandexMetrika({
       webvisor: true,
     });
@@ -98,9 +95,48 @@ describe(`loadYandexMetrika`, () => {
     // Check that two scripts are not added to the document head
     expect(appendChildSpy)
       .toHaveBeenCalledTimes(0);
+  });
 
-    // Cleanup
-    appendChildSpy.mockRestore();
-    delete process.env.NEXT_PUBLIC_METRICS_ENABLED;
+  it(`
+    GIVEN env METRICS_ENABLED = true and cookie rejected
+    WHEN loadYandexMetrika is called with isYandexIframe = true
+    SHOULD initialize yandex metrics ignoring cookie
+  `, () => {
+    process.env.NEXT_PUBLIC_METRICS_ENABLED = `true`;
+    (getCookie as jest.Mock).mockReturnValue(`false`);
+
+    loadYandexMetrika({
+      webvisor: true,
+      isYandexIframe: true,
+    });
+
+    expect(appendChildSpy)
+      .toHaveBeenCalledTimes(2);
+
+    const secondScript = appendChildSpy.mock.calls[1][0] as any;
+    expect(secondScript.textContent)
+      .toContain(
+        `window["ym"](${yandexId}, "init", ${JSON.stringify({
+          ...OPTION_YANDEX_METRIKA,
+          webvisor: true,
+        })}`,
+      );
+  });
+
+  it(`
+    GIVEN env METRICS_ENABLED = false and cookie rejected
+    WHEN loadYandexMetrika is called with isYandexIframe = true
+    SHOULD not initialize yandex metrics
+  `, () => {
+    process.env.NEXT_PUBLIC_METRICS_ENABLED = `false`;
+    (getCookie as jest.Mock).mockReturnValue(`false`);
+
+    loadYandexMetrika({
+      webvisor: true,
+      isYandexIframe: true,
+    });
+
+    expect(appendChildSpy)
+      .toHaveBeenCalledTimes(0);
   });
 });

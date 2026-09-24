@@ -4,21 +4,35 @@ import { COOKIE_ACCEPT } from "../constants/cookie";
 
 export function loadYandexMetrika({
   webvisor,
+  isYandexIframe,
 }: {
   webvisor: boolean;
+  isYandexIframe?: boolean;
 }) {
   const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
   const isCookieAccept = getCookie(COOKIE_ACCEPT) === `true`;
-  const isYandexIframe = isYandexMetricaIframe();
 
-  if (isMetricsEnabled && (isCookieAccept || isYandexIframe)) {
+  if (!isMetricsEnabled) {
+    return;
+  }
+
+  // You need to initialize yandex metrica if the site opens as an iframe on the analytics page in yandex metrica
+  // Otherwise, the click and link map won't work
+  if (isYandexIframe) {
+    initYandexMetrika({
+      webvisor,
+    });
+    return;
+  }
+
+  if (isCookieAccept) {
     initYandexMetrika({
       webvisor,
     });
   }
 }
 
-export function initYandexMetrika({
+function initYandexMetrika({
   webvisor,
 }: {
   webvisor: boolean;

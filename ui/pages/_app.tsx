@@ -6,7 +6,7 @@ import type { AppProps } from 'next/app';
 import { useEffect, useState } from 'react';
 import { getCookie } from 'cookies-next';
 import dynamic from 'next/dynamic';
-import { initYandexMetrika, isYandexMetricaIframe } from '../common/loadYandexMetrika/loadYandexMetrika';
+import { isYandexMetricaIframe, loadYandexMetrika } from '../common/loadYandexMetrika/loadYandexMetrika';
 import { COOKIE_ACCEPT, COOKIE_SETTINGS } from '../common/constants/cookie';
 import { CookieProvider } from '../common/providers/CookieProvider';
 
@@ -66,18 +66,19 @@ function MyApp({
     // You need to initialize yandex metrica if the site opens as an iframe on the analytics page in yandex metrica
     // Otherwise, the click and link map won't work
     if (yandexIframe) {
-      initYandexMetrika({
+      loadYandexMetrika({
         webvisor: true,
+        isYandexIframe: true,
       });
       return;
     }
 
     const savedCookieSettings = getCookie(COOKIE_SETTINGS);
-    const isCookieAccept = getCookie(COOKIE_ACCEPT) === `true`;
 
-    if (isCookieAccept && savedCookieSettings) {
+    if (savedCookieSettings) {
       const parsedSettings = JSON.parse(savedCookieSettings as string);
-      initYandexMetrika({
+
+      loadYandexMetrika({
         webvisor: parsedSettings.webvisor,
       });
     }
