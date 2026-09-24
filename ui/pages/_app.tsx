@@ -6,7 +6,7 @@ import type { AppProps } from 'next/app';
 import { useEffect, useState } from 'react';
 import { getCookie } from 'cookies-next';
 import dynamic from 'next/dynamic';
-import { initYandexMetrika, isYandexMetricaIframe, loadYandexMetrika } from '../common/loadYandexMetrika/loadYandexMetrika';
+import { initYandexMetrika, isYandexMetricaIframe } from '../common/loadYandexMetrika/loadYandexMetrika';
 import { COOKIE_ACCEPT, COOKIE_SETTINGS } from '../common/constants/cookie';
 import { CookieProvider } from '../common/providers/CookieProvider';
 
@@ -60,43 +60,66 @@ function MyApp({
   const [isYandexIframe, setIsYandexIframe] = useState(false);
 
   useEffect(() => {
+    const yandexIframe = isYandexMetricaIframe();
+    setIsYandexIframe(yandexIframe);
+
+    // You need to initialize yandex metrica if the site opens as an iframe on the analytics page in yandex metrica
+    // Otherwise, the click and link map won't work
+    if (yandexIframe) {
+      initYandexMetrika({
+        webvisor: true,
+      });
+      return;
+    }
+
     const savedCookieSettings = getCookie(COOKIE_SETTINGS);
+    const isCookieAccept = getCookie(COOKIE_ACCEPT) === `true`;
 
-    if (savedCookieSettings) {
+    if (isCookieAccept && savedCookieSettings) {
       const parsedSettings = JSON.parse(savedCookieSettings as string);
-
-      loadYandexMetrika({
+      initYandexMetrika({
         webvisor: parsedSettings.webvisor,
       });
     }
   }, []);
 
-  // You need to initialize yandex metrica if the site opens as an iframe on the analytics page in yandex metrica
-  // Otherwise, the click and link map won't work
   useEffect(() => {
-    const yandexIframe = isYandexMetricaIframe();
-    setIsYandexIframe(yandexIframe);
+    // routeChangeComplete passes the relative URL first
+    // we use window.location.href so that hits always carry a full URL
+    const handleRouteChange = (_url: string, {
+      shallow,
+    }: {
+      shallow: boolean;
+    }) => {
+      if (typeof window.ym !== `function` || !isMetricsEnabled) {
+        return;
+      }
 
-    if (yandexIframe) {
-      initYandexMetrika({
-        webvisor: true,
-      });
-    }
-  }, []);
+      // A shallow transition (e.g. the magazine's version switcher, which only updates ?version=)
+      // is not a new page view, so it must not produce a hit
+      if (shallow) {
+        return;
+      }
 
-  useEffect(() => {
-    const handleRouteChange = (url: string) => {
-      const isCookieAccept = document.cookie.includes(`${COOKIE_ACCEPT}=true`);
+      const isCookieAccept = getCookie(COOKIE_ACCEPT) === `true`;
 
-      if ((isCookieAccept || isYandexIframe) && typeof window !== `undefined` && isMetricsEnabled) {
+      if (isCookieAccept || isYandexIframe) {
         // Google metrics are temporarily disabled
         // window.gtag(`event`, url, {
         //   send_to: googleId,
         // });
 
-        window.ym(Number(yandexId), `hit`, url);
+        window.ym(Number(yandexId), `hit`, window.location.href);
       }
     };
+
+    // First hit for the initial page load also needs the rAF delay
+    // on mount <Head> may not have applied the title yet
+    requestAnimationFrame(() => {
+      handleRouteChange(window.location.href, {
+        shallow: false,
+      });
+    });
 
     router.events.on(`routeChangeComplete`, handleRouteChange);
 
