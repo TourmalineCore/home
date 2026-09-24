@@ -12,13 +12,9 @@ export function loadYandexMetrika({
   const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
   const isCookieAccept = getCookie(COOKIE_ACCEPT) === `true`;
 
-  if (!isMetricsEnabled) {
-    return;
-  }
-
   // You need to initialize yandex.metrica if the site opens as an iframe on the analytics page in Yandex.Metrica and in this case it is not necessary to accept cookies
   // Otherwise, the click and link map will not work
-  if (isCookieAccept || isYandexIframe) {
+  if (isMetricsEnabled && (isCookieAccept || isYandexIframe)) {
     initYandexMetrika({
       webvisor,
     });
