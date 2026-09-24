@@ -41,7 +41,6 @@ describe(`loadYandexMetrika`, () => {
     WHEN loadYandexMetrika is called
     SHOULD initialize yandex metrics with correct options
     `, () => {
-    process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID = yandexId;
     process.env.NEXT_PUBLIC_METRICS_ENABLED = `true`;
     (getCookie as jest.Mock).mockReturnValue(`true`);
 
