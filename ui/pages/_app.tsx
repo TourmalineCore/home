@@ -104,7 +104,7 @@ function MyApp({
 
       const isCookieAccept = getCookie(COOKIE_ACCEPT) === `true`;
 
-      if (isCookieAccept || isYandexIframe) {
+      if (isCookieAccept) {
         // Google metrics are temporarily disabled
         // window.gtag(`event`, url, {
         //   send_to: googleId,
