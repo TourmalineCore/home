@@ -16,16 +16,9 @@ export function loadYandexMetrika({
     return;
   }
 
-  // You need to initialize yandex metrica if the site opens as an iframe on the analytics page in yandex metrica
-  // Otherwise, the click and link map won't work
-  if (isYandexIframe) {
-    initYandexMetrika({
-      webvisor,
-    });
-    return;
-  }
-
-  if (isCookieAccept) {
+  // You need to initialize yandex.metrica if the site opens as an iframe on the analytics page in Yandex.Metrica and in this case it is not necessary to accept cookies
+  // Otherwise, the click and link map will not work
+  if (isCookieAccept || isYandexIframe) {
     initYandexMetrika({
       webvisor,
     });
