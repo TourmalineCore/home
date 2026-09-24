@@ -87,7 +87,7 @@ function MyApp({
   useEffect(() => {
     // routeChangeComplete passes the relative URL first
     // we use window.location.href so that hits always carry a full URL
-    const handleRouteChange = (_url: string, {
+    const handleRouteChange = (_: string, {
       shallow,
     }: {
       shallow: boolean;
