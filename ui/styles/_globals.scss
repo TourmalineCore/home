@@ -191,6 +191,12 @@ a {
   }
 }
 
+// prevents CLS, Yandex SmartCaptcha injects this node into <body>,
+// and it would otherwise affect document height.
+.smart-captcha {
+  position: absolute;
+}
+
 @keyframes showSmoothАppearance {
   0% {
     transform: translate3d(0, -10px, 0);
