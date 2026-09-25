@@ -127,7 +127,6 @@ export function Cookie({
           onChallengeHidden={hideSmartCaptcha}
           visible={isSmartCaptchaVisible}
           hideShield
-          test
         />
       )}
     </>
