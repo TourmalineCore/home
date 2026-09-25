@@ -111,7 +111,6 @@ export function Cookie({
             {acceptButtonText}
           </button>
         </div>
-
       </aside>
 
       {(isSmartCaptchaEnabled && !isComponentPage) && (
