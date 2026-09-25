@@ -65,51 +65,55 @@ export function Cookie({
   }
 
   return (
-    <aside
-      className="cookie"
-      data-testid="cookie"
-    >
-      <div className="cookie__text">
-        <MarkdownText
-          linkClassName="cookie__link"
-          isTargetBlank
-        >
-          {bannerText}
-        </MarkdownText>
-      </div>
-      <div className="cookie__buttons">
-        <button
-          type="button"
-          className="cookie__button cookie__button--settings"
-          onClick={() => setIsSettingsModalOpen(true)}
-          data-testid="cookie-settings-button"
-        >
-          {settingsButtonText}
-        </button>
+    <>
+      <aside
+        className="cookie"
+        data-testid="cookie"
+      >
+        <div className="cookie__text">
+          <MarkdownText
+            linkClassName="cookie__link"
+            isTargetBlank
+          >
+            {bannerText}
+          </MarkdownText>
+        </div>
+        <div className="cookie__buttons">
+          <button
+            type="button"
+            className="cookie__button cookie__button--settings"
+            onClick={() => setIsSettingsModalOpen(true)}
+            data-testid="cookie-settings-button"
+          >
+            {settingsButtonText}
+          </button>
 
-        <button
-          type="button"
-          className="cookie__button"
-          onClick={handleRejectCookie}
-          data-testid="reject-button"
-        >
-          {rejectButtonText}
-        </button>
-        <button
-          type="button"
-          className="cookie__button"
-          onClick={async () => {
-            if (isSmartCaptchaEnabled) {
-              showSmartCaptcha();
-            } else {
-              await handleAcceptCookie();
-            }
-          }}
-          data-testid="accept-button"
-        >
-          {acceptButtonText}
-        </button>
-      </div>
+          <button
+            type="button"
+            className="cookie__button"
+            onClick={handleRejectCookie}
+            data-testid="reject-button"
+          >
+            {rejectButtonText}
+          </button>
+          <button
+            type="button"
+            className="cookie__button"
+            onClick={async () => {
+              if (isSmartCaptchaEnabled) {
+                showSmartCaptcha();
+              } else {
+                await handleAcceptCookie();
+              }
+            }}
+            data-testid="accept-button"
+          >
+            {acceptButtonText}
+          </button>
+        </div>
+
+      </aside>
+
       {(isSmartCaptchaEnabled && !isComponentPage) && (
         <InvisibleSmartCaptcha
           key={smartCaptchaKey}
@@ -123,9 +127,10 @@ export function Cookie({
           onChallengeHidden={hideSmartCaptcha}
           visible={isSmartCaptchaVisible}
           hideShield
+          test
         />
       )}
-    </aside>
+    </>
   );
 
   async function handleAcceptCookie({
