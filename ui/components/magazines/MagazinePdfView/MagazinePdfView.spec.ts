@@ -242,9 +242,15 @@ async function counterOfPagesTests({
 
 async function fullScreenTests({
   page,
+  setViewportSize,
 }: {
   page: Page;
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
 }) {
+  await setViewportSize({
+    width: Breakpoint.DESKTOP,
+  });
+
   await stubFullscreenApi({
     page,
   });
