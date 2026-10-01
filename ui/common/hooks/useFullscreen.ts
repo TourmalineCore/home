@@ -39,7 +39,7 @@ export function useFullscreen({
       return;
     }
 
-    if (isDesktop) {
+    if (isDesktop && typeof targetElement.requestFullscreen === `function`) {
       if (document.fullscreenElement === targetElement) {
         document.exitFullscreen()
           .catch(() => {});
