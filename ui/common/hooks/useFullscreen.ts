@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useDeviceSize } from './useDeviceSize';
 
 export function useFullscreen({
   targetId,
@@ -8,6 +9,10 @@ export function useFullscreen({
   fallbackClassName: string;
 }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const {
+    isDesktop,
+  } = useDeviceSize();
 
   // Fullscreen can also be left via Esc or the browser's own UI, which only this event reports
   useEffect(() => {
@@ -34,23 +39,22 @@ export function useFullscreen({
       return;
     }
 
-    // iPhone Safari has no element fullscreen, so requestFullscreen is missing rather than
-    // rejecting, and calling it would throw. Stand in for it with css there
-    if (typeof targetElement.requestFullscreen !== `function`) {
+    if (isDesktop) {
+      if (document.fullscreenElement === targetElement) {
+        document.exitFullscreen()
+          .catch(() => {});
+      } else {
+        targetElement.requestFullscreen()
+          .catch(() => {});
+      }
+    } else {
+      // Fullscreen mode on phones does not work correctly.
+      // iPhone Safari has no element fullscreen, so requestFullscreen is missing rather than rejecting, and calling it would throw.
+      // And the zoom doesn't work on android, so we use CSS to stretch the element to the full screen.
       const isFullscreenOn = targetElement.classList.toggle(fallbackClassName);
 
       document.body.classList.toggle(`body--scroll-hidden`, isFullscreenOn);
       setIsFullscreen(isFullscreenOn);
-
-      return;
-    }
-
-    if (document.fullscreenElement === targetElement) {
-      document.exitFullscreen()
-        .catch(() => {});
-    } else {
-      targetElement.requestFullscreen()
-        .catch(() => {});
     }
   }
 }
