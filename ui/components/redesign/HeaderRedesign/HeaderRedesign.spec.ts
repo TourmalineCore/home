@@ -86,8 +86,13 @@ test.describe(`Header`, () => {
           width: breakpoint,
         });
 
-        await page.getByTestId(`lang-switch`)
-          .hover();
+        if (breakpoint === Breakpoint.MOBILE) {
+          await page.getByTestId(`lang-switch`)
+            .click();
+        } else {
+          await page.getByTestId(`lang-switch`)
+            .hover();
+        }
 
         await page.waitForTimeout(150);
 
