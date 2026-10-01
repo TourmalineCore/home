@@ -246,7 +246,6 @@ async function fullScreenTests({
 }: {
   page: Page;
   setViewportSize: CustomTestFixtures[`setViewportSize`];
-
 }) {
   await setViewportSize({
     width: Breakpoint.DESKTOP,
