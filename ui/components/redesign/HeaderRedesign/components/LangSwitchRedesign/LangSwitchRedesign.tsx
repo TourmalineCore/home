@@ -5,7 +5,7 @@ import Link from 'next/link';
 import IconDownArrow from '../../../../../icons/icon-arrow-down-redesign.svg';
 import GlobalIcon from '../../../../../icons/global-icon.svg';
 import { DEFAULT_LOCALE } from '../../../../../common/constants';
-import { useAutoClose, useOnScrollDirections } from '../../../../../common/hooks';
+import { useAutoClose, useDeviceSize, useOnScrollDirections } from '../../../../../common/hooks';
 
 type Languages = {
   [key: string]: {
@@ -49,6 +49,10 @@ export function LangSwitchRedesign({
     }
   }, [isScrollUp]);
 
+  const {
+    isDesktop,
+  } = useDeviceSize();
+
   return (
     <div
       ref={langSwitchRef}
@@ -60,27 +64,34 @@ export function LangSwitchRedesign({
         },
       )}
       data-testid="lang-switch"
-      onPointerEnter={(e) => e.pointerType === `mouse` && setIsOpen(true)}
-      onPointerLeave={(e) => e.pointerType === `mouse` && setIsOpen(false)}
+      {...(isDesktop && {
+        onMouseEnter: () => setIsOpen(true),
+        onMouseLeave: () => setIsOpen(false),
+      })}
     >
       <button
         type="button"
+        aria-expanded={isOpen}
         className="lang-switch-redesign__button"
-        onClick={() => setIsOpen((prev) => !prev)}
+        {...(!isDesktop ? {
+          onClick: () => setIsOpen((prev) => !prev),
+        } : {
+          onFocus: () => setIsOpen(true),
+          onBlur: (e) => {
+            if (!langSwitchRef.current?.contains(e.relatedTarget as Node)) {
+              setIsOpen(false);
+            }
+          },
+        })}
         aria-label={router.locale === `ru`
-          ? `Выбрать язык`
-          : `Select language`}
+          ? `Выбрать язык, сейчас выбран ${LANGUAGES[router.locale || DEFAULT_LOCALE].name}`
+          : `Select language, currently selected ${LANGUAGES[router.locale || DEFAULT_LOCALE].name}`}
       >
         <GlobalIcon
           aria-hidden="true"
           className="lang-switch-redesign__icon"
         />
-        <span aria-label={
-          router.locale === `ru`
-            ? `Сейчас выбран`
-            : `Currently selected`
-        }
-        >
+        <span>
           {LANGUAGES[router.locale || DEFAULT_LOCALE].name}
         </span>
         <IconDownArrow
@@ -99,16 +110,9 @@ export function LangSwitchRedesign({
                 className="lang-switch-redesign__option"
               >
                 <Link
-                  role="presentation"
                   href={router.asPath}
                   locale={locale}
                   className="lang-switch-redesign__link"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (router.locale !== locale) {
-                      window.open((e.target as HTMLAnchorElement).href, `_self`);
-                    }
-                  }}
                 >
                   {LANGUAGES[locale].name}
                 </Link>
