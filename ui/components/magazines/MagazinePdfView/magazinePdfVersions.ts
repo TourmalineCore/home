@@ -1,3 +1,5 @@
+import { DEFAULT_LOCALE } from "../../../common/constants";
+
 export type MagazinePdfVersionId = 'teaser' | 'full';
 
 export type MagazinePdfVersion = {
@@ -28,8 +30,6 @@ const MAGAZINE_PDF_VERSIONS_BY_LOCALE: Record<string, MagazinePdfVersion[]> = {
   ],
 };
 
-const FALLBACK_LOCALE = `en`;
-
 export const DEFAULT_MAGAZINE_PDF_VERSION_ID: MagazinePdfVersionId = `full`;
 
 export function getMagazinePdfVersions({
@@ -37,7 +37,7 @@ export function getMagazinePdfVersions({
 }: {
   locale: string | undefined;
 }) {
-  return MAGAZINE_PDF_VERSIONS_BY_LOCALE[locale || FALLBACK_LOCALE] || MAGAZINE_PDF_VERSIONS_BY_LOCALE[FALLBACK_LOCALE];
+  return MAGAZINE_PDF_VERSIONS_BY_LOCALE[locale || DEFAULT_LOCALE] || MAGAZINE_PDF_VERSIONS_BY_LOCALE[DEFAULT_LOCALE];
 }
 
 export function getMagazinePdfVersion({
