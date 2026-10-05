@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE } from "../../../common/constants";
+import { DEFAULT_LOCALE } from '../../../common/constants/languages';
 
 export type MagazinePdfVersionId = 'teaser' | 'full';
 
