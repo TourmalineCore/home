@@ -376,6 +376,9 @@ export async function getStaticProps({
         `chelzooCMS`,
         `chelzooPromo`,
         `chelzooLinks`,
+        `magazinesHero`,
+        `magazineTddHero`,
+        `magazinePdfView`,
       ])),
     },
   };

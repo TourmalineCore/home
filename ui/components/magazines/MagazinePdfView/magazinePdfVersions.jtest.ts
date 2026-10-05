@@ -1,5 +1,12 @@
 import { describe, expect, test } from '@jest/globals';
-import { resolveMagazinePdfVersionIdFromQuery } from './magazinePdfVersions';
+import { getMagazinePdfVersions, resolveMagazinePdfVersionIdFromQuery } from './magazinePdfVersions';
+
+const RU_VERSIONS = getMagazinePdfVersions({
+  locale: `ru`,
+});
+const EN_VERSIONS = getMagazinePdfVersions({
+  locale: `en`,
+});
 
 describe(`resolveMagazinePdfVersionIdFromQuery`, () => {
   test(`
@@ -9,6 +16,7 @@ describe(`resolveMagazinePdfVersionIdFromQuery`, () => {
     `, () => {
     expect(resolveMagazinePdfVersionIdFromQuery({
       rawValue: undefined,
+      versions: RU_VERSIONS,
     }))
       .toEqual({
         versionId: `full`,
@@ -23,6 +31,7 @@ describe(`resolveMagazinePdfVersionIdFromQuery`, () => {
     `, () => {
     expect(resolveMagazinePdfVersionIdFromQuery({
       rawValue: `teaser`,
+      versions: RU_VERSIONS,
     }))
       .toEqual({
         versionId: `teaser`,
@@ -37,6 +46,7 @@ describe(`resolveMagazinePdfVersionIdFromQuery`, () => {
     `, () => {
     expect(resolveMagazinePdfVersionIdFromQuery({
       rawValue: `full`,
+      versions: RU_VERSIONS,
     }))
       .toEqual({
         versionId: `full`,
@@ -51,6 +61,7 @@ describe(`resolveMagazinePdfVersionIdFromQuery`, () => {
     `, () => {
     expect(resolveMagazinePdfVersionIdFromQuery({
       rawValue: `notValidValue`,
+      versions: RU_VERSIONS,
     }))
       .toEqual({
         versionId: `full`,
@@ -65,6 +76,22 @@ describe(`resolveMagazinePdfVersionIdFromQuery`, () => {
     `, () => {
     expect(resolveMagazinePdfVersionIdFromQuery({
       rawValue: [`teaser`, `full`],
+      versions: RU_VERSIONS,
+    }))
+      .toEqual({
+        versionId: `full`,
+        isInvalid: true,
+      });
+  });
+
+  test(`
+    GIVEN version query param = 'teaser' on a locale that has no teaser
+    WHEN resolveMagazinePdfVersionIdFromQuery is called with this value
+    THEN it resolves to the full (default) version
+    `, () => {
+    expect(resolveMagazinePdfVersionIdFromQuery({
+      rawValue: `teaser`,
+      versions: EN_VERSIONS,
     }))
       .toEqual({
         versionId: `full`,

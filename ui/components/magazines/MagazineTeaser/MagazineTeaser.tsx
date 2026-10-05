@@ -1,6 +1,47 @@
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import { FeaturedCardsList } from "../../FeaturedCardsList/FeaturedCardsList";
 
 export function MagazineTeaser() {
+  const {
+    locale,
+  } = useRouter();
+
+  const {
+    t,
+  } = useTranslation(`magazineTeaser`);
+
+  const socialLinks = locale === `ru`
+    ? [
+      {
+        name: `Telegram`,
+        icon: `/images/icon-qa.svg`,
+        link: `https://t.me/+f4cIrOcFi_EyYjcy`,
+      },
+      {
+        name: `Вконтакте`,
+        icon: `/images/icon-design.svg`,
+        link: `https://vk.com/tourmalinecore`,
+      },
+      {
+        name: `Youtube`,
+        icon: `/images/icon-devops.svg`,
+        link: `https://www.youtube.com/@tourmalinecore`,
+      },
+    ]
+    : [
+      {
+        name: `Youtube`,
+        icon: `/images/icon-devops.svg`,
+        link: `https://www.youtube.com/@tourmalinecore`,
+      },
+      {
+        name: `LinkedIn`,
+        icon: `/images/icon-design.svg`,
+        link: `https://www.linkedin.com/company/tourmalinecore`,
+      },
+    ];
+
   return (
     <FeaturedCardsList cards={[
       {
@@ -16,28 +57,12 @@ export function MagazineTeaser() {
       {
         id: 2,
         type: `wide`,
-        title: `Следующий номер — про Content Credentials`,
-        description: `Анонсы выпусков, разборы по темам номеров и точки, где можно забрать бумажный журнал — в блогах компании`,
-        wideCardItems: [
-          {
-            id: 1,
-            name: `Telegram`,
-            icon: `/images/icon-qa.svg`,
-            link: `https://t.me/+f4cIrOcFi_EyYjcy`,
-          },
-          {
-            id: 2,
-            name: `Вконтакте`,
-            icon: `/images/icon-design.svg`,
-            link: `https://vk.com/tourmalinecore`,
-          },
-          {
-            id: 3,
-            name: `Youtube`,
-            icon: `/images/icon-devops.svg`,
-            link: `https://www.youtube.com/@tourmalinecore`,
-          },
-        ],
+        title: t(`title`),
+        description: t(`description`),
+        wideCardItems: socialLinks.map((socialLink, index) => ({
+          id: index + 1,
+          ...socialLink,
+        })),
       },
     ]}
     />

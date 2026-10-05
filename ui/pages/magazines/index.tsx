@@ -136,6 +136,8 @@ async function getStaticTranslation({
 }) {
   return serverSideTranslations(locale, [
     `magazinesMeta`,
+    `magazinesHero`,
+    `magazineTeaser`,
     `formBlockRedesign`,
     `footer`,
   ]);

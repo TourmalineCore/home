@@ -5,6 +5,7 @@ import 'slick-carousel/slick/slick-theme.css';
 
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import FocusLock from 'react-focus-lock';
@@ -21,6 +22,7 @@ import { getMagazinePdfSlides } from './magazinePdfSlides';
 import {
   DEFAULT_MAGAZINE_PDF_VERSION_ID,
   getMagazinePdfVersion,
+  getMagazinePdfVersions,
   MagazinePdfVersionId,
   resolveMagazinePdfVersionIdFromQuery,
 } from './magazinePdfVersions';
@@ -66,15 +68,25 @@ export function MagazinePdfView() {
   const router = useRouter();
 
   const {
+    t,
+  } = useTranslation(`magazinePdfView`);
+
+  const versions = getMagazinePdfVersions({
+    locale: router.locale,
+  });
+
+  const {
     versionId: selectedVersionId,
     isInvalid: isVersionQueryInvalid,
   } = resolveMagazinePdfVersionIdFromQuery({
     rawValue: router.query.version,
+    versions,
   });
 
   const {
     filePath,
   } = getMagazinePdfVersion({
+    versions,
     versionId: selectedVersionId,
   });
 
@@ -191,8 +203,10 @@ export function MagazinePdfView() {
   const sliderWidth = pageHeight * PAGE_ASPECT_RATIO * pagesPerSlide;
 
   const progressText = loadProgress && loadProgress.total > 0
-    ? `Загрузка журнала: ${Math.round((loadProgress.loaded / loadProgress.total) * 100)}%`
-    : `Загрузка журнала...`;
+    ? t(`loadingProgress`, {
+      progress: Math.round((loadProgress.loaded / loadProgress.total) * 100),
+    })
+    : t(`loading`);
 
   return (
     // Fullscreen is a reading mode: focus moves onto the magazine, stays inside the viewer while
@@ -233,6 +247,7 @@ export function MagazinePdfView() {
             }}
           >
             <MagazinePdfVersionSwitcher
+              versions={versions}
               selectedVersionId={selectedVersionId}
               // eslint-disable-next-line react/jsx-no-bind
               onChange={replaceVersionQuery}
@@ -280,7 +295,7 @@ export function MagazinePdfView() {
             data-testid="magazine-pdf-view-slider-wrapper"
             ref={sliderWrapperRef}
             role="region"
-            aria-label="Журнал"
+            aria-label={t(`magazineAriaLabel`)}
             // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
             tabIndex={0}
             style={{

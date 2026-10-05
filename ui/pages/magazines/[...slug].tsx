@@ -155,6 +155,10 @@ async function getStaticTranslation({
 }) {
   return serverSideTranslations(locale, [
     `magazineTddMeta`,
+    `magazineTddHero`,
+    `magazineTddDescription`,
+    `magazinePdfView`,
+    `magazineTeaser`,
     `formBlockRedesign`,
     `footer`,
   ]);
