@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import IconDownArrow from '../../../../../icons/icon-arrow-down-redesign.svg';
 import GlobalIcon from '../../../../../icons/global-icon.svg';
-import { DEFAULT_LOCALE } from '../../../../../common/constants';
 import { useAutoClose, useDeviceSize, useOnScrollDirections } from '../../../../../common/hooks';
+import { DEFAULT_LOCALE } from '../../../../../common/constants/languages';
 
 type Languages = {
   [key: string]: {

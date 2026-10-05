@@ -14,9 +14,9 @@ import { PrimaryButton } from '../PrimaryButton/PrimaryButton';
 import { Textarea } from './components/Textarea/Textarea';
 import { Spinner } from '../Spinner/Spinner';
 import { isChineseLanguage } from '../../common/utils';
-import { DEFAULT_LOCALE } from '../../common/constants';
 import { CheckBox } from '../Checkbox/Checkbox';
 import { useSmartCaptcha } from '../../common/hooks/useSmartCaptcha';
+import { DEFAULT_LOCALE } from '../../common/constants/languages';
 
 export function Form({
   onSubmit = () => {},
