@@ -183,15 +183,17 @@
     overflow: auto;
     width: 100%;
 
-    // dvh accounts for the collapsing mobile address bar, vh is the fallback where it's missing
+    // svh, the height with the browser's bars out: on a phone a pinch springing
+    // back stretches dvh for a moment, and the magazine centred in here would jump down and back.
+    // vh is the fallback where svh is missing
     height: 100vh;
-    height: 100dvh;
+    height: 100svh;
+    visibility: visible;
   }
 }
 
-// While the css fullscreen fallback is on, whatever the fixed layer doesn't reach is painted in
-// the same tone rather than showing the black body through
-body:has(.magazine-pdf-view--fullscreen) {
+// While the css fullscreen fallback is on, whatever the fixed layer doesn't reach is painted in the same tone
+html:has(.magazine-pdf-view--fullscreen) {
   background-color: $color-grey-800-redesign;
 }
 

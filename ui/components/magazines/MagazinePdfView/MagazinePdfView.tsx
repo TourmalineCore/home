@@ -6,12 +6,17 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import FocusLock from 'react-focus-lock';
 import { Document, Page, pdfjs } from 'react-pdf';
 import Slider from 'react-slick';
 import { Breakpoint } from '../../../common/enums';
-import { useDeviceSize, useFullscreen } from '../../../common/hooks';
+import { useFullscreen } from '../../../common/hooks';
 import { MagazinePdfLoader } from './components/MagazinePdfLoader/MagazinePdfLoader';
 import { MagazinePdfViewArrow } from './components/MagazinePdfViewArrow/MagazinePdfViewArrow';
 import { MagazinePdfCounter } from './components/MagazinePdfCounter/MagazinePdfCounter';
@@ -85,6 +90,7 @@ export function MagazinePdfView() {
   const [transitionFromSlide, setTransitionFromSlide] = useState<number | null>(null);
   const [wrapperWidth, setWrapperWidth] = useState(0);
   const [maxPageHeight, setMaxPageHeight] = useState(0);
+  const [fullscreenHeight, setFullscreenHeight] = useState(0);
 
   const [isPdfReady, setIsPdfReady] = useState(false);
   const [loadProgress, setLoadProgress] = useState<{
@@ -109,10 +115,6 @@ export function MagazinePdfView() {
     targetId: VIEW_ELEMENT_ID,
     fallbackClassName: `magazine-pdf-view--fullscreen`,
   });
-
-  const {
-    height: deviceHeight,
-  } = useDeviceSize();
 
   const pagesPerSlide = wrapperWidth >= Breakpoint.TABLET ? 2 : 1;
 
@@ -154,6 +156,28 @@ export function MagazinePdfView() {
     };
   }, []);
 
+  // Screen height for fullscreen from the sentinel, which zoom doesn't change.
+  // window.innerHeight changes on zoom on phones, so the pages would jump
+  useLayoutEffect(() => {
+    const sentinelElement = sentinelRef.current;
+
+    if (!isFullscreen || !sentinelElement) {
+      return undefined;
+    }
+
+    setFullscreenHeight(sentinelElement.offsetHeight);
+
+    const sentinelObserver = new ResizeObserver(() => {
+      setFullscreenHeight(sentinelElement.offsetHeight);
+    });
+
+    sentinelObserver.observe(sentinelElement);
+
+    return () => {
+      sentinelObserver.disconnect();
+    };
+  }, [isFullscreen]);
+
   useEffect(() => {
     if (isVersionQueryInvalid) {
       replaceVersionQuery(DEFAULT_MAGAZINE_PDF_VERSION_ID);
@@ -181,7 +205,7 @@ export function MagazinePdfView() {
   // toolbar and the three equal gaps around it leave over
   const fullscreenOverhead = CONTROLS_ROW_HEIGHT + 3 * FULLSCREEN_GAP;
   const heightCeiling = isFullscreen
-    ? Math.max(deviceHeight - fullscreenOverhead, 0)
+    ? Math.max(fullscreenHeight - fullscreenOverhead, 0)
     : maxPageHeight;
 
   // wrapperWidth/heightCeiling are still 0 before the observers' first callback, skip sizing off an empty box
@@ -189,6 +213,14 @@ export function MagazinePdfView() {
     ? Math.min(heightCeiling, wrapperWidth / pagesPerSlide / PAGE_ASPECT_RATIO)
     : 0;
   const sliderWidth = pageHeight * PAGE_ASPECT_RATIO * pagesPerSlide;
+
+  // react-slick calls resizeWindow after a debounce.
+  // Re-measure right away before paint so the page doesn't shift when entering and leaving fullscreen.
+  useLayoutEffect(() => {
+    (sliderRef.current?.innerSlider as {
+      resizeWindow?: () => void;
+    } | undefined)?.resizeWindow?.();
+  }, [sliderWidth]);
 
   const progressText = loadProgress && loadProgress.total > 0
     ? `Загрузка журнала: ${Math.round((loadProgress.loaded / loadProgress.total) * 100)}%`
@@ -207,9 +239,12 @@ export function MagazinePdfView() {
       onActivation={() => sliderWrapperRef.current?.focus()}
       // Returns focus to the button that opened fullscreen. Deferred by hand, since a lock
       // toggled via `disabled` would otherwise return it mid-render and React would undo that -
-      // see "Unmounting and focus management" in react-focus-lock's README
+      // see "Unmounting and focus management" in react-focus-lock's README. Without scrolling, as
+      // a button partly off screen would otherwise pull the page after it
       returnFocus={(originalElement) => {
-        setTimeout(() => (originalElement as HTMLElement).focus());
+        setTimeout(() => (originalElement as HTMLElement).focus({
+          preventScroll: true,
+        }));
 
         return false;
       }}

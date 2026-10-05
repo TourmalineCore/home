@@ -6,6 +6,12 @@ export function useOnScrollDirections() {
 
   useEffect(() => {
     const handleScroll = () => {
+      // A pinch zoom in the magazine's fullscreen on a phone moves the page under it
+      // which isn't the user scrolling
+      if (document.documentElement.classList.contains(`html--fullscreen`)) {
+        return;
+      }
+
       const currentScrollY = window.scrollY || 0;
 
       if (currentScrollY > lastScrollY && currentScrollY > 50) {
