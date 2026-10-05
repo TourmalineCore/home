@@ -180,7 +180,9 @@
     left: 0;
     top: 0;
     z-index: $fullscreen;
-    overflow: auto;
+
+    // The pages are sized to fit, so there's nothing to scroll, only a pixel of rounding
+    overflow: hidden;
     width: 100%;
 
     // svh, the height with the browser's bars out: on a phone a pinch springing
@@ -189,12 +191,29 @@
     height: 100vh;
     height: 100svh;
     visibility: visible;
+
+    // Nothing is meant to scroll here, yet a phone browser still flashes its scrollbars, e.g. on a pinch
+    &,
+    * {
+      scrollbar-width: none;
+    }
+
+    &::-webkit-scrollbar,
+    *::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 
-// While the css fullscreen fallback is on, whatever the fixed layer doesn't reach is painted in the same tone
+// While the css fullscreen fallback is on, whatever the fixed layer doesn't reach is painted in the same tone,
+// and the page's own scrollbar is hidden like the viewer's
 html:has(.magazine-pdf-view--fullscreen) {
   background-color: $color-grey-800-redesign;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .slick-slide {

@@ -13,6 +13,7 @@
 // unlike body--scroll-hidden, so the browser bars don't jump
 .html--fullscreen {
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 html {
