@@ -262,6 +262,7 @@ export function MagazinePdfView() {
         />
 
         <Document
+          key={filePath}
           file={filePath}
           // eslint-disable-next-line react/jsx-no-bind
           onLoadSuccess={({
