@@ -9,6 +9,13 @@
   scrollbar-gutter: stable;
 }
 
+// Css fullscreen on phones, see useFullscreen. Locks the page without scrolling it to the top,
+// unlike body--scroll-hidden, so the browser bars don't jump
+.html--fullscreen {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 html {
   overflow-x: hidden;
 }
@@ -44,6 +51,11 @@ body {
     font-size: 19px;
     line-height: 1.6;
   }
+}
+
+// Hides the site under css fullscreen, a zoom-out on a phone would show it. After html, body for stylelint
+.html--fullscreen body {
+  visibility: hidden;
 }
 
 .default-scroll {
