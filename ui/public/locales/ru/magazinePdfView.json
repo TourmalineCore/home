@@ -1,0 +1,17 @@
+{
+  "loading": "Загрузка журнала...",
+  "loadingProgress": "Загрузка журнала: {{progress}}%",
+  "magazineAriaLabel": "Журнал",
+  "prevArrowAriaLabel": "Предыдущий разворот",
+  "nextArrowAriaLabel": "Следующий разворот",
+  "fullscreenEnter": "На весь экран",
+  "fullscreenEnterAriaLabel": "Развернуть журнал на весь экран",
+  "fullscreenExit": "Свернуть",
+  "fullscreenExitAriaLabel": "Свернуть журнал",
+  "versionSwitcherAriaLabel": "Версия журнала",
+  "pagesCount": "{{count}} стр.",
+  "versions": {
+    "teaser": "Тизер",
+    "full": "Полная версия"
+  }
+}

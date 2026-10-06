@@ -1,16 +1,23 @@
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import { useRef, useState } from 'react';
 import IconArrowDown from '../../../../../icons/icon-arrow-down-redesign.svg';
 import { useAutoClose } from '../../../../../common/hooks';
-import { getMagazinePdfVersion, MAGAZINE_PDF_VERSIONS, MagazinePdfVersionId } from '../../magazinePdfVersions';
+import { getMagazinePdfVersion, MagazinePdfVersion, MagazinePdfVersionId } from '../../magazinePdfVersions';
 
 export function MagazinePdfVersionSwitcher({
+  versions,
   selectedVersionId,
   onChange,
 }: {
+  versions: MagazinePdfVersion[];
   selectedVersionId: MagazinePdfVersionId;
   onChange: (versionId: MagazinePdfVersionId) => void;
 }) {
+  const {
+    t,
+  } = useTranslation(`magazinePdfView`);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const rootRef = useRef<HTMLDivElement>(null);
@@ -18,6 +25,7 @@ export function MagazinePdfVersionSwitcher({
   useAutoClose(rootRef, setIsOpen);
 
   const selectedVersion = getMagazinePdfVersion({
+    versions,
     versionId: selectedVersionId,
   });
 
@@ -38,7 +46,9 @@ export function MagazinePdfVersionSwitcher({
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <span>
-          {`${selectedVersion.label} · ${selectedVersion.pagesCount} стр.`}
+          {`${t(`versions.${selectedVersion.id}`)} · ${t(`pagesCount`, {
+            count: selectedVersion.pagesCount,
+          })}`}
         </span>
 
         <IconArrowDown
@@ -50,9 +60,9 @@ export function MagazinePdfVersionSwitcher({
       <ul
         className="magazine-pdf-version-switcher__list"
         role="listbox"
-        aria-label="Версия журнала"
+        aria-label={t(`versionSwitcherAriaLabel`)}
       >
-        {MAGAZINE_PDF_VERSIONS.map((version) => (
+        {versions.map((version) => (
           <li key={version.id}>
             <button
               type="button"
@@ -72,11 +82,13 @@ export function MagazinePdfVersionSwitcher({
 
               <span className="magazine-pdf-version-switcher__option-text">
                 <span className="magazine-pdf-version-switcher__option-label">
-                  {version.label}
+                  {t(`versions.${version.id}`)}
                 </span>
 
                 <span className="magazine-pdf-version-switcher__option-meta">
-                  {`${version.pagesCount} стр.`}
+                  {t(`pagesCount`, {
+                    count: version.pagesCount,
+                  })}
                 </span>
               </span>
             </button>

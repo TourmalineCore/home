@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import IconChevronLeft from '../../../../../icons/icon-chevron-left.svg';
 import IconChevronRight from '../../../../../icons/icon-chevron-right.svg';
 
@@ -11,6 +12,10 @@ export function MagazinePdfViewArrow({
   isDisabled: boolean;
   onClick: () => void;
 }) {
+  const {
+    t,
+  } = useTranslation(`magazinePdfView`);
+
   const Icon = direction === `prev` ? IconChevronLeft : IconChevronRight;
 
   return (
@@ -24,7 +29,7 @@ export function MagazinePdfViewArrow({
       onClick={onClick}
       // Not `disabled`, which would drop focus once the user reaches the last slide
       aria-disabled={isDisabled}
-      aria-label={direction === `prev` ? `Предыдущий разворот` : `Следующий разворот`}
+      aria-label={direction === `prev` ? t(`prevArrowAriaLabel`) : t(`nextArrowAriaLabel`)}
     >
       <Icon
         className="magazine-pdf-view__arrow-icon"

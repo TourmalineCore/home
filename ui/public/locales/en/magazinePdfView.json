@@ -1,0 +1,17 @@
+{
+  "loading": "Loading the magazine...",
+  "loadingProgress": "Loading the magazine: {{progress}}%",
+  "magazineAriaLabel": "Magazine",
+  "prevArrowAriaLabel": "Previous page",
+  "nextArrowAriaLabel": "Next page",
+  "fullscreenEnter": "Full screen",
+  "fullscreenEnterAriaLabel": "Open the magazine in full screen",
+  "fullscreenExit": "Exit full screen",
+  "fullscreenExitAriaLabel": "Exit full screen",
+  "versionSwitcherAriaLabel": "Magazine Version",
+  "pagesCount": "{{count}} pages",
+  "versions": {
+    "teaser": "Teaser",
+    "full": "Full Version"
+  }
+}

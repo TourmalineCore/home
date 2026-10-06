@@ -1,52 +1,77 @@
+import { DEFAULT_LOCALE } from '../../../common/constants/languages';
+
 export type MagazinePdfVersionId = 'teaser' | 'full';
 
 export type MagazinePdfVersion = {
   id: MagazinePdfVersionId;
-  label: string;
   pagesCount: number;
   filePath: string;
 };
 
-export const MAGAZINE_PDF_VERSIONS: MagazinePdfVersion[] = [
-  {
-    id: `teaser`,
-    label: `Тизер`,
-    pagesCount: 20,
-    filePath: `/documents/magazines/tourmaline-code-001-tdd-teaser.pdf`,
-  },
-  {
-    id: `full`,
-    label: `Полная версия`,
-    pagesCount: 40,
-    filePath: `/documents/magazines/tourmaline-code-001-tdd-full.pdf`,
-  },
-];
+const MAGAZINE_PDF_VERSIONS_BY_LOCALE: Record<string, MagazinePdfVersion[]> = {
+  ru: [
+    {
+      id: `teaser`,
+      pagesCount: 20,
+      filePath: `/documents/magazines/tourmaline-code-001-tdd-teaser-ru.pdf`,
+    },
+    {
+      id: `full`,
+      pagesCount: 40,
+      filePath: `/documents/magazines/tourmaline-code-001-tdd-full-ru.pdf`,
+    },
+  ],
+  en: [
+    {
+      id: `full`,
+      pagesCount: 40,
+      filePath: `/documents/magazines/tourmaline-code-001-tdd-full-en.pdf`,
+    },
+  ],
+};
 
 export const DEFAULT_MAGAZINE_PDF_VERSION_ID: MagazinePdfVersionId = `full`;
 
+export function getMagazinePdfVersions({
+  locale,
+}: {
+  locale: string | undefined;
+}) {
+  return MAGAZINE_PDF_VERSIONS_BY_LOCALE[locale || DEFAULT_LOCALE] || MAGAZINE_PDF_VERSIONS_BY_LOCALE[DEFAULT_LOCALE];
+}
+
 export function getMagazinePdfVersion({
+  versions,
   versionId,
 }: {
+  versions: MagazinePdfVersion[];
   versionId: MagazinePdfVersionId;
 }) {
-  return MAGAZINE_PDF_VERSIONS.find((version) => version.id === versionId)!;
+  return versions.find((version) => version.id === versionId)!;
 }
 
 export function resolveMagazinePdfVersionIdFromQuery({
   rawValue,
+  versions,
 }: {
   rawValue: string | string[] | undefined;
+  versions: MagazinePdfVersion[];
 }) {
-  if (rawValue === `teaser`) {
+  if (rawValue === undefined) {
     return {
-      versionId: `teaser` as const,
+      versionId: DEFAULT_MAGAZINE_PDF_VERSION_ID,
       isInvalid: false,
     };
   }
 
-  if (rawValue === DEFAULT_MAGAZINE_PDF_VERSION_ID || rawValue === undefined) {
+  // A version the locale doesn't have (say, the teaser in English) is as invalid as a made-up one
+  const version = versions.find(({
+    id,
+  }) => id === rawValue);
+
+  if (version) {
     return {
-      versionId: DEFAULT_MAGAZINE_PDF_VERSION_ID,
+      versionId: version.id,
       isInvalid: false,
     };
   }

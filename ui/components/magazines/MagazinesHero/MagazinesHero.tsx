@@ -1,19 +1,23 @@
-/* eslint-disable max-len */
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslation } from "next-i18next";
 import CoverOfTddMagazine from "../../../public/images/cover-of-tdd-magazine.jpg";
 import NewLabel from '../../../icons/new.svg';
 
 export function MagazinesHero() {
+  const {
+    t,
+  } = useTranslation(`magazinesHero`);
+
   return (
     <section
       className="magazines-hero"
       data-testid="magazines-hero"
     >
       <div className="container-redesign magazines-hero__wrapper">
-        <h1 className="magazines-hero__title">Журналы</h1>
+        <h1 className="magazines-hero__title">{t(`title`)}</h1>
         <p className="magazines-hero__description">
-          Разбираем технологии, подходы и процессы, из которых собираются цифровые продукты. Одна большая тема на номер: что решение меняет в деньгах и сроках, и как оно устроено внутри.
+          {t(`description`)}
         </p>
         <Link
           href="/magazines/tourmaline-code-about-tdd"
@@ -29,7 +33,7 @@ export function MagazinesHero() {
             />
           </div>
           <h2 className="magazines-hero__magazine-title">
-            №1: про Test-Driven Development. Когда стоит писать тесты до кода?
+            {t(`tddMagazineTitle`)}
           </h2>
         </Link>
       </div>
