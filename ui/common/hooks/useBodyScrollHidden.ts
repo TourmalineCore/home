@@ -2,7 +2,9 @@ import { useEffect } from 'react';
 
 export function useBodyScrollHidden(isOpen: boolean) {
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      return;
+    }
 
     const {
       scrollY,
