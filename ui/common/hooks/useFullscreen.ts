@@ -16,6 +16,7 @@ export function useFullscreen({
     isDesktop,
   } = useDeviceSize();
 
+  // Fullscreen can also be left via Esc or the browser's own UI, which only this event reports
   useEffect(() => {
     document.addEventListener(`fullscreenchange`, handleFullscreenChange);
 
