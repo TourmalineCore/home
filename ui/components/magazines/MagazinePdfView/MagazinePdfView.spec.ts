@@ -9,6 +9,18 @@ import { Breakpoint, ComponentName } from '../../../common/enums';
 
 const TEST_ID = ComponentName.MAGAZINE_PDF_VIEW;
 
+// The real Fullscreen API on a desktop, the css fallback on a phone
+const FULLSCREEN_DEVICES = [
+  {
+    device: `on a desktop`,
+    width: Breakpoint.DESKTOP,
+  },
+  {
+    device: `on a phone`,
+    width: Breakpoint.MOBILE,
+  },
+];
+
 // The same tablet held one way and then the other: upright there's room for a single page at a
 // time, landscape for two side by side
 const TABLET_UPRIGHT = {
@@ -153,6 +165,31 @@ test.describe(`MagazinePdfViewTests`, () => {
     `,
     hiddenPageLinksAreNotTabbableTests,
   );
+});
+
+test.describe(`MagazinePdfViewFullscreenScrollTests`, () => {
+  for (const {
+    device,
+    width,
+  } of FULLSCREEN_DEVICES) {
+    test(
+      `
+      GIVEN a reader ${device}, scrolled down to the magazine on a long page
+      WHEN they enter fullscreen and leave it
+      THEN the page stays where it was, both under fullscreen and after it
+      `,
+      ({
+        page,
+        goToComponentsPage,
+        setViewportSize,
+      }) => keepsScrollOnFullscreenTests({
+        page,
+        goToComponentsPage,
+        setViewportSize,
+        width,
+      }),
+    );
+  }
 });
 
 test.describe(`MagazinePdfViewSlideTests`, () => {
@@ -312,9 +349,16 @@ async function fullScreenTests({
 
 async function fullscreenFocusTests({
   page,
+  setViewportSize,
 }: {
   page: Page;
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
 }) {
+  // The stubbed Fullscreen API is only used on a desktop, smaller screens get the css fallback
+  await setViewportSize({
+    width: Breakpoint.DESKTOP,
+  });
+
   await stubFullscreenApi({
     page,
   });
@@ -417,6 +461,83 @@ async function hiddenPageLinksAreNotTabbableTests({
 
   await expect(nextArrow)
     .toBeFocused();
+}
+
+async function keepsScrollOnFullscreenTests({
+  page,
+  goToComponentsPage,
+  setViewportSize,
+  width,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
+  width: number;
+}) {
+  const fullscreenButton = page.getByTestId(`magazine-pdf-fullscreen-button`);
+
+  await openScrollableMagazinePage({
+    page,
+    goToComponentsPage,
+    setViewportSize,
+    width,
+  });
+
+  await fullscreenButton.scrollIntoViewIfNeeded();
+
+  const scrollBeforeFullscreen = await page.evaluate(() => window.scrollY);
+
+  expect(scrollBeforeFullscreen)
+    .toBeGreaterThan(0);
+
+  await fullscreenButton.click();
+
+  await expect(fullscreenButton)
+    .toHaveText(`Свернуть`);
+
+  await fullscreenButton.click();
+
+  await expect(fullscreenButton)
+    .toHaveText(`На весь экран`);
+
+  await expect
+    .poll(() => page.evaluate(() => window.scrollY))
+    .toBe(scrollBeforeFullscreen);
+}
+
+async function openScrollableMagazinePage({
+  page,
+  goToComponentsPage,
+  setViewportSize,
+  width,
+}: {
+  page: Page;
+  goToComponentsPage: CustomTestFixtures[`goToComponentsPage`];
+  setViewportSize: CustomTestFixtures[`setViewportSize`];
+  width: number;
+}) {
+  await openMagazineAt({
+    page,
+    goToComponentsPage,
+    setViewportSize,
+    width,
+  });
+
+  await page.evaluate((testId) => {
+    const viewer = document.querySelector(`[data-testid="${testId}"]`)!;
+
+    viewer.before(createFiller(500));
+    // Taller than the viewer: in fullscreen it leaves the page, which must stay long enough to keep its scroll
+    viewer.after(createFiller(2000));
+
+    function createFiller(height: number) {
+      const filler = document.createElement(`div`);
+
+      filler.style.height = `${height}px`;
+
+      return filler;
+    }
+  }, TEST_ID);
 }
 
 function getFullscreenCalls({
