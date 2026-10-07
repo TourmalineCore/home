@@ -42,6 +42,8 @@ import { FormBlockRedesign } from "../../components/redesign/FormBlockRedesign/F
 import { MagazineHero } from "../../components/magazines/MagazineHero/MagazineHero";
 import { MagazinesHero } from "../../components/magazines/MagazinesHero/MagazinesHero";
 import { getCookiePageProps } from "../../common/utils/getCookiePageProps";
+import { ZooMapSurvey } from "../../components/zooMapSurvey/ZooMapSurvey/ZooMapSurvey";
+import { ZooMapSurveySubmittedModal } from "../../components/zooMapSurvey/ZooMapSurveySubmittedModal/ZooMapSurveySubmittedModal";
 
 // react-pdf/pdfjs reach for browser-only APIs (window, ResizeObserver) during render, so this
 // can't be server-rendered - same as its usage on the actual magazine page.
@@ -266,6 +268,8 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   [ComponentName.MAGAZINES_HERO]: () => <MagazinesHero />,
   [ComponentName.MAGAZINE_HERO]: () => <MagazineHero />,
   [ComponentName.MAGAZINE_PDF_VIEW]: () => <MagazinePdfView />,
+  [ComponentName.ZOO_MAP_SURVEY]: () => <ZooMapSurvey />,
+  [ComponentName.ZOO_MAP_SURVEY_SUBMITTED_MODAL]: () => <ZooMapSurveySubmittedModal onCloseModal={() => {}} />,
 };
 
 export default function ComponentsPage({
