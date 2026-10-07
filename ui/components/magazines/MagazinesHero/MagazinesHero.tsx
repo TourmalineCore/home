@@ -1,13 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
-import CoverOfTddMagazine from "../../../public/images/cover-of-tdd-magazine.jpg";
+import { useRouter } from "next/router";
+import CoverOfTddMagazine from "../../../public/images/cover-of-tdd-magazine.png";
+import CoverOfTddMagazineRu from "../../../public/images/cover-of-tdd-magazine-ru.jpg";
 import NewLabel from '../../../icons/new.svg';
 
 export function MagazinesHero() {
   const {
+    locale,
+  } = useRouter();
+
+  const {
     t,
   } = useTranslation(`magazinesHero`);
+
+  const cover = locale === `ru` ? CoverOfTddMagazineRu : CoverOfTddMagazine;
 
   return (
     <section
@@ -26,7 +34,7 @@ export function MagazinesHero() {
           <NewLabel className="magazines-hero__new-label" />
           <div className="magazines-hero__image-container">
             <Image
-              src={CoverOfTddMagazine}
+              src={cover}
               fill
               placeholder="blur"
               alt=""

@@ -1,54 +1,42 @@
+import { ServerResponse } from 'http';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
 
-import { useRouter } from 'next/router';
 import { PageHead } from '../../components/PageHead/PageHead';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
-import { CollageWithLinkBlock, LayoutData } from '../../common/types';
+import { LayoutData } from '../../common/types';
 import { LayoutRedesign } from '../../components/redesign/LayoutRedesign/LayoutRedesign';
-import { MagazinesHero } from '../../components/magazines/MagazinesHero/MagazinesHero';
-import { useNonBreakingSpaces } from '../../common/hooks';
-import { MagazineTeaser } from '../../components/magazines/MagazineTeaser/MagazineTeaser';
-import { CollageWithLink } from '../../components/CollageWithLink/CollageWithLink';
+import { ZooMapSurvey } from '../../components/zooMapSurvey/ZooMapSurvey/ZooMapSurvey';
+import { ZOO_MAP_SURVEY_DESCRIPTION, ZOO_MAP_SURVEY_TITLE } from '../../components/zooMapSurvey/ZooMapSurvey/zooMapSurveyQuestions';
 import { getCookiePageProps } from '../../common/utils/getCookiePageProps';
 
-export default function MagazinesPage({
+const ROBOTS_NO_INDEX = `noindex, nofollow`;
+
+export default function ZooMapSurveyPage({
   layoutData,
-  collageWithLinkData,
   isPreview,
 }: {
   layoutData: LayoutData;
-  collageWithLinkData: CollageWithLinkBlock;
   isPreview: boolean;
 }) {
-  const {
-    locale,
-  } = useRouter();
-
-  const {
-    t,
-  } = useTranslation(`magazinesMeta`);
-
-  useNonBreakingSpaces({
-    locale: locale!,
-  });
-
   return (
     <>
       <PageHead
         seoData={{
           seo: {
-            title: t(`metaTitle`),
-            description: t(`metaDescription`),
+            title: `${ZOO_MAP_SURVEY_TITLE} | Tourmaline Core`,
+            description: ZOO_MAP_SURVEY_DESCRIPTION,
           },
-          keywords: t(`metaKeywords`),
-          metaTags: [],
+          keywords: ``,
+          // The survey is temporary and is meant to be opened by a direct link only
+          metaTags: [
+            {
+              name: `robots`,
+              content: ROBOTS_NO_INDEX,
+            },
+          ],
           structuredData: ``,
           additionalCode: ``,
-          image: {
-            src: `https://tourmalinecore.com/images/cover-of-tdd-magazine-ru.jpg`,
-          },
         }}
       />
       <LayoutRedesign
@@ -56,13 +44,7 @@ export default function MagazinesPage({
         footerContent={layoutData.footerContent}
         isPreview={isPreview}
       >
-        <MagazinesHero />
-        <MagazineTeaser />
-        <CollageWithLink
-          text={collageWithLinkData.text}
-          link="/"
-          imagesWithBlurDataURL={collageWithLinkData.imagesWithBlurDataURL}
-        />
+        <ZooMapSurvey />
       </LayoutRedesign>
     </>
   );
@@ -71,10 +53,22 @@ export default function MagazinesPage({
 export async function getServerSideProps({
   locale,
   preview = false,
+  res,
 }: {
   locale: string;
   preview: boolean;
+  res: ServerResponse;
 }) {
+  // The survey exists in Russian only
+  if (locale !== `ru`) {
+    return {
+      notFound: true,
+    };
+  }
+
+  // Duplicates the robots meta tag for the crawlers that only look at the headers
+  res.setHeader(`X-Robots-Tag`, ROBOTS_NO_INDEX);
+
   const {
     cookieData,
     cookieSettingsData,
@@ -84,11 +78,7 @@ export async function getServerSideProps({
   });
 
   if (process.env.IS_STATIC_MODE === `true`) {
-    const translationsPageData = await loadTranslations(locale, [
-      `headerRedesign`,
-      `footerRedesign`,
-      `collageWithLink`,
-    ]);
+    const translationsPageData = await loadTranslations(locale, [`headerRedesign`, `footerRedesign`]);
 
     return {
       props: {
@@ -98,7 +88,6 @@ export async function getServerSideProps({
           headerContent: translationsPageData.headerRedesign,
           footerContent: translationsPageData.footerRedesign,
         },
-        collageWithLinkData: translationsPageData.collageWithLink,
         ...(await getStaticTranslation({
           locale,
         })),
@@ -113,14 +102,11 @@ export async function getServerSideProps({
     status,
   });
 
-  const translationsPageData = await loadTranslations(locale, [`collageWithLink`]);
-
   return {
     props: {
       cookieData,
       cookieSettingsData,
       layoutData,
-      collageWithLinkData: translationsPageData.collageWithLink,
       isPreview: preview,
       ...(await getStaticTranslation({
         locale,
@@ -134,11 +120,5 @@ async function getStaticTranslation({
 }: {
   locale: string;
 }) {
-  return serverSideTranslations(locale, [
-    `magazinesMeta`,
-    `magazinesHero`,
-    `magazineTeaser`,
-    `formBlockRedesign`,
-    `footer`,
-  ]);
+  return serverSideTranslations(locale, [`formBlockRedesign`, `footer`]);
 }

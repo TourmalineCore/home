@@ -24,6 +24,7 @@
     "generate-api-types": "docker-compose -f ./api-types/docker-compose.yml up --build ts_generator"
   },
   "dependencies": {
+    "@radix-ui/themes": "^3.3.0",
     "@yandex/smart-captcha": "^2.8.0",
     "clsx": "^2.1.1",
     "cookies-next": "^6.1.1",

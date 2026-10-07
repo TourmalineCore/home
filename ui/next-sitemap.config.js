@@ -11,6 +11,9 @@ module.exports = {
     `/404`,
     `/ru/404`,
     `/zh/404`,
+    `/zoo-map-survey`,
+    `/ru/zoo-map-survey`,
+    `/zh/zoo-map-survey`,
   ],
   robotsTxtOptions: {
     policies: [
