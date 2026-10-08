@@ -12,12 +12,10 @@
   "pluginOptions": {},
   "attributes": {
     "age": {
-      "type": "string",
-      "maxLength": 255
+      "type": "string"
     },
     "visitFrequency": {
-      "type": "string",
-      "maxLength": 255
+      "type": "string"
     },
     "season": {
       "type": "text",
@@ -32,8 +30,7 @@
       "maxLength": 2000
     },
     "decisionMaker": {
-      "type": "string",
-      "maxLength": 255
+      "type": "string"
     },
     "routeChange": {
       "type": "text",
@@ -52,12 +49,10 @@
       "maxLength": 2000
     },
     "splitUp": {
-      "type": "string",
-      "maxLength": 255
+      "type": "string"
     },
     "plan": {
-      "type": "string",
-      "maxLength": 255
+      "type": "string"
     },
     "nextPoint": {
       "type": "text",

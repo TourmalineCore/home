@@ -771,10 +771,7 @@ export interface ApiZooMapSurveyResponseZooMapSurveyResponse
     draftAndPublish: false;
   };
   attributes: {
-    age: Schema.Attribute.String &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 255;
-      }>;
+    age: Schema.Attribute.String;
     animalInfo: Schema.Attribute.Text &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 2000;
@@ -786,10 +783,7 @@ export interface ApiZooMapSurveyResponseZooMapSurveyResponse
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    decisionMaker: Schema.Attribute.String &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 255;
-      }>;
+    decisionMaker: Schema.Attribute.String;
     landmarks: Schema.Attribute.Text &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 2000;
@@ -848,10 +842,7 @@ export interface ApiZooMapSurveyResponseZooMapSurveyResponse
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 2000;
       }>;
-    plan: Schema.Attribute.String &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 255;
-      }>;
+    plan: Schema.Attribute.String;
     problemsAnimals: Schema.Attribute.Text &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 2000;
@@ -897,10 +888,7 @@ export interface ApiZooMapSurveyResponseZooMapSurveyResponse
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 2000;
       }>;
-    splitUp: Schema.Attribute.String &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 255;
-      }>;
+    splitUp: Schema.Attribute.String;
     timeOfDay: Schema.Attribute.Text &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 2000;
@@ -908,10 +896,7 @@ export interface ApiZooMapSurveyResponseZooMapSurveyResponse
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    visitFrequency: Schema.Attribute.String &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 255;
-      }>;
+    visitFrequency: Schema.Attribute.String;
     wishes: Schema.Attribute.Text &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 2000;
