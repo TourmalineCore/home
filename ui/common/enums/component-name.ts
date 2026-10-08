@@ -42,8 +42,6 @@ export enum ComponentName {
   MAGAZINES_HERO = `magazines-hero`,
   MAGAZINE_HERO = `magazine-hero`,
   MAGAZINE_PDF_VIEW = `magazine-pdf-view`,
-  ZOO_MAP_SURVEY = `zoo-map-survey`,
-  ZOO_MAP_SURVEY_SUBMITTED_MODAL = `zoo-map-survey-submitted-modal`,
 }
 
 export const COMPONENT_LINKS = Object.values(ComponentName)
