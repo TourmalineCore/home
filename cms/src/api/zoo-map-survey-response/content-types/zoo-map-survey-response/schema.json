@@ -1,0 +1,142 @@
+{
+  "kind": "collectionType",
+  "collectionName": "zoo_map_survey_responses",
+  "info": {
+    "singularName": "zoo-map-survey-response",
+    "pluralName": "zoo-map-survey-responses",
+    "displayName": "Zoo map survey response"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "age": {
+      "type": "string"
+    },
+    "visitFrequency": {
+      "type": "string"
+    },
+    "season": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "timeOfDay": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "company": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "decisionMaker": {
+      "type": "string"
+    },
+    "routeChange": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "routeChangeCustom": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "movementLimits": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "movementLimitsCustom": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "splitUp": {
+      "type": "string"
+    },
+    "plan": {
+      "type": "string"
+    },
+    "nextPoint": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "nextPointCustom": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "orientationTools": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "orientationToolsCustom": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "landmarks": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "landmarksCustom": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "problemsOrientation": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "problemsAnimals": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "problemsInfrastructure": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "problemsPlanning": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "problemsOther": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "problemsOtherCustom": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "reaction": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "reactionCustom": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "navigationMoments": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "navigationMomentsCustom": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "navigationTools": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "navigationToolsCustom": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "animalInfo": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "mapFeatures": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "wishes": {
+      "type": "text",
+      "maxLength": 2000
+    }
+  }
+}
