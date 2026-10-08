@@ -23,6 +23,9 @@ module.exports = {
           `/components`,
           `/ru/components`,
           `/zh/components`,
+          `/zoo-map-survey`,
+          `/ru/zoo-map-survey`,
+          `/zh/zoo-map-survey`,
         ],
       } : {
         userAgent: `*`,
