@@ -47,7 +47,7 @@ export default function MagazinesPage({
           structuredData: ``,
           additionalCode: ``,
           image: {
-            src: `https://tourmalinecore.com/images/cover-of-tdd-magazine.jpg`,
+            src: `https://tourmalinecore.com/images/cover-of-tdd-magazine-ru.jpg`,
           },
         }}
       />
