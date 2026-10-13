@@ -2,6 +2,8 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import path from "path";
+import { PDFParse } from "pdf-parse";
 import { CollageWithLinkBlock, LayoutData } from "../../common/types";
 import { PageHead } from "../../components/PageHead/PageHead";
 import { LayoutRedesign } from "../../components/redesign/LayoutRedesign/LayoutRedesign";
@@ -34,15 +36,16 @@ export default function MagazinePage({
   layoutData,
   collageWithLinkData,
   isPreview,
+  pdfText,
 }: {
   layoutData: LayoutData;
   collageWithLinkData: CollageWithLinkBlock;
   isPreview: boolean;
+  pdfText: string;
 }) {
   const {
     locale,
   } = useRouter();
-
   const {
     t,
   } = useTranslation(`magazineTddMeta`);
@@ -50,6 +53,20 @@ export default function MagazinePage({
   useNonBreakingSpaces({
     locale: locale!,
   });
+
+  // It is necessary for indexing text from a pdf magazine
+  const structuredData = pdfText ? {
+    '@context': `https://schema.org`,
+    '@type': `Article`,
+    headline: t(`metaTitle`),
+    description: t(`metaDescription`),
+    articleBody: pdfText,
+    inLanguage: locale === `ru` ? `ru-RU` : `en-US`,
+    author: {
+      '@type': `Organization`,
+      name: `Tourmaline Core`,
+    },
+  } : null;
 
   return (
     <>
@@ -61,7 +78,7 @@ export default function MagazinePage({
           },
           keywords: t(`metaKeywords`),
           metaTags: [],
-          structuredData: ``,
+          structuredData,
           additionalCode: ``,
           image: {
             src: `https://tourmalinecore.com/images/cover-of-tdd-magazine-ru.jpg`,
@@ -88,9 +105,13 @@ export default function MagazinePage({
 }
 
 export async function getServerSideProps({
+  query,
   locale,
   preview = false,
 }: {
+  query: {
+    version?: string;
+  };
   locale: string;
   preview: boolean;
 }) {
@@ -101,6 +122,30 @@ export async function getServerSideProps({
     locale,
     preview,
   });
+
+  const fileName = `tourmaline-code-001-tdd-${query.version || `full`}-${locale}.pdf`;
+  const filePath = path.join(
+    process.cwd(),
+    `public`,
+    `documents`,
+    `magazines`,
+    fileName,
+  );
+
+  let pdfText = ``;
+
+  try {
+    const parser = new PDFParse({
+      url: filePath,
+    });
+
+    const pdfData = await parser.getText();
+
+    pdfText = pdfData.text;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(`PDF file ${fileName} not found`);
+  }
 
   if (process.env.IS_STATIC_MODE === `true`) {
     const translationsPageData = await loadTranslations(locale, [
@@ -121,6 +166,7 @@ export async function getServerSideProps({
         ...(await getStaticTranslation({
           locale,
         })),
+        pdfText,
       },
     };
   }
@@ -144,6 +190,7 @@ export async function getServerSideProps({
       ...(await getStaticTranslation({
         locale,
       })),
+      pdfText,
     },
   };
 }
