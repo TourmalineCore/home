@@ -18,7 +18,7 @@
 1. Open [VK Cloud Console](https://msk.cloud.vk.com/app/)
 2. Navigate to "Object Storage" -> "Buckets" service
 3. Click "Add bucket" button
-4. Specify the bucket name `home-prod-terraform-state`, select "Hotbox" storage class and "private" default ACL
+4. Specify the bucket name `home-prod-terraform-state`, select "Icebox" storage class. Turn off versioning. "private" is default ACL (no need to configure here and it cannot be configured in fact). 
 5. Click "Create bucket" button
 
 ### Create Object Storage access keys
