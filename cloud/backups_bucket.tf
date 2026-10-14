@@ -1,98 +1,32 @@
 // Create backups bucket for db and s3 backups
-resource "yandex_storage_bucket" "backups_bucket" {
-  access_key = yandex_iam_service_account_static_access_key.create_delete_update_media_and_backups_buckets_service_account_static_access_key.access_key
-  secret_key = yandex_iam_service_account_static_access_key.create_delete_update_media_and_backups_buckets_service_account_static_access_key.secret_key
+// VK Cloud doesn't support bucket max size and bucket policies (no IP restrictions, no per-account permissions),
+// so access is restricted by ACL only: bucket is private and is accessible only by accounts of the project.
+resource "aws_s3_bucket" "backups_bucket" {
   bucket = format("%s-backups", local.resource_name_prefix)
-  max_size = var.backups_bucket_max_size_in_bytes
+
+  tags = {
+    project = var.project
+    environment = var.environment
+  }
 }
 
-// Create service account that will be used to put backups
-resource "yandex_iam_service_account" "backups_bucket_service_account" {
-  folder_id = var.folder_id
-  name      = format("%s-backups-bucket-service-account", local.resource_name_prefix)
+resource "aws_s3_bucket_acl" "backups_bucket_acl" {
+  bucket = aws_s3_bucket.backups_bucket.id
+  acl = "private"
 }
 
-// Grant storage.editor perms for backups_bucket_service_account to be able to put backups
-resource "yandex_storage_bucket_iam_binding" "backups_bucket_backups_bucket_service_account_iam_binding" {
-  bucket = yandex_storage_bucket.backups_bucket.bucket
-  role = "storage.editor"
-
-  members = [
-    format("serviceAccount:%s", yandex_iam_service_account.backups_bucket_service_account.id)
-  ]
+// Create Object Storage account that will be used to put backups and get list of media bucket content
+// Note: VK Cloud Object Storage account has access to all buckets of the project
+resource "vkcs_iam_s3_account" "backups_bucket_account" {
+  name = format("%s-backups-bucket", local.resource_name_prefix)
+  description = "Object Storage account to put backups into backups bucket"
 }
 
-// Configure security policy for backups bucket
-resource "yandex_storage_bucket_policy" "backups_bucket_security_policy" {
-  bucket = yandex_storage_bucket.backups_bucket.bucket
-  policy = jsonencode(
-    {
-      Version = "2012-10-17"
-      Statement = [
-        {
-          Effect = "Allow"
-          Principal = {
-            CanonicalUser = yandex_iam_service_account.backups_bucket_service_account.id
-          }
-          Action = [
-            "s3:PutObject"
-          ]
-          Resource  = [
-              // Resource with "/*" grants permissons to objects in the bucket. There was a problem with resources definition. 
-              // Service accounts can't manage object in bucket if resource with "/*" wasn't added. 
-              format("arn:aws:s3:::%s/*", yandex_storage_bucket.backups_bucket.bucket),
-              format("arn:aws:s3:::%s", yandex_storage_bucket.backups_bucket.bucket)
-          ]
-          Sid = format("%s-backups-bucket-write-and-delete-policy", local.resource_name_prefix)
-          Condition = {
-            IpAddress = {
-              "aws:sourceip" = local.vm_ip_address
-            }
-          }
-        },
-        // allows delete or update bucket using create_delete_update_media_and_backups_buckets_service_account
-        {
-          Effect = "Allow"
-          Principal = {
-            CanonicalUser = yandex_iam_service_account.create_delete_update_media_and_backups_buckets_service_account.id
-          }
-          Action = [
-            "s3:ListBucket",
-            "s3:GetBucketCORS",
-            "s3:GetBucketWebsite",
-            "s3:GetBucketVersioning",
-            "s3:GetBucketLogging",
-            "s3:GetLifecycleConfiguration",
-            "s3:GetEncryptionConfiguration"            
-          ]
-          Resource  = [
-              // Resource with "/*" grants permissons to objects in the bucket. There was a problem with resources definition. 
-              // Service accounts can't manage object in bucket if resource with "/*" wasn't added. 
-              format("arn:aws:s3:::%s/*", yandex_storage_bucket.backups_bucket.bucket),
-              format("arn:aws:s3:::%s", yandex_storage_bucket.backups_bucket.bucket)
-          ]
-          Sid = format("%s-backups-bucket-delele-and-update-using-service-account", local.resource_name_prefix)
-        },
-        {
-          Effect = "Allow"
-          Principal = "*"
-          Action = [
-            "*"
-          ]
-          Resource  = [
-              // Resource with "/*" grants permissons to objects in the bucket. There was a problem with resources definition. 
-              // Service accounts can't manage object in bucket if resource with "/*" wasn't added. 
-              format("arn:aws:s3:::%s/*", yandex_storage_bucket.backups_bucket.bucket),
-              format("arn:aws:s3:::%s", yandex_storage_bucket.backups_bucket.bucket)
-          ]
-          Sid = format("%s-backups-bucket-list-policy", local.resource_name_prefix)
-          Condition = {
-            StringLike = {
-              "aws:referer" = format("https://console.yandex.cloud/folders/*/storage/buckets/%s-backups*", local.resource_name_prefix)
-            }
-          }
-        }
-      ]
-    }
-  )
+output "backups_bucket_access_key" {
+  value = vkcs_iam_s3_account.backups_bucket_account.access_key
+}
+
+output "backups_bucket_secret_key" {
+  value = vkcs_iam_s3_account.backups_bucket_account.secret_key
+  sensitive = true
 }

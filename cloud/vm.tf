@@ -1,68 +1,79 @@
+// Ubuntu 24.04 LTS image provided by VK Cloud
+data "vkcs_images_image" "ubuntu" {
+  visibility = "public"
+  default    = true
+  properties = {
+    mcs_os_distro  = "ubuntu"
+    mcs_os_version = "24.04"
+  }
+}
+
 // Boot HDD with Ubuntu 24.04 LTS
-resource "yandex_compute_disk" "vm-disk" {
+resource "vkcs_blockstorage_volume" "vm-disk" {
   name = local.resource_name_prefix
-  type = "network-hdd"
-  zone = var.zone
-  image_id = "fd81qgp4lonb0bu8cg5m" // Ubuntu 24.04 lts
+  volume_type = "ceph-hdd"
+  availability_zone = var.zone
+  image_id = data.vkcs_images_image.ubuntu.id
   size = 32 // Gb
 
-  labels = {
-    project = var.project
-    environment = var.environment
-  }
-}
-
-resource "yandex_compute_instance" "vm" {
-  name = local.resource_name_prefix
-  platform_id = "standard-v2" // Intel Cascade Lake https://yandex.cloud/ru/docs/compute/concepts/vm-platforms#standard-platforms
-  zone = var.zone
-  allow_stopping_for_update = true
-  hostname = local.resource_name_prefix
-  
-  service_account_id = yandex_iam_service_account.monitoring_service_account.id
-
-  resources {
-    cores  = var.vm_cpu_cores_count 
-    memory = var.vm_ram_in_gb
-    core_fraction = var.vm_guaranteed_cpu_share_in_percent // % of CPU
-  }
-
-  boot_disk {
-    disk_id = yandex_compute_disk.vm-disk.id
-    auto_delete = false
-  }
-
-  network_interface {
-    subnet_id = yandex_vpc_subnet.subnet.id
-    security_group_ids = [format("%s", yandex_vpc_security_group.security_group.id)]
-    nat = true
-    nat_ip_address = local.vm_ip_address
-  }
-
   metadata = {
-    // ssh key file should be named as project name + environment + ssh. Example: home-prod-ssh.pub
-    ssh-keys = "ubuntu:${file(format("./%s-ssh.pub", local.resource_name_prefix))}"
-
-    // Install Unified Agent for monitoring
-    // https://yandex.cloud/ru/docs/monitoring/concepts/data-collection/unified-agent/installation#setup
-    install-unified-agent = 1
-    user-data = "#cloud-config\nusers:\n- name: ubuntu\n  sudo: ALL=(ALL) NOPASSWD:ALL\n  shell: /bin/bash\n  ssh_authorized_keys:\n  - ssh-ed25519  ${file(format("./%s-ssh.pub", local.resource_name_prefix))}\nruncmd:\n  - wget -O - https://monitoring.api.cloud.yandex.net/monitoring/v2/unifiedAgent/config/install.sh | bash"
-  }
-  
-  labels = {
     project = var.project
     environment = var.environment
   }
 }
 
-// Service account that can manage monitoring for VM
-resource "yandex_iam_service_account" "monitoring_service_account" {
-  name      = format("%s-vm-service-account", local.resource_name_prefix)
+// ssh key file should be named as project name + environment + ssh. Example: home-prod-ssh.pub
+resource "vkcs_compute_keypair" "ssh_key" {
+  name = format("%s-ssh", local.resource_name_prefix)
+  public_key = file(format("./%s-ssh.pub", local.resource_name_prefix))
 }
 
-// Grant monitoring.editor permission for monitoring service account
-resource "yandex_resourcemanager_folder_iam_member" "monitoring_service_account_iam" {
-  folder_id = var.folder_id
-  role      = "monitoring.editor"
-  member    = "serviceAccount:${yandex_iam_service_account.monitoring_service_account.id}"
+// Install VK Cloud monitoring agent. Service user for monitoring is created automatically
+// https://cloud.vk.ru/docs/en/monitoring-services/monitoring
+resource "vkcs_cloud_monitoring" "monitoring" {
+  image_id = data.vkcs_images_image.ubuntu.id
+}
+
+resource "vkcs_compute_instance" "vm" {
+  name = local.resource_name_prefix
+  availability_zone = var.zone
+  // VK Cloud flavor changing resizes VM with its stopping
+  flavor_name = var.vm_flavor_name
+  key_pair = vkcs_compute_keypair.ssh_key.name
+  stop_before_destroy = true
+
+  block_device {
+    source_type = "volume"
+    destination_type = "volume"
+    uuid = vkcs_blockstorage_volume.vm-disk.id
+    boot_index = 0
+    delete_on_termination = false
+  }
+
+  network {
+    uuid = vkcs_networking_network.network.id
+  }
+
+  security_group_ids = [vkcs_networking_secgroup.security_group.id]
+
+  // VK Cloud has no hostname attribute, so it's set via cloud-init
+  user_data = "#cloud-config\nhostname: ${local.resource_name_prefix}\nfqdn: ${local.resource_name_prefix}\n"
+
+  cloud_monitoring {
+    service_user_id = vkcs_cloud_monitoring.monitoring.service_user_id
+    script = vkcs_cloud_monitoring.monitoring.script
+  }
+
+  tags = local.tags
+
+  // Subnet should be connected to router before VM creation to get access to internet
+  depends_on = [
+    vkcs_networking_router_interface.router_interface
+  ]
+}
+
+// Bind static ip address to VM
+resource "vkcs_compute_floatingip_associate" "vm_ip_address" {
+  floating_ip = vkcs_networking_floatingip.ip_address.address
+  instance_id = vkcs_compute_instance.vm.id
 }

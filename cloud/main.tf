@@ -1,21 +1,30 @@
 terraform {
   required_providers {
-    yandex = {
-      source = "yandex-cloud/yandex"
+    vkcs = {
+      source  = "vk-cs/vkcs"
+      version = "~> 0.18"
+    }
+
+    // VK Cloud provider doesn't manage Object Storage buckets, so S3 compatible AWS provider is used for them.
+    // VK Cloud documentation requires AWS provider version lower than 5.85.0
+    // https://cloud.vk.ru/docs/en/tools-for-using-services/terraform/how-to-guides/aws
+    aws = {
+      source  = "hashicorp/aws"
+      version = "< 5.85.0"
     }
   }
 
-  required_version = ">= 0.13"
-  
+  required_version = ">= 1.1.5"
+
   backend "s3" {
-    endpoints = { 
-      s3 = "https://storage.yandexcloud.net" 
+    endpoints = {
+      s3 = "https://hb.ru-msk.vkcloud-storage.ru"
     }
 
-    region    = "ru-central1"
+    region    = "ru-msk"
     key       = "terraform.tfstate"
 
-    // Some of checks wasn`t realized in Yandex Cloud, so in this reason we`re skipping them
+    // Some of checks wasn`t realized in VK Cloud, so in this reason we`re skipping them
     skip_region_validation      = true
     skip_credentials_validation = true
     skip_metadata_api_check     = true
@@ -24,12 +33,35 @@ terraform {
   }
 }
 
-variable "cloud_id" {
+// Credentials of VK Cloud user. Can be found in VK Cloud Console -> Project settings -> Terraform -> Download VKCS provider file
+variable "vkcs_username" {
   type = string
   sensitive = true
 }
 
-variable "folder_id" {
+variable "vkcs_password" {
+  type = string
+  sensitive = true
+}
+
+variable "vkcs_project_id" {
+  type = string
+  sensitive = true
+}
+
+// VK Cloud region. RegionOne is Moscow region
+variable "vkcs_region" {
+  type = string
+  default = "RegionOne"
+}
+
+// Static access key of Object Storage account that is used to manage buckets (the same key is used for terraform state backend)
+variable "s3_access_key" {
+  type = string
+  sensitive = true
+}
+
+variable "s3_secret_key" {
   type = string
   sensitive = true
 }
@@ -37,7 +69,13 @@ variable "folder_id" {
 // availability zone
 variable "zone" {
   type = string
-  default = "ru-central1-b"
+  default = "MS1"
+}
+
+// name of external network that provides internet access and floating ips. "internet" for Sprut SDN, "ext-net" for Neutron SDN
+variable "external_network_name" {
+  type = string
+  default = "internet"
 }
 
 // name of project that will be used as part of name of every resource
@@ -54,6 +92,12 @@ variable "environment" {
 
 locals {
   resource_name_prefix = format("%s-%s", var.project, var.environment)
+
+  // VK Cloud supports only plain string tags instead of key-value labels
+  tags = [
+    format("project=%s", var.project),
+    format("environment=%s", var.environment),
+  ]
 }
 
 # List of IP's that have access to VM via SSH. Should be separated by commas without spacing. Example: 8.8.8.8/32,77.88.55.88/32
@@ -81,26 +125,32 @@ variable "ssh_port" {
   sensitive = true
 }
 
-// 214748364800 bytes = 200 GB 
-variable "backups_bucket_max_size_in_bytes" {
-  type = number
+// VK Cloud has no custom cpu/ram/guaranteed cpu share configuration, only predefined flavors. Example: STD3-2-6 (2 vCPU, 6 GB RAM)
+// https://cloud.vk.ru/docs/en/computing/iaas/concepts/about
+variable "vm_flavor_name" {
+  type = string
 }
 
-variable "vm_cpu_cores_count" {
-  type = number
+provider "vkcs" {
+  username   = var.vkcs_username
+  password   = var.vkcs_password
+  project_id = var.vkcs_project_id
+  region     = var.vkcs_region
+  auth_url   = "https://infra.mail.ru:35357/v3/"
 }
 
-variable "vm_ram_in_gb" {
-  type = number
-}
+provider "aws" {
+  region     = "ru-msk"
+  access_key = var.s3_access_key
+  secret_key = var.s3_secret_key
 
-variable "vm_guaranteed_cpu_share_in_percent" {
-  type = number
-}
+  // Some of checks wasn`t realized in VK Cloud, so in this reason we`re skipping them
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  skip_requesting_account_id  = true
+  skip_region_validation      = true
 
-provider "yandex" {
-  cloud_id = var.cloud_id
-  folder_id = var.folder_id
-  zone = var.zone
-  service_account_key_file = "authorized_key.json"
+  endpoints {
+    s3 = "https://hb.ru-msk.vkcloud-storage.ru"
+  }
 }
