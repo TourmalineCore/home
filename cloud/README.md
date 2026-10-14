@@ -27,7 +27,7 @@ Access keys are used to write to `home-prod-terraform-state` bucket and to creat
 
 1. Open [VK Cloud Console](https://msk.cloud.vk.com/app/)
 2. Navigate to "Object Storage" -> "Accounts" service
-3. Click "Add account" button, specify the account name `home-prod-terraform` and click "Create" button
+3. Click "Add account" button, specify the account name `home-prod-terraform-service-account` and click "Create" button
 4. Copy "Access Key ID" and "Secret Key"
 5. Create a new file in this repo folder, name it "config.s3.tfbackend" and paste the created access key
 ```bash
