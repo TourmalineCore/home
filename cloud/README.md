@@ -41,7 +41,12 @@ secret_key="PASTE_YOUR_SECRET_KEY_HERE"
 1. Open [VK Cloud Console](https://msk.cloud.vk.com/app/)
 2. Click on the user name in the upper right corner and select "Project settings"
 3. Open "Terraform" tab
-4. Click "Download VKCS provider file" button, it contains `username` and `project_id` that should be used in terraform variables
+4. Create `terraform.tfvars` file. Example looks like this:
+```
+vkcs_username   = "account@email.com"
+vkcs_password   = "PUT_YOUR_PASSWORD_HERE"
+vkcs_project_id = "1a0203b41d9a41577702e9dw9f6b1991"
+```
 5. Make sure that two-factor authentication is disabled for the user or create a separate user for terraform with "Project administrator" role, because VK Cloud Terraform provider uses login and password for authentication
 
 `s3_project_id` is used in Object Storage bucket policies and differs from `project_id`. It looks like `mcs1234567890` and can be found in VK Cloud Console -> Project settings -> General information.
