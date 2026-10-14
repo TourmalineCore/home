@@ -43,5 +43,3 @@ config.s3.tfbackend
 # Ignore SSH key
 *-ssh
 *-ssh.pub
-
-vkcs_provider.tf
