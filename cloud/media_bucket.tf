@@ -2,10 +2,7 @@
 resource "aws_s3_bucket" "media_bucket" {
   bucket = format("%s-media", local.resource_name_prefix)
 
-  tags = {
-    project = var.project
-    environment = var.environment
-  }
+  // VK Cloud Object Storage doesn't support bucket tags (PutBucketTagging isn't implemented)
 }
 
 resource "aws_s3_bucket_acl" "media_bucket_acl" {

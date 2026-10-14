@@ -3,10 +3,7 @@
 resource "aws_s3_bucket" "backups_bucket" {
   bucket = format("%s-backups", local.resource_name_prefix)
 
-  tags = {
-    project = var.project
-    environment = var.environment
-  }
+  // VK Cloud Object Storage doesn't support bucket tags (PutBucketTagging isn't implemented)
 }
 
 resource "aws_s3_bucket_acl" "backups_bucket_acl" {
