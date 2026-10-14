@@ -66,6 +66,37 @@ variable "s3_secret_key" {
   sensitive = true
 }
 
+// Project ID that is used in Object Storage bucket policies. It differs from vkcs_project_id. Example: mcs1234567890
+// Can be found in VK Cloud Console -> Project settings -> General information -> Project ID
+variable "s3_project_id" {
+  type = string
+  sensitive = true
+}
+
+locals {
+  media_bucket_account_principal = format("arn:aws:iam::%s:user/%s", var.s3_project_id, vkcs_iam_s3_account.media_bucket_account.account_name)
+  backups_bucket_account_principal = format("arn:aws:iam::%s:user/%s", var.s3_project_id, vkcs_iam_s3_account.backups_bucket_account.account_name)
+
+  // Actions that allow to change bucket settings and bypass bucket policy
+  bucket_management_actions = [
+    "s3:PutBucketPolicy",
+    "s3:DeleteBucketPolicy",
+    "s3:PutLifecycleConfiguration",
+    "s3:PutBucketVersioning",
+    "s3:PutBucketAcl",
+    "s3:DeleteBucket"
+  ]
+
+  // Actions that allow to change objects
+  object_write_actions = [
+    "s3:PutObject",
+    "s3:PutObjectAcl",
+    "s3:DeleteObject",
+    "s3:DeleteObjectVersion",
+    "s3:AbortMultipartUpload"
+  ]
+}
+
 // availability zone
 variable "zone" {
   type = string

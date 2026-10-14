@@ -87,4 +87,6 @@ resource "vkcs_networking_floatingip" "ip_address" {
 
 locals {
   vm_ip_address = vkcs_networking_floatingip.ip_address.address
+  // VM uses floating ip as source ip address for internet requests, so it's used in bucket policies
+  vm_ip_address_cidr = format("%s/32", local.vm_ip_address)
 }

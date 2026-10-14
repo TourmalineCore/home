@@ -43,6 +43,8 @@ secret_key="PASTE_YOUR_SECRET_KEY_HERE"
 4. Click "Download VKCS provider file" button, it contains `username` and `project_id` that should be used in terraform variables
 5. Make sure that two-factor authentication is disabled for the user or create a separate user for terraform with "Project administrator" role, because VK Cloud Terraform provider uses login and password for authentication
 
+`s3_project_id` is used in Object Storage bucket policies and differs from `project_id`. It looks like `mcs1234567890` and can be found in VK Cloud Console -> Project settings -> General information.
+
 ### VSCode Dev Container
 
 Open this repo's folder in VSCode, it might immediately propose you to re-open it in a Dev Container or you can click on Remote Explorer, find plus button and choose the Open Current Folder in Container option and wait when it is ready.
@@ -98,6 +100,7 @@ terraform apply -auto-approve \
     -var "vkcs_project_id=YOUR_VK_CLOUD_PROJECT_ID" \
     -var "s3_access_key=YOUR_OBJECT_STORAGE_ACCESS_KEY" \
     -var "s3_secret_key=YOUR_OBJECT_STORAGE_SECRET_KEY" \
+    -var "s3_project_id=YOUR_OBJECT_STORAGE_PROJECT_ID" \
     -var "protected_resources_allowed_external_ip_addresses=YOUR_IP_ADRESSES" \
     -var "project=YOUR_PROJECT_NAME" \
     -var "environment=YOUR_ENVIRONMENT" \
@@ -117,6 +120,7 @@ terraform apply -auto-approve \
     -var "vkcs_project_id=b5b7ffd4ef0547e5b222f44555dfXXXX" \
     -var "s3_access_key=access_key" \
     -var "s3_secret_key=secret_key" \
+    -var "s3_project_id=mcs1234567890" \
     -var "protected_resources_allowed_external_ip_addresses=77.88.55.88/32" \
     -var "project=home" \
     -var "environment=prod" \

@@ -1384,3 +1384,550 @@
     (https://cloud.vk.ru/docs/en/intro/it-security/tech)
   - Документация провайдера vkcs
     (https://github.com/vk-cs/terraform-provider-vkcs/tree/v0.18.0/docs)
+
+❯ <ide_opened_file>The user opened the file /workspaces/home/cloud/network.tf
+  in the IDE. This may or may not be related to the current
+  task.</ide_opened_file>
+
+❯ Есть ли способы реализовать в VK Cloud ограничение доступа к VM по IP? можно
+  использовать не terraform, а ручную настройку?
+
+● Web Search("VK Cloud Object Storage put-bucket-policy ограничение доступа к
+            бакету по IP адресу")
+  ⎿  Did 1 search in 8s
+
+● Нашёл важную деталь: судя по свежей статье VK Cloud, у них теперь есть Bucket
+  Policy — это противоречит моему прошлому выводу. Сейчас разберусь в
+  подробностях.
+
+● Fetch(https://cloud.vk.ru/blog/bucket-policy-v-vk-object-storage-upravlenie-do
+       stupom-cherez-json-politiki/)
+  ⎿  Received 146.1KB (200 OK)
+
+● Fetch(https://habr.com/ru/companies/vktech/articles/1076548/)
+  ⎿  Received 392.4KB (200 OK)
+
+● Проверю официальную страницу документации, на которую ссылается статья.
+
+● Fetch(https://cloud.vk.ru/docs/ru/storage/s3/concepts/access/bucket-policy)
+  ⎿  Received 688.2KB (200 OK)
+
+  Ran 1 shell command (ctrl+o to expand)
+  ⎿  Interrupted · What should Claude do instead?
+
+❯ Речь идёт не про досутп к S3, а доступ к VM по SSH, чтобы было нельзя
+  подключиться к слабозащищённому серверу внутри VM с любого IP-адреса
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Да, это поддерживается, и в миграции уже сделано через Terraform, ручная
+  настройка не нужна. Фильтрация по IP работает так же, как группы безопасности
+  в Yandex Cloud.
+
+  Как это работает сейчас
+
+  В network.tf:60 (network.tf#L60) на каждый адрес из
+  protected_resources_allowed_external_ip_addresses создаётся отдельное правило:
+
+  hcl
+  resource "vkcs_networking_secgroup_rule" "ssh" {
+    for_each = toset(split(",",
+  nonsensitive(var.protected_resources_allowed_external_ip_addresses)))
+    direction        = "ingress"
+    protocol         = "tcp"
+    port_range_min   = tonumber(var.ssh_port)
+    port_range_max   = tonumber(var.ssh_port)
+    remote_ip_prefix = each.value
+  }
+
+  Группа привязана к ВМ в vm.tf:57 (vm.tf#L57). Группа безопасности VK Cloud
+  пропускает только то, что явно разрешено. Поэтому снаружи до ВМ доходят
+  только:
+  - 80 и 443 с любого адреса;
+  - SSH-порт только с адресов из списка.
+
+  Остальные порты из интернета закрыты, даже если сервис внутри ВМ слушает
+  0.0.0.0. Фильтрация идёт на уровне облачной сети, до ВМ.
+
+  Есть два отличия от Yandex:
+  - Протокол. В Yandex у правила SSH стоял ANY. В VK Cloud, если указан порт,
+    протокол обязателен, поэтому я поставил tcp. Если на этом порту нужен и UDP
+    (например, mosh), понадобится второе правило.
+  - Один CIDR на правило. Отсюда for_each. Из-за nonsensitive разрешённые IP
+    будут видны в выводе terraform plan. Если это критично, можно убрать
+    for_each и передавать адреса как обычную (не sensitive) переменную. На
+    безопасность это не влияет.
+
+  Если слабо защищённый сервер слушает другой порт
+
+  Для него нужно отдельное правило с тем же списком IP. Если хотите, добавлю
+  переменную, например protected_ports, и правила будут создаваться на каждую
+  пару «порт × IP».
+
+  Ручная настройка
+
+  Если Terraform не нужен: консоль VK Cloud → «Виртуальные сети» → «Настройки
+  firewall» → группа home-prod-security-group → правило входящего трафика:
+  протокол TCP, порт, удалённый адрес — нужный CIDR. Но тогда Terraform при
+  следующем apply удалит правила, которых нет в конфигурации, и вручную их лучше
+  не добавлять.
+
+  Для дополнительной защиты можно включить ufw или nftables на самой ВМ с теми
+  же правилами. Это страховка на случай ошибки в группе безопасности.
+
+  Поправка к моему прошлому отчёту про S3
+
+  Пока искал, нашёл, что Bucket Policy в VK Object Storage всё-таки есть, по
+  документации
+  (https://cloud.vk.ru/docs/ru/storage/s3/concepts/access/bucket-policy) и
+  анонсу от июля 2026 (https://cloud.vk.ru/blog/bucket-policy-v-vk-object-storag
+  e-upravlenie-dostupom-cherez-json-politiki/). Значит, ограничение бакетов по
+  IP ВМ и права отдельных S3-аккаунтов переносить можно, я ошибся, когда записал
+  их в непортируемые. Условия по aws:Referer там нет, но правило для консоли
+  Yandex в VK и не нужно. Если хотите, верну политики в media_bucket.tf и
+  backups_bucket.tf через aws_s3_bucket_policy. Работает ли этот ресурс с VK,
+  надо будет проверить на тестовом бакете.
+
+❯ Да, верни политики
+
+● Сначала уточню по документации, в каком формате указывать ID проекта и имя
+  S3-аккаунта в Principal.
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● В VK по умолчанию разрешено всё, доступ сужается только явными Deny, поэтому
+  Yandex-политики (только Allow) нужно переворачивать в запреты, а в Principal
+  указывать S3-идентификатор проекта вида mcs1234567890, а не UUID project_id.
+  Приступаю к написанию политик.
+
+  Read 1 file (ctrl+o to expand)
+
+● Write(media_bucket.tf)
+  ⎿  Added 87 lines, removed 3 lines
+      1  // Create media bucket for content
+      2 -// VK Cloud doesn't support bucket policies (no IP restrictions,
+        - no per-account permissions), so access is restricted by ACL onl
+        -y:                                                              
+      3 -// bucket is private and is accessible only by accounts of the p
+        -roject.                                                         
+      2  resource "aws_s3_bucket" "media_bucket" {
+      3    bucket = format("%s-media", local.resource_name_prefix)
+      4  
+     ...
+      14  }
+      15  
+      16  // Create Object Storage account that will be used to put or de
+          lete content
+      19 -// Note: VK Cloud Object Storage account has access to all buck
+         -ets of the project                                             
+      17 +// VK Cloud Object Storage account has access to all buckets of
+         + the project by default, access is restricted by bucket policie
+         +s                                                              
+      18  resource "vkcs_iam_s3_account" "media_bucket_account" {
+      19    name = format("%s-media-bucket", local.resource_name_prefix)
+      20    description = "Object Storage account to put or delete conten
+          t in media bucket"
+     ...
+       28    value = vkcs_iam_s3_account.media_bucket_account.secret_key
+       29    sensitive = true
+       30  }
+       31 +                                                              
+       32 +// Configure security policy for media bucket                 
+       33 +// In VK Cloud all actions are allowed for accounts of the pro
+          +ject by default (implicit allow), so access is restricted by e
+          +xplicit deny only.                                            
+       34 +// Terraform account and VK Cloud Console users aren't restric
+          +ted, so they are still able to manage bucket.                 
+       35 +// https://cloud.vk.ru/docs/ru/storage/s3/concepts/access/buck
+          +et-policy                                                     
+       36 +resource "aws_s3_bucket_policy" "media_bucket_security_policy"
+          + {                                                            
+       37 +  bucket = aws_s3_bucket.media_bucket.id                      
+       38 +  policy = jsonencode(                                        
+       39 +    {                                                         
+       40 +      Version = "2012-10-17"                                  
+       41 +      Statement = [                                           
+       42 +        // denies any access to media bucket using media bucke
+          +t account from anywhere except VM                             
+       43 +        {                                                     
+       44 +          Sid = format("%s-media-bucket-deny-media-account-out
+          +side-vm", local.resource_name_prefix)                         
+       45 +          Effect = "Deny"                                     
+       46 +          Principal = {                                       
+       47 +            AWS = local.media_bucket_account_principal        
+       48 +          }                                                   
+       49 +          Action = ["s3:*"]                                   
+       50 +          Resource = [                                        
+       51 +            format("arn:aws:s3:::%s", aws_s3_bucket.media_buck
+          +et.bucket),                                                   
+       52 +            format("arn:aws:s3:::%s/*", aws_s3_bucket.media_bu
+          +cket.bucket)                                                  
+       53 +          ]                                                   
+       54 +          Condition = {                                       
+       55 +            NotIpAddress = {                                  
+       56 +              "aws:SourceIp" = local.vm_ip_address_cidr       
+       57 +            }                                                 
+       58 +          }                                                   
+       59 +        },                                                    
+       60 +        // denies to change bucket settings using media bucket
+          + account to prevent bypass of this policy                     
+       61 +        {                                                     
+       62 +          Sid = format("%s-media-bucket-deny-media-account-buc
+          +ket-management", local.resource_name_prefix)                  
+       63 +          Effect = "Deny"                                     
+       64 +          Principal = {                                       
+       65 +            AWS = local.media_bucket_account_principal        
+       66 +          }                                                   
+       67 +          Action = local.bucket_management_actions            
+       68 +          Resource = [                                        
+       69 +            format("arn:aws:s3:::%s", aws_s3_bucket.media_buck
+          +et.bucket)                                                    
+       70 +          ]                                                   
+       71 +        },                                                    
+       72 +        // denies any access to media bucket using backups buc
+          +ket account from anywhere except VM                           
+       73 +        {                                                     
+       74 +          Sid = format("%s-media-bucket-deny-backups-account-o
+          +utside-vm", local.resource_name_prefix)                       
+       75 +          Effect = "Deny"                                     
+       76 +          Principal = {                                       
+       77 +            AWS = local.backups_bucket_account_principal      
+       78 +          }                                                   
+       79 +          Action = ["s3:*"]                                   
+       80 +          Resource = [                                        
+       81 +            format("arn:aws:s3:::%s", aws_s3_bucket.media_buck
+          +et.bucket),                                                   
+       82 +            format("arn:aws:s3:::%s/*", aws_s3_bucket.media_bu
+          +cket.bucket)                                                  
+       83 +          ]                                                   
+       84 +          Condition = {                                       
+       85 +            NotIpAddress = {                                  
+       86 +              "aws:SourceIp" = local.vm_ip_address_cidr       
+       87 +            }                                                 
+       88 +          }                                                   
+       89 +        },                                                    
+       90 +        // backups bucket account is used by backupper to read
+          + content of media bucket, so any changes are denied           
+       91 +        {                                                     
+       92 +          Sid = format("%s-media-bucket-deny-backups-account-w
+          +rite", local.resource_name_prefix)                            
+       93 +          Effect = "Deny"                                     
+       94 +          Principal = {                                       
+       95 +            AWS = local.backups_bucket_account_principal      
+       96 +          }                                                   
+       97 +          Action = local.object_write_actions                 
+       98 +          Resource = [                                        
+       99 +            format("arn:aws:s3:::%s/*", aws_s3_bucket.media_bu
+          +cket.bucket)                                                  
+      100 +          ]                                                   
+      101 +        },                                                    
+      102 +        {                                                     
+      103 +          Sid = format("%s-media-bucket-deny-backups-account-b
+          +ucket-management", local.resource_name_prefix)                
+      104 +          Effect = "Deny"                                     
+      105 +          Principal = {                                       
+      106 +            AWS = local.backups_bucket_account_principal      
+      107 +          }                                                   
+      108 +          Action = local.bucket_management_actions            
+      109 +          Resource = [                                        
+      110 +            format("arn:aws:s3:::%s", aws_s3_bucket.media_buck
+          +et.bucket)                                                    
+      111 +          ]                                                   
+      112 +        }                                                     
+      113 +      ]                                                       
+      114 +    }                                                         
+      115 +  )                                                           
+      116 +}                                                             
+
+● Write(backups_bucket.tf)
+  ⎿  Added 75 lines, removed 3 lines
+      1  // Create backups bucket for db and s3 backups
+      2 -// VK Cloud doesn't support bucket max size and bucket policies 
+        -(no IP restrictions, no per-account permissions),               
+      3 -// so access is restricted by ACL only: bucket is private and is
+        - accessible only by accounts of the project.                    
+      2 +// VK Cloud doesn't support bucket max size, so size of backups 
+        +bucket isn't limited                                            
+      3  resource "aws_s3_bucket" "backups_bucket" {
+      4    bucket = format("%s-backups", local.resource_name_prefix)
+      5  
+     ...
+      15  }
+      16  
+      17  // Create Object Storage account that will be used to put backu
+          ps and get list of media bucket content
+      19 -// Note: VK Cloud Object Storage account has access to all buck
+         -ets of the project                                             
+      18 +// VK Cloud Object Storage account has access to all buckets of
+         + the project by default, access is restricted by bucket policie
+         +s                                                              
+      19  resource "vkcs_iam_s3_account" "backups_bucket_account" {
+      20    name = format("%s-backups-bucket", local.resource_name_prefix
+          )
+      21    description = "Object Storage account to put backups into bac
+          kups bucket"
+     ...
+       29    value = vkcs_iam_s3_account.backups_bucket_account.secret_ke
+           y
+       30    sensitive = true
+       31  }
+       32 +                                                              
+       33 +// Configure security policy for backups bucket               
+       34 +// In VK Cloud all actions are allowed for accounts of the pro
+          +ject by default (implicit allow), so access is restricted by e
+          +xplicit deny only.                                            
+       35 +// Terraform account and VK Cloud Console users aren't restric
+          +ted, so they are still able to manage bucket and restore backu
+          +ps.                                                           
+       36 +// https://cloud.vk.ru/docs/ru/storage/s3/concepts/access/buck
+          +et-policy                                                     
+       37 +resource "aws_s3_bucket_policy" "backups_bucket_security_polic
+          +y" {                                                          
+       38 +  bucket = aws_s3_bucket.backups_bucket.id                    
+       39 +  policy = jsonencode(                                        
+       40 +    {                                                         
+       41 +      Version = "2012-10-17"                                  
+       42 +      Statement = [                                           
+       43 +        // denies any access to backups bucket using backups b
+          +ucket account from anywhere except VM                         
+       44 +        {                                                     
+       45 +          Sid = format("%s-backups-bucket-deny-backups-account
+          +-outside-vm", local.resource_name_prefix)                     
+       46 +          Effect = "Deny"                                     
+       47 +          Principal = {                                       
+       48 +            AWS = local.backups_bucket_account_principal      
+       49 +          }                                                   
+       50 +          Action = ["s3:*"]                                   
+       51 +          Resource = [                                        
+       52 +            format("arn:aws:s3:::%s", aws_s3_bucket.backups_bu
+          +cket.bucket),                                                 
+       53 +            format("arn:aws:s3:::%s/*", aws_s3_bucket.backups_
+          +bucket.bucket)                                                
+       54 +          ]                                                   
+       55 +          Condition = {                                       
+       56 +            NotIpAddress = {                                  
+       57 +              "aws:SourceIp" = local.vm_ip_address_cidr       
+       58 +            }                                                 
+       59 +          }                                                   
+       60 +        },                                                    
+       61 +        // denies to delete backups using backups bucket accou
+          +nt, so backups can't be removed if VM is compromised          
+       62 +        {                                                     
+       63 +          Sid = format("%s-backups-bucket-deny-backups-account
+          +-delete", local.resource_name_prefix)                         
+       64 +          Effect = "Deny"                                     
+       65 +          Principal = {                                       
+       66 +            AWS = local.backups_bucket_account_principal      
+       67 +          }                                                   
+       68 +          Action = [                                          
+       69 +            "s3:DeleteObject",                                
+       70 +            "s3:DeleteObjectVersion"                          
+       71 +          ]                                                   
+       72 +          Resource = [                                        
+       73 +            format("arn:aws:s3:::%s/*", aws_s3_bucket.backups_
+          +bucket.bucket)                                                
+       74 +          ]                                                   
+       75 +        },                                                    
+       76 +        // denies to change bucket settings using backups buck
+          +et account to prevent bypass of this policy                   
+       77 +        {                                                     
+       78 +          Sid = format("%s-backups-bucket-deny-backups-account
+          +-bucket-management", local.resource_name_prefix)              
+       79 +          Effect = "Deny"                                     
+       80 +          Principal = {                                       
+       81 +            AWS = local.backups_bucket_account_principal      
+       82 +          }                                                   
+       83 +          Action = local.bucket_management_actions            
+       84 +          Resource = [                                        
+       85 +            format("arn:aws:s3:::%s", aws_s3_bucket.backups_bu
+          +cket.bucket)                                                  
+       86 +          ]                                                   
+       87 +        },                                                    
+       88 +        // media bucket account has nothing to do with backups
+       89 +        {                                                     
+       90 +          Sid = format("%s-backups-bucket-deny-media-account",
+          + local.resource_name_prefix)                                  
+       91 +          Effect = "Deny"                                     
+       92 +          Principal = {                                       
+       93 +            AWS = local.media_bucket_account_principal        
+       94 +          }                                                   
+       95 +          Action = ["s3:*"]                                   
+       96 +          Resource = [                                        
+       97 +            format("arn:aws:s3:::%s", aws_s3_bucket.backups_bu
+          +cket.bucket),                                                 
+       98 +            format("arn:aws:s3:::%s/*", aws_s3_bucket.backups_
+          +bucket.bucket)                                                
+       99 +          ]                                                   
+      100 +        }                                                     
+      101 +      ]                                                       
+      102 +    }                                                         
+      103 +  )                                                           
+      104 +}                                                             
+
+● Добавляю переменную с S3-ID проекта и общие locals.
+
+● Update(main.tf)
+  ⎿  Added 31 lines
+       66    sensitive = true
+       67  }
+       68  
+       69 +// Project ID that is used in Object Storage bucket policies. 
+          +It differs from vkcs_project_id. Example: mcs1234567890       
+       70 +// Can be found in VK Cloud Console -> Project settings -> Gen
+          +eral information -> Project ID                                
+       71 +variable "s3_project_id" {                                    
+       72 +  type = string                                               
+       73 +  sensitive = true                                            
+       74 +}                                                             
+       75 +                                                              
+       76 +locals {                                                      
+       77 +  media_bucket_account_principal = format("arn:aws:iam::%s:use
+          +r/%s", var.s3_project_id, vkcs_iam_s3_account.media_bucket_acc
+          +ount.account_name)                                            
+       78 +  backups_bucket_account_principal = format("arn:aws:iam::%s:u
+          +ser/%s", var.s3_project_id, vkcs_iam_s3_account.backups_bucket
+          +_account.account_name)                                        
+       79 +                                                              
+       80 +  // Actions that allow to change bucket settings and bypass b
+          +ucket policy                                                  
+       81 +  bucket_management_actions = [                               
+       82 +    "s3:PutBucketPolicy",                                     
+       83 +    "s3:DeleteBucketPolicy",                                  
+       84 +    "s3:PutLifecycleConfiguration",                           
+       85 +    "s3:PutBucketVersioning",                                 
+       86 +    "s3:PutBucketAcl",                                        
+       87 +    "s3:DeleteBucket"                                         
+       88 +  ]                                                           
+       89 +                                                              
+       90 +  // Actions that allow to change objects                     
+       91 +  object_write_actions = [                                    
+       92 +    "s3:PutObject",                                           
+       93 +    "s3:PutObjectAcl",                                        
+       94 +    "s3:DeleteObject",                                        
+       95 +    "s3:DeleteObjectVersion",                                 
+       96 +    "s3:AbortMultipartUpload"                                 
+       97 +  ]                                                           
+       98 +}                                                             
+       99 +                                                              
+      100  // availability zone
+      101  variable "zone" {
+      102    type = string
+
+● Update(network.tf)
+  ⎿  Added 2 lines
+      87  
+      88  locals {
+      89    vm_ip_address = vkcs_networking_floatingip.ip_address.address
+      90 +  // VM uses floating ip as source ip address for internet requ
+         +ests, so it's used in bucket policies                          
+      91 +  vm_ip_address_cidr = format("%s/32", local.vm_ip_address)    
+      92  }
+
+● Проверю, все ли действия из списков присутствуют в таблице действий VK, чтобы
+  исключить их молчаливое игнорирование.
+
+  Ran 1 shell command (ctrl+o to expand)
+● Все действия есть в документации. Обновляю README и валидирую.
+
+● Bash(sed -i 's|    -var "s3_secret_key=YOUR_OBJECT_STORAGE_SECRET_KEY" \\|&\n
+        -var "s3_project_id=YOUR_OBJECT_STORAGE_PROJECT_ID" \\|; s|    -var
+      "s3_secret_key=s…)
+  ⎿  Updated README.md (+4 -0)
+      43  4. Click "Download VKCS provider file" button, it contains `use
+          rname` and `project_id` that should be used in terraform variab
+          les
+      44  5. Make sure that two-factor authentication is disabled for the
+           user or create a separate user for terraform with "Project adm
+          inistrator" role, because VK Cloud Terraform provider uses logi
+          n and password for authentication
+      45  
+      46 +`s3_project_id` is used in Object Storage bucket policies and d
+         +iffers from `project_id`. It looks like `mcs1234567890` and can
+         + be found in VK Cloud Console -> Project settings -> General in
+         +formation.                                                     
+      47 +                                                               
+      48  ### VSCode Dev Container
+      49  
+      50  Open this repo's folder in VSCode, it might immediately propose
+           you to re-open it in a Dev Container or you can click on Remot
+          e Explorer, find plus button and choose the Open Current Folder
+           in Container option and wait when it is ready.
+     ...
+      100      -var "vkcs_project_id=YOUR_VK_CLOUD_PROJECT_ID" \
+      101      -var "s3_access_key=YOUR_OBJECT_STORAGE_ACCESS_KEY" \
+      102      -var "s3_secret_key=YOUR_OBJECT_STORAGE_SECRET_KEY" \
+      103 +    -var "s3_project_id=YOUR_OBJECT_STORAGE_PROJECT_ID" \     
+      104      -var "protected_resources_allowed_external_ip_addresses=YO
+           UR_IP_ADRESSES" \
+      105      -var "project=YOUR_PROJECT_NAME" \
+      106      -var "environment=YOUR_ENVIRONMENT" \
+     ...
+      120      -var "vkcs_project_id=b5b7ffd4ef0547e5b222f44555dfXXXX" \
+      121      -var "s3_access_key=access_key" \
+      122      -var "s3_secret_key=secret_key" \
+      123 +    -var "s3_project_id=mcs1234567890" \                      
+      124      -var "protected_resources_allowed_external_ip_addresses=77
+           .88.55.88/32" \
+      125      -var "project=home" \
+      126      -var "environment=prod" \
+
+● Вернул политики бакетов, terraform validate проходит. На реальном VK Cloud я
+  их не применял, и это главный риск: работу aws_s3_bucket_policy с VK нужно
+  проверить на тестовом бакете.
+
+  Чем отличается от Yandex
+
+  Модель доступа в VK обратная. Аккаунтам своего проекта по умолчанию разрешено
+  всё, а сузить доступ можно только явными Deny (документация
+  (https://cloud.vk.ru/docs/ru/storage/s3/concepts/access/bucket-policy)).
+  Поэтому разрешающие правила из Yandex я переписал в запреты для двух
+  S3-аккаунтов приложения. Ключ Terraform и пользователи консоли не ограничены,
+  так что управлять бакетами и восстанавливать бэкапы можно как раньше.
+  Отдельное правило для доступа из консоли (aws:referer), как было в Yandex, не
+  нужно.
+
+  Бакет home-prod-media (media_bucket.tf):
+  - аккаунту медиа запрещено всё с любого IP, кроме IP ВМ;
+  - аккаунту бэкапов запрещено всё с любого IP, кроме IP ВМ, а с ВМ разрешено
+    только чтение, изменять объекты нельзя;
+  - обоим аккаунтам запрещено менять настройки бакета: политику, ACL, lifecycle,
+    версионирование, удаление бакета. Иначе с ключом приложения можно было бы
+    снять собственный запрет.
+
+  Бакет home-prod-backups (backups_bucket.tf):
+  - аккаунту бэкапов разрешён доступ только с IP ВМ; удалять объекты и менять
+    настройки бакета он не может. Если ВМ взломают, бэкапы не удалить;
+  - аккаунту медиа доступ к этому бакету закрыт полностью.
+
+  Это немного шире, чем было в Yandex. Там аккаунту медиа разрешались только
+  PutObject/DeleteObject, а аккаунту бэкапов — только PutObject. Здесь с ВМ им
+  доступно и чтение. Если нужен строгий вариант, добавлю запрет GetObject.
+
+  Что ещё добавил
+
+  - Переменную s3_project_id в main.tf. Это ID проекта для политик, вида
+    mcs1234567890, и он не совпадает с UUID vkcs_project_id. В README я написал,
+    что он в «Настройки проекта → Общая информация», но точное место в консоли
+    не проверял.
+  - Principal собирается из атрибута account_name ресурса vkcs_iam_s3_account.
+    Ни документация, ни провайдер не подтверждают, что это то самое имя, которое
+    ждёт политика.
+  - Пропуск с ВМ работает по её внешнему (floating) IP, через которого ВМ
+    выходит в интернет. Если в сети включить vkcs_services_access (доступ к
+    сервисам VK из внутренней сети), запросы пойдут с внутреннего адреса, и
+    правило по IP перестанет пропускать ВМ.
+
+  Как проверить после apply
+
+  1. aws s3api get-bucket-policy --bucket home-prod-media --endpoint-url
+     https://hb.ru-msk.vkcloud-storage.ru должен вернуть все правила. По статье
+     VK неизвестные ключи иногда молча отбрасываются.
+  2. С ВМ ключом медиа загрузить и удалить объект — должно получиться.
+  3. С любой другой машины тем же ключом — должен прийти AccessDenied.
+  4. Ключом бэкапов удалить объект из home-prod-backups — должен прийти
+     AccessDenied.
+
+  Если в пункте 3 доступ проходит, значит Principal не совпал с аккаунтом.
+  Первым делом стоит проверить s3_project_id и account_name.
+
+  Изменения по-прежнему не закоммичены.
