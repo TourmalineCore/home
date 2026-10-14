@@ -37,6 +37,7 @@ secret_key="PASTE_YOUR_SECRET_KEY_HERE"
 
 ### Get VK Cloud credentials for Terraform
 
+0. Activate 2FA for the account (temporarily, otherwise we won't be able to download VKCS provider file for terraform and use Terraform in general), Activate API access.
 1. Open [VK Cloud Console](https://msk.cloud.vk.com/app/)
 2. Click on the user name in the upper right corner and select "Project settings"
 3. Open "Terraform" tab
