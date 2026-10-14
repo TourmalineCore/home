@@ -167,7 +167,7 @@ provider "vkcs" {
   password   = var.vkcs_password
   project_id = var.vkcs_project_id
   region     = var.vkcs_region
-  auth_url   = "https://infra.mail.ru:35357/v3/"
+  auth_url   = "https://infra.mail.ru:5000/v3/"
 }
 
 provider "aws" {
