@@ -22,12 +22,6 @@ resource "vkcs_blockstorage_volume" "vm-disk" {
   }
 }
 
-// ssh key file should be named as project name + environment + ssh. Example: home-prod-ssh.pub
-resource "vkcs_compute_keypair" "ssh_key" {
-  name = format("%s-ssh", local.resource_name_prefix)
-  public_key = file(format("./%s-ssh.pub", local.resource_name_prefix))
-}
-
 // Install VK Cloud monitoring agent. Service user for monitoring is created automatically
 // https://cloud.vk.ru/docs/en/monitoring-services/monitoring
 resource "vkcs_cloud_monitoring" "monitoring" {
@@ -39,7 +33,6 @@ resource "vkcs_compute_instance" "vm" {
   availability_zone = var.zone
   // VK Cloud flavor changing resizes VM with its stopping
   flavor_name = var.vm_flavor_name
-  key_pair = vkcs_compute_keypair.ssh_key.name
   stop_before_destroy = true
 
   block_device {
@@ -57,7 +50,13 @@ resource "vkcs_compute_instance" "vm" {
   security_group_ids = [vkcs_networking_secgroup.security_group.id]
 
   // VK Cloud has no hostname attribute, so it's set via cloud-init
-  user_data = "#cloud-config\nhostname: ${local.resource_name_prefix}\nfqdn: ${local.resource_name_prefix}\n"
+  // SSH key is set via cloud-init too, because VK Cloud keypairs don't support ed25519 keys ("failed to generate fingerprint" error)
+  // ssh key file should be named as project name + environment + ssh. Example: home-prod-ssh.pub
+  user_data = format("#cloud-config\n%s", yamlencode({
+    hostname = local.resource_name_prefix
+    fqdn = local.resource_name_prefix
+    ssh_authorized_keys = [trimspace(file(format("./%s-ssh.pub", local.resource_name_prefix)))]
+  }))
 
   cloud_monitoring {
     service_user_id = vkcs_cloud_monitoring.monitoring.service_user_id

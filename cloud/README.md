@@ -153,7 +153,7 @@ To destroy the cloud resources that were created using this terraform configurat
 
 ## After CDN domain was linked in domain names registry
 1. Add CNAME record for CDN domain that points to the CNAME shown in VK Cloud Console -> CDN -> CDN resource
-2. Let's Encrypt certificate will be issued automatically when DNS changes have propagated
+2. When DNS changes have propagated apply terraform configuration with `-var "cdn_lets_encrypt_enabled=true"` to issue Let's Encrypt certificate. Don't enable it before DNS is switched: CDN resource can't be updated until certificate is issued
 3. Open [VK Cloud Console](https://msk.cloud.vk.com/app/), navigate to "CDN", select the CDN resource and enable redirect from HTTP to HTTPS, because this option isn't supported by VK Cloud Terraform provider
 
 ## DDoS protection

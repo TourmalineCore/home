@@ -185,3 +185,10 @@ provider "aws" {
     s3 = "https://hb.ru-msk.vkcloud-storage.ru"
   }
 }
+
+// Enable it only after CNAME record for cdn_domain points to VK Cloud CDN, otherwise Let's Encrypt certificate can't be issued
+// and CDN resource can't be updated until certificate is issued
+variable "cdn_lets_encrypt_enabled" {
+  type = bool
+  default = false
+}
