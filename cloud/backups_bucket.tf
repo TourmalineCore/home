@@ -1,96 +1,101 @@
 // Create backups bucket for db and s3 backups
-resource "yandex_storage_bucket" "backups_bucket" {
-  access_key = yandex_iam_service_account_static_access_key.create_delete_update_media_and_backups_buckets_service_account_static_access_key.access_key
-  secret_key = yandex_iam_service_account_static_access_key.create_delete_update_media_and_backups_buckets_service_account_static_access_key.secret_key
+// VK Cloud doesn't support bucket max size, so size of backups bucket isn't limited
+resource "aws_s3_bucket" "backups_bucket" {
   bucket = format("%s-backups", local.resource_name_prefix)
-  max_size = var.backups_bucket_max_size_in_bytes
+
+  // VK Cloud Object Storage doesn't support bucket tags (PutBucketTagging isn't implemented)
 }
 
-// Create service account that will be used to put backups
-resource "yandex_iam_service_account" "backups_bucket_service_account" {
-  folder_id = var.folder_id
-  name      = format("%s-backups-bucket-service-account", local.resource_name_prefix)
+resource "aws_s3_bucket_acl" "backups_bucket_acl" {
+  bucket = aws_s3_bucket.backups_bucket.id
+  acl = "private"
 }
 
-// Grant storage.editor perms for backups_bucket_service_account to be able to put backups
-resource "yandex_storage_bucket_iam_binding" "backups_bucket_backups_bucket_service_account_iam_binding" {
-  bucket = yandex_storage_bucket.backups_bucket.bucket
-  role = "storage.editor"
+// Create Object Storage account that will be used to put backups and get list of media bucket content
+// VK Cloud Object Storage account has access to all buckets of the project by default, access is restricted by bucket policies
+resource "vkcs_iam_s3_account" "backups_bucket_account" {
+  name = format("%s-backups-bucket", local.resource_name_prefix)
+  description = "Object Storage account to put backups into backups bucket"
+}
 
-  members = [
-    format("serviceAccount:%s", yandex_iam_service_account.backups_bucket_service_account.id)
-  ]
+output "backups_bucket_access_key" {
+  value = vkcs_iam_s3_account.backups_bucket_account.access_key
+}
+
+output "backups_bucket_secret_key" {
+  value = vkcs_iam_s3_account.backups_bucket_account.secret_key
+  sensitive = true
 }
 
 // Configure security policy for backups bucket
-resource "yandex_storage_bucket_policy" "backups_bucket_security_policy" {
-  bucket = yandex_storage_bucket.backups_bucket.bucket
+// In VK Cloud all actions are allowed for accounts of the project by default (implicit allow), so access is restricted by explicit deny only.
+// Terraform account and VK Cloud Console users aren't restricted, so they are still able to manage bucket and restore backups.
+// https://cloud.vk.ru/docs/ru/storage/s3/concepts/access/bucket-policy
+resource "aws_s3_bucket_policy" "backups_bucket_security_policy" {
+  bucket = aws_s3_bucket.backups_bucket.id
   policy = jsonencode(
     {
       Version = "2012-10-17"
       Statement = [
+        // denies any access to backups bucket using backups bucket account from anywhere except VM
         {
-          Effect = "Allow"
+          Sid = format("%s-backups-bucket-deny-backups-account-outside-vm", local.resource_name_prefix)
+          Effect = "Deny"
           Principal = {
-            CanonicalUser = yandex_iam_service_account.backups_bucket_service_account.id
+            AWS = local.backups_bucket_account_principal
           }
-          Action = [
-            "s3:PutObject"
+          // VK Cloud rejects wildcard action inside a list with "MalformedPolicy" error, so it is set as a string
+          Action = "s3:*"
+          Resource = [
+            format("arn:aws:s3:::%s", aws_s3_bucket.backups_bucket.bucket),
+            format("arn:aws:s3:::%s/*", aws_s3_bucket.backups_bucket.bucket)
           ]
-          Resource  = [
-              // Resource with "/*" grants permissons to objects in the bucket. There was a problem with resources definition. 
-              // Service accounts can't manage object in bucket if resource with "/*" wasn't added. 
-              format("arn:aws:s3:::%s/*", yandex_storage_bucket.backups_bucket.bucket),
-              format("arn:aws:s3:::%s", yandex_storage_bucket.backups_bucket.bucket)
-          ]
-          Sid = format("%s-backups-bucket-write-and-delete-policy", local.resource_name_prefix)
           Condition = {
-            IpAddress = {
-              "aws:sourceip" = local.vm_ip_address
+            NotIpAddress = {
+              "aws:SourceIp" = local.vm_ip_address_cidr
             }
           }
         },
-        // allows delete or update bucket using create_delete_update_media_and_backups_buckets_service_account
+        // denies to delete backups using backups bucket account, so backups can't be removed if VM is compromised
         {
-          Effect = "Allow"
+          Sid = format("%s-backups-bucket-deny-backups-account-delete", local.resource_name_prefix)
+          Effect = "Deny"
           Principal = {
-            CanonicalUser = yandex_iam_service_account.create_delete_update_media_and_backups_buckets_service_account.id
+            AWS = local.backups_bucket_account_principal
           }
           Action = [
-            "s3:ListBucket",
-            "s3:GetBucketCORS",
-            "s3:GetBucketWebsite",
-            "s3:GetBucketVersioning",
-            "s3:GetBucketLogging",
-            "s3:GetLifecycleConfiguration",
-            "s3:GetEncryptionConfiguration"            
+            "s3:DeleteObject",
+            "s3:DeleteObjectVersion"
           ]
-          Resource  = [
-              // Resource with "/*" grants permissons to objects in the bucket. There was a problem with resources definition. 
-              // Service accounts can't manage object in bucket if resource with "/*" wasn't added. 
-              format("arn:aws:s3:::%s/*", yandex_storage_bucket.backups_bucket.bucket),
-              format("arn:aws:s3:::%s", yandex_storage_bucket.backups_bucket.bucket)
+          Resource = [
+            format("arn:aws:s3:::%s/*", aws_s3_bucket.backups_bucket.bucket)
           ]
-          Sid = format("%s-backups-bucket-delele-and-update-using-service-account", local.resource_name_prefix)
         },
+        // denies to change bucket settings using backups bucket account to prevent bypass of this policy
         {
-          Effect = "Allow"
-          Principal = "*"
-          Action = [
-            "*"
-          ]
-          Resource  = [
-              // Resource with "/*" grants permissons to objects in the bucket. There was a problem with resources definition. 
-              // Service accounts can't manage object in bucket if resource with "/*" wasn't added. 
-              format("arn:aws:s3:::%s/*", yandex_storage_bucket.backups_bucket.bucket),
-              format("arn:aws:s3:::%s", yandex_storage_bucket.backups_bucket.bucket)
-          ]
-          Sid = format("%s-backups-bucket-list-policy", local.resource_name_prefix)
-          Condition = {
-            StringLike = {
-              "aws:referer" = format("https://console.yandex.cloud/folders/*/storage/buckets/%s-backups*", local.resource_name_prefix)
-            }
+          Sid = format("%s-backups-bucket-deny-backups-account-bucket-management", local.resource_name_prefix)
+          Effect = "Deny"
+          Principal = {
+            AWS = local.backups_bucket_account_principal
           }
+          Action = local.bucket_management_actions
+          Resource = [
+            format("arn:aws:s3:::%s", aws_s3_bucket.backups_bucket.bucket)
+          ]
+        },
+        // media bucket account has nothing to do with backups
+        {
+          Sid = format("%s-backups-bucket-deny-media-account", local.resource_name_prefix)
+          Effect = "Deny"
+          Principal = {
+            AWS = local.media_bucket_account_principal
+          }
+          // VK Cloud rejects wildcard action inside a list with "MalformedPolicy" error, so it is set as a string
+          Action = "s3:*"
+          Resource = [
+            format("arn:aws:s3:::%s", aws_s3_bucket.backups_bucket.bucket),
+            format("arn:aws:s3:::%s/*", aws_s3_bucket.backups_bucket.bucket)
+          ]
         }
       ]
     }

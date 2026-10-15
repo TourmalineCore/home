@@ -1,0 +1,1933 @@
+
+❯ в этом репозитории хранится terraform-конфигурация облака проекта home, она
+  написана для yandex cloud, необходимо мигрировать эту конфигурацию на vk
+  cloud и проверить есть ли что-то из конфигурации, что не поддерживается в vk
+  cloud и это нельзя портировать
+
+● Начну с изучения текущей конфигурации.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Конфигурация небольшая: VPC, ВМ, 2 S3-бакета с политиками, IAM SA, CDN и
+  сертификат. Теперь проверю окружение и документацию провайдера VK Cloud
+  (vk-cs/vkcs).
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Реестр доступен напрямую — скачаю провайдер vk-cs/vkcs в scratchpad и извлеку
+  его точную схему, чтобы опираться на реальные ресурсы, а не на память.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● В vkcs 0.18.0 нашёл CDN, vkcs_iam_s3_account, vkcs_iam_service_user,
+  vkcs_cloud_monitoring, но отдельного ресурса S3-бакета нет. Сейчас изучу
+  атрибуты найденных ресурсов.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Я получил схему провайдера VK Cloud (312 строк атрибутов) и сейчас анализирую
+  её, чтобы сопоставить каждый ресурс Yandex с соответствующим аналогом.
+
+  Read 1 file (ctrl+o to expand)
+
+● Атрибуты CDN заданы вложенными типами — достану их отдельно.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● У CDN в vkcs нет опции редиректа HTTP→HTTPS — отмечу это в выводах. Далее
+  проверю по документации VK Cloud самые рискованные места: политики бакетов,
+  квоты, роли service user, DDoS-защиту и флейворы.
+
+● Web Search("VK Cloud Object Storage bucket policy terraform aws provider
+            hb.ru-msk.vkcloud-s3.ru")
+  ⎿  Did 1 search in 8s
+
+● Web Search("cloud.vk.com docs vkcs_iam_service_user role_names list of roles")
+  ⎿  Did 1 search in 6s
+
+● Web Search("VK Cloud защита от DDoS публичный IP адрес Qrator")
+  ⎿  Did 1 search in 8s
+
+● Fetch(https://cloud.vk.ru/docs/en/tools-for-using-services/terraform/how-to-gu
+       ides/aws)
+  ⎿  Received 466.3KB (200 OK)
+
+● Web Search("VK Cloud Object Storage S3 bucket policy supported actions
+            conditions aws:SourceIp aws:Referer")
+  ⎿  Did 1 search in 8s
+
+● Fetch(https://cloud.vk.ru/docs/en/storage/s3/instructions/access-management/s3
+       -acl)
+  ⎿  Received 472.6KB (200 OK)
+
+● Web Search("cloud.vk.ru docs storage s3 bucket policy "Bucket Policy" VK
+            Object Storage")
+  ⎿  Did 1 search in 5s
+
+● Fetch(https://cloud.vk.ru/docs/en/storage/s3/s3-rest-api)
+  ⎿  Received 393.5KB (200 OK)
+
+● Fetch(https://cloud.vk.ru/docs/en/storage/s3/concepts/about)
+  ⎿  Received 415.4KB (200 OK)
+
+● Проверяю в документации VK S3 API бакетов (политики, квоты) и prefix access
+  keys — это ключевой риск миграции.
+
+● Fetch(https://cloud.vk.ru/docs/en/storage/s3/s3-rest-api/bucket-api)
+  ⎿  Received 462.9KB (200 OK)
+
+● Fetch(https://cloud.vk.ru/docs/en/storage/s3/s3-rest-api/pak-api)
+  ⎿  Received 447.5KB (200 OK)
+
+● Политики бакетов и квоты в VK S3 API оказались недокументированы. Дальше
+  проверю роли service user, имена внешней сети, типы дисков и зоны.
+● Web Search("VK Cloud сервисные пользователи роли список mcs_admin_vm
+            мониторинг")
+  ⎿  Did 1 search in 10s
+
+● Fetch(https://raw.githubusercontent.com/vk-cs/terraform-provider-vkcs/master/d
+       ocs/resources/iam_service_user.md)
+  ⎿  Received 2.5KB (200 OK)
+
+● Fetch(https://raw.githubusercontent.com/vk-cs/terraform-provider-vkcs/master/d
+       ocs/resources/cloud_monitoring.md)
+  ⎿  Received 1.5KB (200 OK)
+
+● Мониторинг портируется полностью — vkcs_cloud_monitoring сам создаёт
+  сервисного пользователя. Теперь сверяю примеры провайдера для ВМ и сети (имена
+  внешней сети, зоны, типы дисков).
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Web Search("cloud.vk.ru docs computing iaas flavors Basic STD2 STD3 vCPU
+            guaranteed share CPU")
+  ⎿  Did 1 search in 6s
+
+● Web Search("cloud.vk.ru docs DDoS protection networks public IP anti-DDoS")
+  ⎿  Did 1 search in 7s
+
+● Осталось уточнить точный endpoint VK S3 (для backend и бакетов), затем пишу
+  конфигурацию.
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Ключевые данные собраны. Теперь уточню, как устроен доступ S3-аккаунтов VK к
+  бакетам проекта, и проверю аргументы data source для флейвора/образа.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Web Search("VK Object Storage аккаунт ключ доступа ко всем бакетам проекта
+            ограничить доступ к бакету")
+  ⎿  Did 1 search in 6s
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Fetch(https://cloud.vk.ru/docs/en/storage/s3/instructions/access-management/ap
+       ikeys)
+  ⎿  Received 413.3KB (200 OK)
+
+● Исследование закончено. Пишу конфигурацию VK Cloud на месте текущих файлов
+  (без коммита).
+
+● Write(main.tf)
+  ⎿  Added 77 lines, removed 27 lines
+       1  terraform {
+       2    required_providers {
+       3 -    yandex = {                                                 
+       4 -      source = "yandex-cloud/yandex"                           
+       3 +    vkcs = {                                                   
+       4 +      source  = "vk-cs/vkcs"                                   
+       5 +      version = "~> 0.18"                                      
+       6      }
+       7 +                                                               
+       8 +    // VK Cloud provider doesn't manage Object Storage buckets,
+         + so S3 compatible AWS provider is used for them.               
+       9 +    // VK Cloud documentation requires AWS provider version low
+         +er than 5.85.0                                                 
+      10 +    // https://cloud.vk.ru/docs/en/tools-for-using-services/ter
+         +raform/how-to-guides/aws                                       
+      11 +    aws = {                                                    
+      12 +      source  = "hashicorp/aws"                                
+      13 +      version = "< 5.85.0"                                     
+      14 +    }                                                          
+      15    }
+      16  
+       8 -  required_version = ">= 0.13"                                 
+       9 -                                                               
+      17 +  required_version = ">= 1.1.5"                                
+      18 +                                                               
+      19    backend "s3" {
+      11 -    endpoints = {                                              
+      12 -      s3 = "https://storage.yandexcloud.net"                   
+      20 +    endpoints = {                                              
+      21 +      s3 = "https://hb.ru-msk.vkcloud-storage.ru"              
+      22      }
+      23  
+      15 -    region    = "ru-central1"                                  
+      24 +    region    = "ru-msk"                                       
+      25      key       = "terraform.tfstate"
+      26  
+      18 -    // Some of checks wasn`t realized in Yandex Cloud, so in th
+         -is reason we`re skipping them                                  
+      27 +    // Some of checks wasn`t realized in VK Cloud, so in this r
+         +eason we`re skipping them                                      
+      28      skip_region_validation      = true
+      29      skip_credentials_validation = true
+      30      skip_metadata_api_check     = true
+     ...
+      33    }
+      34  }
+      35  
+      27 -variable "cloud_id" {                                          
+      36 +// Credentials of VK Cloud user. Can be found in VK Cloud Conso
+         +le -> Project settings -> Terraform -> Download VKCS provider f
+         +ile                                                            
+      37 +variable "vkcs_username" {                                     
+      38    type = string
+      39    sensitive = true
+      40  }
+      41  
+      32 -variable "folder_id" {                                         
+      42 +variable "vkcs_password" {                                     
+      43    type = string
+      44    sensitive = true
+      45  }
+      46  
+      47 +variable "vkcs_project_id" {                                   
+      48 +  type = string                                                
+      49 +  sensitive = true                                             
+      50 +}                                                              
+      51 +                                                               
+      52 +// VK Cloud region. RegionOne is Moscow region                 
+      53 +variable "vkcs_region" {                                       
+      54 +  type = string                                                
+      55 +  default = "RegionOne"                                        
+      56 +}                                                              
+      57 +                                                               
+      58 +// Static access key of Object Storage account that is used to 
+         +manage buckets (the same key is used for terraform state backen
+         +d)                                                             
+      59 +variable "s3_access_key" {                                     
+      60 +  type = string                                                
+      61 +  sensitive = true                                             
+      62 +}                                                              
+      63 +                                                               
+      64 +variable "s3_secret_key" {                                     
+      65 +  type = string                                                
+      66 +  sensitive = true                                             
+      67 +}                                                              
+      68 +                                                               
+      69  // availability zone
+      70  variable "zone" {
+      71    type = string
+      40 -  default = "ru-central1-b"                                    
+      72 +  default = "MS1"                                              
+      73  }
+      74  
+      75 +// name of external network that provides internet access and f
+         +loating ips. "internet" for Sprut SDN, "ext-net" for Neutron SD
+         +N                                                              
+      76 +variable "external_network_name" {                             
+      77 +  type = string                                                
+      78 +  default = "internet"                                         
+      79 +}                                                              
+      80 +                                                               
+      81  // name of project that will be used as part of name of every r
+          esource
+      82  variable "project" {
+      83    type = string
+     ...
+       92  
+       93  locals {
+       94    resource_name_prefix = format("%s-%s", var.project, var.envi
+           ronment)
+       95 +                                                              
+       96 +  // VK Cloud supports only plain string tags instead of key-v
+          +alue labels                                                   
+       97 +  tags = [                                                    
+       98 +    format("project=%s", var.project),                        
+       99 +    format("environment=%s", var.environment),                
+      100 +  ]                                                           
+      101  }
+      102  
+      103  # List of IP's that have access to VM via SSH. Should be separ
+           ated by commas without spacing. Example: 8.8.8.8/32,77.88.55.8
+           8/32
+     ...
+      125    sensitive = true
+      126  }
+      127  
+       84 -// 214748364800 bytes = 200 GB                                
+       85 -variable "backups_bucket_max_size_in_bytes" {                 
+       86 -  type = number                                               
+      128 +// VK Cloud has no custom cpu/ram/guaranteed cpu share configu
+          +ration, only predefined flavors. Example: STD3-2-6 (2 vCPU, 6 
+          +GB RAM)                                                       
+      129 +// https://cloud.vk.ru/docs/en/computing/iaas/concepts/about  
+      130 +variable "vm_flavor_name" {                                   
+      131 +  type = string                                               
+      132  }
+      133  
+       89 -variable "vm_cpu_cores_count" {                               
+       90 -  type = number                                               
+      134 +provider "vkcs" {                                             
+      135 +  username   = var.vkcs_username                              
+      136 +  password   = var.vkcs_password                              
+      137 +  project_id = var.vkcs_project_id                            
+      138 +  region     = var.vkcs_region                                
+      139 +  auth_url   = "https://infra.mail.ru:35357/v3/"              
+      140  }
+      141  
+       93 -variable "vm_ram_in_gb" {                                     
+       94 -  type = number                                               
+       95 -}                                                             
+      142 +provider "aws" {                                              
+      143 +  region     = "ru-msk"                                       
+      144 +  access_key = var.s3_access_key                              
+      145 +  secret_key = var.s3_secret_key                              
+      146  
+       97 -variable "vm_guaranteed_cpu_share_in_percent" {               
+       98 -  type = number                                               
+       99 -}                                                             
+      147 +  // Some of checks wasn`t realized in VK Cloud, so in this re
+          +ason we`re skipping them                                      
+      148 +  skip_credentials_validation = true                          
+      149 +  skip_metadata_api_check     = true                          
+      150 +  skip_requesting_account_id  = true                          
+      151 +  skip_region_validation      = true                          
+      152  
+      101 -provider "yandex" {                                           
+      102 -  cloud_id = var.cloud_id                                     
+      103 -  folder_id = var.folder_id                                   
+      104 -  zone = var.zone                                             
+      105 -  service_account_key_file = "authorized_key.json"            
+      153 +  endpoints {                                                 
+      154 +    s3 = "https://hb.ru-msk.vkcloud-storage.ru"               
+      155 +  }                                                           
+      156  }
+
+● Write(network.tf)
+  ⎿  Added 70 lines, removed 58 lines
+       1 -resource "yandex_vpc_network" "network" {                      
+       2 -  name = format("%s-network", local.resource_name_prefix)      
+       1 +// External network that provides internet access and floating 
+         +ips                                                            
+       2 +data "vkcs_networking_network" "external_network" {            
+       3 +  name = var.external_network_name                             
+       4 +}                                                              
+       5  
+       4 -  labels = {                                                   
+       5 -    project = var.project                                      
+       6 -    environment = var.environment                              
+       7 -  }                                                            
+       6 +resource "vkcs_networking_network" "network" {                 
+       7 +  name = format("%s-network", local.resource_name_prefix)      
+       8 +  tags = local.tags                                            
+       9  }
+      10  
+      10 -resource "yandex_vpc_subnet" "subnet" {                        
+      11 +resource "vkcs_networking_subnet" "subnet" {                   
+      12    name = format("%s-%s", local.resource_name_prefix, var.zone)
+      13    // local ip addresses
+      13 -  v4_cidr_blocks = ["10.129.0.0/24"]                           
+      14 -  zone = var.zone                                              
+      15 -  network_id = yandex_vpc_network.network.id                   
+      14 +  cidr = "10.129.0.0/24"                                       
+      15 +  network_id = vkcs_networking_network.network.id              
+      16 +  tags = local.tags                                            
+      17 +}                                                              
+      18  
+      17 -  labels = {                                                   
+      18 -    project = var.project                                      
+      19 -    environment = var.environment                              
+      20 -  }                                                            
+      19 +// Router is required in VK Cloud to get access to internet and
+         + to use floating ip                                            
+      20 +resource "vkcs_networking_router" "router" {                   
+      21 +  name = format("%s-router", local.resource_name_prefix)       
+      22 +  external_network_id = data.vkcs_networking_network.external_n
+         +etwork.id                                                      
+      23 +  tags = local.tags                                            
+      24  }
+      25  
+      26 +resource "vkcs_networking_router_interface" "router_interface" 
+         +{                                                              
+      27 +  router_id = vkcs_networking_router.router.id                 
+      28 +  subnet_id = vkcs_networking_subnet.subnet.id                 
+      29 +}                                                              
+      30 +                                                               
+      31  // Security group with configured incoming and outcoming connec
+          tions
+      24 -resource "yandex_vpc_security_group" "security_group" {        
+      32 +resource "vkcs_networking_secgroup" "security_group" {         
+      33    name = format("%s-security-group", local.resource_name_prefix
+          )
+      26 -  network_id  = yandex_vpc_network.network.id                  
+      34 +  // Default egress rules are replaced with explicit rule below
+      35 +  delete_default_rules = true                                  
+      36 +  tags = local.tags                                            
+      37 +}                                                              
+      38  
+      28 -  labels = {                                                   
+      29 -    project = var.project                                      
+      30 -    environment = var.environment                              
+      31 -  }                                                            
+      39 +resource "vkcs_networking_secgroup_rule" "http" {              
+      40 +  security_group_id = vkcs_networking_secgroup.security_group.i
+         +d                                                              
+      41 +  description = "HTTP"                                         
+      42 +  direction = "ingress"                                        
+      43 +  protocol = "tcp"                                             
+      44 +  port_range_min = 80                                          
+      45 +  port_range_max = 80                                          
+      46 +  remote_ip_prefix = "0.0.0.0/0"                               
+      47 +}                                                              
+      48  
+      33 -  ingress {                                                    
+      34 -    protocol = "TCP"                                           
+      35 -    description = "HTTP"                                       
+      36 -    v4_cidr_blocks = ["0.0.0.0/0"]                             
+      37 -    port = 80                                                  
+      38 -  }                                                            
+      49 +resource "vkcs_networking_secgroup_rule" "https" {             
+      50 +  security_group_id = vkcs_networking_secgroup.security_group.i
+         +d                                                              
+      51 +  description = "HTTPS"                                        
+      52 +  direction = "ingress"                                        
+      53 +  protocol = "tcp"                                             
+      54 +  port_range_min = 443                                         
+      55 +  port_range_max = 443                                         
+      56 +  remote_ip_prefix = "0.0.0.0/0"                               
+      57 +}                                                              
+      58  
+      40 -  ingress {                                                    
+      41 -    protocol = "TCP"                                           
+      42 -    description = "HTTPS"                                      
+      43 -    v4_cidr_blocks = ["0.0.0.0/0"]                             
+      44 -    port = 443                                                 
+      45 -  }                                                            
+      46 -                                                               
+      47 -  ingress {                                                    
+      48 -    protocol = "ANY"                                           
+      49 -    description = "SSH"                                        
+      50 -    v4_cidr_blocks = tolist(split(",", var.protected_resources_
+         -allowed_external_ip_addresses))                                
+      51 -    port = var.ssh_port                                        
+      52 -  }                                                            
+      59 +// VK Cloud security group rule supports only one CIDR, so rule
+         + is created for every allowed ip address                       
+      60 +resource "vkcs_networking_secgroup_rule" "ssh" {               
+      61 +  for_each = toset(split(",", nonsensitive(var.protected_resour
+         +ces_allowed_external_ip_addresses)))                           
+      62  
+      54 -  egress {                                                     
+      55 -    protocol = "ANY"                                           
+      56 -    description = "Internet"                                   
+      57 -    v4_cidr_blocks = ["0.0.0.0/0"]                             
+      58 -    from_port = 0                                              
+      59 -    to_port = 65535                                            
+      60 -  }                                                            
+      63 +  security_group_id = vkcs_networking_secgroup.security_group.i
+         +d                                                              
+      64 +  description = "SSH"                                          
+      65 +  direction = "ingress"                                        
+      66 +  // VK Cloud requires protocol to be specified if port is spec
+         +ified                                                          
+      67 +  protocol = "tcp"                                             
+      68 +  port_range_min = tonumber(var.ssh_port)                      
+      69 +  port_range_max = tonumber(var.ssh_port)                      
+      70 +  remote_ip_prefix = each.value                                
+      71  }
+      72  
+      73 +resource "vkcs_networking_secgroup_rule" "internet" {          
+      74 +  security_group_id = vkcs_networking_secgroup.security_group.i
+         +d                                                              
+      75 +  description = "Internet"                                     
+      76 +  direction = "egress"                                         
+      77 +  // protocol and ports are omitted to allow any traffic       
+      78 +  remote_ip_prefix = "0.0.0.0/0"                               
+      79 +}                                                              
+      80 +                                                               
+      81  // Static ip address for VM
+      64 -resource "yandex_vpc_address" "ip_address" {                   
+      65 -  labels = {                                                   
+      66 -    project = var.project                                      
+      67 -    environment = var.environment                              
+      68 -  }                                                            
+      69 -                                                               
+      70 -  external_ipv4_address {                                      
+      71 -    zone_id = var.zone                                         
+      72 -    ddos_protection_provider = "qrator"                        
+      73 -  }                                                            
+      82 +// DDoS protection can't be configured using terraform in VK Cl
+         +oud, it should be requested in VK Cloud Console or via support 
+      83 +resource "vkcs_networking_floatingip" "ip_address" {           
+      84 +  pool = data.vkcs_networking_network.external_network.name    
+      85 +  description = format("%s static ip address", local.resource_n
+         +ame_prefix)                                                    
+      86  }
+      87  
+      88  locals {
+      77 -  vm_ip_address = yandex_vpc_address.ip_address.external_ipv4_a
+         -ddress[0].address                                              
+      78 -}                                                              
+      89   No newline at end of file
+      90 +  vm_ip_address = vkcs_networking_floatingip.ip_address.address
+      91 +}                                                              
+
+● Write(vm.tf)
+  ⎿  Added 58 lines, removed 47 lines
+       1 +// Ubuntu 24.04 LTS image provided by VK Cloud                 
+       2 +data "vkcs_images_image" "ubuntu" {                            
+       3 +  visibility = "public"                                        
+       4 +  default    = true                                            
+       5 +  properties = {                                               
+       6 +    mcs_os_distro  = "ubuntu"                                  
+       7 +    mcs_os_version = "24.04"                                   
+       8 +  }                                                            
+       9 +}                                                              
+      10 +                                                               
+      11  // Boot HDD with Ubuntu 24.04 LTS
+       2 -resource "yandex_compute_disk" "vm-disk" {                     
+      12 +resource "vkcs_blockstorage_volume" "vm-disk" {                
+      13    name = local.resource_name_prefix
+       4 -  type = "network-hdd"                                         
+       5 -  zone = var.zone                                              
+       6 -  image_id = "fd81qgp4lonb0bu8cg5m" // Ubuntu 24.04 lts        
+      14 +  volume_type = "ceph-hdd"                                     
+      15 +  availability_zone = var.zone                                 
+      16 +  image_id = data.vkcs_images_image.ubuntu.id                  
+      17    size = 32 // Gb
+      18  
+       9 -  labels = {                                                   
+      19 +  metadata = {                                                 
+      20      project = var.project
+      21      environment = var.environment
+      22    }
+      23  }
+      24  
+      15 -resource "yandex_compute_instance" "vm" {                      
+      25 +// ssh key file should be named as project name + environment +
+         + ssh. Example: home-prod-ssh.pub                               
+      26 +resource "vkcs_compute_keypair" "ssh_key" {                    
+      27 +  name = format("%s-ssh", local.resource_name_prefix)          
+      28 +  public_key = file(format("./%s-ssh.pub", local.resource_name_
+         +prefix))                                                       
+      29 +}                                                              
+      30 +                                                               
+      31 +// Install VK Cloud monitoring agent. Service user for monitori
+         +ng is created automatically                                    
+      32 +// https://cloud.vk.ru/docs/en/monitoring-services/monitoring  
+      33 +resource "vkcs_cloud_monitoring" "monitoring" {                
+      34 +  image_id = data.vkcs_images_image.ubuntu.id                  
+      35 +}                                                              
+      36 +                                                               
+      37 +resource "vkcs_compute_instance" "vm" {                        
+      38    name = local.resource_name_prefix
+      17 -  platform_id = "standard-v2" // Intel Cascade Lake https://yan
+         -dex.cloud/ru/docs/compute/concepts/vm-platforms#standard-platfo
+         -rms                                                            
+      18 -  zone = var.zone                                              
+      19 -  allow_stopping_for_update = true                             
+      20 -  hostname = local.resource_name_prefix                        
+      21 -                                                               
+      22 -  service_account_id = yandex_iam_service_account.monitoring_se
+         -rvice_account.id                                               
+      39 +  availability_zone = var.zone                                 
+      40 +  // VK Cloud flavor changing resizes VM with its stopping     
+      41 +  flavor_name = var.vm_flavor_name                             
+      42 +  key_pair = vkcs_compute_keypair.ssh_key.name                 
+      43 +  stop_before_destroy = true                                   
+      44  
+      24 -  resources {                                                  
+      25 -    cores  = var.vm_cpu_cores_count                            
+      26 -    memory = var.vm_ram_in_gb                                  
+      27 -    core_fraction = var.vm_guaranteed_cpu_share_in_percent // %
+         - of CPU                                                        
+      45 +  block_device {                                               
+      46 +    source_type = "volume"                                     
+      47 +    destination_type = "volume"                                
+      48 +    uuid = vkcs_blockstorage_volume.vm-disk.id                 
+      49 +    boot_index = 0                                             
+      50 +    delete_on_termination = false                              
+      51    }
+      52  
+      30 -  boot_disk {                                                  
+      31 -    disk_id = yandex_compute_disk.vm-disk.id                   
+      32 -    auto_delete = false                                        
+      53 +  network {                                                    
+      54 +    uuid = vkcs_networking_network.network.id                  
+      55    }
+      56  
+      35 -  network_interface {                                          
+      36 -    subnet_id = yandex_vpc_subnet.subnet.id                    
+      37 -    security_group_ids = [format("%s", yandex_vpc_security_grou
+         -p.security_group.id)]                                          
+      38 -    nat = true                                                 
+      39 -    nat_ip_address = local.vm_ip_address                       
+      40 -  }                                                            
+      57 +  security_group_ids = [vkcs_networking_secgroup.security_group
+         +.id]                                                           
+      58  
+      42 -  metadata = {                                                 
+      43 -    // ssh key file should be named as project name + environme
+         -nt + ssh. Example: home-prod-ssh.pub                           
+      44 -    ssh-keys = "ubuntu:${file(format("./%s-ssh.pub", local.reso
+         -urce_name_prefix))}"                                           
+      59 +  // VK Cloud has no hostname attribute, so it's set via cloud-
+         +init                                                           
+      60 +  user_data = "#cloud-config\nhostname: ${local.resource_name_p
+         +refix}\nfqdn: ${local.resource_name_prefix}\n"                 
+      61  
+      46 -    // Install Unified Agent for monitoring                    
+      47 -    // https://yandex.cloud/ru/docs/monitoring/concepts/data-co
+         -llection/unified-agent/installation#setup                      
+      48 -    install-unified-agent = 1                                  
+      49 -    user-data = "#cloud-config\nusers:\n- name: ubuntu\n  sudo:
+         - ALL=(ALL) NOPASSWD:ALL\n  shell: /bin/bash\n  ssh_authorized_k
+         -eys:\n  - ssh-ed25519  ${file(format("./%s-ssh.pub", local.reso
+         -urce_name_prefix))}\nruncmd:\n  - wget -O - https://monitoring.
+         -api.cloud.yandex.net/monitoring/v2/unifiedAgent/config/install.
+         -sh | bash"                                                     
+      62 +  cloud_monitoring {                                           
+      63 +    service_user_id = vkcs_cloud_monitoring.monitoring.service_
+         +user_id                                                        
+      64 +    script = vkcs_cloud_monitoring.monitoring.script           
+      65    }
+      51 -                                                               
+      52 -  labels = {                                                   
+      53 -    project = var.project                                      
+      54 -    environment = var.environment                              
+      55 -  }                                                            
+      56 -}                                                              
+      66  
+      58 -// Service account that can manage monitoring for VM           
+      59 -resource "yandex_iam_service_account" "monitoring_service_accou
+         -nt" {                                                          
+      60 -  name      = format("%s-vm-service-account", local.resource_na
+         -me_prefix)                                                     
+      67 +  tags = local.tags                                            
+      68 +                                                               
+      69 +  // Subnet should be connected to router before VM creation to
+         + get access to internet                                        
+      70 +  depends_on = [                                               
+      71 +    vkcs_networking_router_interface.router_interface          
+      72 +  ]                                                            
+      73  }
+      74  
+      63 -// Grant monitoring.editor permission for monitoring service ac
+         -count                                                          
+      64 -resource "yandex_resourcemanager_folder_iam_member" "monitoring
+         -_service_account_iam" {                                        
+      65 -  folder_id = var.folder_id                                    
+      66 -  role      = "monitoring.editor"                              
+      67 -  member    = "serviceAccount:${yandex_iam_service_account.moni
+         -toring_service_account.id}"                                    
+      68 -}                                                              
+      75   No newline at end of file
+      76 +// Bind static ip address to VM                                
+      77 +resource "vkcs_compute_floatingip_associate" "vm_ip_address" { 
+      78 +  floating_ip = vkcs_networking_floatingip.ip_address.address  
+      79 +  instance_id = vkcs_compute_instance.vm.id                    
+      80 +}                                                              
+
+● Write(media_bucket.tf)
+  ⎿  Added 22 lines, removed 122 lines
+        1  // Create media bucket for content
+        2 -resource "yandex_storage_bucket" "media_bucket" {             
+        3 -  access_key = yandex_iam_service_account_static_access_key.cr
+          -eate_delete_update_media_and_backups_buckets_service_account_s
+          -tatic_access_key.access_key                                   
+        4 -  secret_key = yandex_iam_service_account_static_access_key.cr
+          -eate_delete_update_media_and_backups_buckets_service_account_s
+          -tatic_access_key.secret_key                                   
+        2 +// VK Cloud doesn't support bucket policies (no IP restriction
+          +s, no per-account permissions), so access is restricted by ACL
+          + only:                                                        
+        3 +// bucket is private and is accessible only by accounts of the
+          + project.                                                     
+        4 +resource "aws_s3_bucket" "media_bucket" {                     
+        5    bucket = format("%s-media", local.resource_name_prefix)
+        6 +                                                              
+        7 +  tags = {                                                    
+        8 +    project = var.project                                     
+        9 +    environment = var.environment                             
+       10 +  }                                                           
+       11  }
+       12  
+        8 -// Create service account that will be used to put or delete c
+          -ontent                                                        
+        9 -resource "yandex_iam_service_account" "media_bucket_service_ac
+          -count" {                                                      
+       10 -  folder_id = var.folder_id                                   
+       11 -  name      = format("%s-media-bucket-service-account", local.
+          -resource_name_prefix)                                         
+       13 +resource "aws_s3_bucket_acl" "media_bucket_acl" {             
+       14 +  bucket = aws_s3_bucket.media_bucket.id                      
+       15 +  acl = "private"                                             
+       16  }
+       17  
+       14 -// Grant storage.editor perms for media_bucket_service_account
+          - to be able to put or delete content                          
+       15 -resource "yandex_storage_bucket_iam_binding" "media_bucket_med
+          -ia_bucket_service_account_iam_binding" {                      
+       16 -  bucket = yandex_storage_bucket.media_bucket.bucket          
+       17 -  role = "storage.editor"                                     
+       18 -                                                              
+       19 -  members = [                                                 
+       20 -    format("serviceAccount:%s", yandex_iam_service_account.med
+          -ia_bucket_service_account.id)                                 
+       21 -  ]                                                           
+       18 +// Create Object Storage account that will be used to put or d
+          +elete content                                                 
+       19 +// Note: VK Cloud Object Storage account has access to all buc
+          +kets of the project                                           
+       20 +resource "vkcs_iam_s3_account" "media_bucket_account" {       
+       21 +  name = format("%s-media-bucket", local.resource_name_prefix)
+       22 +  description = "Object Storage account to put or delete conte
+          +nt in media bucket"                                           
+       23  }
+       24  
+       24 -// Grant storage.viewer perms for backups_bucket_service_accou
+          -nt to be able to get list of content to create backup of the w
+          -hole bucket                                                   
+       25 -resource "yandex_storage_bucket_iam_binding" "media_bucket_bac
+          -kups_bucket_service_account_iam_binding" {                    
+       26 -  bucket = yandex_storage_bucket.media_bucket.bucket          
+       27 -  role = "storage.viewer"                                     
+       28 -                                                              
+       29 -  members = [                                                 
+       30 -    format("serviceAccount:%s", yandex_iam_service_account.bac
+          -kups_bucket_service_account.id)                               
+       31 -  ]                                                           
+       25 +output "media_bucket_access_key" {                            
+       26 +  value = vkcs_iam_s3_account.media_bucket_account.access_key 
+       27  }
+       28  
+       34 -// Configure security policy for media bucket                 
+       35 -resource "yandex_storage_bucket_policy" "media_bucket_security
+          -_policy" {                                                    
+       36 -  bucket = yandex_storage_bucket.media_bucket.bucket          
+       37 -  policy = jsonencode(                                        
+       38 -    {                                                         
+       39 -      Version = "2012-10-17"                                  
+       40 -      Statement = [                                           
+       41 -        // allows upload and delete content into media bucket 
+          -from VM                                                       
+       42 -        {                                                     
+       43 -          Effect = "Allow"                                    
+       44 -          Principal = {                                       
+       45 -            CanonicalUser = yandex_iam_service_account.media_b
+          -ucket_service_account.id                                      
+       46 -          }                                                   
+       47 -          Action = [                                          
+       48 -            "s3:PutObject",                                   
+       49 -            "s3:DeleteObject",                                
+       50 -          ]                                                   
+       51 -          Resource  = [                                       
+       52 -              // Resource with "/*" grants permissons to objec
+          -ts in the bucket. There was a problem with resources definitio
+          -n.                                                            
+       53 -              // Service accounts can't manage object in bucke
+          -t if resource with "/*" wasn't added.                         
+       54 -              format("arn:aws:s3:::%s/*", yandex_storage_bucke
+          -t.media_bucket.bucket),                                       
+       55 -              format("arn:aws:s3:::%s", yandex_storage_bucket.
+          -media_bucket.bucket)                                          
+       56 -          ]                                                   
+       57 -          Sid = format("%s-media-bucket-write-and-delete-polic
+          -y", local.resource_name_prefix)                               
+       58 -          Condition = {                                       
+       59 -            IpAddress = {                                     
+       60 -              "aws:sourceip" = local.vm_ip_address            
+       61 -            }                                                 
+       62 -          }                                                   
+       63 -        },                                                    
+       64 -        // allows get list of content from media bucket for db
+          - backupper                                                    
+       65 -        {                                                     
+       66 -          Effect = "Allow"                                    
+       67 -          Principal = {                                       
+       68 -            CanonicalUser = yandex_iam_service_account.backups
+          -_bucket_service_account.id                                    
+       69 -          }                                                   
+       70 -          Action = [                                          
+       71 -            "s3:ListBucket"                                   
+       72 -          ]                                                   
+       73 -          Resource  = [                                       
+       74 -              // Resource with "/*" grants permissons to objec
+          -ts in the bucket. There was a problem with resources definitio
+          -n.                                                            
+       75 -              // Service accounts can't manage object in bucke
+          -t if resource with "/*" wasn't added.                         
+       76 -              format("arn:aws:s3:::%s/*", yandex_storage_bucke
+          -t.media_bucket.bucket),                                       
+       77 -              format("arn:aws:s3:::%s", yandex_storage_bucket.
+          -media_bucket.bucket)                                          
+       78 -          ]                                                   
+       79 -          Sid = format("%s-media-bucket-list-policy", local.re
+          -source_name_prefix)                                           
+       80 -          Condition = {                                       
+       81 -            IpAddress = {                                     
+       82 -              "aws:sourceip" = local.vm_ip_address            
+       83 -            }                                                 
+       84 -          }                                                   
+       85 -        },                                                    
+       86 -        // allows delete or update bucket using create_delete_
+          -update_media_and_backups_buckets_service_account              
+       87 -        {                                                     
+       88 -          Effect = "Allow"                                    
+       89 -          Principal = {                                       
+       90 -            CanonicalUser = yandex_iam_service_account.create_
+          -delete_update_media_and_backups_buckets_service_account.id    
+       91 -          }                                                   
+       92 -          Action = [                                          
+       93 -            "s3:ListBucket",                                  
+       94 -            "s3:GetBucketCORS",                               
+       95 -            "s3:GetBucketWebsite",                            
+       96 -            "s3:GetBucketVersioning",                         
+       97 -            "s3:GetBucketLogging",                            
+       98 -            "s3:GetLifecycleConfiguration",                   
+       99 -            "s3:GetEncryptionConfiguration"                   
+      100 -          ]                                                   
+      101 -          Resource  = [                                       
+      102 -              // Resource with "/*" grants permissons to objec
+          -ts in the bucket. There was a problem with resources definitio
+          -n.                                                            
+      103 -              // Service accounts can't manage object in bucke
+          -t if resource with "/*" wasn't added.                         
+      104 -              format("arn:aws:s3:::%s/*", yandex_storage_bucke
+          -t.media_bucket.bucket),                                       
+      105 -              format("arn:aws:s3:::%s", yandex_storage_bucket.
+          -media_bucket.bucket)                                          
+      106 -          ]                                                   
+      107 -          Sid = format("%s-media-bucket-delele-and-update-usin
+          -g-service-account", local.resource_name_prefix)               
+      108 -        },                                                    
+      109 -        // allow access to media bucket from Yandex Cloud Cons
+          -ole                                                           
+      110 -        {                                                     
+      111 -          Effect = "Allow"                                    
+      112 -          Principal = "*"                                     
+      113 -          Action = [                                          
+      114 -            "*"                                               
+      115 -          ]                                                   
+      116 -          Resource  = [                                       
+      117 -              // Resource with "/*" grants permissons to objec
+          -ts in the bucket. There was a problem with resources definitio
+          -n.                                                            
+      118 -              // Service accounts can't manage object in bucke
+          -t if resource with "/*" wasn't added.                         
+      119 -              format("arn:aws:s3:::%s/*", yandex_storage_bucke
+          -t.media_bucket.bucket),                                       
+      120 -              format("arn:aws:s3:::%s", yandex_storage_bucket.
+          -media_bucket.bucket)                                          
+      121 -          ]                                                   
+      122 -          Sid = format("%s-media-bucket-list-policy", local.re
+          -source_name_prefix)                                           
+      123 -          Condition = {                                       
+      124 -            StringLike = {                                    
+      125 -              "aws:referer" = format("https://console.yandex.c
+          -loud/folders/*/storage/buckets/%s-media*", local.resource_name
+          -_prefix)                                                      
+      126 -            }                                                 
+      127 -          }                                                   
+      128 -        }                                                     
+      129 -      ]                                                       
+      130 -    }                                                         
+      131 -  )                                                           
+      132 -}                                                             
+       29   No newline at end of file
+       30 +output "media_bucket_secret_key" {                            
+       31 +  value = vkcs_iam_s3_account.media_bucket_account.secret_key 
+       32 +  sensitive = true                                            
+       33 +}                                                             
+
+● Write(backups_bucket.tf)
+  ⎿  Added 23 lines, removed 89 lines
+       1  // Create backups bucket for db and s3 backups
+       2 -resource "yandex_storage_bucket" "backups_bucket" {            
+       3 -  access_key = yandex_iam_service_account_static_access_key.cre
+         -ate_delete_update_media_and_backups_buckets_service_account_sta
+         -tic_access_key.access_key                                      
+       4 -  secret_key = yandex_iam_service_account_static_access_key.cre
+         -ate_delete_update_media_and_backups_buckets_service_account_sta
+         -tic_access_key.secret_key                                      
+       2 +// VK Cloud doesn't support bucket max size and bucket policies
+         + (no IP restrictions, no per-account permissions),             
+       3 +// so access is restricted by ACL only: bucket is private and i
+         +s accessible only by accounts of the project.                  
+       4 +resource "aws_s3_bucket" "backups_bucket" {                    
+       5    bucket = format("%s-backups", local.resource_name_prefix)
+       6 -  max_size = var.backups_bucket_max_size_in_bytes              
+       6 +                                                               
+       7 +  tags = {                                                     
+       8 +    project = var.project                                      
+       9 +    environment = var.environment                              
+      10 +  }                                                            
+      11  }
+      12  
+       9 -// Create service account that will be used to put backups     
+      10 -resource "yandex_iam_service_account" "backups_bucket_service_a
+         -ccount" {                                                      
+      11 -  folder_id = var.folder_id                                    
+      12 -  name      = format("%s-backups-bucket-service-account", local
+         -.resource_name_prefix)                                         
+      13 +resource "aws_s3_bucket_acl" "backups_bucket_acl" {            
+      14 +  bucket = aws_s3_bucket.backups_bucket.id                     
+      15 +  acl = "private"                                              
+      16  }
+      17  
+      15 -// Grant storage.editor perms for backups_bucket_service_accoun
+         -t to be able to put backups                                    
+      16 -resource "yandex_storage_bucket_iam_binding" "backups_bucket_ba
+         -ckups_bucket_service_account_iam_binding" {                    
+      17 -  bucket = yandex_storage_bucket.backups_bucket.bucket         
+      18 -  role = "storage.editor"                                      
+      18 +// Create Object Storage account that will be used to put backu
+         +ps and get list of media bucket content                        
+      19 +// Note: VK Cloud Object Storage account has access to all buck
+         +ets of the project                                             
+      20 +resource "vkcs_iam_s3_account" "backups_bucket_account" {      
+      21 +  name = format("%s-backups-bucket", local.resource_name_prefix
+         +)                                                              
+      22 +  description = "Object Storage account to put backups into bac
+         +kups bucket"                                                   
+      23 +}                                                              
+      24  
+      20 -  members = [                                                  
+      21 -    format("serviceAccount:%s", yandex_iam_service_account.back
+         -ups_bucket_service_account.id)                                 
+      22 -  ]                                                            
+      25 +output "backups_bucket_access_key" {                           
+      26 +  value = vkcs_iam_s3_account.backups_bucket_account.access_key
+      27  }
+      28  
+      25 -// Configure security policy for backups bucket                
+      26 -resource "yandex_storage_bucket_policy" "backups_bucket_securit
+         -y_policy" {                                                    
+      27 -  bucket = yandex_storage_bucket.backups_bucket.bucket         
+      28 -  policy = jsonencode(                                         
+      29 -    {                                                          
+      30 -      Version = "2012-10-17"                                   
+      31 -      Statement = [                                            
+      32 -        {                                                      
+      33 -          Effect = "Allow"                                     
+      34 -          Principal = {                                        
+      35 -            CanonicalUser = yandex_iam_service_account.backups_
+         -bucket_service_account.id                                      
+      36 -          }                                                    
+      37 -          Action = [                                           
+      38 -            "s3:PutObject"                                     
+      39 -          ]                                                    
+      40 -          Resource  = [                                        
+      41 -              // Resource with "/*" grants permissons to object
+         -s in the bucket. There was a problem with resources definition.
+         -                                                               
+      42 -              // Service accounts can't manage object in bucket
+         - if resource with "/*" wasn't added.                           
+      43 -              format("arn:aws:s3:::%s/*", yandex_storage_bucket
+         -.backups_bucket.bucket),                                       
+      44 -              format("arn:aws:s3:::%s", yandex_storage_bucket.b
+         -ackups_bucket.bucket)                                          
+      45 -          ]                                                    
+      46 -          Sid = format("%s-backups-bucket-write-and-delete-poli
+         -cy", local.resource_name_prefix)                               
+      47 -          Condition = {                                        
+      48 -            IpAddress = {                                      
+      49 -              "aws:sourceip" = local.vm_ip_address             
+      50 -            }                                                  
+      51 -          }                                                    
+      52 -        },                                                     
+      53 -        // allows delete or update bucket using create_delete_u
+         -pdate_media_and_backups_buckets_service_account                
+      54 -        {                                                      
+      55 -          Effect = "Allow"                                     
+      56 -          Principal = {                                        
+      57 -            CanonicalUser = yandex_iam_service_account.create_d
+         -elete_update_media_and_backups_buckets_service_account.id      
+      58 -          }                                                    
+      59 -          Action = [                                           
+      60 -            "s3:ListBucket",                                   
+      61 -            "s3:GetBucketCORS",                                
+      62 -            "s3:GetBucketWebsite",                             
+      63 -            "s3:GetBucketVersioning",                          
+      64 -            "s3:GetBucketLogging",                             
+      65 -            "s3:GetLifecycleConfiguration",                    
+      66 -            "s3:GetEncryptionConfiguration"                    
+      67 -          ]                                                    
+      68 -          Resource  = [                                        
+      69 -              // Resource with "/*" grants permissons to object
+         -s in the bucket. There was a problem with resources definition.
+         -                                                               
+      70 -              // Service accounts can't manage object in bucket
+         - if resource with "/*" wasn't added.                           
+      71 -              format("arn:aws:s3:::%s/*", yandex_storage_bucket
+         -.backups_bucket.bucket),                                       
+      72 -              format("arn:aws:s3:::%s", yandex_storage_bucket.b
+         -ackups_bucket.bucket)                                          
+      73 -          ]                                                    
+      74 -          Sid = format("%s-backups-bucket-delele-and-update-usi
+         -ng-service-account", local.resource_name_prefix)               
+      75 -        },                                                     
+      76 -        {                                                      
+      77 -          Effect = "Allow"                                     
+      78 -          Principal = "*"                                      
+      79 -          Action = [                                           
+      80 -            "*"                                                
+      81 -          ]                                                    
+      82 -          Resource  = [                                        
+      83 -              // Resource with "/*" grants permissons to object
+         -s in the bucket. There was a problem with resources definition.
+         -                                                               
+      84 -              // Service accounts can't manage object in bucket
+         - if resource with "/*" wasn't added.                           
+      85 -              format("arn:aws:s3:::%s/*", yandex_storage_bucket
+         -.backups_bucket.bucket),                                       
+      86 -              format("arn:aws:s3:::%s", yandex_storage_bucket.b
+         -ackups_bucket.bucket)                                          
+      87 -          ]                                                    
+      88 -          Sid = format("%s-backups-bucket-list-policy", local.r
+         -esource_name_prefix)                                           
+      89 -          Condition = {                                        
+      90 -            StringLike = {                                     
+      91 -              "aws:referer" = format("https://console.yandex.cl
+         -oud/folders/*/storage/buckets/%s-backups*", local.resource_name
+         -_prefix)                                                       
+      92 -            }                                                  
+      93 -          }                                                    
+      94 -        }                                                      
+      95 -      ]                                                        
+      96 -    }                                                          
+      97 -  )                                                            
+      98 -}                                                              
+      29   No newline at end of file
+      30 +output "backups_bucket_secret_key" {                           
+      31 +  value = vkcs_iam_s3_account.backups_bucket_account.secret_key
+      32 +  sensitive = true                                             
+      33 +}                                                              
+
+● Write(cdn.tf)
+  ⎿  Added 28 lines, removed 26 lines
+       1 -resource "yandex_cm_certificate" "cdn_cert" {                  
+       2 -  name    = format("%s-cdn-cert", local.resource_name_prefix)  
+       3 -  domains = [format("%s", var.cdn_domain)]                     
+       4 -                                                               
+       5 -  managed {                                                    
+       6 -    challenge_type = "DNS_CNAME"                               
+       7 -  }                                                            
+       8 -}                                                              
+       9 -                                                               
+      10 -resource "yandex_cdn_origin_group" "origins_for_cdn" {         
+       1 +resource "vkcs_cdn_origin_group" "origins_for_cdn" {           
+       2    name = format("Origins for %s", var.cdn_domain)
+      12 -  provider_type = "ourcdn"                                     
+       3  
+      14 -  origin {                                                     
+      15 -    source = var.source_domain                                 
+      16 -  }                                                            
+       4 +  origins = [                                                  
+       5 +    {                                                          
+       6 +      source = var.source_domain                               
+       7 +    }                                                          
+       8 +  ]                                                            
+       9  }
+      10  
+      19 -resource "yandex_cdn_resource" "cdn_resource" {                
+      11 +resource "vkcs_cdn_resource" "cdn_resource" {                  
+      12    cname = var.cdn_domain
+      21 -  provider_type = "ourcdn" // Yandex Cloud                     
+      13 +  // Let's Encrypt certificate can be issued only for active CD
+         +N resource                                                     
+      14    active = true
+      23 -  origin_protocol = "https"                                    
+      15 +  origin_protocol = "HTTPS"                                    
+      16 +  origin_group = vkcs_cdn_origin_group.origins_for_cdn.id      
+      17  
+      25 -  origin_group_id = yandex_cdn_origin_group.origins_for_cdn.id 
+      26 -  options {                                                    
+      27 -    // By default terraform sets empty string as secure key. Se
+         -cure key was set to null to prevent this behavior.             
+      28 -    secure_key = null                                          
+      29 -    edge_cache_settings = var.cdn_cache_time_in_seconds        
+      30 -    ignore_cookie       = false                                
+      31 -    ignore_query_params = false                                
+      32 -    custom_host_header = var.source_domain                     
+      18 +  options = {                                                  
+      19 +    edge_cache_settings = {                                    
+      20 +      enabled = true                                           
+      21 +      value = format("%ds", var.cdn_cache_time_in_seconds)     
+      22 +    }                                                          
+      23 +    ignore_cookie = false                                      
+      24 +    ignore_query_string = false                                
+      25 +    host_header = {                                            
+      26 +      enabled = true                                           
+      27 +      value = var.source_domain                                
+      28 +    }                                                          
+      29    }
+      34 -}                                                              
+      30   No newline at end of file
+      31 +                                                               
+      32 +  // VK Cloud has no Certificate Manager, so CDN issues Let's E
+         +ncrypt certificate itself                                      
+      33 +  // after CNAME record for CDN domain is added to DNS         
+      34 +  ssl_certificate = {                                          
+      35 +    type = "lets_encrypt"                                      
+      36 +  }                                                            
+      37 +}                                                              
+
+● Удаляю файл с SA для управления бакетами — в VK он не нужен — и проверяю, с
+  каких зеркал можно ставить провайдеры, учитывая, что в исходном проекте
+  используется зеркало Яндекса из-за блокировок HashiCorp.
+
+● Bash(git rm -q media_and_backups_buckets_delete_sa.tf && for u in
+      https://hub.mcs.mail.ru/repository/terraform-providers/registry.terraform.
+      io/vk-cs/vkcs/index.json…)
+  ⎿  Deleted media_and_backups_buckets_delete_sa.tf (+0 -38)
+       1 -// Service account that can create, delete or update buckets   
+       2 -// This service account was created because we can't configure 
+         -main service account perms in bucket's policy because we don't 
+         -know its id.                                                   
+       3 -resource "yandex_iam_service_account" "create_delete_update_med
+         -ia_and_backups_buckets_service_account" {                      
+       4 -  name      = format("%s-delete-media-and-backups-buckets-servi
+         -ce-account", local.resource_name_prefix)                       
+       5 -}                                                              
+       6 -                                                               
+       7 -// Grant storage.editor permission for created service account 
+         -to create buckets                                              
+       8 -resource "yandex_resourcemanager_folder_iam_member" "create_del
+         -ete_update_media_and_backups_buckets_service_account_iam" {    
+       9 -  folder_id = var.folder_id                                    
+      10 -  role      = "storage.editor"                                 
+      11 -  member    = "serviceAccount:${yandex_iam_service_account.crea
+         -te_delete_update_media_and_backups_buckets_service_account.id}"
+      12 -}                                                              
+      13 -                                                               
+      14 -// Grant media bucket admin role for created service account to
+         - be able to delete media bucket                                
+      15 -resource "yandex_storage_bucket_iam_binding" "media_bucket_crea
+         -te_delete_update_media_and_backups_buckets_service_account_role
+         -_binding" {                                                    
+      16 -  bucket = yandex_storage_bucket.media_bucket.bucket           
+      17 -  role = "admin"                                               
+      18 -                                                               
+      19 -  members = [                                                  
+      20 -    format("serviceAccount:%s", yandex_iam_service_account.crea
+         -te_delete_update_media_and_backups_buckets_service_account.id) 
+      21 -  ]                                                            
+      22 -}                                                              
+      23 -                                                               
+      24 -// Grant media bucket admin role for created service account to
+         - be able to delete backups bucket                              
+      25 -resource "yandex_storage_bucket_iam_binding" "backups_bucket_cr
+         -eate_delete_update_media_and_backups_buckets_service_account_ro
+         -le_binding" {                                                  
+      26 -  bucket = yandex_storage_bucket.backups_bucket.bucket         
+      27 -  role = "admin"                                               
+      28 -                                                               
+      29 -  members = [                                                  
+      30 -    format("serviceAccount:%s", yandex_iam_service_account.crea
+         -te_delete_update_media_and_backups_buckets_service_account.id) 
+      31 -  ]                                                            
+      32 -}                                                              
+      33 -                                                               
+      34 -// Create static access key for service account to use it when 
+         -creating, updating or deleting buckets                         
+      35 -resource "yandex_iam_service_account_static_access_key" "create
+         -_delete_update_media_and_backups_buckets_service_account_static
+         -_access_key" {                                                 
+      36 -  service_account_id = yandex_iam_service_account.create_delete
+         -_update_media_and_backups_buckets_service_account.id           
+      37 -  description        = "static access key for creating and dele
+         -ting media and backups buckets"                                
+      38 -}                                                              
+
+● Зеркало Яндекса отдаёт и vk-cs/vkcs, и hashicorp/aws, так что
+  install_terraform.sh менять не нужно. Запускаю init + validate.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Зеркало Яндекса не предлагает сборки под linux_arm64 для этих версий, а у вас
+  devcontainer именно на arm64. Проверю доступность версий напрямую через
+  registry.
+● Bash(export TF_CLI_CONFIG_FILE=/tmp/claude-0/-workspaces-home-cloud/3a78258e-d
+      fe7-400f-9f2c-951b3f8a863f/scratchpad/tfrc && terraform init
+      -backend=false -input=fals…)
+  ⎿  Updated .terraform.lock.hcl (+40 -6)
+       1  # This file is maintained automatically by "terraform init".
+       2  # Manual edits may be lost in future updates.
+       3  
+       4 -provider "registry.terraform.io/yandex-cloud/yandex" {         
+       5 -  version = "0.168.0"                                          
+       4 +provider "registry.terraform.io/hashicorp/aws" {               
+       5 +  version     = "5.84.0"                                       
+       6 +  constraints = "< 5.85.0"                                     
+       7    hashes = [
+       7 -    "h1:QhVbPClVlPGcAiEYF7+qP6/raMD/72lQC4zRmbtHzXY=",         
+       8 -    "h1:TdUdQizYBI2p0vzFg47DnVCGQX3DRnLPlKMUEnDp3RI=",         
+       9 -    "h1:m1yJalvDYO4r9mOeInYE3qoPn/KkvIIkBv2oGxpMBGI=",         
+      10 -    "h1:ps3NebKGwRETADUiaYzodburtCFTHkrypPzJShh4PZ4=",         
+       8 +    "h1:MVppdPvKcROdwwj1i7OMoZ/ODFZlqrYr7GVHI1Fevb8=",         
+       9 +    "zh:078f77438aba6ec8bf9154b7d223e5c71c48d805d6cd3bcf9db0cc1
+         +e82668ac3",                                                    
+      10 +    "zh:1f6591ff96be00501e71b792ed3a5a14b21ff03afec9a1c4a3fd930
+         +0e6e5b674",                                                    
+      11 +    "zh:2ab694e022e81dd74485351c5836148a842ed71cf640664c9d871cb
+         +517b09602",                                                    
+      12 +    "zh:33c8ccb6e3dc496e828a7572dd981366c6271075c1189f249b9b523
+         +6361d7eff",                                                    
+      13 +    "zh:6f31068ebad1d627e421c72ccdaafe678c53600ca73714e977bf45f
+         +f43ae5d17",                                                    
+      14 +    "zh:7488623dccfb639347cae66f9001d39cf06b92e8081975235a1ac3a
+         +0ac3f44aa",                                                    
+      15 +    "zh:7f042b78b9690a8725c95b91a70fc8e264011b836605bcc342ac297
+         +b9ea3937d",                                                    
+      16 +    "zh:88b56ac6c7209dc0a775b79975a371918f3aed8f015c37d5899f31d
+         +eff37c61a",                                                    
+      17 +    "zh:9b12af85486a96aedd8d7984b0ff811a4b42e3d88dad1a3fb4c0b58
+         +0d04fa425",                                                    
+      18 +    "zh:a1979ba840d704af0932f8de5f541cbb4caa9b6bbd25ed552a24e67
+         +72175ba07",                                                    
+      19 +    "zh:b058c0533dae580e69d1adbc1f69e6a80632374abfc10e8634d0618
+         +7a108e87b",                                                    
+      20 +    "zh:c88610af9cf957f8dcf4382e0c9ca566ef10e3290f5de01d4d90b2d
+         +81b078aa8",                                                    
+      21 +    "zh:e9562c055a2247d0c287772b55abef468c79f8d66a74780fe1c5e5d
+         +ae1a284a9",                                                    
+      22 +    "zh:f7a7c71d28441d925a25c08c4485c015b2d9f0338bc9707443e91ff
+         +8e161d3d9",                                                    
+      23 +    "zh:fee533e81976d0900aa6fa443dc54ef171cbd901847f28a6e8edb1d
+         +161fa6fde",                                                    
+      24 +  ]                                                            
+      25 +}                                                              
+      26 +                                                               
+      27 +provider "registry.terraform.io/vk-cs/vkcs" {                  
+      28 +  version     = "0.18.0"                                       
+      29 +  constraints = "~> 0.18"                                      
+      30 +  hashes = [                                                   
+      31 +    "h1:rioxfUFQdn/KtCbiyw7dHmH0nRlmjYAqv2sg7fGa5Oc=",         
+      32 +    "zh:1dde8afb64ebfcc3272664cf0c17c1f2480b84cb8adbdda2abde426
+         +19a1c59ad",                                                    
+      33 +    "zh:2337ae1a56ab233463a2191f08e94e68e6653b08374bc455fc1378d
+         +e143bb555",                                                    
+      34 +    "zh:346b0aa5bfce13eb2823c086b7daab32500cd17354430f38b4b7f22
+         +57c7cced6",                                                    
+     … 12 more lines (ctrl+o to expand)
+  ⎿  (timeout 10m)
+
+● Конфигурация валидна. Обновляю README под VK Cloud (создание проекта, бакета
+  для state, ключей, команды apply/destroy).
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Bash(cat > README.md <<'EOF'
+      # home-cloud…)
+  ⎿  Updated README.md (+64 -98)
+       1  # home-cloud
+       2  
+       3  ## Getting Started
+       4 -> Additional information about Yandex Cloud Terraform provider 
+         -and Yandex Cloud resources can be found in documentation       
+       5 - - [Yandex Cloud Terraform Provider](https://terraform-provider
+         -.yandexcloud.net)                                              
+       6 - - [Yandex Cloud Documentation](https://yandex.cloud/en/docs)  
+       4 +> Additional information about VK Cloud Terraform provider and 
+         +VK Cloud resources can be found in documentation               
+       5 + - [VK Cloud Terraform Provider](https://registry.terraform.io/
+         +providers/vk-cs/vkcs/latest/docs)                              
+       6 + - [VK Cloud Documentation](https://cloud.vk.ru/docs/en)       
+       7 + - [Managing VK Object Storage using AWS Terraform Provider](ht
+         +tps://cloud.vk.ru/docs/en/tools-for-using-services/terraform/ho
+         +w-to-guides/aws)                                               
+       8  
+       8 -### Create new folder in Yandex Cloud                          
+       9 -                                                               
+      10 -1. Open [Yandex Cloud Console](https://console.yandex.cloud/clo
+         -ud/)                                                           
+      11 -2. Click "Create folder" button                                
+      12 -3. Specify the folder name `home-prod`                         
+      13 -4. Unselect "Create a default network" checkbox                
+      14 -5. Click "Create" button                                       
+      15 -6. When it is created switch to this folder in the left upper c
+         -orner and proceed with the instruction in the new folder.      
+       9 +### Create new project in VK Cloud                             
+      10  
+      11 +1. Open [VK Cloud Console](https://msk.cloud.vk.com/app/)      
+      12 +2. Click on the current project name in the upper left corner a
+         +nd click "Create project" button                               
+      13 +3. Specify the project name `home-prod`                        
+      14 +4. Click "Create" button and switch to the created project.    
+      15  
+      16  ### Create S3 bucket for Terraform state
+      17  
+      20 -1. Open [Yandex Cloud Console](https://console.yandex.cloud)   
+      21 -2. Navigate to "Object Storage" service using the search (ALT +
+         - S)                                                            
+      22 -3. Click "Create bucket" button                                
+      23 -4. Specify the bucket name `home-prod-terraform-state`, set the
+         - maximum size of the bucket to 1 GB and select "Resticted" opti
+         -on for all access settings.                                    
+      24 -5. Specify labels:                                             
+      25 -project: home                                                  
+      26 -environment: prod                                              
+      27 -6. Click "Create bucket" button                                
+      28 -                                                               
+      29 -### Create Service Account                                     
+      30 -                                                               
+      31 -1. Open [Yandex Cloud Console](https://console.yandex.cloud)   
+     … 178 more lines (ctrl+o to expand)
+
+● Перевёл конфигурацию на провайдер VK Cloud. terraform validate проходит:
+  vk-cs/vkcs 0.18.0 и hashicorp/aws 5.84.0. plan и apply я не запускал, учётных
+  данных VK Cloud у меня нет. Изменения лежат в рабочей копии на master, не
+  закоммичены.
+
+  Что не переносится
+
+  Шесть вещей в VK Cloud либо отсутствуют, либо не настраиваются через
+  Terraform:
+
+  Что было в Yandex: Политики бакетов yandex_storage_bucket_policy: права на
+  PutObject/DeleteObject/ListBucket, доступ только с IP ВМ (aws:sourceip),
+  доступ из консоли по aws:referer
+  Почему не переносится: В документации S3 API VK Cloud нет операции
+  PutBucketPolicy. Доступ настраивается только через ACL.
+  Чем заменил: ACL private. Ограничение по IP ВМ и права отдельных учёток
+  пропадают.
+  ────────────────────────────────────────
+  Что было в Yandex: Роли на бакет yandex_storage_bucket_iam_binding: SA медиа
+  видит только свой бакет, SA бэкапов может только писать
+  Почему не переносится: У S3-аккаунтов VK есть только ключи, назначить роль на
+  конкретный бакет нельзя. Есть prefix access keys с привязкой к бакету и
+  префиксу, но они создаются только через API, в Terraform их нет.
+  Чем заменил: Два vkcs_iam_s3_account, ключи доступны в outputs. Аккаунт,
+  скорее
+  всего, получает доступ ко всем бакетам проекта. Прямого подтверждения в
+  документации я не нашёл, это нужно проверить.
+  ────────────────────────────────────────
+  Что было в Yandex: Лимит размера бакета max_size = 200 GB
+  Почему не переносится: В S3 API VK Cloud квот на бакет нет
+  Чем заменил: Убрал переменную backups_bucket_max_size_in_bytes
+  ────────────────────────────────────────
+  Что было в Yandex: Гарантированная доля vCPU core_fraction плюс произвольные
+  ядра и RAM
+  Почему не переносится: В VK Cloud только готовые флейворы, например STD3-2-6.
+  Вашей конфигурации 2 vCPU / 5 GB может не оказаться.
+  Чем заменил: Вместо трёх переменных одна, vm_flavor_name
+  ────────────────────────────────────────
+  Что было в Yandex: DDoS-защита ddos_protection_provider = "qrator"
+  Почему не переносится: В Terraform такой настройки нет, защиту подключают по
+  запросу в консоли или через поддержку
+  Чем заменил: Описал в README
+  ────────────────────────────────────────
+  Что было в Yandex: Редирект HTTP→HTTPS на CDN (в Yandex это тоже делалось
+  вручную)
+  Почему не переносится: В провайдере vkcs среди опций options нет редиректа
+  Чем заменил: Ручной шаг в README
+
+  Что перенесено
+
+  - Backend и бакеты. S3 работает через endpoint hb.ru-msk.vkcloud-storage.ru. В
+    vkcs нет ресурса для бакетов, поэтому они создаются через hashicorp/aws,
+    как рекомендует VK Cloud.
+  - Сеть. В VK Cloud для выхода в интернет и floating IP нужен роутер, поэтому
+    добавил vkcs_networking_router.
+    - Правило SSH в VK принимает только один CIDR, поэтому создаётся отдельное
+      правило на каждый IP из protected_resources_allowed_external_ip_addresses.
+      Сами IP при этом будут видны в выводе plan.
+    - Статический IP — vkcs_networking_floatingip.
+  - ВМ.
+    - Загрузочный диск ceph-hdd создаётся отдельным ресурсом и не удаляется
+      вместе с ВМ.
+    - Образ Ubuntu 24.04 ищется через data source.
+    - SSH-ключ создаётся как vkcs_compute_keypair.
+    - Hostname задаётся через cloud-init.
+  - Мониторинг. vkcs_cloud_monitoring сам создаёт сервисного пользователя и
+    ставит агент. Поэтому SA мониторинга и установка Unified Agent больше не
+    нужны.
+  - Удалён media_and_backups_buckets_delete_sa.tf. Этот SA был обходным решением
+    под политики Yandex. В VK Cloud бакетами управляет ключ проекта.
+  - CDN. Вместо Certificate Manager используется сертификат Let's Encrypt,
+    который CDN выпускает сам. Он появится после того, как CNAME вашего домена
+    распространится по DNS.
+  - Метки. В VK Cloud теги — это строки, а не пары ключ–значение, поэтому метки
+    стали тегами вида project=home.
+  - README переписан под VK Cloud.
+
+  Что проверить перед apply
+
+  1. Имя внешней сети. По умолчанию стоит internet, это для SDN Sprut. Для
+     Neutron нужно ext-net, задаётся переменной external_network_name.
+  2. Названия флейвора, типа диска и зоны. Зона по умолчанию MS1. Названия
+     зависят от проекта, их стоит сверить с консолью.
+  3. Двухфакторная аутентификация. Провайдер vkcs входит по логину и паролю,
+     поэтому у пользователя для Terraform 2FA должна быть отключена.
+  4. Зеркало провайдеров. Через зеркало Яндекса из install_terraform.sh init в
+     вашем devcontainer на linux_arm64 не работает: там нет сборок vkcs 0.18.0 и
+     aws 5.84.0 под эту платформу. Я провалидировал конфигурацию напрямую через
+     registry.terraform.io. Скрипт не менял — решите, оставить ли зеркало или
+     ставить провайдеры напрямую.
+  5. Данные. Это новая инфраструктура с новым state. Содержимое бакетов и диск
+     ВМ нужно переносить отдельно, например через rclone.
+
+  Источники:
+  - VK Cloud: AWS provider для Object Storage (https://cloud.vk.ru/docs/en/tools
+    -for-using-services/terraform/how-to-guides/aws)
+  - VK S3 Bucket API
+    (https://cloud.vk.ru/docs/en/storage/s3/s3-rest-api/bucket-api)
+  - VK S3 ACL (https://cloud.vk.ru/docs/en/storage/s3/instructions/access-manage
+    ment/s3-acl)
+  - Prefix access keys
+    (https://cloud.vk.ru/docs/en/storage/s3/s3-rest-api/pak-api)
+  - VK Cloud: безопасность и DDoS
+    (https://cloud.vk.ru/docs/en/intro/it-security/tech)
+  - Документация провайдера vkcs
+    (https://github.com/vk-cs/terraform-provider-vkcs/tree/v0.18.0/docs)
+
+❯ <ide_opened_file>The user opened the file /workspaces/home/cloud/network.tf
+  in the IDE. This may or may not be related to the current
+  task.</ide_opened_file>
+
+❯ Есть ли способы реализовать в VK Cloud ограничение доступа к VM по IP? можно
+  использовать не terraform, а ручную настройку?
+
+● Web Search("VK Cloud Object Storage put-bucket-policy ограничение доступа к
+            бакету по IP адресу")
+  ⎿  Did 1 search in 8s
+
+● Нашёл важную деталь: судя по свежей статье VK Cloud, у них теперь есть Bucket
+  Policy — это противоречит моему прошлому выводу. Сейчас разберусь в
+  подробностях.
+
+● Fetch(https://cloud.vk.ru/blog/bucket-policy-v-vk-object-storage-upravlenie-do
+       stupom-cherez-json-politiki/)
+  ⎿  Received 146.1KB (200 OK)
+
+● Fetch(https://habr.com/ru/companies/vktech/articles/1076548/)
+  ⎿  Received 392.4KB (200 OK)
+
+● Проверю официальную страницу документации, на которую ссылается статья.
+
+● Fetch(https://cloud.vk.ru/docs/ru/storage/s3/concepts/access/bucket-policy)
+  ⎿  Received 688.2KB (200 OK)
+
+  Ran 1 shell command (ctrl+o to expand)
+  ⎿  Interrupted · What should Claude do instead?
+
+❯ Речь идёт не про досутп к S3, а доступ к VM по SSH, чтобы было нельзя
+  подключиться к слабозащищённому серверу внутри VM с любого IP-адреса
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Да, это поддерживается, и в миграции уже сделано через Terraform, ручная
+  настройка не нужна. Фильтрация по IP работает так же, как группы безопасности
+  в Yandex Cloud.
+
+  Как это работает сейчас
+
+  В network.tf:60 (network.tf#L60) на каждый адрес из
+  protected_resources_allowed_external_ip_addresses создаётся отдельное правило:
+
+  hcl
+  resource "vkcs_networking_secgroup_rule" "ssh" {
+    for_each = toset(split(",",
+  nonsensitive(var.protected_resources_allowed_external_ip_addresses)))
+    direction        = "ingress"
+    protocol         = "tcp"
+    port_range_min   = tonumber(var.ssh_port)
+    port_range_max   = tonumber(var.ssh_port)
+    remote_ip_prefix = each.value
+  }
+
+  Группа привязана к ВМ в vm.tf:57 (vm.tf#L57). Группа безопасности VK Cloud
+  пропускает только то, что явно разрешено. Поэтому снаружи до ВМ доходят
+  только:
+  - 80 и 443 с любого адреса;
+  - SSH-порт только с адресов из списка.
+
+  Остальные порты из интернета закрыты, даже если сервис внутри ВМ слушает
+  0.0.0.0. Фильтрация идёт на уровне облачной сети, до ВМ.
+
+  Есть два отличия от Yandex:
+  - Протокол. В Yandex у правила SSH стоял ANY. В VK Cloud, если указан порт,
+    протокол обязателен, поэтому я поставил tcp. Если на этом порту нужен и UDP
+    (например, mosh), понадобится второе правило.
+  - Один CIDR на правило. Отсюда for_each. Из-за nonsensitive разрешённые IP
+    будут видны в выводе terraform plan. Если это критично, можно убрать
+    for_each и передавать адреса как обычную (не sensitive) переменную. На
+    безопасность это не влияет.
+
+  Если слабо защищённый сервер слушает другой порт
+
+  Для него нужно отдельное правило с тем же списком IP. Если хотите, добавлю
+  переменную, например protected_ports, и правила будут создаваться на каждую
+  пару «порт × IP».
+
+  Ручная настройка
+
+  Если Terraform не нужен: консоль VK Cloud → «Виртуальные сети» → «Настройки
+  firewall» → группа home-prod-security-group → правило входящего трафика:
+  протокол TCP, порт, удалённый адрес — нужный CIDR. Но тогда Terraform при
+  следующем apply удалит правила, которых нет в конфигурации, и вручную их лучше
+  не добавлять.
+
+  Для дополнительной защиты можно включить ufw или nftables на самой ВМ с теми
+  же правилами. Это страховка на случай ошибки в группе безопасности.
+
+  Поправка к моему прошлому отчёту про S3
+
+  Пока искал, нашёл, что Bucket Policy в VK Object Storage всё-таки есть, по
+  документации
+  (https://cloud.vk.ru/docs/ru/storage/s3/concepts/access/bucket-policy) и
+  анонсу от июля 2026 (https://cloud.vk.ru/blog/bucket-policy-v-vk-object-storag
+  e-upravlenie-dostupom-cherez-json-politiki/). Значит, ограничение бакетов по
+  IP ВМ и права отдельных S3-аккаунтов переносить можно, я ошибся, когда записал
+  их в непортируемые. Условия по aws:Referer там нет, но правило для консоли
+  Yandex в VK и не нужно. Если хотите, верну политики в media_bucket.tf и
+  backups_bucket.tf через aws_s3_bucket_policy. Работает ли этот ресурс с VK,
+  надо будет проверить на тестовом бакете.
+
+❯ Да, верни политики
+
+● Сначала уточню по документации, в каком формате указывать ID проекта и имя
+  S3-аккаунта в Principal.
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● В VK по умолчанию разрешено всё, доступ сужается только явными Deny, поэтому
+  Yandex-политики (только Allow) нужно переворачивать в запреты, а в Principal
+  указывать S3-идентификатор проекта вида mcs1234567890, а не UUID project_id.
+  Приступаю к написанию политик.
+
+  Read 1 file (ctrl+o to expand)
+
+● Write(media_bucket.tf)
+  ⎿  Added 87 lines, removed 3 lines
+      1  // Create media bucket for content
+      2 -// VK Cloud doesn't support bucket policies (no IP restrictions,
+        - no per-account permissions), so access is restricted by ACL onl
+        -y:                                                              
+      3 -// bucket is private and is accessible only by accounts of the p
+        -roject.                                                         
+      2  resource "aws_s3_bucket" "media_bucket" {
+      3    bucket = format("%s-media", local.resource_name_prefix)
+      4  
+     ...
+      14  }
+      15  
+      16  // Create Object Storage account that will be used to put or de
+          lete content
+      19 -// Note: VK Cloud Object Storage account has access to all buck
+         -ets of the project                                             
+      17 +// VK Cloud Object Storage account has access to all buckets of
+         + the project by default, access is restricted by bucket policie
+         +s                                                              
+      18  resource "vkcs_iam_s3_account" "media_bucket_account" {
+      19    name = format("%s-media-bucket", local.resource_name_prefix)
+      20    description = "Object Storage account to put or delete conten
+          t in media bucket"
+     ...
+       28    value = vkcs_iam_s3_account.media_bucket_account.secret_key
+       29    sensitive = true
+       30  }
+       31 +                                                              
+       32 +// Configure security policy for media bucket                 
+       33 +// In VK Cloud all actions are allowed for accounts of the pro
+          +ject by default (implicit allow), so access is restricted by e
+          +xplicit deny only.                                            
+       34 +// Terraform account and VK Cloud Console users aren't restric
+          +ted, so they are still able to manage bucket.                 
+       35 +// https://cloud.vk.ru/docs/ru/storage/s3/concepts/access/buck
+          +et-policy                                                     
+       36 +resource "aws_s3_bucket_policy" "media_bucket_security_policy"
+          + {                                                            
+       37 +  bucket = aws_s3_bucket.media_bucket.id                      
+       38 +  policy = jsonencode(                                        
+       39 +    {                                                         
+       40 +      Version = "2012-10-17"                                  
+       41 +      Statement = [                                           
+       42 +        // denies any access to media bucket using media bucke
+          +t account from anywhere except VM                             
+       43 +        {                                                     
+       44 +          Sid = format("%s-media-bucket-deny-media-account-out
+          +side-vm", local.resource_name_prefix)                         
+       45 +          Effect = "Deny"                                     
+       46 +          Principal = {                                       
+       47 +            AWS = local.media_bucket_account_principal        
+       48 +          }                                                   
+       49 +          Action = ["s3:*"]                                   
+       50 +          Resource = [                                        
+       51 +            format("arn:aws:s3:::%s", aws_s3_bucket.media_buck
+          +et.bucket),                                                   
+       52 +            format("arn:aws:s3:::%s/*", aws_s3_bucket.media_bu
+          +cket.bucket)                                                  
+       53 +          ]                                                   
+       54 +          Condition = {                                       
+       55 +            NotIpAddress = {                                  
+       56 +              "aws:SourceIp" = local.vm_ip_address_cidr       
+       57 +            }                                                 
+       58 +          }                                                   
+       59 +        },                                                    
+       60 +        // denies to change bucket settings using media bucket
+          + account to prevent bypass of this policy                     
+       61 +        {                                                     
+       62 +          Sid = format("%s-media-bucket-deny-media-account-buc
+          +ket-management", local.resource_name_prefix)                  
+       63 +          Effect = "Deny"                                     
+       64 +          Principal = {                                       
+       65 +            AWS = local.media_bucket_account_principal        
+       66 +          }                                                   
+       67 +          Action = local.bucket_management_actions            
+       68 +          Resource = [                                        
+       69 +            format("arn:aws:s3:::%s", aws_s3_bucket.media_buck
+          +et.bucket)                                                    
+       70 +          ]                                                   
+       71 +        },                                                    
+       72 +        // denies any access to media bucket using backups buc
+          +ket account from anywhere except VM                           
+       73 +        {                                                     
+       74 +          Sid = format("%s-media-bucket-deny-backups-account-o
+          +utside-vm", local.resource_name_prefix)                       
+       75 +          Effect = "Deny"                                     
+       76 +          Principal = {                                       
+       77 +            AWS = local.backups_bucket_account_principal      
+       78 +          }                                                   
+       79 +          Action = ["s3:*"]                                   
+       80 +          Resource = [                                        
+       81 +            format("arn:aws:s3:::%s", aws_s3_bucket.media_buck
+          +et.bucket),                                                   
+       82 +            format("arn:aws:s3:::%s/*", aws_s3_bucket.media_bu
+          +cket.bucket)                                                  
+       83 +          ]                                                   
+       84 +          Condition = {                                       
+       85 +            NotIpAddress = {                                  
+       86 +              "aws:SourceIp" = local.vm_ip_address_cidr       
+       87 +            }                                                 
+       88 +          }                                                   
+       89 +        },                                                    
+       90 +        // backups bucket account is used by backupper to read
+          + content of media bucket, so any changes are denied           
+       91 +        {                                                     
+       92 +          Sid = format("%s-media-bucket-deny-backups-account-w
+          +rite", local.resource_name_prefix)                            
+       93 +          Effect = "Deny"                                     
+       94 +          Principal = {                                       
+       95 +            AWS = local.backups_bucket_account_principal      
+       96 +          }                                                   
+       97 +          Action = local.object_write_actions                 
+       98 +          Resource = [                                        
+       99 +            format("arn:aws:s3:::%s/*", aws_s3_bucket.media_bu
+          +cket.bucket)                                                  
+      100 +          ]                                                   
+      101 +        },                                                    
+      102 +        {                                                     
+      103 +          Sid = format("%s-media-bucket-deny-backups-account-b
+          +ucket-management", local.resource_name_prefix)                
+      104 +          Effect = "Deny"                                     
+      105 +          Principal = {                                       
+      106 +            AWS = local.backups_bucket_account_principal      
+      107 +          }                                                   
+      108 +          Action = local.bucket_management_actions            
+      109 +          Resource = [                                        
+      110 +            format("arn:aws:s3:::%s", aws_s3_bucket.media_buck
+          +et.bucket)                                                    
+      111 +          ]                                                   
+      112 +        }                                                     
+      113 +      ]                                                       
+      114 +    }                                                         
+      115 +  )                                                           
+      116 +}                                                             
+
+● Write(backups_bucket.tf)
+  ⎿  Added 75 lines, removed 3 lines
+      1  // Create backups bucket for db and s3 backups
+      2 -// VK Cloud doesn't support bucket max size and bucket policies 
+        -(no IP restrictions, no per-account permissions),               
+      3 -// so access is restricted by ACL only: bucket is private and is
+        - accessible only by accounts of the project.                    
+      2 +// VK Cloud doesn't support bucket max size, so size of backups 
+        +bucket isn't limited                                            
+      3  resource "aws_s3_bucket" "backups_bucket" {
+      4    bucket = format("%s-backups", local.resource_name_prefix)
+      5  
+     ...
+      15  }
+      16  
+      17  // Create Object Storage account that will be used to put backu
+          ps and get list of media bucket content
+      19 -// Note: VK Cloud Object Storage account has access to all buck
+         -ets of the project                                             
+      18 +// VK Cloud Object Storage account has access to all buckets of
+         + the project by default, access is restricted by bucket policie
+         +s                                                              
+      19  resource "vkcs_iam_s3_account" "backups_bucket_account" {
+      20    name = format("%s-backups-bucket", local.resource_name_prefix
+          )
+      21    description = "Object Storage account to put backups into bac
+          kups bucket"
+     ...
+       29    value = vkcs_iam_s3_account.backups_bucket_account.secret_ke
+           y
+       30    sensitive = true
+       31  }
+       32 +                                                              
+       33 +// Configure security policy for backups bucket               
+       34 +// In VK Cloud all actions are allowed for accounts of the pro
+          +ject by default (implicit allow), so access is restricted by e
+          +xplicit deny only.                                            
+       35 +// Terraform account and VK Cloud Console users aren't restric
+          +ted, so they are still able to manage bucket and restore backu
+          +ps.                                                           
+       36 +// https://cloud.vk.ru/docs/ru/storage/s3/concepts/access/buck
+          +et-policy                                                     
+       37 +resource "aws_s3_bucket_policy" "backups_bucket_security_polic
+          +y" {                                                          
+       38 +  bucket = aws_s3_bucket.backups_bucket.id                    
+       39 +  policy = jsonencode(                                        
+       40 +    {                                                         
+       41 +      Version = "2012-10-17"                                  
+       42 +      Statement = [                                           
+       43 +        // denies any access to backups bucket using backups b
+          +ucket account from anywhere except VM                         
+       44 +        {                                                     
+       45 +          Sid = format("%s-backups-bucket-deny-backups-account
+          +-outside-vm", local.resource_name_prefix)                     
+       46 +          Effect = "Deny"                                     
+       47 +          Principal = {                                       
+       48 +            AWS = local.backups_bucket_account_principal      
+       49 +          }                                                   
+       50 +          Action = ["s3:*"]                                   
+       51 +          Resource = [                                        
+       52 +            format("arn:aws:s3:::%s", aws_s3_bucket.backups_bu
+          +cket.bucket),                                                 
+       53 +            format("arn:aws:s3:::%s/*", aws_s3_bucket.backups_
+          +bucket.bucket)                                                
+       54 +          ]                                                   
+       55 +          Condition = {                                       
+       56 +            NotIpAddress = {                                  
+       57 +              "aws:SourceIp" = local.vm_ip_address_cidr       
+       58 +            }                                                 
+       59 +          }                                                   
+       60 +        },                                                    
+       61 +        // denies to delete backups using backups bucket accou
+          +nt, so backups can't be removed if VM is compromised          
+       62 +        {                                                     
+       63 +          Sid = format("%s-backups-bucket-deny-backups-account
+          +-delete", local.resource_name_prefix)                         
+       64 +          Effect = "Deny"                                     
+       65 +          Principal = {                                       
+       66 +            AWS = local.backups_bucket_account_principal      
+       67 +          }                                                   
+       68 +          Action = [                                          
+       69 +            "s3:DeleteObject",                                
+       70 +            "s3:DeleteObjectVersion"                          
+       71 +          ]                                                   
+       72 +          Resource = [                                        
+       73 +            format("arn:aws:s3:::%s/*", aws_s3_bucket.backups_
+          +bucket.bucket)                                                
+       74 +          ]                                                   
+       75 +        },                                                    
+       76 +        // denies to change bucket settings using backups buck
+          +et account to prevent bypass of this policy                   
+       77 +        {                                                     
+       78 +          Sid = format("%s-backups-bucket-deny-backups-account
+          +-bucket-management", local.resource_name_prefix)              
+       79 +          Effect = "Deny"                                     
+       80 +          Principal = {                                       
+       81 +            AWS = local.backups_bucket_account_principal      
+       82 +          }                                                   
+       83 +          Action = local.bucket_management_actions            
+       84 +          Resource = [                                        
+       85 +            format("arn:aws:s3:::%s", aws_s3_bucket.backups_bu
+          +cket.bucket)                                                  
+       86 +          ]                                                   
+       87 +        },                                                    
+       88 +        // media bucket account has nothing to do with backups
+       89 +        {                                                     
+       90 +          Sid = format("%s-backups-bucket-deny-media-account",
+          + local.resource_name_prefix)                                  
+       91 +          Effect = "Deny"                                     
+       92 +          Principal = {                                       
+       93 +            AWS = local.media_bucket_account_principal        
+       94 +          }                                                   
+       95 +          Action = ["s3:*"]                                   
+       96 +          Resource = [                                        
+       97 +            format("arn:aws:s3:::%s", aws_s3_bucket.backups_bu
+          +cket.bucket),                                                 
+       98 +            format("arn:aws:s3:::%s/*", aws_s3_bucket.backups_
+          +bucket.bucket)                                                
+       99 +          ]                                                   
+      100 +        }                                                     
+      101 +      ]                                                       
+      102 +    }                                                         
+      103 +  )                                                           
+      104 +}                                                             
+
+● Добавляю переменную с S3-ID проекта и общие locals.
+
+● Update(main.tf)
+  ⎿  Added 31 lines
+       66    sensitive = true
+       67  }
+       68  
+       69 +// Project ID that is used in Object Storage bucket policies. 
+          +It differs from vkcs_project_id. Example: mcs1234567890       
+       70 +// Can be found in VK Cloud Console -> Project settings -> Gen
+          +eral information -> Project ID                                
+       71 +variable "s3_project_id" {                                    
+       72 +  type = string                                               
+       73 +  sensitive = true                                            
+       74 +}                                                             
+       75 +                                                              
+       76 +locals {                                                      
+       77 +  media_bucket_account_principal = format("arn:aws:iam::%s:use
+          +r/%s", var.s3_project_id, vkcs_iam_s3_account.media_bucket_acc
+          +ount.account_name)                                            
+       78 +  backups_bucket_account_principal = format("arn:aws:iam::%s:u
+          +ser/%s", var.s3_project_id, vkcs_iam_s3_account.backups_bucket
+          +_account.account_name)                                        
+       79 +                                                              
+       80 +  // Actions that allow to change bucket settings and bypass b
+          +ucket policy                                                  
+       81 +  bucket_management_actions = [                               
+       82 +    "s3:PutBucketPolicy",                                     
+       83 +    "s3:DeleteBucketPolicy",                                  
+       84 +    "s3:PutLifecycleConfiguration",                           
+       85 +    "s3:PutBucketVersioning",                                 
+       86 +    "s3:PutBucketAcl",                                        
+       87 +    "s3:DeleteBucket"                                         
+       88 +  ]                                                           
+       89 +                                                              
+       90 +  // Actions that allow to change objects                     
+       91 +  object_write_actions = [                                    
+       92 +    "s3:PutObject",                                           
+       93 +    "s3:PutObjectAcl",                                        
+       94 +    "s3:DeleteObject",                                        
+       95 +    "s3:DeleteObjectVersion",                                 
+       96 +    "s3:AbortMultipartUpload"                                 
+       97 +  ]                                                           
+       98 +}                                                             
+       99 +                                                              
+      100  // availability zone
+      101  variable "zone" {
+      102    type = string
+
+● Update(network.tf)
+  ⎿  Added 2 lines
+      87  
+      88  locals {
+      89    vm_ip_address = vkcs_networking_floatingip.ip_address.address
+      90 +  // VM uses floating ip as source ip address for internet requ
+         +ests, so it's used in bucket policies                          
+      91 +  vm_ip_address_cidr = format("%s/32", local.vm_ip_address)    
+      92  }
+
+● Проверю, все ли действия из списков присутствуют в таблице действий VK, чтобы
+  исключить их молчаливое игнорирование.
+
+  Ran 1 shell command (ctrl+o to expand)
+● Все действия есть в документации. Обновляю README и валидирую.
+
+● Bash(sed -i 's|    -var "s3_secret_key=YOUR_OBJECT_STORAGE_SECRET_KEY" \\|&\n
+        -var "s3_project_id=YOUR_OBJECT_STORAGE_PROJECT_ID" \\|; s|    -var
+      "s3_secret_key=s…)
+  ⎿  Updated README.md (+4 -0)
+      43  4. Click "Download VKCS provider file" button, it contains `use
+          rname` and `project_id` that should be used in terraform variab
+          les
+      44  5. Make sure that two-factor authentication is disabled for the
+           user or create a separate user for terraform with "Project adm
+          inistrator" role, because VK Cloud Terraform provider uses logi
+          n and password for authentication
+      45  
+      46 +`s3_project_id` is used in Object Storage bucket policies and d
+         +iffers from `project_id`. It looks like `mcs1234567890` and can
+         + be found in VK Cloud Console -> Project settings -> General in
+         +formation.                                                     
+      47 +                                                               
+      48  ### VSCode Dev Container
+      49  
+      50  Open this repo's folder in VSCode, it might immediately propose
+           you to re-open it in a Dev Container or you can click on Remot
+          e Explorer, find plus button and choose the Open Current Folder
+           in Container option and wait when it is ready.
+     ...
+      100      -var "vkcs_project_id=YOUR_VK_CLOUD_PROJECT_ID" \
+      101      -var "s3_access_key=YOUR_OBJECT_STORAGE_ACCESS_KEY" \
+      102      -var "s3_secret_key=YOUR_OBJECT_STORAGE_SECRET_KEY" \
+      103 +    -var "s3_project_id=YOUR_OBJECT_STORAGE_PROJECT_ID" \     
+      104      -var "protected_resources_allowed_external_ip_addresses=YO
+           UR_IP_ADRESSES" \
+      105      -var "project=YOUR_PROJECT_NAME" \
+      106      -var "environment=YOUR_ENVIRONMENT" \
+     ...
+      120      -var "vkcs_project_id=b5b7ffd4ef0547e5b222f44555dfXXXX" \
+      121      -var "s3_access_key=access_key" \
+      122      -var "s3_secret_key=secret_key" \
+      123 +    -var "s3_project_id=mcs1234567890" \                      
+      124      -var "protected_resources_allowed_external_ip_addresses=77
+           .88.55.88/32" \
+      125      -var "project=home" \
+      126      -var "environment=prod" \
+
+● Вернул политики бакетов, terraform validate проходит. На реальном VK Cloud я
+  их не применял, и это главный риск: работу aws_s3_bucket_policy с VK нужно
+  проверить на тестовом бакете.
+
+  Чем отличается от Yandex
+
+  Модель доступа в VK обратная. Аккаунтам своего проекта по умолчанию разрешено
+  всё, а сузить доступ можно только явными Deny (документация
+  (https://cloud.vk.ru/docs/ru/storage/s3/concepts/access/bucket-policy)).
+  Поэтому разрешающие правила из Yandex я переписал в запреты для двух
+  S3-аккаунтов приложения. Ключ Terraform и пользователи консоли не ограничены,
+  так что управлять бакетами и восстанавливать бэкапы можно как раньше.
+  Отдельное правило для доступа из консоли (aws:referer), как было в Yandex, не
+  нужно.
+
+  Бакет home-prod-media (media_bucket.tf):
+  - аккаунту медиа запрещено всё с любого IP, кроме IP ВМ;
+  - аккаунту бэкапов запрещено всё с любого IP, кроме IP ВМ, а с ВМ разрешено
+    только чтение, изменять объекты нельзя;
+  - обоим аккаунтам запрещено менять настройки бакета: политику, ACL, lifecycle,
+    версионирование, удаление бакета. Иначе с ключом приложения можно было бы
+    снять собственный запрет.
+
+  Бакет home-prod-backups (backups_bucket.tf):
+  - аккаунту бэкапов разрешён доступ только с IP ВМ; удалять объекты и менять
+    настройки бакета он не может. Если ВМ взломают, бэкапы не удалить;
+  - аккаунту медиа доступ к этому бакету закрыт полностью.
+
+  Это немного шире, чем было в Yandex. Там аккаунту медиа разрешались только
+  PutObject/DeleteObject, а аккаунту бэкапов — только PutObject. Здесь с ВМ им
+  доступно и чтение. Если нужен строгий вариант, добавлю запрет GetObject.
+
+  Что ещё добавил
+
+  - Переменную s3_project_id в main.tf. Это ID проекта для политик, вида
+    mcs1234567890, и он не совпадает с UUID vkcs_project_id. В README я написал,
+    что он в «Настройки проекта → Общая информация», но точное место в консоли
+    не проверял.
+  - Principal собирается из атрибута account_name ресурса vkcs_iam_s3_account.
+    Ни документация, ни провайдер не подтверждают, что это то самое имя, которое
+    ждёт политика.
+  - Пропуск с ВМ работает по её внешнему (floating) IP, через которого ВМ
+    выходит в интернет. Если в сети включить vkcs_services_access (доступ к
+    сервисам VK из внутренней сети), запросы пойдут с внутреннего адреса, и
+    правило по IP перестанет пропускать ВМ.
+
+  Как проверить после apply
+
+  1. aws s3api get-bucket-policy --bucket home-prod-media --endpoint-url
+     https://hb.ru-msk.vkcloud-storage.ru должен вернуть все правила. По статье
+     VK неизвестные ключи иногда молча отбрасываются.
+  2. С ВМ ключом медиа загрузить и удалить объект — должно получиться.
+  3. С любой другой машины тем же ключом — должен прийти AccessDenied.
+  4. Ключом бэкапов удалить объект из home-prod-backups — должен прийти
+     AccessDenied.
+
+  Если в пункте 3 доступ проходит, значит Principal не совпал с аккаунтом.
+  Первым делом стоит проверить s3_project_id и account_name.
+
+  Изменения по-прежнему не закоммичены.
