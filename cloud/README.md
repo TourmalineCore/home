@@ -114,7 +114,8 @@ terraform apply -auto-approve \
     -var "source_domain=YOUR_DOMAIN" \
     -var "cdn_domain=YOUR_CDN_DOMAIN" \
     -var "cdn_cache_time_in_seconds=YOUR_CDN_CACHE_TIME_IN_SECONDS" \
-    -var "vm_flavor_name=YOUR_VM_FLAVOR_NAME"
+    -var "vm_flavor_name=YOUR_VM_FLAVOR_NAME" \
+    -var "vm_ip_address=YOUR_IP_ADDRESS"
 ```
 
 Example:
@@ -134,7 +135,8 @@ terraform apply -auto-approve \
     -var "source_domain=domain.com" \
     -var "cdn_domain=cdn.domain.com" \
     -var "cdn_cache_time_in_seconds=3600" \
-    -var "vm_flavor_name=STD3-2-6"
+    -var "vm_flavor_name=STD3-2-6" \
+    -var "vm_ip_address=77.88.55.88"
 ```
 
 Object Storage keys for media and backups buckets are available in terraform outputs:

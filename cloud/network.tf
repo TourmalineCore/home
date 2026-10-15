@@ -78,15 +78,18 @@ resource "vkcs_networking_secgroup_rule" "internet" {
   remote_ip_prefix = "0.0.0.0/0"
 }
 
+// Disabled because Yandex Cloud VM is be used instead of VK Cloud VM
 // Static ip address for VM
 // DDoS protection can't be configured using terraform in VK Cloud, it should be requested in VK Cloud Console or via support
-resource "vkcs_networking_floatingip" "ip_address" {
-  pool = data.vkcs_networking_network.external_network.name
-  description = format("%s static ip address", local.resource_name_prefix)
-}
+// resource "vkcs_networking_floatingip" "ip_address" {
+//   pool = data.vkcs_networking_network.external_network.name
+//   description = format("%s static ip address", local.resource_name_prefix)
+// }
 
 locals {
-  vm_ip_address = vkcs_networking_floatingip.ip_address.address
+  // Disabled because Yandex Cloud VM is be used instead of VK Cloud VM
+  // vm_ip_address = vkcs_networking_floatingip.ip_address.address
+  vm_ip_address = var.vm_ip_address
   // VM uses floating ip as source ip address for internet requests, so it's used in bucket policies
   vm_ip_address_cidr = format("%s/32", local.vm_ip_address)
 }
