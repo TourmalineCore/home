@@ -105,6 +105,10 @@ module.exports = withReactSvg({
       },
       {
         protocol: 'https',
+        hostname: 'hb.ru-msk.vkcloud-storage.ru',
+      },
+      {
+        protocol: 'https',
         hostname: 'raw.githubusercontent.com',
         pathname: '/TourmalineCore/**'
       },
