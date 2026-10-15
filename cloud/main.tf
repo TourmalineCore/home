@@ -156,6 +156,11 @@ variable "ssh_port" {
   sensitive = true
 }
 
+variable "vm_ip_address" {
+  type = string
+  sensitive = true
+}
+
 // VK Cloud has no custom cpu/ram/guaranteed cpu share configuration, only predefined flavors. Example: STD3-2-6 (2 vCPU, 6 GB RAM)
 // https://cloud.vk.ru/docs/en/computing/iaas/concepts/about
 variable "vm_flavor_name" {
