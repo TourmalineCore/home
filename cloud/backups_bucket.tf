@@ -44,7 +44,8 @@ resource "aws_s3_bucket_policy" "backups_bucket_security_policy" {
           Principal = {
             AWS = local.backups_bucket_account_principal
           }
-          Action = ["s3:*"]
+          // VK Cloud rejects wildcard action inside a list with "MalformedPolicy" error, so it is set as a string
+          Action = "s3:*"
           Resource = [
             format("arn:aws:s3:::%s", aws_s3_bucket.backups_bucket.bucket),
             format("arn:aws:s3:::%s/*", aws_s3_bucket.backups_bucket.bucket)
@@ -89,7 +90,8 @@ resource "aws_s3_bucket_policy" "backups_bucket_security_policy" {
           Principal = {
             AWS = local.media_bucket_account_principal
           }
-          Action = ["s3:*"]
+          // VK Cloud rejects wildcard action inside a list with "MalformedPolicy" error, so it is set as a string
+          Action = "s3:*"
           Resource = [
             format("arn:aws:s3:::%s", aws_s3_bucket.backups_bucket.bucket),
             format("arn:aws:s3:::%s/*", aws_s3_bucket.backups_bucket.bucket)
