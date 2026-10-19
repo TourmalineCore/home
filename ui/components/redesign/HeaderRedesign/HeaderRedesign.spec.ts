@@ -5,7 +5,7 @@ import {
   test,
 } from '../../../playwright-tests/custom-test';
 import { BREAKPOINTS } from '../../../playwright-tests/constants/breakpoints';
-import { Breakpoint, ComponentName } from '../../../common/enums';
+import { Breakpoint, BreakpointName, ComponentName } from '../../../common/enums';
 
 const TEST_ID = `header-redesign`;
 
@@ -106,4 +106,106 @@ test.describe(`Header`, () => {
       });
     }
   });
+
+  test.describe(`Scroll to top after switching between pages`, () => {
+    const testCases = [
+      {
+        breakpointName: BreakpointName.DESKTOP,
+        breakpoint: Breakpoint.DESKTOP,
+      },
+      {
+        breakpointName: BreakpointName.MOBILE,
+        breakpoint: Breakpoint.MOBILE,
+      },
+    ];
+
+    for (const {
+      breakpointName,
+      breakpoint,
+    } of testCases) {
+      test(`
+        GIVEN page in ${breakpointName} breakpoint
+        AND the page has been scrolled away from the top
+        WHEN the user opens the burger menu, expands a section, and taps a link to another page
+        THEN after the redirect the new page opens scrolled to the top
+      `, async ({
+        page,
+        setViewportSize,
+      }: {
+        page: Page;
+        setViewportSize: CustomTestFixtures["setViewportSize"];
+      }) => {
+        await setViewportSize({
+          width: breakpoint,
+        });
+
+        await expect(await getScrollY({
+          page,
+        }))
+          .toBe(0);
+
+        await page.evaluate(() => {
+          document.body.style.minHeight = `3000px`;
+        });
+
+        await page.mouse.wheel(0, 1000);
+
+        await page.mouse.wheel(0, -200);
+
+        await page.waitForTimeout(100);
+
+        await expect(await getScrollY({
+          page,
+        }))
+          .not
+          .toBe(0);
+
+        const currentUrl = page.url();
+
+        if (breakpoint === Breakpoint.MOBILE) {
+          await page
+            .getByTestId(`header-redesign-burger`)
+            .click();
+        }
+
+        await page
+          .getByTestId(`header-accordion-button`)
+          .filter({
+            visible: true,
+          })
+          .first()
+          .click();
+
+        await page
+          .getByText(`UI/UX дизайн`)
+          .filter({
+            visible: true,
+          })
+          .first()
+          .click();
+
+        await page.waitForURL((url) => url.toString() !== currentUrl, {
+          waitUntil: `networkidle`,
+        });
+
+        await page.getByText(`UX/UI design`)
+          .waitFor({
+            state: `visible`,
+          });
+
+        await expect(await getScrollY({
+          page,
+        }))
+          .toBe(0);
+      });
+    }
+  });
 });
+
+async function getScrollY({
+  page,
+}: {
+  page: Page;
+}) {
+  return page.evaluate(() => window.scrollY);
+}
