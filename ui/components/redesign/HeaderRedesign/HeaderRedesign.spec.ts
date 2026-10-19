@@ -149,28 +149,9 @@ test.describe(`Header`, () => {
           width: breakpoint,
         });
 
-        await expect(await getScrollY({
+        await prepareScrolledPage({
           page,
-        }))
-          .toBe(0);
-
-        await page.evaluate(() => {
-          document.body.style.minHeight = `3000px`;
         });
-
-        // Scroll down to hide the header, then scroll up slightly to make it reappear (this is the expected smart-header behavior).
-        // Then click on the desired link in the header.
-        await page.mouse.wheel(0, 1000);
-
-        await page.mouse.wheel(0, -200);
-
-        await page.waitForTimeout(100);
-
-        await expect(await getScrollY({
-          page,
-        }))
-          .not
-          .toBe(0);
 
         const currentUrl = page.url();
 
@@ -221,7 +202,7 @@ test.describe(`Header`, () => {
     }: {
       browser: Browser;
     }) => {
-      // Set Russian coordinates
+      // Set Russian coordinates so that the form is displayed
       const context = await browser.newContext({
         permissions: [`geolocation`],
         geolocation: {
@@ -239,24 +220,9 @@ test.describe(`Header`, () => {
 
       await page.goto(`/ru`);
 
-      await expect(await getScrollY({
-        page,
-      }))
-        .toBe(0);
-
-      // Scroll down to hide the header, then scroll up slightly to make it reappear (this is the expected smart-header behavior).
-      // Then click on the desired link in the header.
-      await page.mouse.wheel(0, 1000);
-      await page.mouse.wheel(0, -200);
-      await page.waitForTimeout(100);
-
-      const scrollBeforeModal = await getScrollY({
+      const scrollBeforeModal = await prepareScrolledPage({
         page,
       });
-
-      await expect(scrollBeforeModal)
-        .not
-        .toBe(0);
 
       await page
         .getByTestId(`header-contact-button`)
@@ -283,4 +249,30 @@ async function getScrollY({
   page: Page;
 }) {
   return page.evaluate(() => window.scrollY);
+}
+
+async function prepareScrolledPage({
+  page,
+}:{
+  page: Page;
+}) {
+  await expect(await getScrollY({
+    page,
+  }))
+    .toBe(0);
+
+  // Scroll down to hide the header, then scroll up slightly to make it reappear
+  await page.mouse.wheel(0, 1000);
+  await page.mouse.wheel(0, -200);
+  await page.waitForTimeout(100);
+
+  const currentScroll = await getScrollY({
+    page,
+  });
+
+  await expect(currentScroll)
+    .not
+    .toBe(0);
+
+  return currentScroll;
 }
