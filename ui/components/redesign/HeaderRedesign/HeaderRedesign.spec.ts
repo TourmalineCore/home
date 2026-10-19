@@ -148,6 +148,8 @@ test.describe(`Header`, () => {
           document.body.style.minHeight = `3000px`;
         });
 
+        // Scroll down to hide the header, then scroll up slightly to make it reappear (this is the expected smart-header behavior).
+        // Then click on the desired link in the header.
         await page.mouse.wheel(0, 1000);
 
         await page.mouse.wheel(0, -200);
