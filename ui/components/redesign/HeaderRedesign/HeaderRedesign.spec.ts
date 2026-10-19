@@ -253,7 +253,7 @@ async function getScrollY({
 
 async function scrollAwayFromTop({
   page,
-}:{
+}: {
   page: Page;
 }) {
   await expect(await getScrollY({
