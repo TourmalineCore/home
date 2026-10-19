@@ -65,9 +65,6 @@ async function closeButtonIsNotCoveredByFormTest({
     height: 1000,
   });
 
-  await expect(page.getByTestId(TEST_ID)
-    .filter({
-      visible: true,
-    }))
-    .toHaveScreenshot(`${TEST_ID}-desktop-xl-close-button.png`);
+  await expect(page.getByTestId(TEST_ID))
+    .toHaveScreenshot(`${TEST_ID}-close-button-${BreakpointName.DESKTOP_XL}.png`);
 }
