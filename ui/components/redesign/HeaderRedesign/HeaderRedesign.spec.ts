@@ -1,3 +1,4 @@
+import { Browser } from '@playwright/test';
 import {
   CustomTestFixtures,
   expect,
@@ -10,12 +11,6 @@ import { Breakpoint, BreakpointName, ComponentName } from '../../../common/enums
 const TEST_ID = `header-redesign`;
 
 test.describe(`Header`, () => {
-  test.beforeEach(async ({
-    goToComponentsPage,
-  }) => {
-    await goToComponentsPage(ComponentName.HEADER);
-  });
-
   for (const {
     name,
     breakpoint,
@@ -23,7 +18,10 @@ test.describe(`Header`, () => {
   } of BREAKPOINTS) {
     test(name, async ({
       testScreenshotAtBreakpoint,
+      goToComponentsPage,
     }) => {
+      await goToComponentsPage(ComponentName.HEADER);
+
       await testScreenshotAtBreakpoint({
         testId: TEST_ID,
         breakpoint,
@@ -43,10 +41,14 @@ test.describe(`Header`, () => {
       test(name, async ({
         page,
         setViewportSize,
+        goToComponentsPage,
       }: {
         page: Page;
         setViewportSize: CustomTestFixtures["setViewportSize"];
+        goToComponentsPage: CustomTestFixtures["goToComponentsPage"];
       }) => {
+        await goToComponentsPage(ComponentName.HEADER);
+
         await setViewportSize({
           width: breakpoint,
         });
@@ -78,10 +80,14 @@ test.describe(`Header`, () => {
       test(name, async ({
         page,
         setViewportSize,
+        goToComponentsPage,
       }: {
         page: Page;
         setViewportSize: CustomTestFixtures["setViewportSize"];
+        goToComponentsPage: CustomTestFixtures["goToComponentsPage"];
       }) => {
+        await goToComponentsPage(ComponentName.HEADER);
+
         await setViewportSize({
           width: breakpoint,
         });
@@ -107,7 +113,7 @@ test.describe(`Header`, () => {
     }
   });
 
-  test.describe(`Scroll to top after switching between pages`, () => {
+  test.describe(`Scroll behavior on page interactions`, () => {
     const testCases = [
       {
         breakpointName: BreakpointName.DESKTOP,
@@ -130,11 +136,15 @@ test.describe(`Header`, () => {
         THEN after the redirect the new page opens scrolled to the top
       `, async ({
         page,
+        goto,
         setViewportSize,
       }: {
         page: Page;
+        goto: CustomTestFixtures['goto'];
         setViewportSize: CustomTestFixtures["setViewportSize"];
       }) => {
+        await goto(`/ru`);
+
         await setViewportSize({
           width: breakpoint,
         });
@@ -201,6 +211,69 @@ test.describe(`Header`, () => {
           .toBe(0);
       });
     }
+
+    test(`
+      GIVEN page has been scrolled away from the top
+      WHEN a modal is opened and closed without navigating to a new page
+      THEN the scroll is restored to its previous value
+    `, async ({
+      browser,
+    }: {
+      browser: Browser;
+    }) => {
+      // Set Russian coordinates
+      const context = await browser.newContext({
+        permissions: [`geolocation`],
+        geolocation: {
+          latitude: 61.5240,
+          longitude: 105.3188,
+        },
+      });
+
+      const page = await context.newPage();
+
+      await page.setViewportSize({
+        width: Breakpoint.DESKTOP,
+        height: 768,
+      });
+
+      await page.goto(`/ru`);
+
+      await expect(await getScrollY({
+        page,
+      }))
+        .toBe(0);
+
+      // Scroll down to hide the header, then scroll up slightly to make it reappear (this is the expected smart-header behavior).
+      // Then click on the desired link in the header.
+      await page.mouse.wheel(0, 1000);
+      await page.mouse.wheel(0, -200);
+      await page.waitForTimeout(100);
+
+      const scrollBeforeModal = await getScrollY({
+        page,
+      });
+
+      await expect(scrollBeforeModal)
+        .not
+        .toBe(0);
+
+      await page
+        .getByTestId(`header-contact-button`)
+        .filter({
+          visible: true,
+        })
+        .click();
+
+      await page.waitForTimeout(100);
+
+      await page.keyboard.press(`Escape`);
+
+      await expect(await getScrollY({
+        page,
+      }))
+        .toBe(scrollBeforeModal);
+    });
   });
 });
 
