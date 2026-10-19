@@ -149,7 +149,7 @@ test.describe(`Header`, () => {
           width: breakpoint,
         });
 
-        await prepareScrolledPage({
+        await scrollAwayFromTop({
           page,
         });
 
@@ -220,7 +220,7 @@ test.describe(`Header`, () => {
 
       await page.goto(`/ru`);
 
-      const scrollBeforeModal = await prepareScrolledPage({
+      const scrollBeforeModal = await scrollAwayFromTop({
         page,
       });
 
@@ -251,7 +251,7 @@ async function getScrollY({
   return page.evaluate(() => window.scrollY);
 }
 
-async function prepareScrolledPage({
+async function scrollAwayFromTop({
   page,
 }:{
   page: Page;
