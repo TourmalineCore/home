@@ -4,6 +4,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
 
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
@@ -358,7 +359,7 @@ export function MagazinePdfView() {
                           pageNumber={pageNumber}
                           height={pageHeight || undefined}
                           devicePixelRatio={Math.min(window.devicePixelRatio, 3)}
-                          renderTextLayer={false}
+                          renderTextLayer
                           // Neighbouring slides are mounted but hidden, so their links must not be tabbable
                           renderAnnotationLayer={slideIndex === currentSlide}
                         />
