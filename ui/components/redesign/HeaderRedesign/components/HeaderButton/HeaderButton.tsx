@@ -27,6 +27,7 @@ export function HeaderButton({
         )}
         type="button"
         onClick={() => onClick(true)}
+        data-testid="header-contact-button"
       >
         {children}
       </button>
@@ -41,6 +42,7 @@ export function HeaderButton({
         )}
         role="button"
         href="mailto:contact@tourmalinecore.com"
+        data-testid="header-contact-button"
       >
         {children}
       </a>

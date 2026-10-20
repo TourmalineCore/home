@@ -1,3 +1,4 @@
+import { Browser } from '@playwright/test';
 import {
   CustomTestFixtures,
   expect,
@@ -5,17 +6,11 @@ import {
   test,
 } from '../../../playwright-tests/custom-test';
 import { BREAKPOINTS } from '../../../playwright-tests/constants/breakpoints';
-import { Breakpoint, ComponentName } from '../../../common/enums';
+import { Breakpoint, BreakpointName, ComponentName } from '../../../common/enums';
 
 const TEST_ID = `header-redesign`;
 
 test.describe(`Header`, () => {
-  test.beforeEach(async ({
-    goToComponentsPage,
-  }) => {
-    await goToComponentsPage(ComponentName.HEADER);
-  });
-
   for (const {
     name,
     breakpoint,
@@ -23,7 +18,10 @@ test.describe(`Header`, () => {
   } of BREAKPOINTS) {
     test(name, async ({
       testScreenshotAtBreakpoint,
+      goToComponentsPage,
     }) => {
+      await goToComponentsPage(ComponentName.HEADER);
+
       await testScreenshotAtBreakpoint({
         testId: TEST_ID,
         breakpoint,
@@ -43,10 +41,14 @@ test.describe(`Header`, () => {
       test(name, async ({
         page,
         setViewportSize,
+        goToComponentsPage,
       }: {
         page: Page;
         setViewportSize: CustomTestFixtures["setViewportSize"];
+        goToComponentsPage: CustomTestFixtures["goToComponentsPage"];
       }) => {
+        await goToComponentsPage(ComponentName.HEADER);
+
         await setViewportSize({
           width: breakpoint,
         });
@@ -78,10 +80,14 @@ test.describe(`Header`, () => {
       test(name, async ({
         page,
         setViewportSize,
+        goToComponentsPage,
       }: {
         page: Page;
         setViewportSize: CustomTestFixtures["setViewportSize"];
+        goToComponentsPage: CustomTestFixtures["goToComponentsPage"];
       }) => {
+        await goToComponentsPage(ComponentName.HEADER);
+
         await setViewportSize({
           width: breakpoint,
         });
@@ -106,4 +112,167 @@ test.describe(`Header`, () => {
       });
     }
   });
+
+  test.describe(`Scroll behavior on page interactions`, () => {
+    const testCases = [
+      {
+        breakpointName: BreakpointName.DESKTOP,
+        breakpoint: Breakpoint.DESKTOP,
+      },
+      {
+        breakpointName: BreakpointName.MOBILE,
+        breakpoint: Breakpoint.MOBILE,
+      },
+    ];
+
+    for (const {
+      breakpointName,
+      breakpoint,
+    } of testCases) {
+      test(`
+        GIVEN page in ${breakpointName} breakpoint
+        AND the page has been scrolled away from the top
+        WHEN the user opens the burger menu, expands a section, and taps a link to another page
+        THEN after the redirect the new page opens scrolled to the top
+      `, async ({
+        page,
+        goto,
+        setViewportSize,
+      }: {
+        page: Page;
+        goto: CustomTestFixtures['goto'];
+        setViewportSize: CustomTestFixtures["setViewportSize"];
+      }) => {
+        await goto(`/ru`);
+
+        await setViewportSize({
+          width: breakpoint,
+        });
+
+        await scrollAwayFromTop({
+          page,
+        });
+
+        const currentUrl = page.url();
+
+        if (breakpoint === Breakpoint.MOBILE) {
+          await page
+            .getByTestId(`header-redesign-burger`)
+            .click();
+        }
+
+        await page
+          .getByTestId(`header-accordion-button`)
+          .filter({
+            visible: true,
+          })
+          .first()
+          .click();
+
+        await page
+          .getByText(`UI/UX дизайн`)
+          .filter({
+            visible: true,
+          })
+          .first()
+          .click();
+
+        await page.waitForURL((url) => url.toString() !== currentUrl, {
+          waitUntil: `networkidle`,
+        });
+
+        await page.getByText(`UX/UI design`)
+          .waitFor({
+            state: `visible`,
+          });
+
+        await expect(await getScrollY({
+          page,
+        }))
+          .toBe(0);
+      });
+    }
+
+    test(`
+      GIVEN page has been scrolled away from the top
+      WHEN a modal is opened and closed without navigating to a new page
+      THEN the scroll is restored to its previous value
+    `, async ({
+      browser,
+    }: {
+      browser: Browser;
+    }) => {
+      // Set Russian coordinates so that the form is displayed
+      const context = await browser.newContext({
+        permissions: [`geolocation`],
+        geolocation: {
+          latitude: 61.5240,
+          longitude: 105.3188,
+        },
+      });
+
+      const page = await context.newPage();
+
+      await page.setViewportSize({
+        width: Breakpoint.DESKTOP,
+        height: 768,
+      });
+
+      await page.goto(`/ru`);
+
+      const scrollBeforeModal = await scrollAwayFromTop({
+        page,
+      });
+
+      await page
+        .getByTestId(`header-contact-button`)
+        .filter({
+          visible: true,
+        })
+        .click();
+
+      await page.waitForTimeout(100);
+
+      await page.keyboard.press(`Escape`);
+
+      await expect(await getScrollY({
+        page,
+      }))
+        .toBe(scrollBeforeModal);
+    });
+  });
 });
+
+async function getScrollY({
+  page,
+}: {
+  page: Page;
+}) {
+  return page.evaluate(() => window.scrollY);
+}
+
+async function scrollAwayFromTop({
+  page,
+}: {
+  page: Page;
+}) {
+  await expect(await getScrollY({
+    page,
+  }))
+    .toBe(0);
+
+  // Scroll down to hide the header, then scroll up slightly to make it reappear
+  await page.mouse.wheel(0, 1000);
+  await page.mouse.wheel(0, -200);
+  await page.waitForTimeout(100);
+
+  const currentScroll = await getScrollY({
+    page,
+  });
+
+  await expect(currentScroll)
+    .not
+    .toBe(0);
+
+  return currentScroll;
+}
