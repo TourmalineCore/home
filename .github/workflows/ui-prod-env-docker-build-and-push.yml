@@ -17,7 +17,7 @@ jobs:
       image-name: home-ui
       # Build-args used to define variables that will be used in image
       build-args: |
-        CDN_ENABLED=true
+        CDN_ENABLED=false
         CDN_DOMAIN=cdn.tourmalinecore.com
         CORS_ORIGIN=https://tourmalinecore.com
         ENABLE_SEO_INDEXING=true
