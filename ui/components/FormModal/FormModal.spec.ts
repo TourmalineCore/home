@@ -1,5 +1,10 @@
-import { test } from '../../playwright-tests/custom-test';
-import { BreakpointName, ComponentName } from '../../common/enums';
+import {
+  CustomTestFixtures,
+  expect,
+  Page,
+  test,
+} from '../../playwright-tests/custom-test';
+import { Breakpoint, BreakpointName, ComponentName } from '../../common/enums';
 import { BREAKPOINTS } from '../../playwright-tests/constants/breakpoints';
 
 const TEST_ID = `form-modal`;
@@ -44,4 +49,22 @@ test.describe(`FormModal`, () => {
       });
     });
   }
+
+  test(`CloseButtonIsNotCoveredByFormTest`, closeButtonIsNotCoveredByFormTest);
 });
+
+async function closeButtonIsNotCoveredByFormTest({
+  page,
+  setViewportSize,
+}: {
+  page: Page;
+  setViewportSize: CustomTestFixtures["setViewportSize"];
+}) {
+  await setViewportSize({
+    width: Breakpoint.DESKTOP_XL,
+    height: 1000,
+  });
+
+  await expect(page.getByTestId(TEST_ID))
+    .toHaveScreenshot(`${TEST_ID}-close-button-${BreakpointName.DESKTOP_XL}.png`);
+}
