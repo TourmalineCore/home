@@ -114,6 +114,8 @@ export async function getServerSideProps({
   locale: string;
   preview: boolean;
 }) {
+  // Imports are executed only on the server (inside getServerSideProps),
+  // because these packages are compatible only with the server environment
   await import(`pdf-parse/worker`);
 
   const {
