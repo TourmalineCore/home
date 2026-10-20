@@ -70,6 +70,9 @@ module.exports = withReactSvg({
   i18n,
   include: path.resolve(__dirname, 'icons'),
 
+  // https://github.com/mehmet-kozan/pdf-parse/blob/HEAD/docs/troubleshooting.md#3-error-cannot-find-module-pdf-parse-or-napi-rscanvas
+  serverExternalPackages: ["pdf-parse", "@napi-rs/canvas"],
+
   ...(process.env.CDN_ENABLED === 'true' && process.env.CDN_DOMAIN && {
     // https://nextjs.org/docs/app/api-reference/config/next-config-js/assetPrefix
     // asset prefix for JavaScript and CSS files that it loads from /_next/
