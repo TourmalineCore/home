@@ -3,7 +3,6 @@ import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import path from "path";
-import { PDFParse } from "pdf-parse";
 import { CollageWithLinkBlock, LayoutData } from "../../common/types";
 import { PageHead } from "../../components/PageHead/PageHead";
 import { LayoutRedesign } from "../../components/redesign/LayoutRedesign/LayoutRedesign";
@@ -115,6 +114,12 @@ export async function getServerSideProps({
   locale: string;
   preview: boolean;
 }) {
+  await import(`pdf-parse/worker`);
+
+  const {
+    PDFParse,
+  } = await import(`pdf-parse`);
+
   const {
     cookieData,
     cookieSettingsData,
