@@ -57,6 +57,8 @@
     }
 
     @include desktop-xl {
+      padding-bottom: 24px;
+      padding-left: 22px;
       min-height: 138px;
     }
   }

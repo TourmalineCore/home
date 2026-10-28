@@ -1,7 +1,12 @@
 import { Browser, Page } from '@playwright/test';
-import { expect, test } from '../../../playwright-tests/custom-test';
+import { CustomTestFixtures, expect, test } from '../../../playwright-tests/custom-test';
 import { BREAKPOINTS } from '../../../playwright-tests/constants/breakpoints';
-import { AppRoute, ComponentName } from '../../../common/enums';
+import {
+  AppRoute,
+  Breakpoint,
+  BreakpointName,
+  ComponentName,
+} from '../../../common/enums';
 
 const TEST_ID = `form-block`;
 
@@ -24,6 +29,29 @@ test.describe(`FormBlockScreenshotTests`, () => {
       });
     });
   }
+
+  test(`FilledTextAreaTextDoesNotExtendBeyondLabelAt1920`, async ({
+    page,
+    goToComponentsPage,
+    setViewportSize,
+  }: {
+    page: Page;
+    goToComponentsPage: CustomTestFixtures["goToComponentsPage"];
+    setViewportSize: CustomTestFixtures["setViewportSize"];
+  }) => {
+    await goToComponentsPage(ComponentName.FORM_BLOCK);
+
+    await setViewportSize({
+      width: Breakpoint.DESKTOP_XL,
+    });
+
+    await page
+      .getByTestId(`form-redesign-message-textarea`)
+      .fill(`textarea message`);
+
+    await expect(page.getByTestId(TEST_ID))
+      .toHaveScreenshot(`${TEST_ID}-filled-text-area-${BreakpointName.DESKTOP_XL}.png`);
+  });
 });
 
 test.describe(`FormDisplayDependingOnGeolocationTests`, () => {
