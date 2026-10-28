@@ -42,6 +42,7 @@ import { FormBlockRedesign } from "../../components/redesign/FormBlockRedesign/F
 import { MagazineHero } from "../../components/magazines/MagazineHero/MagazineHero";
 import { MagazinesHero } from "../../components/magazines/MagazinesHero/MagazinesHero";
 import { getCookiePageProps } from "../../common/utils/getCookiePageProps";
+import { MermaidDiagram } from "../../components/MermaidDiagram/MermaidDiagram";
 
 // react-pdf/pdfjs reach for browser-only APIs (window, ResizeObserver) during render, so this
 // can't be server-rendered - same as its usage on the actual magazine page.
@@ -266,6 +267,18 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   [ComponentName.MAGAZINES_HERO]: () => <MagazinesHero />,
   [ComponentName.MAGAZINE_HERO]: () => <MagazineHero />,
   [ComponentName.MAGAZINE_PDF_VIEW]: () => <MagazinePdfView />,
+  [ComponentName.MERMAID_DIAGRAM_VALID]: () => (
+    <MermaidDiagram code={`
+      sequenceDiagram
+      actor Dev
+      participant GitHub
+      Dev->>GitHub: Push changes
+    `}
+    />
+  ),
+  [ComponentName.MERMAID_DIAGRAM_INVALID]: () => (
+    <MermaidDiagram code="incorrect code" />
+  ),
 };
 
 export default function ComponentsPage({
