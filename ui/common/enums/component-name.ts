@@ -44,6 +44,7 @@ export enum ComponentName {
   MAGAZINE_PDF_VIEW = `magazine-pdf-view`,
   MERMAID_DIAGRAM_VALID = `mermaid-diagram-valid`,
   MERMAID_DIAGRAM_INVALID = `mermaid-diagram-invalid`,
+  ARTICLE = `article`,
 }
 
 export const COMPONENT_LINKS = Object.values(ComponentName)
