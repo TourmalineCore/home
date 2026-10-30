@@ -12,6 +12,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          # sparse-checkout is needed to clone ui folder only. 
+          # Cone mode is disabled to not clone other files in root folder
+          # It's important to clone only this folder to keep the root folder clean
+          # Because we will move service subfolder to the root in the next step 
+          sparse-checkout: 'ui'
+          sparse-checkout-cone-mode: false
 
       - name: Cypress install
         uses: cypress-io/github-action@v7
