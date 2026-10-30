@@ -1,0 +1,48 @@
+name: Install cypress
+
+on:
+  # to allow to wait for a cypress install to proceed in another workflow
+  workflow_call:
+
+jobs:
+  install-cypress:
+    runs-on: ubuntu-24.04
+    container:
+      image: cypress/browsers:node-24.20.0-chrome-152.0.7977.64-1-ff-154.0.1-edge-151.0.4129.107-1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          # sparse-checkout is needed to clone ui folder only. 
+          # Cone mode is disabled to not clone other files in root folder
+          # It's important to clone only this folder to keep the root folder clean
+          # Because we will move service subfolder to the root in the next step 
+          sparse-checkout: 'ui'
+          sparse-checkout-cone-mode: false
+
+      # This step is needed because all steps runs from root folder and there are several options how to solve this problem
+      # Option #1: change working-directory of each step
+      # Option #2: move subfolder to root folder
+      # Option #2 was chosen because it allows the folder to be moved in a single action
+      # It seems a good option to move subfolder to the root folder because we are not going to commit anything from this workflow
+      - name: Move subfolder to current(top-level) folder
+        shell: bash
+        run: |
+          mv ui/{.,}* .
+          rm -rf ui
+
+      - name: Cypress install
+        uses: cypress-io/github-action@v7
+        with:
+          runTests: false
+        #   build: npm run build
+        # env:
+        #   CORS_ORIGIN: http://localhost:3000
+
+      # - name: Save dist folder
+      #   uses: actions/upload-artifact@v7
+      #   with:
+      #     name: dist
+      #     if-no-files-found: error
+      #     path: dist
+ 
