@@ -2,11 +2,16 @@ module.exports = {
   siteUrl: `https://tourmalinecore.com`,
   generateRobotsTxt: true,
   exclude: [
-    `/**/components`,
-    `/**/components/**`,
-    `/**/404`,
-    `/**/500`,
-    `/**/zoo-map-survey`,
+    `components`,
+    `components/**`,
+    `*/components`,
+    `*/components/**`,
+    `404`,
+    `*/404`,
+    `500`,
+    `*/500`,
+    `zoo-map-survey`,
+    `*/zoo-map-survey`,
   ],
   robotsTxtOptions: {
     policies: [
