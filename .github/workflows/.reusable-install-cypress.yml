@@ -35,14 +35,14 @@ jobs:
         uses: cypress-io/github-action@v7
         with:
           runTests: false
-          build: npm run build
-        env:
-          CORS_ORIGIN: http://localhost:3000
+        #   build: npm run build
+        # env:
+        #   CORS_ORIGIN: http://localhost:3000
 
-      - name: Save dist folder
-        uses: actions/upload-artifact@v7
-        with:
-          name: dist
-          if-no-files-found: error
-          path: dist
+      # - name: Save dist folder
+      #   uses: actions/upload-artifact@v7
+      #   with:
+      #     name: dist
+      #     if-no-files-found: error
+      #     path: dist
  
