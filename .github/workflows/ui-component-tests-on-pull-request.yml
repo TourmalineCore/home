@@ -1,0 +1,42 @@
+name: Component Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  paths:
+    - 'ui/**'
+
+jobs:
+  install-cypress:
+    uses: ./.github/workflows/.reusable-install-cypress.yml
+  
+  component_test:
+    runs-on: ubuntu-24.04 
+    container: cypress/browsers:node-24.20.0-chrome-152.0.7977.64-1-ff-154.0.1-edge-151.0.4129.107-1
+    strategy:
+      fail-fast: false
+    needs: install-cypress
+    steps:
+      - name: Checkout ui
+        uses: actions/checkout@v7
+
+      - name: Download the dist folders
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist
+
+      - name: Cypress run component tests
+        uses: cypress-io/github-action@v7
+        with:
+          component: true
+          browser: electron
+
+      - name: Upload screenshots of tests failed
+        uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: |
+            cypress-image-diff-screenshots/**/*
+            cypress-image-diff-html-report/**/*
