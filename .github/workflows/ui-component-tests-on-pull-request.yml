@@ -1,10 +1,11 @@
 name: Component Tests
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-  paths:
-    - 'ui/**'
+  push:
+    branches:
+      - feature/*
+    paths:
+      - 'ui/**'
 
 jobs:
   install-cypress:
