@@ -28,6 +28,16 @@ jobs:
           sparse-checkout: 'ui'
           sparse-checkout-cone-mode: false
 
+      # This step is needed because all steps runs from root folder and there are several options how to solve this problem
+      # Option #1: change working-directory of each step
+      # Option #2: move subfolder to root folder
+      # Option #2 was chosen because it allows the folder to be moved in a single action
+      # It seems a good option to move subfolder to the root folder because we are not going to commit anything from this workflow
+      - name: Move subfolder to current(top-level) folder
+        run: |
+          mv ui/{.,}* .
+          rm -rf ui
+
       - name: Download the dist folders
         uses: actions/download-artifact@v8
         with:
