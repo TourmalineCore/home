@@ -20,12 +20,13 @@ jobs:
     steps:
       - name: Checkout ui
         uses: actions/checkout@v7
-        # sparse-checkout is needed to clone ui folder only. 
-        # Cone mode is disabled to not clone other files in root folder
-        # It's important to clone only this folder to keep the root folder clean
-        # Because we will move service subfolder to the root in the next step 
-        sparse-checkout: 'ui'
-        sparse-checkout-cone-mode: false
+        with:
+          # sparse-checkout is needed to clone ui folder only. 
+          # Cone mode is disabled to not clone other files in root folder
+          # It's important to clone only this folder to keep the root folder clean
+          # Because we will move service subfolder to the root in the next step 
+          sparse-checkout: 'ui'
+          sparse-checkout-cone-mode: false
 
       - name: Download the dist folders
         uses: actions/download-artifact@v8
