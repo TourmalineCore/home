@@ -1,11 +1,10 @@
+import webpack from "webpack";
+import path from "path";
+
 import { defineConfig } from "cypress";
 import getCompareSnapshotsPlugin from "cypress-image-diff-js/plugin";
-import path from "path";
-import webpack from "webpack";
 
 export default defineConfig({
-  allowCypressEnv: false,
-
   component: {
     setupNodeEvents(on, config) {
       return getCompareSnapshotsPlugin(on, config);
