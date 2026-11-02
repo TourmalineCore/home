@@ -80,8 +80,8 @@ function snapshotTests() {
         Cypress.automation(`remote:debugger:protocol`, {
           command: `Emulation.setDeviceMetricsOverride`,
           params: {
-            width: viewport.width,
-            height: viewport.height,
+            width: Math.floor(viewport.width),
+            height: Math.floor(viewport.height),
             deviceScaleFactor: 1,
             mobile: false,
           },
