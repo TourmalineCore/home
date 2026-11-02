@@ -38,13 +38,7 @@ jobs:
         run: |
           mv ui/{.,}* .
           rm -rf ui
-
-      - name: Download the dist folders
-        uses: actions/download-artifact@v8
-        with:
-          name: dist
-          path: dist
-
+          
       - name: Cypress run component tests
         uses: cypress-io/github-action@v7
         with:
