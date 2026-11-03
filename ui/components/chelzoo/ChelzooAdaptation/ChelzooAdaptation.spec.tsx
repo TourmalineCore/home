@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-loop-func */
 import fs from 'fs';
 import { expect, test } from '@playwright/experimental-ct-react';
-import { ChelzooAdaptationStory } from "./ChelzooAdapatation.stories";
+import { ChelzooAdaptationStory } from "./ChelzooAdaptation.stories";
 import { Breakpoint } from '../../../common/enums';
 
 const VIEWPORTS = [
