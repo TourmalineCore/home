@@ -22,8 +22,8 @@
     "update-snapshots": "npx playwright test --update-snapshots",
     "jest:run": "jest",
     "generate-api-types": "docker-compose -f ./api-types/docker-compose.yml up --build ts_generator",
-    "playwright-ct:run": "npx playwright test -c playwright-ct.config.ts",
-    "playwright-ct:open": "npx playwright test --ui -c playwright-ct.config.ts"
+    "playwright-ct:run": "npx playwright test -c playwright-ct.config.mts",
+    "playwright-ct:open": "npx playwright test --ui -c playwright-ct.config.mts"
   },
   "dependencies": {
     "@radix-ui/themes": "^3.3.0",

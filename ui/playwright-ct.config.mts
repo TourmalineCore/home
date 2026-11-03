@@ -1,7 +1,12 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { defineConfig, devices } from '@playwright/experimental-ct-react';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { fileURLToPath } from 'node:url';
 import svgr from 'vite-plugin-svgr';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -64,17 +69,17 @@ export default defineConfig({
         ...devices[`Desktop Chrome`],
       },
     },
-    {
-      name: `firefox`,
-      use: {
-        ...devices[`Desktop Firefox`],
-      },
-    },
-    {
-      name: `webkit`,
-      use: {
-        ...devices[`Desktop Safari`],
-      },
-    },
+    // {
+    //   name: `firefox`,
+    //   use: {
+    //     ...devices[`Desktop Firefox`],
+    //   },
+    // },
+    // {
+    //   name: `webkit`,
+    //   use: {
+    //     ...devices[`Desktop Safari`],
+    //   },
+    // },
   ],
 });

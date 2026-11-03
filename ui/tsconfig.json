@@ -35,7 +35,8 @@
     "**/*.config.js", 
     "next-sitemap.config.js",
     "declarations.d.ts",
-    "packages.d.ts"
+    "packages.d.ts",
+    "playwright-ct.config.mts"
   ],
   "exclude": ["node_modules"]
 }
