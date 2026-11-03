@@ -1,9 +1,9 @@
-import { I18nextProvider } from 'react-i18next';
 import { ChelzooAdaptation } from "./ChelzooAdaptation";
 
 import translations from '../../../public/locales/ru/chelzooAdaptation.json';
-import { createTestI18n } from "../../../playwright-tests/I18nextTestProvider";
+import { createTestI18n, I18nextTestProvider } from "../../../playwright-tests/I18nextTestProvider";
 import { RouterTestProvider } from "../../../playwright-tests/RouterTestProvider";
+import { useNonBreakingSpaces } from "../../../common/hooks";
 
 export function ChelzooAdaptationStory() {
   const testI18n = createTestI18n({
@@ -12,11 +12,15 @@ export function ChelzooAdaptationStory() {
     resources: translations,
   });
 
+  useNonBreakingSpaces({
+    locale: `ru`,
+  });
+
   return (
     <RouterTestProvider>
-      <I18nextProvider i18n={testI18n}>
+      <I18nextTestProvider i18nInstance={testI18n}>
         <ChelzooAdaptation />
-      </I18nextProvider>
+      </I18nextTestProvider>
     </RouterTestProvider>
   );
 }
