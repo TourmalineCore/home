@@ -9,10 +9,6 @@
   scrollbar-gutter: stable;
 }
 
-html {
-  overflow-x: hidden;
-}
-
 html,
 body {
   // never add the overflow-x: hidden; property for html and body at the same time
@@ -83,7 +79,10 @@ img {
 
 /* stylelint-disable-next-line selector-id-pattern */
 #__next {
-  height: 100%;
+  // For older browsers (iOS 15 and below) that do not support clip
+  overflow-x: hidden;
+  overflow-x: clip;
+  width: 100%;
 }
 
 p + p {
