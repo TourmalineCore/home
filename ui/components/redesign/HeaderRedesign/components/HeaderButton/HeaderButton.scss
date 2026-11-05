@@ -29,13 +29,13 @@
 
   &::before {
     left: -4px;
-    background-image: url("../../../../../public/images/header-button-edge-left-desktop-xl.svg");
+    background-image: url("/images/header-button-edge-left-desktop-xl.svg");
     pointer-events: none;
   }
 
   &::after {
     right: -4px;
-    background-image: url("../../../../../public/images/header-button-edge-right-desktop-xl.svg");
+    background-image: url("/images/header-button-edge-right-desktop-xl.svg");
   }
 
   &:hover,

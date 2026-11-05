@@ -21,10 +21,13 @@
     "playwright:open:e2e": "npx playwright test --ui --config=playwright.e2e.config.ts",
     "update-snapshots": "npx playwright test --update-snapshots",
     "jest:run": "jest",
-    "generate-api-types": "docker-compose -f ./api-types/docker-compose.yml up --build ts_generator"
+    "generate-api-types": "docker-compose -f ./api-types/docker-compose.yml up --build ts_generator",
+    "playwright-ct:run": "npx playwright test -c playwright-ct.config.mts",
+    "playwright-ct:open": "npx playwright test --ui -c playwright-ct.config.mts"
   },
   "dependencies": {
     "@radix-ui/themes": "^3.3.0",
+    "@vitejs/plugin-react": "^4.7.0",
     "@yandex/smart-captcha": "^2.8.0",
     "clsx": "^2.1.1",
     "cookies-next": "^6.1.1",
@@ -53,6 +56,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
+    "@playwright/experimental-ct-react": "1.55.1",
     "@playwright/test": "1.55.1",
     "@stylistic/eslint-plugin": "^1.6.3",
     "@stylistic/stylelint-config": "^1.0.1",
@@ -85,7 +89,8 @@
     "stylelint-order": "^6.0.4",
     "ts-jest": "^29.4.11",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vite-plugin-svgr": "^5.2.0"
   },
   "browserslist": {
     "production": [
