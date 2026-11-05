@@ -54,6 +54,7 @@ export function HeaderRedesign({
         className={clsx(`header-redesign`, {
           'header-redesign--hidden': !isScrollUp && !isMobileMenuOpen,
         })}
+        data-cy="header-redesign"
         data-testid="header-redesign"
       >
         <div className="header-redesign__inner container-redesign">

@@ -52,6 +52,7 @@ export function ChelzooAdaptation() {
     <section
       className="chelzoo-adaptation"
       data-testid="chelzoo-adaptation"
+      data-cy="chelzoo-adaptation"
     >
       <div className="chelzoo-adaptation__container">
         <div className="chelzoo-adaptation__wrapper">
