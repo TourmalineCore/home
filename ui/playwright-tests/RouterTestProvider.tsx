@@ -3,14 +3,12 @@ import React from 'react';
 import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";
 import { NextRouter } from 'next/router';
 
-export type MockRouterOptions = Partial<NextRouter>;
-
 export function RouterTestProvider({
   children,
   routerOptions = {},
 }: {
   children: React.ReactNode;
-  routerOptions?: MockRouterOptions;
+  routerOptions?: Partial<NextRouter>;
 }) {
   const mockRouter: NextRouter = {
     route: `/`,
@@ -19,9 +17,9 @@ export function RouterTestProvider({
     asPath: `/`,
     basePath: ``,
     isReady: true,
-    locale: undefined,
+    locale: `ru`,
     locales: undefined,
-    defaultLocale: undefined,
+    defaultLocale: `ru`,
     domainLocales: undefined,
     isLocaleDomain: false,
     push: () => Promise.resolve(true),

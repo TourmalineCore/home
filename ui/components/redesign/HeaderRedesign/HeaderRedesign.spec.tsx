@@ -7,22 +7,22 @@ const VIEWPORTS = [
   {
     name: `mobile`,
     width: Breakpoint.MOBILE,
-    height: 158,
+    height: 80,
   },
   {
     name: `tablet`,
     width: Breakpoint.TABLET,
-    height: 158,
+    height: 80,
   },
   {
     name: `tablet-xl`,
     width: Breakpoint.TABLET_XL,
-    height: 158,
+    height: 80,
   },
   {
     name: `desktop`,
     width: Breakpoint.DESKTOP,
-    height: 158,
+    height: 88,
   },
   {
     name: `desktop-xl`,

@@ -1,5 +1,4 @@
 import { ChelzooAdaptation } from "./ChelzooAdaptation";
-
 import translations from '../../../public/locales/ru/chelzooAdaptation.json';
 import { createTestI18n, I18nextTestProvider } from "../../../playwright-tests/I18nextTestProvider";
 import { RouterTestProvider } from "../../../playwright-tests/RouterTestProvider";
