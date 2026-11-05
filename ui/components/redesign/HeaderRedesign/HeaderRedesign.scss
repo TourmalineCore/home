@@ -1,7 +1,9 @@
 .header-redesign {
   @include inter-font;
 
-  position: sticky;
+  position: fixed;
+  left: 0;
+  right: 0;
   top: 0;
   z-index: $header;
   background-color: $color-black;
