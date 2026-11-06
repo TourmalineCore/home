@@ -24,6 +24,8 @@ const CookieSettingsModal = dynamic(
   },
 );
 
+const isPlaywrightComponentTest = process.env.NEXT_PUBLIC_IS_PLAYWRIGHT_COMPONENT_TEST === `true`;
+
 const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
 const yandexId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
 // const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
@@ -143,7 +145,7 @@ function MyApp({
         />
         <title>Tourmaline Core</title>
       </Head>
-      {!isYandexIframe && (
+      {!isPlaywrightComponentTest && !isYandexIframe && (
         <Cookie
           acceptButtonText={cookieData.acceptButtonText}
           rejectButtonText={cookieData.rejectButtonText}
@@ -151,13 +153,15 @@ function MyApp({
           settingsButtonText={cookieData.settingsButtonText}
         />
       )}
-      <CookieSettingsModal
-        title={cookieSettingsData.title}
-        note={cookieSettingsData.note}
-        buttonText={cookieSettingsData.buttonText}
-        analyticsData={cookieSettingsData.analytics}
-        webvisorData={cookieSettingsData.webvisor}
-      />
+      {!isPlaywrightComponentTest && (
+        <CookieSettingsModal
+          title={cookieSettingsData.title}
+          note={cookieSettingsData.note}
+          buttonText={cookieSettingsData.buttonText}
+          analyticsData={cookieSettingsData.analytics}
+          webvisorData={cookieSettingsData.webvisor}
+        />
+      )}
       <Component {...pageProps} />
     </CookieProvider>
   );
