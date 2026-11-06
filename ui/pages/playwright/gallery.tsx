@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import * as HeaderRedesign from '../../components/redesign/HeaderRedesign/HeaderRedesign';
-import * as ChelzooAdaptationStories from '../../components/chelzoo/ChelzooAdaptation/ChelzooAdaptation.stories';
+import * as ChelzooAdaptationStory from '../../components/chelzoo/ChelzooAdaptation/ChelzooAdaptation.stories';
 
-const storiesRegistry: Record<string, React.ComponentType<any>> = {
+const componentsRegistry: Record<string, React.ComponentType<any>> = {
   ...HeaderRedesign,
-  ...ChelzooAdaptationStories,
+  ...ChelzooAdaptationStory,
 };
 
 export default function GalleryPage() {
-  const [StoryComponent, setStoryComponent] = useState<React.ComponentType<any> | null>(null);
+  const [TestedComponent, setTestedComponent] = useState<React.ComponentType<any> | null>(null);
   const [props, setProps] = useState<any>({});
 
   useEffect(() => {
@@ -21,28 +21,32 @@ export default function GalleryPage() {
       story: string;
       props?: any;
     }) => {
-      const Component = storiesRegistry[story];
+      const Component = componentsRegistry[story];
 
       if (!Component) {
-        throw new Error(`Story not found: "${story}". Available: ${Object.keys(storiesRegistry)
+        throw new Error(`Component not found: "${story}". Available: ${Object.keys(componentsRegistry)
           .join(`, `)}`);
       }
 
-      setStoryComponent(() => Component);
+      setTestedComponent(() => Component);
       setProps(newProps || {});
 
       return document.getElementById(`root`);
     };
 
     (window as any).unmount = () => {
-      setStoryComponent(null);
+      setTestedComponent(null);
       setProps({});
     };
   }, []);
 
   return (
     <div id="root">
-      {StoryComponent && <StoryComponent {...props} />}
+      {TestedComponent && (
+        <TestedComponent
+          {...props}
+        />
+      )}
     </div>
   );
 }
