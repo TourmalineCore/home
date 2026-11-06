@@ -61,7 +61,7 @@ test.describe(`SnapshotTests`, () => {
         return route.continue();
       });
 
-      await mount(`HeaderRedesignStory`, {
+      await mount(`HeaderRedesign`, {
         ...headerTranslationsRu,
       });
 
@@ -254,7 +254,7 @@ test.describe(`ShowLangTooltipTests`, () => {
       height: 768,
     });
 
-    await mount(`HeaderRedesignStory`, {
+    await mount(`HeaderRedesign`, {
       ...headerTranslationsRu,
     });
 
@@ -279,7 +279,7 @@ test.describe(`ShowLangTooltipTests`, () => {
       height: 768,
     });
 
-    await mount(`HeaderRedesignStory`, {
+    await mount(`HeaderRedesign`, {
       ...headerTranslationsRu,
     });
 

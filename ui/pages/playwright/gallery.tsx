@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import * as HeaderRedesignStories from '../../components/redesign/HeaderRedesign/HeaderRedesign.stories';
+import * as HeaderRedesign from '../../components/redesign/HeaderRedesign/HeaderRedesign';
 import * as ChelzooAdaptationStories from '../../components/chelzoo/ChelzooAdaptation/ChelzooAdaptation.stories';
 
 const storiesRegistry: Record<string, React.ComponentType<any>> = {
-  ...HeaderRedesignStories,
+  ...HeaderRedesign,
   ...ChelzooAdaptationStories,
 };
 
