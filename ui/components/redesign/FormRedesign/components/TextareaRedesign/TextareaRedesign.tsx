@@ -1,31 +1,31 @@
 import clsx from 'clsx';
-import { DetailedHTMLProps, TextareaHTMLAttributes } from 'react';
+import { DetailedHTMLProps, TextareaHTMLAttributes, useId } from 'react';
 
 interface TextareaProps extends DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> {
-  id: string;
   label: string;
   description?: string;
   isError?: boolean;
 }
 
 export function TextareaRedesign({
-  id,
   label,
   description,
   className,
   ...props
 }: TextareaProps) {
+  const textareaId = useId();
+
   return (
     <div className={clsx(`textarea-redesign`, className)}>
       <div className="textarea-redesign__box">
         <textarea
-          id={id}
+          id={textareaId}
           className="textarea-redesign__control ym-disable-keys"
           placeholder=""
           {...props}
         />
         <label
-          htmlFor={id}
+          htmlFor={textareaId}
           className="textarea-redesign__label"
         >
           {label}

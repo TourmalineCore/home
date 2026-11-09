@@ -8,8 +8,8 @@ import { loadTranslations } from '../common/utils';
 import { Block, LayoutData, Seo } from '../common/types';
 import { getLayoutData } from '../services/cms/api/layout-api/layout-api';
 import { getPageData } from '../services/cms/api/pages-api/pages-api';
-import { useScrollTop } from '../common/hooks/useScrollTop';
 import { useNonBreakingSpaces } from '../common/hooks';
+import { getCookiePageProps } from '../common/utils/getCookiePageProps';
 
 type PageData = {
   seo: Seo;
@@ -26,16 +26,11 @@ export default function UniversalPage({
   isPreview: boolean;
 }) {
   const {
-    asPath,
     locale,
   } = useRouter();
 
   useNonBreakingSpaces({
     locale: locale!,
-  });
-
-  useScrollTop({
-    dependencies: [asPath],
   });
 
   const {
@@ -85,6 +80,14 @@ export async function getServerSideProps({
   };
   preview: boolean;
 }) {
+  const {
+    cookieData,
+    cookieSettingsData,
+  } = await getCookiePageProps({
+    locale,
+    preview,
+  });
+
   if (process.env.IS_STATIC_MODE === `true`) {
     const translationsPageData = await loadTranslations(locale, [
       `common`,
@@ -171,6 +174,8 @@ export async function getServerSideProps({
 
     return {
       props: {
+        cookieData,
+        cookieSettingsData,
         layoutData: {
           headerContent: translationsPageData.headerRedesign,
           footerContent: translationsPageData.footerRedesign,
@@ -215,6 +220,8 @@ export async function getServerSideProps({
 
   return {
     props: {
+      cookieData,
+      cookieSettingsData,
       layoutData,
       isPreview: preview,
       pageData: {
@@ -233,9 +240,5 @@ async function getStaticTranslation({
 }: {
   locale: string;
 }) {
-  return serverSideTranslations(locale, [
-    `common`,
-    `cookie`,
-    `formBlockRedesign`,
-  ]);
+  return serverSideTranslations(locale, [`common`, `formBlockRedesign`]);
 }

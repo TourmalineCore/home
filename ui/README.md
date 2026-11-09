@@ -95,6 +95,13 @@ To run E2E tests in UI mode, execute the following command:
 npm run playwright:open:e2e
 ```
 
+## Updating Version of Privacy Policy
+When the Privacy Policy document gets updated and you want the user to be notified about it to get their consent on tracking analytics, you need to do the following:
+
+1. Add the new PDF files to `public/documents/policy` folder
+2. In the `.env.production` file change the NEXT_PUBLIC_POLICY_VERSION variable with the incremented value, e.g. `NEXT_PUBLIC_POLICY_VERSION=v1` -> `NEXT_PUBLIC_POLICY_VERSION=v2.`
+>You don't need to specify the version in the PDF filename itself, the filename can be the same.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

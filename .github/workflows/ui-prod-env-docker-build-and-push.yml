@@ -21,5 +21,6 @@ jobs:
         CDN_DOMAIN=cdn.tourmalinecore.com
         CORS_ORIGIN=https://tourmalinecore.com
         ENABLE_SEO_INDEXING=true
+        NEXT_PUBLIC_ENABLE_SMARTCAPTCHA=true
     # without this it cannot login to the registry
     secrets: inherit

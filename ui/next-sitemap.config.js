@@ -2,15 +2,16 @@ module.exports = {
   siteUrl: `https://tourmalinecore.com`,
   generateRobotsTxt: true,
   exclude: [
-    `/components`,
-    `/components/*`,
-    `/ru/components`,
-    `/ru/components/*`,
-    `/zh/components`,
-    `/zh/components/*`,
-    `/404`,
-    `/ru/404`,
-    `/zh/404`,
+    `components`,
+    `components/**`,
+    `*/components`,
+    `*/components/**`,
+    `404`,
+    `*/404`,
+    `500`,
+    `*/500`,
+    `zoo-map-survey`,
+    `*/zoo-map-survey`,
   ],
   robotsTxtOptions: {
     policies: [
@@ -18,8 +19,9 @@ module.exports = {
         userAgent: `*`,
         disallow: [
           `/components`,
-          `/ru/components`,
-          `/zh/components`,
+          `/*/components`,
+          `/zoo-map-survey`,
+          `/*/zoo-map-survey`,
         ],
       } : {
         userAgent: `*`,

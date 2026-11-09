@@ -55,8 +55,6 @@ function homepageMainScenarioTest() {
       async function setupCmsContent() {
         await cms.navigateToContentManager();
 
-        await cms.skipTutorial();
-
         await test.step(`Filling homepage content`, fillAndPublishHomepageCmsUi);
 
         async function fillAndPublishHomepageCmsUi() {

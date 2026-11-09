@@ -1,6 +1,6 @@
 import path from "path";
 import fs from 'fs';
-import { DEFAULT_LOCALE } from "../constants";
+import { DEFAULT_LOCALE } from "../constants/languages";
 
 export async function loadTranslations<T extends string>(locale: string, namespaces: T[]): Promise<Record<T, any>> {
   const translationPromises = namespaces.map(async (namespace) => {

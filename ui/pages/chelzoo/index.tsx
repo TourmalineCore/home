@@ -2,7 +2,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { PageHead } from '../../components/PageHead/PageHead';
-import { useScrollTop } from '../../common/hooks/useScrollTop';
 import { CollageWithLinkBlock, LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
@@ -29,6 +28,7 @@ import { ChelzooLinks } from '../../components/chelzoo/ChelzooLinks/ChelzooLinks
 import { ChelzooReview } from '../../components/chelzoo/ChelzooReview/ChelzooReview';
 import { CollageWithLink } from '../../components/CollageWithLink/CollageWithLink';
 import { useNonBreakingSpaces } from '../../common/hooks';
+import { getCookiePageProps } from '../../common/utils/getCookiePageProps';
 
 export default function ChelzooPage({
   layoutData,
@@ -49,10 +49,6 @@ export default function ChelzooPage({
 
   useNonBreakingSpaces({
     locale: locale!,
-  });
-
-  useScrollTop({
-    dependencies: [],
   });
 
   return (
@@ -114,6 +110,13 @@ export async function getServerSideProps({
   locale: string;
   preview: boolean;
 }) {
+  const {
+    cookieData,
+    cookieSettingsData,
+  } = await getCookiePageProps({
+    locale,
+    preview,
+  });
   if (process.env.IS_STATIC_MODE === `true`) {
     const translationsPageData = await loadTranslations(locale, [
       `headerRedesign`,
@@ -123,6 +126,8 @@ export async function getServerSideProps({
 
     return {
       props: {
+        cookieData,
+        cookieSettingsData,
         layoutData: {
           headerContent: translationsPageData.headerRedesign,
           footerContent: translationsPageData.footerRedesign,
@@ -150,6 +155,8 @@ export async function getServerSideProps({
 
   return {
     props: {
+      cookieData,
+      cookieSettingsData,
       layoutData,
       collageWithLinkData: {
         text: translationsPageData.collageWithLink.text,
@@ -171,7 +178,6 @@ async function getStaticTranslation({
 }) {
   return serverSideTranslations(locale, [
     `chelzooMeta`,
-    `cookie`,
     `formBlockRedesign`,
     `chelzooHero`,
     `chelzooAbout`,

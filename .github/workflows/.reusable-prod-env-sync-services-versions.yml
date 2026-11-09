@@ -1,0 +1,93 @@
+name: Sync services
+on: 
+  workflow_call:
+    inputs:
+      service-name:
+        required: true
+        type: string
+      path-to-values:
+        required: true
+        type: string
+      prefix:
+        required: false
+        type: string 
+
+jobs:
+  Sync-services:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout Home  
+        uses: actions/checkout@v3 
+
+      - name: Write short-sha to GitHub Env
+        run: |
+          echo "SHORT_SHA=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV
+
+      - name: Set branch name
+        run: 
+          echo "BRANCH_NAME=feature/sync-image-tag-${{ inputs.service-name }}-$(date +'%FT%H-%M')-short-sha-${{ env.SHORT_SHA }}" >> $GITHUB_ENV
+
+      # double quotes and new lines in multiline commit message breaks the sync workflow
+      # using json to file trick that replaces double quotes and new lines with \" and \n
+      # -e is used to enable interpretation of the following backslash escapes (e.g \n)
+      - name: Write commit message to file
+        run: 
+          echo -e ${{ toJson(github.event.head_commit.message) }} > commit_message.txt
+
+        # We tried to use yq to change the image tag, but in the values files for helmfile we have non-yaml code that yq can`t parse or ignore
+        # so for that reason we use Stream EDitor which can find needeed string using regular expressions and change it to a new value
+        # The -i flag is needed to write new image tag directly to values file
+      - name: Write new image tag to values
+        run: |
+          sed -i "0,/tag:.*/s//tag: \"${{ inputs.prefix && format('{0}-', inputs.prefix) || '' }}sha-${{ github.sha }}\"/" ${{ inputs.path-to-values }}
+
+      - name: Write new tag to helmfile
+        run: |
+          # The first one changes the ref for custom repository in the helmfile
+          # For example: 
+          # The URL was: git+https://github.com/TourmalineCore/home.git@env-synchronizer?ref=2b1b79806fc9291782aa5865d440045e1a155335
+          # Became: git+https://github.com/TourmalineCore/home.git@env-synchronizer?ref=fb67abade2db5390fe40bc601d9dbf45cfb59f77
+          sed -i "0,/${{ inputs.service-name }}?ref=.*/s//${{ inputs.service-name }}?ref=${{ github.sha }}/" prod-env/deploy/helmfile.yaml
+
+          # The second one changes the ref for service values file ref in the helmfile
+          # For example:
+          # The URL was: git::https://github.com/TourmalineCore/home.git@/env-synchronizer/ci/values.yaml?ref=2b1b79806fc9291782aa5865d440045e1a155335
+          # Became: git::https://github.com/TourmalineCore/home.git@/env-synchronizer/ci/values.yaml?ref=fb67abade2db5390fe40bc601d9dbf45cfb59f77
+          sed -i "0,/${{ inputs.service-name }}\/ci\/values.yaml?ref=.*/s//${{ inputs.service-name }}\/ci\/values.yaml?ref=${{ github.sha }}/" prod-env/deploy/helmfile.yaml
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name github-actions[bot]
+          # 41898282 is id of GitHub Actions Bot that was taken from GitHub API: https://api.github.com/users/github-actions[bot]
+          git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+          git checkout -b $BRANCH_NAME master
+
+          git add ${{ inputs.path-to-values }}
+
+          git add prod-env/deploy/helmfile.yaml
+
+          git commit -F commit_message.txt
+          
+          git push origin $BRANCH_NAME
+
+      - name: Set PR title
+        run: 'echo "PR_TITLE=sync: ${{ inputs.service-name }} image tag" >> $GITHUB_ENV' 
+        
+      - name: Create PR
+        run: gh pr create -B master -H $BRANCH_NAME --title "${{ env.PR_TITLE }}" -F commit_message.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Approve PR
+        run: gh pr review $BRANCH_NAME -a
+        env:
+          GITHUB_TOKEN: ${{ secrets.HOME_ENV_SYNC_TRIGGER_TOKEN }}
+
+      - name: Merge PR
+        run: gh pr merge $BRANCH_NAME --merge --subject "${{ env.PR_TITLE }}" -F commit_message.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

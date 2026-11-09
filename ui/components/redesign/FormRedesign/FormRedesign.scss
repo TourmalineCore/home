@@ -203,6 +203,15 @@
     }
   }
 
+  &__error {
+    @include body-s;
+
+    display: block;
+    margin-bottom: 10px;
+    text-align: center;
+    color: $color-red;
+  }
+
   &.is-modal {
     padding-top: 28px;
 

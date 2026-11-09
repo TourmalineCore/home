@@ -1,42 +1,60 @@
-import { Trans, useTranslation } from 'next-i18next';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+
+import { getCookie } from 'cookies-next';
+import { InvisibleSmartCaptcha } from '@yandex/smart-captcha';
 import { useRouter } from 'next/router';
-
-import { getCookie, setCookie } from 'cookies-next';
-import { loadYandexMetrika } from '../../common/loadYandexMetrika/loadYandexMetrika';
-import { COOKIE_ACCEPT, POLICY_VERSION } from '../../common/constants/cookie';
-
-const cookieOptions = {
-  // 1 year
-  maxAge: 365 * 24 * 3600,
-};
+import { COOKIE_ACCEPT } from '../../common/constants/cookie';
+import { useCookieContext } from '../../common/hooks/useCookieContext';
+import { MarkdownText } from '../MarkdownText/MarkdownText';
+import { useSmartCaptcha } from '../../common/hooks/useSmartCaptcha';
 
 // Google metrics are temporarily disabled
 // const googleId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ``;
 
 export function Cookie({
+  acceptButtonText,
+  rejectButtonText,
+  bannerText,
+  settingsButtonText,
   isComponentPage,
 }: {
+  acceptButtonText: string;
+  rejectButtonText: string;
+  bannerText: string;
+  settingsButtonText: string;
   isComponentPage?: boolean;
 }) {
-  const {
-    t,
-  } = useTranslation(`cookie`);
   const {
     locale,
   } = useRouter();
 
-  const [isCookieVisible, setIsCookieVisible] = useState(isComponentPage || false);
+  const {
+    isBannerVisible,
+    setIsBannerVisible,
+    setIsSettingsModalOpen,
+    acceptCookies,
+    rejectCookies,
+  } = useCookieContext();
+
+  const {
+    isSmartCaptchaEnabled,
+    isSmartCaptchaVisible,
+    smartCaptchaKey,
+    showSmartCaptcha,
+    hideSmartCaptcha,
+    resetSmartCaptcha,
+  } = useSmartCaptcha();
+
+  const isCookieVisible = isComponentPage || isBannerVisible;
   // const [date, setDate] = useState<Date | null>(null);
-  const isMetricsEnabled = process.env.NEXT_PUBLIC_METRICS_ENABLED === `true`;
 
   useEffect(() => {
     if (!isComponentPage) {
       // setDate(new Date());
       if (getCookie(COOKIE_ACCEPT) !== undefined) {
-        setIsCookieVisible(false);
+        setIsBannerVisible(false);
       } else {
-        setIsCookieVisible(true);
+        setIsBannerVisible(true);
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,63 +65,91 @@ export function Cookie({
   }
 
   return (
-    <aside
-      className="cookie"
-      data-testid="cookie"
-    >
-      <div className="cookie__text">
-        <Trans
-          i18nKey="cookie:text"
-          components={{
-            bolt: <a
-              className="cookie__link"
-              href={`/documents/policy/policy-${POLICY_VERSION}-${locale}.pdf#page=5`}
-              target="_blank"
-              rel="noreferrer"
-              aria-label=""
-            />,
+    <>
+      <aside
+        className="cookie"
+        data-testid="cookie"
+      >
+        <div className="cookie__text">
+          <MarkdownText
+            linkClassName="cookie__link"
+            isTargetBlank
+          >
+            {bannerText}
+          </MarkdownText>
+        </div>
+        <div className="cookie__buttons">
+          <button
+            type="button"
+            className="cookie__button cookie__button--settings"
+            onClick={() => setIsSettingsModalOpen(true)}
+            data-testid="cookie-settings-button"
+          >
+            {settingsButtonText}
+          </button>
+
+          <button
+            type="button"
+            className="cookie__button"
+            onClick={handleRejectCookie}
+            data-testid="reject-button"
+          >
+            {rejectButtonText}
+          </button>
+          <button
+            type="button"
+            className="cookie__button"
+            onClick={async () => {
+              if (isSmartCaptchaEnabled) {
+                showSmartCaptcha();
+              } else {
+                await handleAcceptCookie();
+              }
+            }}
+            data-testid="accept-button"
+          >
+            {acceptButtonText}
+          </button>
+        </div>
+      </aside>
+
+      {(isSmartCaptchaEnabled && !isComponentPage) && (
+        <InvisibleSmartCaptcha
+          key={smartCaptchaKey}
+          sitekey={process.env.NEXT_PUBLIC_SMARTCAPTCHA_CLIENT_KEY as string}
+          language={locale === `ru` ? `ru` : `en`}
+          onSuccess={async (token) => {
+            await handleAcceptCookie({
+              token,
+            });
           }}
+          onChallengeHidden={hideSmartCaptcha}
+          visible={isSmartCaptchaVisible}
+          hideShield
         />
-      </div>
-      <div className="cookie__buttons">
-        <button
-          type="button"
-          className="cookie__button"
-          onClick={acceptCookie}
-          data-testid="accept-button"
-        >
-          {t(`accept`)}
-        </button>
-        <button
-          type="button"
-          className="cookie__button"
-          onClick={rejectCookie}
-          data-testid="reject-button"
-        >
-          {t(`reject`)}
-        </button>
-      </div>
-    </aside>
+      )}
+    </>
   );
 
-  function acceptCookie() {
+  async function handleAcceptCookie({
+    token = ``,
+  }: {
+    token?: string;
+  } = {}) {
     if (!isComponentPage) {
-      setCookie(COOKIE_ACCEPT, true, cookieOptions);
+      await acceptCookies({
+        analytics: true,
+        webvisor: true,
+        token,
+      });
 
-      if (isMetricsEnabled) {
-        // window.gtag(`js`, date);
-        // window.gtag(`config`, googleId);
-        loadYandexMetrika();
-      }
-      setIsCookieVisible(false);
+      resetSmartCaptcha();
     }
   }
 
-  function rejectCookie() {
+  function handleRejectCookie() {
     if (!isComponentPage) {
-      setCookie(COOKIE_ACCEPT, false, cookieOptions);
+      rejectCookies();
     }
-
-    setIsCookieVisible(false);
   }
 }

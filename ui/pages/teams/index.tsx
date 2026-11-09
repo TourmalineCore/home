@@ -8,10 +8,13 @@ import { Tasks } from '../../components/Tasks/Tasks';
 import { Stack } from '../../components/Stack/Stack';
 import { Cases } from '../../components/Cases/Cases';
 import { Stages } from '../../components/Stages/Stages';
-import { useScrollTop } from '../../common/hooks/useScrollTop';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
 import { LayoutData } from '../../common/types';
+import { useIsRussianCountry } from '../../common/hooks';
+import { TechnologyPageAnchorLink } from '../../common/enums';
+import { FormBlock } from '../../components/FormBlock/FormBlock';
+import { getCookiePageProps } from '../../common/utils/getCookiePageProps';
 
 export default function TeamsPage({
   layoutData,
@@ -24,11 +27,7 @@ export default function TeamsPage({
     t,
   } = useTranslation(`common`);
 
-  // const isCountryRus = useIsRussianCountry();
-
-  useScrollTop({
-    dependencies: [],
-  });
+  const isCountryRus = useIsRussianCountry();
 
   return (
     <>
@@ -56,12 +55,12 @@ export default function TeamsPage({
         <Stack />
         <Cases />
         <Stages />
-        {/* {isCountryRus && (
+        {isCountryRus && (
           <FormBlock
             id={TechnologyPageAnchorLink.Contact}
             buttonClassName="teams__form-button"
           />
-        )} */}
+        )}
       </Layout>
     </>
   );
@@ -74,11 +73,21 @@ export async function getServerSideProps({
   locale: string;
   preview: boolean;
 }) {
+  const {
+    cookieData,
+    cookieSettingsData,
+  } = await getCookiePageProps({
+    locale,
+    preview,
+  });
+
   if (process.env.IS_STATIC_MODE === `true`) {
     const translationsPageData = await loadTranslations(locale, [`headerRedesign`]);
 
     return {
       props: {
+        cookieData,
+        cookieSettingsData,
         layoutData: {
           headerContent: translationsPageData.headerRedesign,
         },
@@ -98,6 +107,8 @@ export async function getServerSideProps({
 
   return {
     props: {
+      cookieData,
+      cookieSettingsData,
       layoutData,
       isPreview: preview,
       ...(await getStaticTranslation({
@@ -115,7 +126,6 @@ async function getStaticTranslation({
   return serverSideTranslations(locale, [
     `common`,
     `footer`,
-    `cookie`,
     `form`,
     `formBlock`,
     `heroTeams`,

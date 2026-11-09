@@ -11,10 +11,10 @@ export function MobileMenu({
   emailCaption,
   emailAddress,
   socialLinks,
-  // onOpenModal,
+  onOpenModal,
   isMobileMenuOpen,
 }: HeaderRedesignProps & {
-  // onOpenModal: () => void;
+  onOpenModal: () => void;
   isMobileMenuOpen: boolean;
 }) {
   return (
@@ -33,7 +33,7 @@ export function MobileMenu({
       {buttonLabel && (
         <HeaderButton
           className="mobile-menu-redesign__button"
-          // onClick={onOpenModal}
+          onClick={onOpenModal}
           isMobileMenu
         >
           {buttonLabel}

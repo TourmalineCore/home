@@ -1,47 +1,70 @@
-// import { test } from '../../playwright-tests/custom-test';
-// import { BreakpointName, ComponentName } from '../../common/enums';
-// import { BREAKPOINTS } from '../../playwright-tests/constants/breakpoints';
+import {
+  CustomTestFixtures,
+  expect,
+  Page,
+  test,
+} from '../../playwright-tests/custom-test';
+import { Breakpoint, BreakpointName, ComponentName } from '../../common/enums';
+import { BREAKPOINTS } from '../../playwright-tests/constants/breakpoints';
 
-// const TEST_ID = `form-modal`;
+const TEST_ID = `form-modal`;
 
-// const heightMap: Record<BreakpointName, number> = {
-//   mobile: 801,
-//   tablet: 1024,
-//   'tablet-xl': 1024,
-//   desktop: 768,
-//   'desktop-xl': 1080,
-// };
+const heightMap: Record<BreakpointName, number> = {
+  mobile: 801,
+  tablet: 1024,
+  'tablet-xl': 1024,
+  desktop: 768,
+  'desktop-xl': 1080,
+};
 
-// test.describe(`FormModal`, () => {
-//   test.beforeEach(async ({
-//     page,
-//     goToComponentsPage,
-//   }) => {
-//     await goToComponentsPage(ComponentName.FORM_MODAL);
+test.describe(`FormModal`, () => {
+  test.beforeEach(async ({
+    page,
+    goToComponentsPage,
+  }) => {
+    await goToComponentsPage(ComponentName.FORM_MODAL);
 
-//     await page.addStyleTag({
-//       content: `
-//     *:focus {
-//       outline: none !important;
-//       box-shadow: none !important;
-//     }`,
-//     });
-//   });
+    await page.addStyleTag({
+      content: `
+    *:focus {
+      outline: none !important;
+      box-shadow: none !important;
+    }`,
+    });
+  });
 
-//   for (const {
-//     name,
-//     breakpoint,
-//     breakpointName,
-//   } of BREAKPOINTS) {
-//     test(name, async ({
-//       testScreenshotAtBreakpoint,
-//     }) => {
-//       await testScreenshotAtBreakpoint({
-//         testId: TEST_ID,
-//         breakpoint,
-//         breakpointName,
-//         height: heightMap[breakpointName],
-//       });
-//     });
-//   }
-// });
+  for (const {
+    name,
+    breakpoint,
+    breakpointName,
+  } of BREAKPOINTS) {
+    test(name, async ({
+      testScreenshotAtBreakpoint,
+    }) => {
+      await testScreenshotAtBreakpoint({
+        testId: TEST_ID,
+        breakpoint,
+        breakpointName,
+        height: heightMap[breakpointName],
+      });
+    });
+  }
+
+  test(`CloseButtonIsNotCoveredByFormTest`, closeButtonIsNotCoveredByFormTest);
+});
+
+async function closeButtonIsNotCoveredByFormTest({
+  page,
+  setViewportSize,
+}: {
+  page: Page;
+  setViewportSize: CustomTestFixtures["setViewportSize"];
+}) {
+  await setViewportSize({
+    width: Breakpoint.DESKTOP_XL,
+    height: 1000,
+  });
+
+  await expect(page.getByTestId(TEST_ID))
+    .toHaveScreenshot(`${TEST_ID}-close-button-${BreakpointName.DESKTOP_XL}.png`);
+}

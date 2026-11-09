@@ -8,9 +8,10 @@ import { HeaderButton } from "./components/HeaderButton/HeaderButton";
 import { MobileMenu } from "./components/MobileMenuRedesign/MobileMenuRedesign";
 import { useBodyScrollHidden } from "../../../common/hooks/useBodyScrollHidden";
 import { HeaderRedesignProps } from "../../../common/types";
-import { useOnScrollDirections } from "../../../common/hooks";
+import { useDeviceSize, useOnScrollDirections } from "../../../common/hooks";
 import { HeaderNavigationList } from "./components/HeaderNavigationList/HeaderNavigationList";
 import { AppRoute } from "../../../common/enums";
+import { FormModal } from "../../FormModal/FormModal";
 
 export function HeaderRedesign({
   navigationLists,
@@ -24,7 +25,7 @@ export function HeaderRedesign({
   } = useRouter();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -33,7 +34,11 @@ export function HeaderRedesign({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [asPath]);
 
-  useBodyScrollHidden(isMobileMenuOpen);
+  const {
+    isDesktop,
+  } = useDeviceSize();
+
+  useBodyScrollHidden((isMobileMenuOpen && !isDesktop) || isModalOpen);
 
   const {
     isScrollUp,
@@ -97,17 +102,17 @@ export function HeaderRedesign({
           {buttonLabel && (
             <HeaderButton
               className="header-redesign__button"
-              // onClick={setIsModalOpen}
+              onClick={setIsModalOpen}
               isMobileMenu={false}
             >
               {buttonLabel}
             </HeaderButton>
           )}
         </div>
-        {/* <FormModal
+        <FormModal
           onCloseModal={() => setIsModalOpen(false)}
           isModalOpen={isModalOpen}
-        /> */}
+        />
       </header>
 
       <MobileMenu
@@ -116,7 +121,7 @@ export function HeaderRedesign({
         emailCaption={emailCaption}
         emailAddress={emailAddress}
         socialLinks={socialLinks}
-        // onOpenModal={() => setIsModalOpen(true)}
+        onOpenModal={() => setIsModalOpen(true)}
         isMobileMenuOpen={isMobileMenuOpen}
       />
     </>

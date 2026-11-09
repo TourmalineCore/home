@@ -1,6 +1,12 @@
 name: Publish UI Docker Image For Local Env
 
 on:
+  # to build local-env-latest tag
+  push:
+    branches:
+      - master
+    paths:
+      - 'ui/**'
   # to allow to wait for a docker image to be published to proceed in another workflow
   workflow_call:
 
@@ -17,5 +23,6 @@ jobs:
       # Build-args used to define variables that will be used in image
       build-args: |
         CDN_ENABLED=false
+        NEXT_PUBLIC_ENABLE_SMARTCAPTCHA=false
     # without this it cannot login to the registry
     secrets: inherit

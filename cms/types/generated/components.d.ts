@@ -469,7 +469,7 @@ export interface ShowcaseColumnShowcaseColumns extends Struct.ComponentSchema {
 }
 
 declare module '@strapi/strapi' {
-  export module Public {
+  export namespace Public {
     export interface ComponentSchemas {
       'column-with-content.column-with-image': ColumnWithContentColumnWithImage;
       'column-with-content.column-with-repositories': ColumnWithContentColumnWithRepositories;

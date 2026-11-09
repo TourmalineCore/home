@@ -1,3 +1,5 @@
+# TourmalineCore Home local env, AGPL-3.0 license
+
 image:
   tag: "latest"
 
@@ -40,7 +42,7 @@ extraConfigMapEnvVars:
 
 initContainers:
   - name: create-bucket
-    image: minio/mc
+    image: bitnamilegacy/minio-client
     command: ["/bin/sh", "-c"]
     args:
       - |

@@ -89,8 +89,8 @@ We don't test in all browsers, only in Chrome.</br>
 #### Stubs for images
 If there is an image part of a component, we substitute the image with an image stub, because there have been many flacks with images in screenshot testing, when random pixels where red showing discrepancies that are not distinguishable with the human eye. Using a stub we no longer get this problem, the image is always the same. 
 
-![image](../docs/images/image-flacks.png)
-<img src="../docs/images/image-stub.png" width="400" />
+![image](./images/image-flacks.png)
+<img src="./images/image-stub.png" width="400" />
 
 #### Threshold
 Playwright offers several options to configure the tolerance for differences in the *toHaveScreenshot()* assertions: *maxDiffPixels / maxDiffPixelRatio*.

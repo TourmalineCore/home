@@ -1,15 +1,11 @@
 /* eslint-disable react/no-unstable-nested-components */
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
-
-const DynamicCommentsComponent = dynamic(() => import(`./components/Comments/Comments`), {
-  ssr: false,
-});
+import { MermaidDiagram } from '../../../../components/MermaidDiagram/MermaidDiagram';
 
 export default function Article({
   markdown,
@@ -41,8 +37,51 @@ export default function Article({
       <article className="article-page__article">
         <ReactMarkdown
           remarkPlugins={[gfm]}
-          rehypePlugins={[rehypeHighlight, rehypeRaw]}
+          rehypePlugins={[
+            [
+              rehypeHighlight,
+              {
+                plainText: [`mermaid`],
+              },
+            ],
+            rehypeRaw,
+          ]}
           components={{
+            code({
+              node,
+              inline,
+              className,
+              children,
+              ...props
+            }) {
+              const match = /language-(\w+)/.exec(className || ``);
+              const lang = match ? match[1] : ``;
+
+              if (lang === `mermaid`) {
+                const code = String(children)
+                  .replace(/\n$/, ``);
+
+                return <MermaidDiagram code={code} />;
+              }
+
+              return !inline && match ? (
+                <pre {...props}>
+                  <code
+                    className={className}
+                    {...props}
+                  >
+                    {children}
+                  </code>
+                </pre>
+              ) : (
+                <code
+                  className={className}
+                  {...props}
+                >
+                  {children}
+                </code>
+              );
+            },
             img: ({
               src, alt, title,
             }) => (
@@ -73,10 +112,6 @@ export default function Article({
           {markdown}
         </ReactMarkdown>
       </article>
-
-      <div className="article-page__comments">
-        <DynamicCommentsComponent />
-      </div>
     </div>
   );
 }

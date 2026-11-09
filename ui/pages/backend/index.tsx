@@ -9,10 +9,13 @@ import { Cta } from '../../components/Cta/Cta';
 import { Payment } from '../../components/Payment/Payment';
 import { Cooperation } from '../../components/Cooperation/Cooperation';
 import { ServicesTechnology } from '../../components/ServicesTechnology/ServicesTechnology';
-import { useScrollTop } from '../../common/hooks/useScrollTop';
 import { LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
+import { TechnologyPageAnchorLink } from '../../common/enums';
+import { useIsRussianCountry } from '../../common/hooks';
+import { FormBlock } from '../../components/FormBlock/FormBlock';
+import { getCookiePageProps } from '../../common/utils/getCookiePageProps';
 
 export default function BackendPage({
   layoutData,
@@ -25,11 +28,7 @@ export default function BackendPage({
     t,
   } = useTranslation(`common`);
 
-  // const isCountryRus = useIsRussianCountry();
-
-  useScrollTop({
-    dependencies: [],
-  });
+  const isCountryRus = useIsRussianCountry();
 
   return (
     <>
@@ -58,12 +57,12 @@ export default function BackendPage({
         <Payment />
         <Cooperation />
         <ServicesTechnology />
-        {/* {isCountryRus && (
+        {isCountryRus && (
           <FormBlock
             id={TechnologyPageAnchorLink.Contact}
             buttonClassName="backend__form-button"
           />
-        )} */}
+        )}
       </Layout>
     </>
   );
@@ -76,11 +75,21 @@ export async function getServerSideProps({
   locale: string;
   preview: boolean;
 }) {
+  const {
+    cookieData,
+    cookieSettingsData,
+  } = await getCookiePageProps({
+    locale,
+    preview,
+  });
+
   if (process.env.IS_STATIC_MODE === `true`) {
     const translationsPageData = await loadTranslations(locale, [`headerRedesign`]);
 
     return {
       props: {
+        cookieData,
+        cookieSettingsData,
         layoutData: {
           headerContent: translationsPageData.headerRedesign,
         },
@@ -100,6 +109,8 @@ export async function getServerSideProps({
 
   return {
     props: {
+      cookieData,
+      cookieSettingsData,
       layoutData,
       isPreview: preview,
       ...(await getStaticTranslation({
@@ -117,7 +128,6 @@ async function getStaticTranslation({
   return serverSideTranslations(locale, [
     `common`,
     `footer`,
-    `cookie`,
     `form`,
     `formBlock`,
     `heroBackend`,

@@ -4,14 +4,14 @@
     flex-direction: column;
     gap: 20px;
 
-    @include tablet-xl {
+    @include desktop {
       flex-direction: row;
       gap: 0;
     }
   }
 
   &__list-item {
-    @include tablet-xl {
+    @include desktop {
       display: flex;
       align-items: center;
     }
@@ -25,14 +25,14 @@
     }
 
     &--mobile {
-      @include tablet-xl {
+      @include desktop {
         display: none;
       }
     }
   }
 
   &__accordion {
-    @include tablet-xl {
+    @include desktop {
       padding-right: 16px;
       padding-left: 16px;
     }
@@ -55,7 +55,7 @@
       text-decoration: underline;
     }
 
-    @include tablet-xl {
+    @include desktop {
       @include body-m;
 
       margin-right: 16px;
@@ -68,7 +68,7 @@
     }
   }
 
-  @include tablet-xl {
+  @include desktop {
     margin-right: 56px;
   }
 

@@ -15,6 +15,7 @@
 @import "../components/FormBlock/FormBlock";
 @import "../components/Modal/Modal";
 @import "../components/Cookie/Cookie";
+@import "../components/CookieSettingsModal/CookieSettingsModal";
 @import "../components/Form/Form";
 @import "../components/Form/components/Input/Input";
 @import "../components/Form/components/Textarea/Textarea";
@@ -37,6 +38,7 @@
 @import "../components/Stages/Stages";
 @import "../components/Stages/components/StagesList/StagesList";
 @import "../components/SkipLink/SkipLink";
+@import "../components/MermaidDiagram/MermaidDiagram";
 
 // features
 @import "../features/Articles/components/Articles/Articles";
@@ -112,3 +114,13 @@
 @import "../components/chelzoo/ChelzooCMS/ChelzooCMS";
 @import "../components/chelzoo/ChelzooPromo/ChelzooPromo";
 @import "../components/chelzoo/ChelzooLinks/ChelzooLinks";
+
+// magazines
+@import "../components/magazines/MagazinesHero/MagazinesHero";
+@import "../components/magazines/MagazineHero/MagazineHero";
+@import "../components/magazines/MagazinePdfView/MagazinePdfView";
+@import "../components/magazines/MagazineDescription/MagazineDescription";
+@import "../components/magazines/MagazinePdfView/components/MagazinePdfLoader/MagazinePdfLoader";
+@import "../components/magazines/MagazinePdfView/components/MagazinePdfCounter/MagazinePdfCounter";
+@import "../components/magazines/MagazinePdfView/components/MagazinePdfFullscreenButton/MagazinePdfFullscreenButton";
+@import "../components/magazines/MagazinePdfView/components/MagazinePdfVersionSwitcher/MagazinePdfVersionSwitcher";

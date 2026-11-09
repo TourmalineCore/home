@@ -1,3 +1,5 @@
+<!-- TourmalineCore Home local env, AGPL-3.0 license --> 
+
 # Local Kubernetes Environment
 
 This repo enables running the whole home project stack locally in k8s in Docker.

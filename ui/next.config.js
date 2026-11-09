@@ -45,12 +45,6 @@ module.exports = withReactSvg({
 
           // 2. Security headers:
 
-          // Prevents the site from being opened in an <iframe> (protection against clickjacking)
-          {
-            key: 'X-Frame-Options',
-            value: "SAMEORIGIN",
-          },
-
           // Prevents MIME-sniffing (e.g., ensuring HTML is not treated as JS)
           {
             key: 'X-Content-Type-Options',
@@ -60,13 +54,13 @@ module.exports = withReactSvg({
           // Controls what data goes into the Referer header
           {
             key: 'Referrer-Policy',
-            value: "no-referrer",
+            value: "strict-origin-when-cross-origin",
           },
 
           // Block access to browser features and APIs
           {
             key: 'Permissions-Policy',
-            value: "interest-cohort=(), camera=(), microphone=(), fullscreen=(), payment=(), usb=(), accelerometer=(), display-capture=(), gyroscope=(), magnetometer=(), midi=(), picture-in-picture=(self), xr-spatial-tracking=()",
+            value: "interest-cohort=(), camera=(), microphone=(), fullscreen=(self), payment=(), usb=(), accelerometer=(), display-capture=(), gyroscope=(), magnetometer=(), midi=(), picture-in-picture=(self), xr-spatial-tracking=()",
           }
         ]
       }
@@ -75,6 +69,9 @@ module.exports = withReactSvg({
   devIndicators: false,
   i18n,
   include: path.resolve(__dirname, 'icons'),
+
+  // https://github.com/mehmet-kozan/pdf-parse/blob/HEAD/docs/troubleshooting.md#3-error-cannot-find-module-pdf-parse-or-napi-rscanvas
+  serverExternalPackages: ["pdf-parse", "@napi-rs/canvas"],
 
   ...(process.env.CDN_ENABLED === 'true' && process.env.CDN_DOMAIN && {
     // https://nextjs.org/docs/app/api-reference/config/next-config-js/assetPrefix
@@ -111,6 +108,10 @@ module.exports = withReactSvg({
       },
       {
         protocol: 'https',
+        hostname: 'hb.ru-msk.vkcloud-storage.ru',
+      },
+      {
+        protocol: 'https',
         hostname: 'raw.githubusercontent.com',
         pathname: '/TourmalineCore/**'
       },
@@ -126,6 +127,8 @@ module.exports = withReactSvg({
   
   webpack(webpackConfig) {
     webpackConfig.resolve.fallback = { fs: false };
+    // This setting is necessary for the correct operation of the react-pdf package.
+    webpackConfig.resolve.alias.canvas = false;
 
     return webpackConfig;
   },

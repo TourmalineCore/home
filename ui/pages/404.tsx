@@ -1,8 +1,8 @@
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 
-import { GetServerSideProps } from 'next';
 import { CustomError } from '../components/CustomError/CustomError';
+import { getCookiePageProps } from '../common/utils/getCookiePageProps';
 
 export default function Custom404() {
   const {
@@ -17,10 +17,26 @@ export default function Custom404() {
   );
 }
 
-export const getStaticProps: GetServerSideProps = async ({
+export async function getStaticProps({
   locale,
-}) => ({
-  props: {
-    ...(await serverSideTranslations(locale as string, [`pageNotFound`, `cookie`])),
-  },
-});
+  preview = false,
+}: {
+  locale: string;
+  preview: boolean;
+}) {
+  const {
+    cookieData,
+    cookieSettingsData,
+  } = await getCookiePageProps({
+    locale,
+    preview,
+  });
+
+  return {
+    props: {
+      cookieData,
+      cookieSettingsData,
+      ...(await serverSideTranslations(locale as string, [`pageNotFound`])),
+    },
+  };
+}

@@ -1,8 +1,9 @@
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HeaderAccordion } from "../HeaderAccordion/HeaderAccordion";
 import { HeaderRedesignProps } from "../../../../../common/types";
 import { SmartLink } from "../../../../SmartLink/SmartLink";
+import { useOnScrollDirections } from "../../../../../common/hooks";
 
 export function HeaderNavigationList({
   className,
@@ -18,6 +19,17 @@ export function HeaderNavigationList({
   const handleToggle = (id: number) => {
     setOpenId((prev) => (prev === id ? null : id));
   };
+
+  const {
+    isScrollUp,
+  } = useOnScrollDirections();
+
+  // The header hides on scroll down, so the list closes with it instead of sticking out below
+  useEffect(() => {
+    if (!isScrollUp) {
+      setOpenId(null);
+    }
+  }, [isScrollUp]);
 
   return (
     <nav

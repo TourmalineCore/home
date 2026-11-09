@@ -11,10 +11,13 @@ import { Stack } from '../../components/Stack/Stack';
 import { Payment } from '../../components/Payment/Payment';
 import { Cooperation } from '../../components/Cooperation/Cooperation';
 import { ServicesTechnology } from '../../components/ServicesTechnology/ServicesTechnology';
-import { useScrollTop } from '../../common/hooks/useScrollTop';
 import { LayoutData } from '../../common/types';
 import { getLayoutData } from '../../services/cms/api/layout-api/layout-api';
 import { loadTranslations } from '../../common/utils';
+import { useIsRussianCountry } from '../../common/hooks';
+import { FormBlock } from '../../components/FormBlock/FormBlock';
+import { TechnologyPageAnchorLink } from '../../common/enums';
+import { getCookiePageProps } from '../../common/utils/getCookiePageProps';
 
 export default function MlPage({
   layoutData,
@@ -27,11 +30,7 @@ export default function MlPage({
     t,
   } = useTranslation(`common`);
 
-  // const isCountryRus = useIsRussianCountry();
-
-  useScrollTop({
-    dependencies: [],
-  });
+  const isCountryRus = useIsRussianCountry();
 
   return (
     <>
@@ -62,12 +61,12 @@ export default function MlPage({
         <Payment />
         <Cooperation />
         <ServicesTechnology />
-        {/* {isCountryRus && (
+        {isCountryRus && (
           <FormBlock
             id={TechnologyPageAnchorLink.Contact}
             buttonClassName="ml__form-button"
           />
-        )} */}
+        )}
       </Layout>
     </>
   );
@@ -80,11 +79,21 @@ export async function getServerSideProps({
   locale: string;
   preview: boolean;
 }) {
+  const {
+    cookieData,
+    cookieSettingsData,
+  } = await getCookiePageProps({
+    locale,
+    preview,
+  });
+
   if (process.env.IS_STATIC_MODE === `true`) {
     const translationsPageData = await loadTranslations(locale, [`headerRedesign`]);
 
     return {
       props: {
+        cookieData,
+        cookieSettingsData,
         layoutData: {
           headerContent: translationsPageData.headerRedesign,
         },
@@ -104,6 +113,8 @@ export async function getServerSideProps({
 
   return {
     props: {
+      cookieData,
+      cookieSettingsData,
       layoutData,
       isPreview: preview,
       ...(await getStaticTranslation({
@@ -121,7 +132,6 @@ async function getStaticTranslation({
   return serverSideTranslations(locale, [
     `common`,
     `footer`,
-    `cookie`,
     `form`,
     `formBlock`,
     `heroMl`,

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import dynamic from "next/dynamic";
 import { loadTranslations } from "../../common/utils/loadTranslations";
 import { COMPONENT_LINKS, ComponentName } from "../../common/enums";
 import { ChelzooCMS } from "../../components/chelzoo/ChelzooCMS/ChelzooCMS";
@@ -21,7 +22,6 @@ import { ChelzooTasks } from "../../components/chelzoo/ChelzooTasks/ChelzooTasks
 import { ChelzooTestingStrategy } from "../../components/chelzoo/ChelzooTestingStrategy/ChelzooTestingStrategy";
 import { CollageWithLink } from "../../components/CollageWithLink/CollageWithLink";
 import { CollageWithTitle } from "../../components/CollageWithTitle/CollageWithTitle";
-import { Cookie } from "../../components/Cookie/Cookie";
 import { CustomError } from "../../components/CustomError/CustomError";
 import { FeaturedCardsList } from "../../components/FeaturedCardsList/FeaturedCardsList";
 import { Hero } from "../../components/Hero/Hero";
@@ -37,6 +37,36 @@ import { ChelzooInfrastructure } from "../../components/chelzoo/ChelzooInfrastru
 import { ChelzooLinks } from "../../components/chelzoo/ChelzooLinks/ChelzooLinks";
 import { ChelzooReview } from "../../components/chelzoo/ChelzooReview/ChelzooReview";
 import { useNonBreakingSpaces } from "../../common/hooks";
+import { FormModal } from "../../components/FormModal/FormModal";
+import { FormBlockRedesign } from "../../components/redesign/FormBlockRedesign/FormBlockRedesign";
+import { MagazineHero } from "../../components/magazines/MagazineHero/MagazineHero";
+import { MagazinesHero } from "../../components/magazines/MagazinesHero/MagazinesHero";
+import { getCookiePageProps } from "../../common/utils/getCookiePageProps";
+import { MermaidDiagram } from "../../components/MermaidDiagram/MermaidDiagram";
+import Article from "../../features/Articles/components/Article/Article";
+
+// react-pdf/pdfjs reach for browser-only APIs (window, ResizeObserver) during render, so this
+// can't be server-rendered - same as its usage on the actual magazine page.
+const MagazinePdfView = dynamic(
+  () => import(`../../components/magazines/MagazinePdfView/MagazinePdfView`).then((component) => component.MagazinePdfView),
+  {
+    ssr: false,
+  },
+);
+
+const Cookie = dynamic(
+  () => import(`../../components/Cookie/Cookie`).then((component) => component.Cookie),
+  {
+    ssr: false,
+  },
+);
+
+const CookieSettingsModal = dynamic(
+  () => import(`../../components/CookieSettingsModal/CookieSettingsModal`).then((component) => component.CookieSettingsModal),
+  {
+    ssr: false,
+  },
+);
 
 export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JSX.Element> = {
   [ComponentName.THREE_COLUMN_GRID]: ({
@@ -99,7 +129,7 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
       emailCaption={headerRedesign.emailCaption}
       emailAddress={headerRedesign.emailAddress}
       socialLinks={headerRedesign.socialLinks}
-      // onOpenModal={() => {}}
+      onOpenModal={() => {}}
       isMobileMenuOpen
     />
   ),
@@ -154,20 +184,42 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   }) => (
     <SingleImage imageWithBlurDataURL={singleImage.imageWithBlurDataURL} />
   ),
-  // [ComponentName.FORM_BLOCK]: () => (
-  //   <FormBlockRedesign
-  //     testId="form-block"
-  //     isComponentPage
-  //   />
-  // ),
-  // [ComponentName.SUBMITTED_FORM_BLOCK]: () => (
-  //   <FormBlockRedesign
-  //     initializeIsSubmit
-  //     testId="submitted-form-block"
-  //     isComponentPage
-  //   />
-  // ),
-  [ComponentName.COOKIE]: () => <Cookie isComponentPage />,
+  [ComponentName.FORM_BLOCK]: () => (
+    <FormBlockRedesign
+      testId="form-block"
+      isComponentPage
+    />
+  ),
+  [ComponentName.SUBMITTED_FORM_BLOCK]: () => (
+    <FormBlockRedesign
+      initializeIsSubmit
+      testId="submitted-form-block"
+      isComponentPage
+    />
+  ),
+  [ComponentName.COOKIE]: ({
+    cookie,
+  }) => (
+    <Cookie
+      isComponentPage
+      acceptButtonText={cookie.accept}
+      rejectButtonText={cookie.reject}
+      bannerText={cookie.text}
+      settingsButtonText={cookie.settings}
+    />
+  ),
+  [ComponentName.COOKIE_SETTINGS_MODAL]: ({
+    cookieSettings,
+  }) => (
+    <CookieSettingsModal
+      isComponentPage
+      title={cookieSettings.title}
+      note={cookieSettings.note}
+      buttonText={cookieSettings.buttonText}
+      analyticsData={cookieSettings.analytics}
+      webvisorData={cookieSettings.webvisor}
+    />
+  ),
   [ComponentName.NOT_FOUND]: ({
     pageNotFound,
   }) => (
@@ -176,23 +228,23 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
       message={pageNotFound.message}
     />
   ),
-  // [ComponentName.FORM_MODAL]: () => (
-  //   <FormModal
-  //     onCloseModal={() => {}}
-  //     isModalOpen
-  //     testId="form-modal"
-  //     isComponentPage
-  //   />
-  // ),
-  // [ComponentName.SUBMITTED_FORM_MODAL]: () => (
-  //   <FormModal
-  //     onCloseModal={() => {}}
-  //     isModalOpen
-  //     testId="submitted-form-modal"
-  //     initializeIsSubmit
-  //     isComponentPage
-  //   />
-  // ),
+  [ComponentName.FORM_MODAL]: () => (
+    <FormModal
+      onCloseModal={() => {}}
+      isModalOpen
+      testId="form-modal"
+      isComponentPage
+    />
+  ),
+  [ComponentName.SUBMITTED_FORM_MODAL]: () => (
+    <FormModal
+      onCloseModal={() => {}}
+      isModalOpen
+      testId="submitted-form-modal"
+      initializeIsSubmit
+      isComponentPage
+    />
+  ),
   [ComponentName.CHELZOO_HERO]: () => <ChelzooHero isComponentPage />,
   [ComponentName.CHELZOO_ABOUT]: () => <ChelzooAbout />,
   [ComponentName.CHELZOO_STACK]: () => <ChelzooStack />,
@@ -213,6 +265,35 @@ export const COMPONENT_MAP: Record<string, (pageData: Record<string, any>) => JS
   [ComponentName.CHELZOO_REVIEW]: () => <ChelzooReview />,
   [ComponentName.CHELZOO_INFRASTRUCTURE]: () => <ChelzooInfrastructure />,
   [ComponentName.CHELZOO_LINKS]: () => <ChelzooLinks />,
+  [ComponentName.MAGAZINES_HERO]: () => <MagazinesHero />,
+  [ComponentName.MAGAZINE_HERO]: () => <MagazineHero />,
+  [ComponentName.MAGAZINE_PDF_VIEW]: () => <MagazinePdfView />,
+  [ComponentName.MERMAID_DIAGRAM_VALID]: () => (
+    <MermaidDiagram code={`
+      sequenceDiagram
+      actor Dev
+      participant GitHub
+      Dev->>GitHub: Push changes
+    `}
+    />
+  ),
+  [ComponentName.MERMAID_DIAGRAM_INVALID]: () => (
+    <MermaidDiagram code="incorrect code" />
+  ),
+  [ComponentName.ARTICLE]: () => (
+    // These strange indents are intentional
+    // if you try to align the indents, Markdown will fail and the diagram won’t render.
+    <Article
+      markdown={`\`\`\`mermaid
+  sequenceDiagram
+    actor Dev
+    participant GitHub
+    Dev->>GitHub: Push changes
+  \`\`\``}
+      articleUrl="/articles/playwright-testing"
+      datePublication="28.10.2026"
+    />
+  ),
 };
 
 export default function ComponentsPage({
@@ -265,8 +346,10 @@ export default function ComponentsPage({
 
 export async function getStaticProps({
   locale,
+  preview = false,
 }: {
   locale: string;
+  preview: boolean;
 }) {
   const translationsPageData = await loadTranslations(locale, [
     `threeColumnGrid`,
@@ -282,14 +365,25 @@ export async function getStaticProps({
     `pageNotFound`,
     `headerRedesign`,
     `footerRedesign`,
+    `cookie`,
+    `cookieSettings`,
   ]);
+
+  const {
+    cookieData,
+    cookieSettingsData,
+  } = await getCookiePageProps({
+    locale,
+    preview,
+  });
 
   return {
     props: {
+      cookieData,
+      cookieSettingsData,
       pageData: translationsPageData,
       ...(await serverSideTranslations(locale, [
-        `cookie`,
-        // `formBlockRedesign`,
+        `formBlockRedesign`,
         `chelzooHero`,
         `chelzooAbout`,
         `chelzooStack`,
@@ -310,6 +404,10 @@ export async function getStaticProps({
         `chelzooCMS`,
         `chelzooPromo`,
         `chelzooLinks`,
+        `magazinesHero`,
+        `magazineTddHero`,
+        `magazinePdfView`,
+        `articles`,
       ])),
     },
   };

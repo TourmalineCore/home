@@ -1,0 +1,210 @@
+.magazine-pdf-view {
+  --header-height: 58px;
+  --wrapper-padding-vertical: 34px;
+
+  // Strip reserved for the arrows so they sit beside the pdf, not on top of it. Wherever they
+  // are shown (@include tablet below) it must stay >= their footprint (12px offset + 44px
+  // width), or they overlap a width-constrained slide. Below that they are hidden and the pages
+  // take the full width, leaving just enough not to touch the screen edges
+  --arrow-space: 8px;
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--wrapper-padding-vertical) var(--arrow-space);
+    min-height: 500px;
+    background-color: $color-grey-800-redesign;
+
+    // Fullscreen has no sticky site header to keep clear of, so the padding shrinks to the gap
+    // the toolbar already uses and the pages grow into what's freed. Set here rather than on
+    // --wrapper-padding-vertical, which the breakpoints further down would override
+    .magazine-pdf-view--fullscreen &,
+    .magazine-pdf-view:fullscreen & {
+      min-height: 100%;
+      padding-block: 16px;
+    }
+  }
+
+  &__loader-container {
+    position: absolute;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $color-grey-800-redesign;
+    inset: 0;
+  }
+
+  // Sized to sliderWidth (inline style, same value the pages themselves use) rather than
+  // stretched to the box - on a height-constrained viewport the slider is narrower than the box
+  // and centred, so matching the box width would drift away from the pdf and the toolbar below
+  &__header {
+    margin-bottom: 16px;
+  }
+
+  &__viewport-sentinel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: var(--header-height) 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100svh;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  // The magazine takes focus in fullscreen and for the arrow keys, so it needs a focus ring of
+  // its own. Muted rather than the browser's stark default, which would pull the eye off the
+  // page - it sits on the viewer's own background, against which it still keeps a 4.9:1 contrast
+  &__slider-wrapper:focus-visible {
+    outline: 2px solid $color-white-alpha-200;
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  &__slider {
+    touch-action: manipulation !important;
+  }
+
+  // Lays the pages of a slide side by side and centred, so the cover and the back cover - the
+  // only ones read alone - land in the middle of the viewer rather than against its edge. Its
+  // own element rather than slick's slide, whose display slick keeps to itself
+  &__slide {
+    display: flex;
+    justify-content: center;
+  }
+
+  // Its share of the slide is already set by hand (see MagazinePdfView.tsx), so it mustn't shrink
+  &__page {
+    flex: none;
+  }
+
+  // Sized to sliderWidth too, for the same reason as &__header above
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 16px;
+
+    // Back to a round 16px, so every fullscreen gap is the same FULLSCREEN_GAP the pages are
+    // sized against in MagazinePdfView.tsx
+    .magazine-pdf-view--fullscreen &,
+    .magazine-pdf-view:fullscreen & {
+      margin-top: 16px;
+    }
+
+    @include tablet-xl {
+      margin-top: 16.6px;
+    }
+  }
+
+  // slick-theme.css sets conflicting properties on these same classes at equal specificity, and
+  // its cascade position isn't stable across rebuilds, so !important rather than order
+  &__arrow-button {
+    position: absolute !important;
+
+    // Offsets slick's naive 50% back up by half the toolbar's height, to centre on the page
+    top: calc(50% - 23px) !important;
+    z-index: 1;
+
+    // No room beside a mobile single page, so it swipes instead. Re-enabled in @include tablet
+    display: none !important;
+    border: none;
+    width: 44px !important;
+    height: 44px !important;
+    color: inherit !important;
+    background: none !important;
+    opacity: 0.6;
+    cursor: pointer;
+    transition: opacity 0.15s, background 0.15s;
+    place-items: center;
+
+    // Hides slick-theme.css's own "←"/"→" glyph, which would sit behind our icon
+    &::before {
+      content: none !important;
+    }
+
+    &:hover,
+    &:focus-visible {
+      border-radius: 6px;
+
+      // Longhand alone wouldn't win over `background: none !important` above
+      background-color: rgb(255 255 255 / 8%) !important;
+      opacity: 1;
+    }
+
+    &.slick-disabled {
+      opacity: 0.2;
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  &__arrow-icon {
+    display: block;
+    width: 22px;
+    height: 22px;
+  }
+
+  // !important for the same reason as &__arrow-button: slick-theme.css sets its own offsets
+  .slick-prev {
+    left: 12px !important;
+  }
+
+  .slick-next {
+    right: 12px !important;
+  }
+
+  @include tablet {
+    // 12px offset + 44px button width, plus a bit of breathing room before the page edge
+    --arrow-space: 64px;
+
+    &__arrow-button {
+      display: grid !important;
+    }
+  }
+
+  @include tablet-xl {
+    --header-height: 68.2px;
+    --wrapper-padding-vertical: 44px;
+    --arrow-space: 72px;
+  }
+
+  // Stands in for the Fullscreen API where it isn't available, see useFullscreen
+  &--fullscreen {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: $fullscreen;
+    overflow: auto;
+    width: 100%;
+
+    // dvh accounts for the collapsing mobile address bar, vh is the fallback where it's missing
+    height: 100vh;
+    height: 100dvh;
+  }
+}
+
+// While the css fullscreen fallback is on, whatever the fixed layer doesn't reach is painted in
+// the same tone rather than showing the black body through
+body:has(.magazine-pdf-view--fullscreen) {
+  background-color: $color-grey-800-redesign;
+}
+
+.slick-slide {
+  line-height: 0;
+}
+
+.react-pdf__Page {
+  background-color: $color-grey-800-redesign !important;
+}
+
+.react-pdf__Page__canvas {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}

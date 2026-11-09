@@ -1,124 +1,243 @@
-// import { Browser, Page } from '@playwright/test';
-// import { expect, test } from '../../../playwright-tests/custom-test';
-// import { BREAKPOINTS } from '../../../playwright-tests/constants/breakpoints';
-// import { AppRoute, ComponentName } from '../../../common/enums';
+import { Browser, Page } from '@playwright/test';
+import { CustomTestFixtures, expect, test } from '../../../playwright-tests/custom-test';
+import { BREAKPOINTS } from '../../../playwright-tests/constants/breakpoints';
+import {
+  AppRoute,
+  Breakpoint,
+  BreakpointName,
+  ComponentName,
+} from '../../../common/enums';
 
-// const TEST_ID = `form-block`;
+const TEST_ID = `form-block`;
 
-// test.describe(`FormBlockScreenshotTests`, () => {
-//   for (const {
-//     name,
-//     breakpoint,
-//     breakpointName,
-//   } of BREAKPOINTS) {
-//     test(name, async ({
-//       testScreenshotAtBreakpoint,
-//       goToComponentsPage,
-//     }) => {
-//       await goToComponentsPage(ComponentName.FORM_BLOCK);
+test.describe(`FormBlockScreenshotTests`, () => {
+  for (const {
+    name,
+    breakpoint,
+    breakpointName,
+  } of BREAKPOINTS) {
+    test(name, async ({
+      testScreenshotAtBreakpoint,
+      goToComponentsPage,
+    }) => {
+      await goToComponentsPage(ComponentName.FORM_BLOCK);
 
-//       await testScreenshotAtBreakpoint({
-//         testId: TEST_ID,
-//         breakpoint,
-//         breakpointName,
-//       });
-//     });
-//   }
-// });
+      await testScreenshotAtBreakpoint({
+        testId: TEST_ID,
+        breakpoint,
+        breakpointName,
+      });
+    });
+  }
 
-// test.describe(`FormDisplayDependingOnGeolocationTests`, () => {
-//   test(`FormIsDisplayedInRussiaCountryTest`, formIsDisplayedInRussiaTest);
+  test(`FilledTextAreaTextDoesNotExtendBeyondLabelAt1920`, async ({
+    page,
+    goToComponentsPage,
+    setViewportSize,
+  }: {
+    page: Page;
+    goToComponentsPage: CustomTestFixtures["goToComponentsPage"];
+    setViewportSize: CustomTestFixtures["setViewportSize"];
+  }) => {
+    await goToComponentsPage(ComponentName.FORM_BLOCK);
 
-//   test(`FormIsNotDisplayedOutsideOfRussia`, formIsNotDisplayedOutsideOfRussia);
-// });
+    await setViewportSize({
+      width: Breakpoint.DESKTOP_XL,
+    });
 
-// test.describe(`SubmitButtonStateBasedOnPrivacyPolicyConsentTests`, () => {
-//   test.beforeEach(async ({
-//     goToComponentsPage,
-//   }) => {
-//     await goToComponentsPage(ComponentName.FORM_BLOCK);
-//   });
+    await page
+      .getByTestId(`form-redesign-message-textarea`)
+      .fill(`textarea message`);
 
-//   test(`SubmitButtonIsDisabledWithoutConsentTest`, submitButtonIsDisabledWithoutConsentTest);
+    await expect(page.getByTestId(TEST_ID))
+      .toHaveScreenshot(`${TEST_ID}-filled-text-area-${BreakpointName.DESKTOP_XL}.png`);
+  });
+});
 
-//   test(`SubmitButtonIsEnabledWithConsentTest`, submitButtonIsEnabledWithConsentTest);
-// });
+test.describe(`FormDisplayDependingOnGeolocationTests`, () => {
+  test(`FormIsDisplayedInRussiaCountryTest`, formIsDisplayedInRussiaTest);
 
-// async function formIsNotDisplayedOutsideOfRussia({
-//   browser,
-// }: {
-//   browser: Browser;
-// }) {
-//   // Set American coordinates
-//   const context = await browser.newContext({
-//     permissions: [`geolocation`],
-//     geolocation: {
-//       latitude: 38.7946,
-//       longitude: 106.5348,
-//     },
-//   });
+  test(`FormIsNotDisplayedOutsideOfRussia`, formIsNotDisplayedOutsideOfRussia);
+});
 
-//   const page = await context.newPage();
+test.describe(`SubmitButtonStateBasedOnPrivacyPolicyConsentTests`, () => {
+  test.beforeEach(async ({
+    goToComponentsPage,
+  }) => {
+    await goToComponentsPage(ComponentName.FORM_BLOCK);
+  });
 
-//   await page.goto(AppRoute.Main);
+  test(`SubmitButtonIsDisabledWithoutConsentTest`, submitButtonIsDisabledWithoutConsentTest);
 
-//   await expect(page.getByTestId(TEST_ID))
-//     .not
-//     .toBeVisible();
+  test(`SubmitButtonIsEnabledWithConsentTest`, submitButtonIsEnabledWithConsentTest);
+});
 
-//   await browser.close();
-// }
+test.describe(`FormInputsShouldHaveYmDisableKeysClassNameToDisguiseFromWebvisor`, () => {
+  test.beforeEach(async ({
+    goToComponentsPage,
+  }) => {
+    await goToComponentsPage(ComponentName.FORM_BLOCK);
+  });
 
-// async function formIsDisplayedInRussiaTest({
-//   browser,
-// }: {
-//   browser: Browser;
-// }) {
-//   // Set Russian coordinates
-//   const context = await browser.newContext({
-//     permissions: [`geolocation`],
-//     geolocation: {
-//       latitude: 61.5240,
-//       longitude: 105.3188,
-//     },
-//   });
+  test(`CheckClassNameTest`, checkClassName);
+});
 
-//   const page = await context.newPage();
+test.describe(`Error`, errorTests);
 
-//   await page.goto(AppRoute.Main);
+async function errorTests() {
+  test.beforeEach(async ({
+    goToComponentsPage,
+  }) => {
+    await goToComponentsPage(ComponentName.FORM_BLOCK);
+  });
 
-//   await expect(page.getByTestId(TEST_ID))
-//     .toBeVisible();
+  test(
+    `
+    GIVEN form is displayed
+    WHEN user submits the form and email sending fails
+    THEN error message is displayed
+    AND user can try submitting the form again and email sending succeeds
+    THEN error message is not displayed
+    `,
+    errorMessageDisplayTests,
+  );
+}
 
-//   await browser.close();
-// }
+async function errorMessageDisplayTests({
+  page,
+}: {
+  page: Page;
+}) {
+  const errorText = `Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже или отправьте ваш запрос на почту contact@tourmalinecore.com`;
 
-// async function submitButtonIsDisabledWithoutConsentTest({
-//   page,
-// }: {
-//   page: Page;
-// }) {
-//   await expect(page.getByTestId(`form-block-consent-checkbox`))
-//     .not
-//     .toBeChecked();
+  await page.route(`/api/send-email`, (route) => route.fulfill({
+    status: 500,
+  }));
 
-//   await expect(page.getByTestId(`form-block-submit-button`))
-//     .toBeDisabled();
-// }
+  await page.getByTestId(`form-redesign-name-input`)
+    .fill(`Test Name`);
 
-// async function submitButtonIsEnabledWithConsentTest({
-//   page,
-// }: {
-//   page: Page;
-// }) {
-//   await expect(page.getByTestId(`form-block-consent-checkbox`))
-//     .not
-//     .toBeChecked();
+  await page.getByTestId(`form-redesign-email-input`)
+    .fill(`test@test.ru`);
 
-//   await page.getByTestId(`form-block-consent-checkbox`)
-//     .check();
+  await page.getByTestId(`form-redesign-message-textarea`)
+    .fill(`Test Message`);
 
-//   await expect(page.getByTestId(`form-block-submit-button`))
-//     .not
-//     .toBeDisabled();
-// }
+  await page.getByTestId(`form-block-consent-checkbox`)
+    .check();
+
+  await page.getByTestId(`form-block-submit-button`)
+    .click();
+
+  await expect(
+    page.getByText(errorText),
+  )
+    .toBeVisible();
+
+  await page.route(`/api/send-email`, (route) => route.fulfill({
+    status: 200,
+  }));
+
+  await page.getByTestId(`form-block-submit-button`)
+    .click();
+
+  await expect(
+    page.getByText(errorText),
+  )
+    .not
+    .toBeVisible();
+}
+
+async function checkClassName({
+  page,
+}: {
+  page: Page;
+}) {
+  await expect(page.getByTestId(`form-redesign-name-input`))
+    .toContainClass(`ym-disable-keys`);
+
+  await expect(page.getByTestId(`form-redesign-email-input`))
+    .toContainClass(`ym-disable-keys`);
+
+  await expect(page.getByTestId(`form-redesign-message-textarea`))
+    .toContainClass(`ym-disable-keys`);
+}
+
+async function formIsNotDisplayedOutsideOfRussia({
+  browser,
+}: {
+  browser: Browser;
+}) {
+  // Set American coordinates
+  const context = await browser.newContext({
+    permissions: [`geolocation`],
+    geolocation: {
+      latitude: 38.7946,
+      longitude: 106.5348,
+    },
+  });
+
+  const page = await context.newPage();
+
+  await page.goto(AppRoute.Main);
+
+  await expect(page.getByTestId(TEST_ID))
+    .not
+    .toBeVisible();
+
+  await browser.close();
+}
+
+async function formIsDisplayedInRussiaTest({
+  browser,
+}: {
+  browser: Browser;
+}) {
+  // Set Russian coordinates
+  const context = await browser.newContext({
+    permissions: [`geolocation`],
+    geolocation: {
+      latitude: 61.5240,
+      longitude: 105.3188,
+    },
+  });
+
+  const page = await context.newPage();
+
+  await page.goto(AppRoute.Main);
+
+  await expect(page.getByTestId(TEST_ID))
+    .toBeVisible();
+
+  await browser.close();
+}
+
+async function submitButtonIsDisabledWithoutConsentTest({
+  page,
+}: {
+  page: Page;
+}) {
+  await expect(page.getByTestId(`form-block-consent-checkbox`))
+    .not
+    .toBeChecked();
+
+  await expect(page.getByTestId(`form-block-submit-button`))
+    .toBeDisabled();
+}
+
+async function submitButtonIsEnabledWithConsentTest({
+  page,
+}: {
+  page: Page;
+}) {
+  await expect(page.getByTestId(`form-block-consent-checkbox`))
+    .not
+    .toBeChecked();
+
+  await page.getByTestId(`form-block-consent-checkbox`)
+    .check();
+
+  await expect(page.getByTestId(`form-block-submit-button`))
+    .not
+    .toBeDisabled();
+}

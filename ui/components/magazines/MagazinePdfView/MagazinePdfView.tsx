@@ -1,0 +1,431 @@
+'use client';
+
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
+
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
+import { useEffect, useRef, useState } from 'react';
+import FocusLock from 'react-focus-lock';
+import { Document, Page, pdfjs } from 'react-pdf';
+import Slider from 'react-slick';
+import { Breakpoint } from '../../../common/enums';
+import { useDeviceSize, useFullscreen } from '../../../common/hooks';
+import { MagazinePdfLoader } from './components/MagazinePdfLoader/MagazinePdfLoader';
+import { MagazinePdfViewArrow } from './components/MagazinePdfViewArrow/MagazinePdfViewArrow';
+import { MagazinePdfCounter } from './components/MagazinePdfCounter/MagazinePdfCounter';
+import { MagazinePdfFullscreenButton } from './components/MagazinePdfFullscreenButton/MagazinePdfFullscreenButton';
+import { MagazinePdfVersionSwitcher } from './components/MagazinePdfVersionSwitcher/MagazinePdfVersionSwitcher';
+import { getMagazinePdfSlides } from './magazinePdfSlides';
+import {
+  DEFAULT_MAGAZINE_PDF_VERSION_ID,
+  getMagazinePdfVersion,
+  getMagazinePdfVersions,
+  MagazinePdfVersionId,
+  resolveMagazinePdfVersionIdFromQuery,
+} from './magazinePdfVersions';
+
+// pdfjs-dist relies on Promise.withResolvers, missing in older browsers (e.g. Safari < 17.4 )
+if (typeof Promise.withResolvers !== `function`) {
+  Promise.withResolvers = function withResolvers<T>() {
+    let resolve!: (value: T | PromiseLike<T>) => void;
+    let reject!: (reason?: unknown) => void;
+    const promise = new Promise<T>((res, rej) => {
+      resolve = res;
+      reject = rej;
+    });
+
+    return {
+      promise,
+      resolve,
+      reject,
+    };
+  };
+}
+
+// Self-hosted (see scripts/copy-pdf-worker.mjs) so a CDN outage can't block rendering. It runs
+// in its own global scope, out of reach of the polyfill above, and ships its own shims
+pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.mjs`;
+
+const VIEW_ELEMENT_ID = `magazine-pdf-view`;
+
+// A4 page aspect ratio (width / height), used to size the pages
+const PAGE_ASPECT_RATIO = 0.7071;
+
+const SLIDE_RENDER_BUFFER = 1;
+
+// Height of a single control row (the version switcher trigger / counter / fullscreen button),
+// mirroring &__header/&__toolbar in MagazinePdfView.scss
+const CONTROLS_ROW_HEIGHT = 32;
+
+// The gap above the pages, between them and the toolbar, and below it, mirroring the fullscreen
+// rules of &__wrapper/&__toolbar in MagazinePdfView.scss
+const FULLSCREEN_GAP = 16;
+
+export function MagazinePdfView() {
+  const router = useRouter();
+
+  const {
+    t,
+  } = useTranslation(`magazinePdfView`);
+
+  const versions = getMagazinePdfVersions({
+    locale: router.locale,
+  });
+
+  const {
+    versionId: selectedVersionId,
+    isInvalid: isVersionQueryInvalid,
+  } = resolveMagazinePdfVersionIdFromQuery({
+    rawValue: router.query.version,
+    versions,
+  });
+
+  const {
+    filePath,
+  } = getMagazinePdfVersion({
+    versions,
+    versionId: selectedVersionId,
+  });
+
+  const [totalPages, setTotalPages] = useState(0);
+  // The page being read, rather than the slide showing it: a slide holds one page or two
+  // depending on the viewport, so the same index means another page once that changes
+  const [currentPage, setCurrentPage] = useState(1);
+  const [transitionFromSlide, setTransitionFromSlide] = useState<number | null>(null);
+  const [wrapperWidth, setWrapperWidth] = useState(0);
+  const [maxPageHeight, setMaxPageHeight] = useState(0);
+
+  const [isPdfReady, setIsPdfReady] = useState(false);
+  const [loadProgress, setLoadProgress] = useState<{
+    loaded: number;
+    total: number;
+  }>({
+    loaded: 0,
+    total: 0,
+  });
+
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const sliderRef = useRef<Slider>(null);
+  const sliderWrapperRef = useRef<HTMLDivElement>(null);
+
+  // One instance, shared with the button below: where the Fullscreen API is missing, useFullscreen
+  // stands in for it with a css class and reports that through its own state only
+  const {
+    isFullscreen,
+    toggleFullscreen,
+  } = useFullscreen({
+    targetId: VIEW_ELEMENT_ID,
+    fallbackClassName: `magazine-pdf-view--fullscreen`,
+  });
+
+  const {
+    height: deviceHeight,
+  } = useDeviceSize();
+
+  const pagesPerSlide = wrapperWidth >= Breakpoint.TABLET ? 2 : 1;
+
+  const slides = getMagazinePdfSlides({
+    totalPages,
+    pagesPerSlide,
+  });
+
+  // The slide that page ended up on
+  const currentSlide = Math.max(
+    slides.findIndex((slidePages) => slidePages.includes(currentPage)),
+    0,
+  );
+
+  useEffect(() => {
+    const wrapperElement = wrapperRef.current;
+    const sentinelElement = sentinelRef.current;
+
+    if (!wrapperElement || !sentinelElement) {
+      return undefined;
+    }
+
+    // Two observers because the wrapper's height depends on the page size computed from it, so
+    // the height ceiling comes from the sentinel instead, whose size is fixed. Rounded so
+    // sub-pixel jitter doesn't re-render every mounted page
+    const wrapperObserver = new ResizeObserver(([entry]) => {
+      setWrapperWidth(Math.round(entry.contentRect.width));
+    });
+    const sentinelObserver = new ResizeObserver(([entry]) => {
+      setMaxPageHeight(Math.round(entry.contentRect.height));
+    });
+
+    wrapperObserver.observe(wrapperElement);
+    sentinelObserver.observe(sentinelElement);
+
+    return () => {
+      wrapperObserver.disconnect();
+      sentinelObserver.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isVersionQueryInvalid) {
+      replaceVersionQuery(DEFAULT_MAGAZINE_PDF_VERSION_ID);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isVersionQueryInvalid]);
+
+  // Document's onLoadSuccess below will set totalPages/isPdfReady for the new file once it's
+  // loaded, but currentPage is otherwise untouched by a file swap - without this the slider
+  // would open the new file already scrolled to wherever the previous one was left
+  useEffect(() => {
+    setCurrentPage(1);
+    setTransitionFromSlide(null);
+    setTotalPages(0);
+    setIsPdfReady(false);
+    setLoadProgress({
+      loaded: 0,
+      total: 0,
+    });
+  }, [filePath]);
+
+  // Not fullscreen: unchanged, sentinel-derived ceiling (roughly one screenful, leaving room for
+  // the sticky site header). Fullscreen: the viewer owns the whole screen, the version switcher
+  // steps aside and no sticky header competes for space either, so the pages take everything the
+  // toolbar and the three equal gaps around it leave over
+  const fullscreenOverhead = CONTROLS_ROW_HEIGHT + 3 * FULLSCREEN_GAP;
+  const heightCeiling = isFullscreen
+    ? Math.max(deviceHeight - fullscreenOverhead, 0)
+    : maxPageHeight;
+
+  // wrapperWidth/heightCeiling are still 0 before the observers' first callback, skip sizing off an empty box
+  const pageHeight = wrapperWidth && heightCeiling
+    ? Math.min(heightCeiling, wrapperWidth / pagesPerSlide / PAGE_ASPECT_RATIO)
+    : 0;
+  const sliderWidth = pageHeight * PAGE_ASPECT_RATIO * pagesPerSlide;
+
+  const progressText = loadProgress && loadProgress.total > 0
+    ? t(`loadingProgress`, {
+      progress: Math.round((loadProgress.loaded / loadProgress.total) * 100),
+    })
+    : t(`loading`);
+
+  return (
+    // Fullscreen is a reading mode: focus moves onto the magazine, stays inside the viewer while
+    // the rest of the page is hidden behind it, and returns to the button on exit, as in a modal
+    <FocusLock
+      className="magazine-pdf-view"
+      lockProps={{
+        id: VIEW_ELEMENT_ID,
+        'data-testid': VIEW_ELEMENT_ID,
+      }}
+      disabled={!isFullscreen}
+      onActivation={() => sliderWrapperRef.current?.focus()}
+      // Returns focus to the button that opened fullscreen. Deferred by hand, since a lock
+      // toggled via `disabled` would otherwise return it mid-render and React would undo that -
+      // see "Unmounting and focus management" in react-focus-lock's README
+      returnFocus={(originalElement) => {
+        setTimeout(() => (originalElement as HTMLElement).focus());
+
+        return false;
+      }}
+    >
+      <div
+        className="magazine-pdf-view__wrapper"
+        ref={wrapperRef}
+      >
+        {!isPdfReady && (
+          <div className="magazine-pdf-view__loader-container">
+            <MagazinePdfLoader progressText={progressText} />
+          </div>
+        )}
+
+        {/* Fullscreen is for reading one version, so the switcher gives its room to the pages */}
+        {!isFullscreen && (
+          <div
+            className="magazine-pdf-view__header"
+            style={{
+              width: sliderWidth || undefined,
+            }}
+          >
+            <MagazinePdfVersionSwitcher
+              versions={versions}
+              selectedVersionId={selectedVersionId}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={replaceVersionQuery}
+            />
+          </div>
+        )}
+
+        <div
+          className="magazine-pdf-view__viewport-sentinel"
+          aria-hidden
+          ref={sentinelRef}
+        />
+
+        <Document
+          key={filePath}
+          file={filePath}
+          // eslint-disable-next-line react/jsx-no-bind
+          onLoadSuccess={({
+            numPages,
+          }) => {
+            setTotalPages(numPages);
+            setIsPdfReady(true);
+          }}
+          loading={null}
+          onLoadProgress={({
+            loaded,
+            total,
+          }) => setLoadProgress({
+            loaded,
+            total,
+          })}
+          externalLinkTarget="_blank"
+        >
+          {/* Outside the slider so the tab order follows the screen */}
+          <MagazinePdfViewArrow
+            direction="prev"
+            isDisabled={currentSlide === 0}
+            onClick={() => sliderRef.current?.slickPrev()}
+          />
+
+          {/* Focusable, so that the magazine itself can take focus in fullscreen and the arrow
+          keys turn its pages */}
+          {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
+          <div
+            className="magazine-pdf-view__slider-wrapper"
+            data-testid="magazine-pdf-view-slider-wrapper"
+            ref={sliderWrapperRef}
+            role="region"
+            aria-label={t(`magazineAriaLabel`)}
+            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+            tabIndex={0}
+            style={{
+              width: sliderWidth || undefined,
+            }}
+            onKeyDown={(event) => {
+              if (event.key === `ArrowLeft`) {
+                sliderRef.current?.slickPrev();
+              } else if (event.key === `ArrowRight`) {
+                sliderRef.current?.slickNext();
+              }
+            }}
+          >
+            {/* Keyed by the layout: a slider kept across a re-deal holds on to a slide index
+            that now points at another page, or past the last slide, which it then clamps to the
+            end of the magazine. A new one starts afresh, on the page being read */}
+            <Slider
+              key={pagesPerSlide}
+              initialSlide={currentSlide}
+              ref={sliderRef}
+              className="magazine-pdf-view__slider"
+              arrows={false}
+              // Its own arrow keys handler sits on the inner list, which can't take focus, so
+              // onKeyDown above stands in for it
+              accessibility={false}
+              dots={false}
+              infinite={false}
+              beforeChange={(prevSlide, nextSlide) => {
+                // The slider can report a target of its own with no slide behind it while
+                // totalPages is transiently 0 (file swap in progress, see the reset effect
+                // above), and never an afterChange to go with it - following it would leave
+                // the reader on no page at all
+                const nextPage = slides[nextSlide]?.[0];
+
+                if (!nextPage) {
+                  return;
+                }
+
+                setTransitionFromSlide(prevSlide);
+                setCurrentPage(nextPage);
+              }}
+              afterChange={() => setTransitionFromSlide(null)}
+            >
+              {slides.map((slidePages, slideIndex) => (
+                <div key={slidePages[0]}>
+                  <div className="magazine-pdf-view__slide">
+                    {isSlideMounted(slideIndex) && slidePages.map((pageNumber) => (
+                      <div
+                        key={pageNumber}
+                        className="magazine-pdf-view__page"
+                        // Sized here rather than left to the canvas inside it, which react-pdf
+                        // draws in the screen's physical pixels: a page with no neighbour to
+                        // share the slide with would come out devicePixelRatio times too big
+                        style={{
+                          width: `${100 / pagesPerSlide}%`,
+                        }}
+                      >
+                        <Page
+                          pageNumber={pageNumber}
+                          height={pageHeight || undefined}
+                          devicePixelRatio={Math.min(window.devicePixelRatio, 3)}
+                          renderTextLayer
+                          // Neighbouring slides are mounted but hidden, so their links must not be tabbable
+                          renderAnnotationLayer={slideIndex === currentSlide}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </Slider>
+          </div>
+
+          <MagazinePdfViewArrow
+            direction="next"
+            isDisabled={currentSlide >= slides.length - 1}
+            onClick={() => sliderRef.current?.slickNext()}
+          />
+        </Document>
+
+        <div
+          className="magazine-pdf-view__toolbar"
+          style={{
+            width: sliderWidth || undefined,
+          }}
+        >
+          <MagazinePdfCounter
+            pages={slides[currentSlide] || []}
+            totalPages={totalPages}
+          />
+
+          <MagazinePdfFullscreenButton
+            targetId={VIEW_ELEMENT_ID}
+            isFullscreen={isFullscreen}
+            onClick={toggleFullscreen}
+          />
+        </div>
+      </div>
+    </FocusLock>
+  );
+
+  // Mounted alongside the slide on screen: the one being turned to is then already rendered by
+  // the time it arrives, as is the one being turned away from
+  function isSlideMounted(slideIndex: number) {
+    return [currentSlide, transitionFromSlide].some((slide) => slide !== null
+      && Math.abs(slideIndex - slide) <= SLIDE_RENDER_BUFFER);
+  }
+
+  function replaceVersionQuery(versionId: MagazinePdfVersionId) {
+    const nextQuery = {
+      ...router.query,
+    };
+
+    if (versionId === DEFAULT_MAGAZINE_PDF_VERSION_ID) {
+      delete nextQuery.version;
+    } else {
+      nextQuery.version = versionId;
+    }
+
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: nextQuery,
+      },
+      undefined,
+      {
+        shallow: true,
+      },
+    );
+  }
+}

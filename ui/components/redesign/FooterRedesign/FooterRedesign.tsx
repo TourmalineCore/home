@@ -1,26 +1,22 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { FooterNavigationListRedesign } from './components/FooterNavigationListRedesign/FooterNavigationListRedesign';
 import { FooterRedesignProps } from '../../../common/types';
-import { POLICY_VERSION } from '../../../common/constants/cookie';
+import { useCookieContext } from '../../../common/hooks/useCookieContext';
 
 export function FooterRedesign({
   emailCaption,
   emailAddress,
   navigationLists,
 }: FooterRedesignProps) {
-  const [currentYear, setCurrentYear] = useState<number | null>(null);
-
   const {
     locale,
   } = useRouter();
 
-  const colCount = Math.min(navigationLists.length, 4);
+  const {
+    setIsSettingsModalOpen,
+  } = useCookieContext();
 
-  useEffect(() => {
-    setCurrentYear(new Date()
-      .getFullYear());
-  }, []);
+  const colCount = Math.min(navigationLists.length, 4);
 
   return (
     <footer
@@ -40,16 +36,24 @@ export function FooterRedesign({
         </div>
         <div className="footer-redesign__copyright">
           <span>
-            {`© 2019-${currentYear} Tourmaline Core`}
+            {`© ${locale === `ru` ? `С 2019 года` : `Since 2019`} Tourmaline Core`}
           </span>
           <a
-            href={`/documents/policy/policy-${POLICY_VERSION}-${locale}.pdf`}
+            href={`/documents/policy/policy-${locale}.pdf`}
             target="_blank"
             rel="noreferrer"
             className="footer-redesign__privacy-policy"
           >
             {locale === `ru` ? `Политика конфиденциальности` : `Privacy policy`}
           </a>
+          <button
+            type="button"
+            className="footer-redesign__cookie-button"
+            onClick={() => setIsSettingsModalOpen(true)}
+            data-testid="footer-cookie-settings-button"
+          >
+            {locale === `ru` ? `Настройки пользовательских данных` : `User privacy settings`}
+          </button>
         </div>
         {navigationLists.length > 0 && (
           <ul
