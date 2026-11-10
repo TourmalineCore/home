@@ -14,7 +14,7 @@ extraConfigMapEnvVars:
   DB_USER: "{{ .Values.HOME_DATABASE_USERNAME }}"
   DB_PASSWORD: "{{ .Values.HOME_DATABASE_PASSWORD }}"
   MULTI_SEGMENT_SLUGS_ENABLED: "true"
-  INITIAL_API_KEY: "adminPassword"
+  INITIAL_API_KEY: "{{ .Values.HOME_URL_SHORTENER_PASSWORD }}"
 
 replicaCount: 1
 
