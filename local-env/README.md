@@ -90,6 +90,7 @@ helmfile cache cleanup && helmfile --environment local --namespace local -f depl
 - ui: http://localhost:40120
 - cms: http://localhost:40120/cms/admin
 - minio-s3-ui: http://minio-s3-console.localhost:40120
+- url-shortener-ui: http://go-admin.localhost:40120
 
 ## Minio-s3 UI
 - Open http://minio-s3-console.localhost:40120
@@ -102,6 +103,10 @@ helmfile cache cleanup && helmfile --environment local --namespace local -f depl
 - Write login and password:
     - `email`: *admin@init-strapi-admin.strapi.io*
     - `password`: *admin*
+
+## URL shortener admin panel
+- Open http://go-admin.localhost:40120
+- Select `Home Local Env` profile
 
 ## Upgrade Infra Dependencies
 
