@@ -106,7 +106,7 @@ helmfile cache cleanup && helmfile --environment local --namespace local -f depl
 
 ## URL shortener admin panel
 - Open http://go-admin.localhost:40120
-- Select `Shlink` profile
+- Select `Home Local Env` profile
 
 ## Upgrade Infra Dependencies
 
