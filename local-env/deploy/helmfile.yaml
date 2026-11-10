@@ -105,7 +105,7 @@ releases:
     # thus we wait for it to be ready first
     needs: 
       - ingress-nginx
-      - postgresql
+      - home-url-shortener
     values:
       - values.yaml.gotmpl
       - values-url-shortener-ui.yaml.gotmpl
