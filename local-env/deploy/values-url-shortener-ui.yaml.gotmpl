@@ -1,0 +1,18 @@
+image:
+  registry: ghcr.io
+  repository: shlinkio/shlink-web-client
+  tag: 4.9.0
+  pullPolicy: Always
+
+replicaCount: 1
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  hostname: {{ .Values.HOME_URL_SHORTENER_UI_HOSTNAME | quote }}
+  path: /
+  annotations:
+    nginx.ingress.kubernetes.io/whitelist-source-range: {{ .Values.HOME_URL_SHORTENER_ALLOWED_IP_ADDRESSES_WHITELIST | quote }}
+  ingressClassName: "nginx"

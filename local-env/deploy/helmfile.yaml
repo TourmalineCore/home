@@ -78,9 +78,9 @@ releases:
       - values.yaml.gotmpl
       - values-cms.yaml.gotmpl
 
-  - name: home-shlink
+  - name: home-url-shortener
     labels:
-      app: home-shlink
+      app: home-url-shortener
     wait: true
     chart: bitnami/nginx
     # after 15.3.5 our docker file or setup can no longer start, need to investigate what is wrong for the newer versions
@@ -92,4 +92,20 @@ releases:
       - postgresql
     values:
       - values.yaml.gotmpl
-      - values-shlink.yaml.gotmpl
+      - values-url-shortener.yaml.gotmpl
+
+  - name: home-url-shortener-ui
+    labels:
+      app: home-url-shortener-ui
+    wait: true
+    chart: bitnami/nginx
+    # after 15.3.5 our docker file or setup can no longer start, need to investigate what is wrong for the newer versions
+    version: 15.3.5
+    # it won't work anyway until ingress controller is created
+    # thus we wait for it to be ready first
+    needs: 
+      - ingress-nginx
+      - postgresql
+    values:
+      - values.yaml.gotmpl
+      - values-url-shortener-ui.yaml.gotmpl

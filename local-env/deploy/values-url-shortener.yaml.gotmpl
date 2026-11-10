@@ -6,7 +6,7 @@ image:
 
 extraConfigMapEnvVars:
   DEFAULT_DOMAIN: "{{ .Values.HOME_URL_SHORTENER_HOSTNAME }}:{{ .Values.HOME_EXTERNAL_PORT }}"
-  BASE_PATH: "{{ .Values.HOME_URL_SHORTENER_BASE_PATH }}"
+  BASE_PATH: ""
   IS_HTTPS_ENABLED: "false"
   DB_DRIVER: "postgres"
   DB_HOST: "{{ .Values.HOME_DATABASE_HOST }}"
@@ -14,6 +14,7 @@ extraConfigMapEnvVars:
   DB_USER: "{{ .Values.HOME_DATABASE_USERNAME }}"
   DB_PASSWORD: "{{ .Values.HOME_DATABASE_PASSWORD }}"
   MULTI_SEGMENT_SLUGS_ENABLED: "true"
+  INITIAL_API_KEY: "adminPassword"
 
 replicaCount: 1
 
@@ -23,10 +24,7 @@ service:
 ingress:
   enabled: true
   hostname: {{ .Values.HOME_URL_SHORTENER_HOSTNAME | quote }}
-  path: "{{ .Values.HOME_URL_SHORTENER_BASE_PATH }}(/|$)(.*)"
-  annotations:
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.HOME_URL_SHORTENER_BASE_PATH }}/$2
+  path: /
   ingressClassName: "nginx"
 
 # not needed in this setup
@@ -65,16 +63,16 @@ extraDeploy:
       {{`{{- if .Values.extraConfigMapEnvVars }}`}}
       {{`{{- include "common.tplvalues.render" ( dict "value" .Values.extraConfigMapEnvVars "context" $ ) | trim | nindent 6 }}`}}
       {{`{{- end }}`}}
-  # this creates an additional ingress configuration for shlink that will handle all REST requests and allows to configure whitelist for these requests
+  # this creates an additional ingress configuration for url-shortener that will handle all REST requests and allows to configure whitelist for these requests
   - |
     apiVersion: networking.k8s.io/v1
     kind: Ingress
     metadata:
       # the `private` postfix was added to this ingress because all REST requests will be private and protected by a whitelist
-      name: home-shlink-private-nginx
+      name: home-url-shortener-private-nginx
       annotations:
         nginx.ingress.kubernetes.io/use-regex: "true"
-        nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.HOME_URL_SHORTENER_BASE_PATH }}/rest/$2
+        nginx.ingress.kubernetes.io/rewrite-target: /rest/$2
         nginx.ingress.kubernetes.io/whitelist-source-range: {{ .Values.HOME_URL_SHORTENER_ALLOWED_IP_ADDRESSES_WHITELIST | quote }}
         nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
     spec:
@@ -83,10 +81,10 @@ extraDeploy:
         - host: {{ .Values.HOME_URL_SHORTENER_HOSTNAME | quote }}
           http:
             paths:
-              - path: {{ .Values.HOME_URL_SHORTENER_BASE_PATH }}/rest(/|$)(.*)
+              - path: /rest(/|$)(.*)
                 pathType: ImplementationSpecific
                 backend:
                   service:
-                    name: home-shlink-nginx
+                    name: home-url-shortener-nginx
                     port:
                       name: http
