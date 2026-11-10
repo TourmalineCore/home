@@ -5,7 +5,7 @@ image:
   pullPolicy: "Always"
 
 extraConfigMapEnvVars:
-  SHLINK_SERVER_URL: "{{ .Values.HOME_URL_SHORTENER_HOSTNAME }}:{{ .Values.HOME_EXTERNAL_PORT }}"
+  SHLINK_SERVER_URL: "http://{{ .Values.HOME_URL_SHORTENER_HOSTNAME }}:{{ .Values.HOME_EXTERNAL_PORT }}"
   SHLINK_SERVER_API_KEY: "{{ .Values.HOME_URL_SHORTENER_PASSWORD }}"
 
 replicaCount: 1
