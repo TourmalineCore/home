@@ -41,7 +41,9 @@ jobs:
           # sparse-checkout is needed to clone service folder only
           # Cone mode is disabled to not clone other files in root folder
           # It's important to clone only this folder to keep the root folder clean
-          sparse-checkout: 'local-env'
+          sparse-checkout: |
+            local-env
+            .github/actions
           sparse-checkout-cone-mode: false
 
       - name: Check deploy files before changes
