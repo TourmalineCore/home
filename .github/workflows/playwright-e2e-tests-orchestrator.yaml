@@ -30,6 +30,7 @@ jobs:
 
   run-ui-playwright-tests:
     if: needs.detect-changed-services.outputs.ui == 'true'
+    needs: detect-changed-services
     uses: ./.github/workflows/.reusable-playwright-e2e-tests.yml
     with:
       is-ui-changed: true
@@ -44,6 +45,7 @@ jobs:
 
   run-cms-playwright-tests:
     if: needs.detect-changed-services.outputs.cms == 'true'
+    needs: detect-changed-services
     uses: ./.github/workflows/.reusable-playwright-e2e-tests.yml
     with:
       is-ui-changed: needs.detect-changed-services.outputs.cms
