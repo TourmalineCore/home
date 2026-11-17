@@ -1,19 +1,35 @@
 name: Publish Docker Image
 
 on: 
+  push:
+    branches:
+      master
   workflow_call:
-    inputs:
-      is-ui-changed:
-        required: false
-        type: boolean
-      is-cms-changed:
-        required: false
-        type: boolean
-
         
 jobs:  
+  detect-changed-services:
+    runs-on: ubuntu-24.04
+    outputs:
+      ui: ${{ steps.detect-changed-services.outputs.ui }}
+      cms: ${{ steps.detect-changed-services.outputs.cms }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect changed services
+        uses: dorny/paths-filter@v4
+        id: detect-changed-services
+        with:
+          filters: |
+            ui:
+              - 'ui/**'
+            cms:
+              - 'cms/**'
+
   push-ui-local-env-to-registry:
-    if: ${{ inputs.is-ui-changed }}
+    needs: detect-changed-services
+    # Builds UI Local Env image from master and FB(using workflow_call event)
+    if: needs.detect-changed-services.outputs.ui == 'true'
     uses: ./.github/workflows/.reusable-docker-build-and-push.yml
     with:
       context: ./ui
@@ -27,8 +43,30 @@ jobs:
         CDN_ENABLED=false
         NEXT_PUBLIC_ENABLE_SMARTCAPTCHA=false
 
+
+  push-ui-prod-env-to-registry:
+    needs: detect-changed-services
+    # Builds Prod Env UI image only if triggered by another workflow in default branch.
+    # In our case it's triggered by sync workflow
+    if: |
+      needs.detect-changed-services.outputs.ui == 'true' && 
+      github.ref_name == github.event.repository.default_branch && 
+      github.event_name == 'workflow_call'
+    uses: ./.github/workflows/.reusable-docker-build-and-push.yml
+    with:
+      context: ./ui
+      image-name: home-ui
+      # Build-args used to define variables that will be used in image
+      build-args: |
+        CDN_ENABLED=true
+        CDN_DOMAIN=cdn.tourmalinecore.com
+        CORS_ORIGIN=https://tourmalinecore.com
+        ENABLE_SEO_INDEXING=true
+        NEXT_PUBLIC_ENABLE_SMARTCAPTCHA=true
+
   push-cms-to-registry:
-    if: ${{ inputs.is-cms-changed }}
+    needs: detect-changed-services
+    if: needs.detect-changed-services.outputs.cms == 'true'
     uses: ./.github/workflows/.reusable-docker-build-and-push.yml
     with:
       context: ./cms
@@ -39,7 +77,3 @@ jobs:
         SERVER_URL=/cms
     # without this it cannot login to the registry
     secrets: inherit
-
-        
-
-        

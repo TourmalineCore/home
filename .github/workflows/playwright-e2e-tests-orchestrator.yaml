@@ -29,11 +29,7 @@ jobs:
               - 'cms/**'
 
   push-to-registry:
-    needs: detect-changed-services
     uses: ./.github/workflows/docker-build-and-push-orchestrator.yml
-    with:
-      is-ui-changed: ${{ needs.detect-changed-services.outputs.ui == 'true'}}
-      is-cms-changed: ${{ needs.detect-changed-services.outputs.cms == 'true'}}
 
   run-ui-playwright-tests:
     if: needs.detect-changed-services.outputs.ui == 'true'

@@ -29,7 +29,6 @@ on:
 jobs:
   run-playwright-e2e-tests:
     runs-on: ubuntu-24.04
-
     strategy:
       fail-fast: false
       matrix:
@@ -52,6 +51,12 @@ jobs:
           cat local-env/deploy/helmfile.yaml
           cat local-env/deploy/values-cms.yaml.gotmpl
 
+      - name: Change refs and image tag
+        uses: ./.github/actions/change-refs-and-tag
+        with:
+          is-ui-changed: ${{ inputs.is-ui-changed }}
+          is-cms-changed: ${{ inputs.is-cms-changed }}
+
       - name: Deploy Local Env to Kind k8s
         uses: devcontainers/ci@v0.3
         with:
@@ -60,29 +65,6 @@ jobs:
           # and it's necessary to define path to the devcontainer config in the folder of needed service
           configFile: ./local-env/.devcontainer/devcontainer.json
           runCmd: |
-            # we need to override "latest" image tag of service inside local-env to run e2e against the current commit service version and not against latest from master
-            # We tried to use yq to change the image tag, but in the values files for helmfile we have non-yaml code that yq can`t parse or ignore
-            # so for that reason we use Stream EDitor which can find needed string using regular expressions and change it to a new value
-            # The -i flag is needed to write new image tag directly to values file
-
-            if [[ "${{ inputs.is-ui-changed }}" == "true" ]]; then
-            sed -i "0,/tag:.*/s//tag: \"local-env-sha-${{ github.sha }}\"/" deploy/values-ui.yaml.gotmpl
-            
-            # we need to override "latest" ref of service chart inside local-env to run tests against the current commit service chart version and not against latest from master
-            sed -i "0,/ui?ref=.*/s//ui?ref=${{ github.sha }}/" deploy/helmfile.yaml
-            
-            # This changes values file ref in the helmfile.yaml
-            sed -i "0,/ui\/ci\/values.yaml?ref=.*/s//ui\/ci\/values.yaml?ref=${{ github.sha }}/" deploy/helmfile.yaml
-            fi
-
-            if [[ "${{ inputs.is-cms-changed }}" == "true" ]]; then
-            sed -i "0,/tag:.*/s//tag: \"sha-${{ github.sha }}\"/" deploy/values-cms.yaml.gotmpl
-
-            sed -i "0,/cms?ref=.*/s//cms?ref=${{ github.sha }}/" deploy/helmfile.yaml
-            
-            sed -i "0,/cms\/ci\/values.yaml?ref=.*/s//cms\/ci\/values.yaml?ref=${{ github.sha }}/" deploy/helmfile.yaml
-            fi
-
             kind create cluster --name home --config kind-local-config.yaml --kubeconfig ./.home-cluster-kubeconfig
             
             export KUBECONFIG=$(pwd)/.home-cluster-kubeconfig
