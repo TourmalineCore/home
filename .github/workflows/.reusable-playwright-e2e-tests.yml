@@ -156,7 +156,7 @@ jobs:
           ENV_VARS: ${{ inputs.env-vars }}
         run: |
           printf '%s\n' "$ENV_VARS" >> "$GITHUB_ENV"
-
+          env
           npx playwright test --config=playwright.e2e.config.ts --reporter=list,html
         
 
