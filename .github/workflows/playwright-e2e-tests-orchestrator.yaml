@@ -1,0 +1,54 @@
+name: Run Home Playwright E2E Tests
+
+on: 
+  push:
+    branches:
+      - feature/*
+    paths:
+      - 'ui/**'
+      - 'cms/**'
+
+jobs:
+  detect-changed-services:
+    runs-on: ubuntu-24.04
+    outputs:
+      ui: ${{ steps.detect-changed-services.outputs.ui }}
+      cms: ${{ steps.detect-changed-services.outputs.cms }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@4
+
+      - name: Detect changed services
+        uses: dorny/paths-filter@v4
+        id: detect-changed-services
+        with:
+          filters: |
+            ui:
+              - 'ui/**'
+            cms:
+              - 'cms/**'
+
+  run-ui-playwright-tests:
+    if: needs.detect-changed-services.outputs.ui == 'true'
+    uses: ./.github/workflows/.reusable-ui-playwright-e2e-tests.yml
+    with:
+      is-ui-changed: true
+      is-cms-changed: needs.detect-changed-services.outputs.cms
+      service-subfolder-name: ui
+      node-version: 20.18.0
+      env-vars: |
+        FRONTEND_URL=http://localhost:40120
+        CMS_URL=http://localhost:40120/cms
+        CMS_EMAIL=admin@init-strapi-admin.strapi.io
+        CMS_PASSWORD=admin
+
+  run-cms-playwright-tests:
+    if: needs.detect-changed-services.outputs.cms == 'true'
+    uses: ./.github/workflows/.reusable-ui-playwright-e2e-tests.yml
+    with:
+      is-ui-changed: needs.detect-changed-services.outputs.cms
+      is-cms-changed: true
+      service-subfolder-name: cms
+      node-version: 22.18.0
+      env-vars: |
+        SERVER_URL=http://localhost:40120/cms
