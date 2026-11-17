@@ -54,7 +54,7 @@ npm run playwright:open
 When you need to update screenshots that are no longer relevant, you can do it with the following command:
 
 ```bash
-npm run update-snapshots
+npm run playwright:update-screenshots
 ```
 
 Only those screenshots that have discrepancies will be replaced.
