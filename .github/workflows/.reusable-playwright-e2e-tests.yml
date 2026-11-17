@@ -54,6 +54,12 @@ jobs:
           sparse-checkout: 'local-env'
           sparse-checkout-cone-mode: false
 
+      - name: Check deploy files before changes
+        run: |
+          cat deploy/values-ui.yaml.gotmpl
+          cat deploy/helmfile.yaml
+          cat deploy/values-cms.yamk.gotmpl
+
       - name: Deploy Local Env to Kind k8s
         uses: devcontainers/ci@v0.3
         with:
@@ -91,6 +97,13 @@ jobs:
 
             helmfile --environment local --namespace local -f deploy/helmfile.yaml apply
           push: never
+
+      - name: Check deploy files after changes
+        run: |
+          cat deploy/values-ui.yaml.gotmpl
+          cat deploy/helmfile.yaml
+          cat deploy/values-cms.yamk.gotmpl
+
 
       - name: Checkout repository
         uses: actions/checkout@v4
