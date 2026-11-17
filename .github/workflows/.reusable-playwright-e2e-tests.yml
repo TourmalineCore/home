@@ -157,7 +157,9 @@ jobs:
         run: |
           export $(printf '%s\n' "$ENV_VARS" | xargs)
 
-          npx playwright test --config=playwright.e2e.config.ts --reporter=list,html
+          export PLAYWRIGHT_CONFIG=${{ inputs.playwright-config-name && format('--config={0}', inputs.playwright-config-name) || '' }}
+
+          npx playwright test $PLAYWRIGHT_CONFIG --reporter=list,html
         
 
       - name: Upload HTML report

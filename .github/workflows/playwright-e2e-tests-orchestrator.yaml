@@ -44,6 +44,7 @@ jobs:
       is-cms-changed: ${{ needs.detect-changed-services.outputs.cms == 'true'}}
       service-subfolder-name: ui
       node-version: 20.18.0
+      playwright-config-name: playwright.e2e.config.ts
       env-vars: |
         FRONTEND_URL=http://localhost:40120
         CMS_URL=http://localhost:40120/cms
