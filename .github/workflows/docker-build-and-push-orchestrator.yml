@@ -10,7 +10,20 @@ on:
         required: false
         type: boolean
 
+        
 jobs:
+
+  test:
+    runs-on: ubuntu-24.04
+    steps: 
+      - name: test
+        run: |
+          echo ${{ inputs.is-ui-changed }}
+          echo ${{ inputs.is-ui-changed == 'true'}}
+          echo ${{ inputs.is-cms-changed == 'true'}}
+
+    
+
   push-ui-local-env-to-registry:
     if: ${{ inputs.is-ui-changed == 'true'}}
     uses: ./.github/workflows/.reusable-docker-build-and-push.yml
