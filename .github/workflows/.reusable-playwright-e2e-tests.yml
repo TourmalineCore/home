@@ -156,7 +156,7 @@ jobs:
           ENV_VARS: ${{ inputs.env-vars }}
         run: |
           export $(printf '%s\n' "$ENV_VARS" | xargs)
-          env
+
           npx playwright test --config=playwright.e2e.config.ts --reporter=list,html
         
 
