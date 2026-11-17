@@ -34,7 +34,7 @@ jobs:
     uses: ./.github/workflows/.reusable-playwright-e2e-tests.yml
     with:
       is-ui-changed: true
-      is-cms-changed: ${{ needs.detect-changed-services.outputs.cms }}
+      is-cms-changed: ${{ needs.detect-changed-services.outputs.cms == 'true'}}
       service-subfolder-name: ui
       node-version: 20.18.0
       env-vars: |
@@ -48,7 +48,7 @@ jobs:
     needs: detect-changed-services  
     uses: ./.github/workflows/.reusable-playwright-e2e-tests.yml
     with:
-      is-ui-changed: ${{ needs.detect-changed-services.outputs.cms }}
+      is-ui-changed: ${{ needs.detect-changed-services.outputs.cms  == 'true'}}
       is-cms-changed: true
       service-subfolder-name: cms
       node-version: 22.18.0
