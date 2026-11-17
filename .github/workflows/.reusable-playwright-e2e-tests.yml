@@ -56,9 +56,10 @@ jobs:
 
       - name: Check deploy files before changes
         run: |
-          cat deploy/values-ui.yaml.gotmpl
-          cat deploy/helmfile.yaml
-          cat deploy/values-cms.yamk.gotmpl
+          ls
+          cat local-env/deploy/values-ui.yaml.gotmpl
+          cat local-env/deploy/helmfile.yaml
+          cat local-env/deploy/values-cms.yamk.gotmpl
 
       - name: Deploy Local Env to Kind k8s
         uses: devcontainers/ci@v0.3
@@ -100,9 +101,9 @@ jobs:
 
       - name: Check deploy files after changes
         run: |
-          cat deploy/values-ui.yaml.gotmpl
-          cat deploy/helmfile.yaml
-          cat deploy/values-cms.yamk.gotmpl
+          cat local-env/deploy/values-ui.yaml.gotmpl
+          cat local-env/deploy/helmfile.yaml
+          cat local-env/deploy/values-cms.yamk.gotmpl
 
 
       - name: Checkout repository
