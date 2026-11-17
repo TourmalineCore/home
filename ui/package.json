@@ -19,7 +19,7 @@
     "playwright:open": "npx playwright test --ui",
     "playwright:run:e2e": "npx playwright test --config=playwright.e2e.config.ts",
     "playwright:open:e2e": "npx playwright test --ui --config=playwright.e2e.config.ts",
-    "update-snapshots": "npx playwright test --update-snapshots",
+    "playwright:update-screenshots": "npx playwright test --update-snapshots",
     "jest:run": "jest",
     "generate-api-types": "docker-compose -f ./api-types/docker-compose.yml up --build ts_generator"
   },
