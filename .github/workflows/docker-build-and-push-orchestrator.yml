@@ -8,6 +8,7 @@ on:
       - 'ui/**'
   workflow_call:
     inputs:
+      # This variable was added because GitHub doesn't provides functionality to check that workflow was triggered by another workflow
       is-workflow-call:
         required: false
         type: boolean
