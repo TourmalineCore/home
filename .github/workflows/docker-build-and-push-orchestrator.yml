@@ -5,6 +5,11 @@ on:
     branches:
       master
   workflow_call:
+    inputs:
+      is-workflow-call:
+        required: false
+        type: boolean
+        default: false
         
 jobs:  
   detect-changed-services:
@@ -50,7 +55,7 @@ jobs:
     if: |
       needs.detect-changed-services.outputs.ui == 'true' && 
       github.ref_name == github.event.repository.default_branch && 
-      github.event_name == 'workflow_call'
+      inputs.is-workflow-call
     uses: ./.github/workflows/.reusable-docker-build-and-push.yml
     with:
       context: ./ui
@@ -68,7 +73,7 @@ jobs:
     # Build CMS image on workflow_call event from cms-sync-env.yml or playwright-e2e-tests-orchestrator.yml
     if: |
       needs.detect-changed-services.outputs.cms == 'true' &&
-      github.event_name == 'workflow_call'
+      inputs.is-workflow-call
     uses: ./.github/workflows/.reusable-docker-build-and-push.yml
     with:
       context: ./cms

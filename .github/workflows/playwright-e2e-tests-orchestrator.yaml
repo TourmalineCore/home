@@ -30,6 +30,8 @@ jobs:
 
   push-to-registry:
     uses: ./.github/workflows/docker-build-and-push-orchestrator.yml
+    with:
+      is-workflow-call: true
 
   run-ui-playwright-tests:
     if: needs.detect-changed-services.outputs.ui == 'true'
