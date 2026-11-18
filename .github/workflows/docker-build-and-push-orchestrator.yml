@@ -7,6 +7,14 @@ on:
   workflow_call:
         
 jobs:  
+
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: test
+        run: |
+          echo ${{ github.event_name }}
+
   detect-changed-services:
     runs-on: ubuntu-24.04
     outputs:
