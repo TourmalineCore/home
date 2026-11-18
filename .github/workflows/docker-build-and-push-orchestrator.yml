@@ -28,7 +28,8 @@ jobs:
 
   push-ui-local-env-to-registry:
     needs: detect-changed-services
-    # Builds UI Local Env image from master and FB(using workflow_call event)
+    # Builds UI Local Env image on push to the master branch (when PR is merged)
+    # And on workflow_call event from playwright-e2e-tests-orchestrator.yml
     if: needs.detect-changed-services.outputs.ui == 'true'
     uses: ./.github/workflows/.reusable-docker-build-and-push.yml
     with:
@@ -43,11 +44,9 @@ jobs:
         CDN_ENABLED=false
         NEXT_PUBLIC_ENABLE_SMARTCAPTCHA=false
 
-
   push-ui-prod-env-to-registry:
     needs: detect-changed-services
-    # Builds Prod Env UI image only if triggered by another workflow in default branch.
-    # In our case it's triggered by sync workflow
+    # Builds Prod Env UI image only if triggered by ui-sync-env.yml
     if: |
       needs.detect-changed-services.outputs.ui == 'true' && 
       github.ref_name == github.event.repository.default_branch && 
@@ -66,7 +65,10 @@ jobs:
 
   push-cms-to-registry:
     needs: detect-changed-services
-    if: needs.detect-changed-services.outputs.cms == 'true'
+    # Build CMS image on workflow_call event from cms-sync-env.yml or playwright-e2e-tests-orchestrator.yml
+    if: |
+      needs.detect-changed-services.outputs.cms == 'true' &&
+      github.event_name == 'workflow_call'
     uses: ./.github/workflows/.reusable-docker-build-and-push.yml
     with:
       context: ./cms
