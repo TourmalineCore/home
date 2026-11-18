@@ -15,15 +15,6 @@ on:
         default: false
 
 jobs:
-
-  test:
-    runs-on: ubuntu-24.04
-    steps:
-      - name: test
-        run: |
-          echo caller_workflow: ${{ github.workflow }}
-
-
   detect-changed-services:
     runs-on: ubuntu-24.04
     outputs:
