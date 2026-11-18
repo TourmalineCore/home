@@ -1,6 +1,11 @@
 name: Publish Docker Image
 
 on: 
+  push:
+    branches:
+      master
+    paths:
+      - 'ui/**'
   workflow_call:
     inputs:
       is-workflow-call:
@@ -41,7 +46,10 @@ jobs:
     needs: detect-changed-services
     # Builds UI Local Env image on push to the master branch (when PR is merged)
     # And on workflow_call event from playwright-e2e-tests-orchestrator.yml
-    if: needs.detect-changed-services.outputs.ui == 'true'
+    if: |
+      needs.detect-changed-services.outputs.ui == 'true' &&
+      ((inputs.is-workflow-call && github.workflow == 'Run Home Playwright E2E Tests') ||
+      github.event_name == 'push' && github.workflow == 'Publish Docker Image')
     uses: ./.github/workflows/.reusable-docker-build-and-push.yml
     with:
       context: ./ui
