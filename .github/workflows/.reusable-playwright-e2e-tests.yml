@@ -16,12 +16,17 @@ on:
       is-cms-changed:
         required: false
         type: boolean
+      # Example of service-subfolder-name usage: cms
       service-subfolder-name:
         required: true
         type: string
+      # Example of playwright-config-name usage: playwright.e2e.config.ts
       playwright-config-name:
         required: false
         type: string
+      # Example of env-vars usage: |
+      #   FRONTEND_URL=http://localhost:40120
+      #   CMS_URL=http://localhost:40120/cms
       env-vars:
         required: false
         type: string
@@ -54,7 +59,7 @@ jobs:
           cat local-env/deploy/values-cms.yaml.gotmpl
 
       - name: Change refs and image tag
-        uses: ./.github/actions/change-refs-and-tag
+        uses: ./.github/actions/change-repository-refs-and-image-tag
         with:
           is-ui-changed: ${{ inputs.is-ui-changed }}
           is-cms-changed: ${{ inputs.is-cms-changed }}
@@ -79,7 +84,6 @@ jobs:
           cat local-env/deploy/values-ui.yaml.gotmpl
           cat local-env/deploy/helmfile.yaml
           cat local-env/deploy/values-cms.yaml.gotmpl
-
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -144,7 +148,6 @@ jobs:
           export PLAYWRIGHT_CONFIG=${{ inputs.playwright-config-name && format('--config={0}', inputs.playwright-config-name) || '' }}
 
           npx playwright test $PLAYWRIGHT_CONFIG --reporter=list,html
-        
 
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
