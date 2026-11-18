@@ -1,17 +1,23 @@
 name: Publish Docker Image
 
 on: 
-  push:
-    branches:
-      master
   workflow_call:
     inputs:
       is-workflow-call:
         required: false
         type: boolean
         default: false
-        
-jobs:  
+
+jobs:
+
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: test
+        run: |
+          echo caller_workflow: ${{ github.workflow }}
+
+
   detect-changed-services:
     runs-on: ubuntu-24.04
     outputs:
