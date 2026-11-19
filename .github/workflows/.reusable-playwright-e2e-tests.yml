@@ -51,13 +51,6 @@ jobs:
             .github/actions
           sparse-checkout-cone-mode: false
 
-      - name: Check deploy files before changes
-        run: |
-          ls
-          cat local-env/deploy/values-ui.yaml.gotmpl
-          cat local-env/deploy/helmfile.yaml
-          cat local-env/deploy/values-cms.yaml.gotmpl
-
       - name: Change UI refs and image tag
         uses: ./.github/actions/change-repository-refs-and-image-tag
         if: ${{ inputs.is-ui-changed }}
@@ -88,12 +81,6 @@ jobs:
 
             helmfile --environment local --namespace local -f deploy/helmfile.yaml apply
           push: never
-
-      - name: Check deploy files after changes
-        run: |
-          cat local-env/deploy/values-ui.yaml.gotmpl
-          cat local-env/deploy/helmfile.yaml
-          cat local-env/deploy/values-cms.yaml.gotmpl
 
       - name: Checkout repository
         uses: actions/checkout@v4
