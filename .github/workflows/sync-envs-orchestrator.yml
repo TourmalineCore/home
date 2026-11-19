@@ -39,7 +39,8 @@ jobs:
               - 'cms/**'
 
   trigger_ui_sync_in_home_env:
-    needs: docker-build-and-push
+    needs: [detect-changed-services, docker-build-and-push]
+    if: needs.detect-changed-services.outputs.ui == 'true'
     uses: ./.github/workflows/.reusable-prod-env-sync-services-versions.yml
     with:
       # path-to-values is used to define where the values files is stored
@@ -49,7 +50,8 @@ jobs:
     secrets: inherit
 
   trigger_cms_sync_in_home_env:
-    needs: docker-build-and-push
+    needs: [detect-changed-services, docker-build-and-push]
+    if: needs.detect-changed-services.outputs.cms == 'true'
     uses: ./.github/workflows/.reusable-prod-env-sync-services-versions.yml
     with:
       # path-to-values is used to define where the values files is stored
