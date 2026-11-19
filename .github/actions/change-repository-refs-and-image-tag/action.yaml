@@ -1,5 +1,5 @@
-name: 'Change repository refs and image tag'
-description: 'Changes refs in helmfile.yaml and image tag in service values.yaml'
+name: Change repository refs and image tag
+description: Changes refs in helmfile.yaml and image tag in service values.yaml
 inputs:
   path-to-values:
     required: true
