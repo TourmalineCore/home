@@ -1,27 +1,74 @@
-import { ComponentName } from "../../../common/enums";
-import { BREAKPOINTS } from "../../../playwright-tests/constants/breakpoints";
-import { test } from "../../../playwright-tests/custom-test";
+import fs from 'fs';
+import test, { expect } from '@playwright/test';
+import { Breakpoint } from '../../../common/enums';
 
-test.describe(`ChelzooAdaptationTests`, () => {
-  test.beforeEach(async ({
-    goToComponentsPage,
-  }) => {
-    await goToComponentsPage(ComponentName.CHELZOO_ADAPTATION);
-  });
+const VIEWPORTS = [
+  {
+    name: `mobile`,
+    width: Breakpoint.MOBILE,
+    height: 565,
+  },
+  {
+    name: `tablet`,
+    width: Breakpoint.TABLET,
+    height: 1312,
+  },
+  {
+    name: `tablet-xl`,
+    width: Breakpoint.TABLET_XL,
+    height: 1801,
+  },
+  {
+    name: `desktop`,
+    width: Breakpoint.DESKTOP,
+    height: 2360,
+  },
+  {
+    name: `desktop-xl`,
+    width: Breakpoint.DESKTOP_XL,
+    height: 3318,
+  },
+];
 
+test.describe(`Snapshot`, () => {
   for (const {
     name,
-    breakpoint,
-    breakpointName,
-  } of BREAKPOINTS) {
-    test(name, async ({
-      testScreenshotAtBreakpoint,
+    width,
+    height,
+  } of VIEWPORTS) {
+    test(`Take the snapshot of ChelzooAdaptation ${width}x${height}`, async ({
+      page,
+      mount,
     }) => {
-      await testScreenshotAtBreakpoint({
-        testId: ComponentName.CHELZOO_ADAPTATION,
-        breakpoint,
-        breakpointName,
+      await page.setViewportSize({
+        width,
+        height,
       });
+
+      const PNG_STUB_FILE = fs.readFileSync(`./playwright-tests/fixtures/stub.png`);
+
+      await page.route(`**/_next/image*`, async (route, request) => {
+        const accept = await request.headerValue(`accept`);
+        if (accept?.includes(`image/*`)) {
+          return route.fulfill({
+            contentType: `image/png`,
+            body: PNG_STUB_FILE,
+          });
+        }
+        return route.continue();
+      });
+
+      await mount(`ChelzooAdaptationStory`);
+
+      await expect(
+        page.getByTestId(`chelzoo-adaptation`)
+          .filter({
+            visible: true,
+          }),
+      )
+        .toHaveScreenshot(`chelzoo-adaptation-${name}.png`, {
+          animations: `disabled`,
+        });
     });
   }
 });
