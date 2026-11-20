@@ -36,6 +36,7 @@ export function HeaderAccordion({
       <button
         className="header-accordion__button"
         data-testid="header-accordion-button"
+        data-cy="header-accordion-button"
         type="button"
       >
         <span className="header-accordion__label">
