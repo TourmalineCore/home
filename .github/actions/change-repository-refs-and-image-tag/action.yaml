@@ -1,0 +1,27 @@
+name: Change repository refs and image tag
+description: Changes refs in helmfile.yaml and image tag in service values.yaml
+inputs:
+  path-to-values:
+    required: true
+  service-name:
+    required: true
+  image-tag:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Change repository refs and image tag
+      run: |
+        # we need to override "latest" image tag of service inside local-env to run e2e against the current commit service version and not against latest from master
+        # We tried to use yq to change the image tag, but in the values files for helmfile we have non-yaml code that yq can`t parse or ignore
+        # so for that reason we use Stream EDitor which can find needed string using regular expressions and change it to a new value
+        # The -i flag is needed to write new image tag directly to values file
+        sed -i "0,/tag:.*/s//tag: \"${{ inputs.image-tag }}\"/" ${{ inputs.path-to-values }}
+        
+        # we need to override "latest" ref of service chart inside local-env to run tests against the current commit service chart version and not against latest from master
+        sed -i "0,/${{ inputs.service-name }}?ref=.*/s//${{ inputs.service-name }}?ref=${{ github.sha }}/" local-env/deploy/helmfile.yaml
+        
+        # This changes values file ref in the helmfile.yaml
+        sed -i "0,/${{ inputs.service-name }}\/ci\/values.yaml?ref=.*/s//${{ inputs.service-name }}\/ci\/values.yaml?ref=${{ github.sha }}/" local-env/deploy/helmfile.yaml
+      shell: bash

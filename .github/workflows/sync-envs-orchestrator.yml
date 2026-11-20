@@ -1,0 +1,61 @@
+name: Sync Services In Home Env
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'ui/**'
+      - 'cms/**'
+
+jobs:
+  # this is needed to wait for the new docker image to be build and published to the registry
+  # so that we can use the image to run ui of the needed commit related version as part of local-env
+  # the idea is taken from here https://stackoverflow.com/a/71489231
+  docker-build-and-push:
+    uses: ./.github/workflows/docker-build-and-push-orchestrator.yml
+    with:
+      is-workflow-call: true
+    # without this it cannot login to the registry
+    secrets: inherit
+
+  detect-changed-services:
+    runs-on: ubuntu-24.04
+    outputs:
+      ui: ${{ steps.detect-changed-services.outputs.ui }}
+      cms: ${{ steps.detect-changed-services.outputs.cms }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect changed services
+        uses: dorny/paths-filter@v4
+        id: detect-changed-services
+        with:
+          filters: |
+            ui:
+              - 'ui/**'
+            cms:
+              - 'cms/**'
+
+  trigger_ui_sync_in_home_env:
+    needs: [detect-changed-services, docker-build-and-push]
+    if: needs.detect-changed-services.outputs.ui == 'true'
+    uses: ./.github/workflows/.reusable-prod-env-sync-services-versions.yml
+    with:
+      # path-to-values is used to define where the values files is stored
+      path-to-values: prod-env/deploy/values-ui.yaml.gotmpl
+      # service-name is the name of the subfolder where the service is stored in the home repo
+      service-name: ui
+    secrets: inherit
+
+  trigger_cms_sync_in_home_env:
+    needs: [detect-changed-services, docker-build-and-push]
+    if: needs.detect-changed-services.outputs.cms == 'true'
+    uses: ./.github/workflows/.reusable-prod-env-sync-services-versions.yml
+    with:
+      # path-to-values is used to define where the values files is stored
+      path-to-values: prod-env/deploy/values-cms.yaml.gotmpl
+      # service-name is the name of the subfolder where the service is stored in the home repo
+      service-name: cms
+    secrets: inherit

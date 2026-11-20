@@ -1,0 +1,92 @@
+name: Publish Docker Image
+
+on: 
+  push:
+    branches:
+      master
+    paths:
+      - 'ui/**'
+  workflow_call:
+    inputs:
+      # This variable was added because GitHub doesn't provides functionality to check that workflow was triggered by another workflow
+      is-workflow-call:
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  detect-changed-services:
+    runs-on: ubuntu-24.04
+    outputs:
+      ui: ${{ steps.detect-changed-services.outputs.ui }}
+      cms: ${{ steps.detect-changed-services.outputs.cms }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect changed services
+        uses: dorny/paths-filter@v4
+        id: detect-changed-services
+        with:
+          filters: |
+            ui:
+              - 'ui/**'
+            cms:
+              - 'cms/**'
+
+  push-ui-local-env-to-registry:
+    needs: detect-changed-services
+    # Builds UI Local Env image on push to the master branch (when PR is merged)
+    # And on workflow_call event from playwright-e2e-tests-orchestrator.yml
+    if: |
+      needs.detect-changed-services.outputs.ui == 'true' &&
+      ((inputs.is-workflow-call && github.workflow == 'Run Home Playwright E2E Tests') ||
+      github.event_name == 'push' && github.workflow == 'Publish Docker Image')
+    uses: ./.github/workflows/.reusable-docker-build-and-push.yml
+    with:
+      context: ./ui
+      image-name: home-ui
+      # We use CDN at prod, that enabling or disabling only during build and can't be enabled/disabled at runtime.   
+      # Prefix is used to build several images, the first one with disabled CDN for Local Env
+      # the second and the third ones with enabled CDN and different CDN_DOMAIN's for Prod and Staging Envs
+      prefix: "local-env"
+      # Build-args used to define variables that will be used in image
+      build-args: |
+        CDN_ENABLED=false
+        NEXT_PUBLIC_ENABLE_SMARTCAPTCHA=false
+
+  push-ui-prod-env-to-registry:
+    needs: detect-changed-services
+    # Builds Prod Env UI image only if triggered by sync sync-envs-orchestrator.yml
+    if: |
+      needs.detect-changed-services.outputs.ui == 'true' && 
+      github.ref_name == github.event.repository.default_branch && 
+      inputs.is-workflow-call
+    uses: ./.github/workflows/.reusable-docker-build-and-push.yml
+    with:
+      context: ./ui
+      image-name: home-ui
+      # Build-args used to define variables that will be used in image
+      build-args: |
+        CDN_ENABLED=true
+        CDN_DOMAIN=cdn.tourmalinecore.com
+        CORS_ORIGIN=https://tourmalinecore.com
+        ENABLE_SEO_INDEXING=true
+        NEXT_PUBLIC_ENABLE_SMARTCAPTCHA=true
+
+  push-cms-to-registry:
+    needs: detect-changed-services
+    # Build CMS image on workflow_call event from cms-sync-env.yml or playwright-e2e-tests-orchestrator.yml
+    if: |
+      needs.detect-changed-services.outputs.cms == 'true' &&
+      inputs.is-workflow-call
+    uses: ./.github/workflows/.reusable-docker-build-and-push.yml
+    with:
+      context: ./cms
+      image-name: home-cms
+      # Build-args is used to define variables that will be used in image
+      build-args: |
+        # this perfectly explains why this is needed https://github.com/strapi/strapi/issues/13889#issuecomment-1516194973
+        SERVER_URL=/cms
+    # without this it cannot login to the registry
+    secrets: inherit
